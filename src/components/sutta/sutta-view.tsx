@@ -562,7 +562,16 @@ export function SuttaView({
                     ? paragraphCard(focus, true)
                     : paragraphList.map((p) => (
                         <div key={p} className="flex flex-col gap-2">
-                          {headingOf.get(p) ? <h2 className="px-2 pt-2 text-[0.95em] font-bold">{headingOf.get(p)}</h2> : null}
+                          {headingOf.get(p) ? (
+                            // 이야기·단락 제목 — 가운데 호박색 글자, 양옆에 옅은 선
+                            <h2 className="flex items-center gap-3 px-2 pt-3 pb-1 font-sans">
+                              <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
+                              <span className="max-w-[80%] text-center text-[0.9em] font-bold tracking-wide text-balance break-keep text-amber-800 dark:text-amber-300">
+                                {headingOf.get(p)}
+                              </span>
+                              <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
+                            </h2>
+                          ) : null}
                           {paragraphCard(p, false)}
                         </div>
                       ))}
