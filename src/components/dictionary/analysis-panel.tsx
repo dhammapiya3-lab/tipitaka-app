@@ -2,25 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchSuttaNissaya } from "@/lib/content";
+import { fetchSuttaAnalysis } from "@/lib/content";
 import { splitWords } from "@/lib/pali";
 import { unitOf } from "@/lib/segments";
-import type { Edition, SuttaNissaya } from "@/types";
+import type { AnalysisKind, Edition, SuttaNissaya } from "@/types";
 
 type State = { status: "loading" } | { status: "error" } | { status: "ready"; files: SuttaNissaya[] };
 
+export const ANALYSIS_LABEL: Record<AnalysisKind, string> = { nissaya: "대역", grammar: "문법분석" };
+
 /**
- * 대역 — 누른 문장(법구경은 그 게송 전체)의 "빠알리: 뜻" 풀이를 판본별로 보여 준다.
- * 판본마다 문장별·게송별로 넣은 방식이 달라, 같은 게송의 칸을 모두 모아 보여 준다.
+ * 대역·문법분석 — 고른 문장(또는 문단 전체)의 "빠알리: 풀이" 줄들을 판본별로 보여 준다.
+ * keys 는 보여 줄 문장 번호들(차례대로). 문장 하나를 골랐는데 그 문장에 칸이 없으면,
+ * 게송 첫 줄에 게송 전체를 넣은 판본이 있어 같은 게송의 칸을 대신 보여 준다.
+ * 종류(kind)가 바뀌면 부르는 쪽에서 key 를 바꿔 새로 그린다.
  */
-export function NissayaPanel({
+export function AnalysisPanel({
+  kind,
   suttaId,
-  rowKey,
+  keys,
   editions,
   onWord,
 }: {
+  kind: AnalysisKind;
   suttaId: string;
-  rowKey: string;
+  keys: string[];
   editions: Edition[];
   onWord: (word: string) => void;
 }) {
@@ -29,7 +35,7 @@ export function NissayaPanel({
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all(editionKey.split(",").map((id) => fetchSuttaNissaya(suttaId, id)))
+    Promise.all(editionKey.split(",").map((id) => fetchSuttaAnalysis(kind, suttaId, id)))
       .then((files) => {
         if (!cancelled) setState({ status: "ready", files });
       })
@@ -39,8 +45,9 @@ export function NissayaPanel({
     return () => {
       cancelled = true;
     };
-  }, [suttaId, editionKey]);
+  }, [kind, suttaId, editionKey]);
 
+  const label = ANALYSIS_LABEL[kind];
   if (state.status === "loading") {
     return (
       <div className="flex flex-col gap-3" aria-busy>
@@ -50,22 +57,29 @@ export function NissayaPanel({
     );
   }
   if (state.status === "error") {
-    return <p className="t-sub py-8 text-center">대역을 불러오지 못했습니다.</p>;
+    return <p className="t-sub py-8 text-center">{label}을 불러오지 못했습니다.</p>;
   }
 
-  const unit = unitOf(rowKey, suttaId);
-  const sameUnit = (key: string) => (unit ? unitOf(key, suttaId) === unit : key === rowKey);
+  const wanted = new Set(keys);
+  const units = new Set(keys.map((k) => unitOf(k, suttaId)).filter((u): u is string => u !== null));
+  const linesOf = (file: SuttaNissaya, pick: (key: string) => boolean) =>
+    Object.entries(file.entries)
+      .filter(([key]) => pick(key))
+      .flatMap(([, value]) => value.split("\n"))
+      .map((l) => l.trim())
+      .filter(Boolean);
+
   const found = state.files.flatMap((file) => {
-    const text = Object.entries(file.entries)
-      .filter(([key]) => sameUnit(key))
-      .map(([, value]) => value.trim())
-      .join("\n");
+    let lines = linesOf(file, (key) => wanted.has(key));
+    if (lines.length === 0 && units.size > 0) {
+      lines = linesOf(file, (key) => units.has(unitOf(key, suttaId) ?? ""));
+    }
     const edition = editions.find((e) => e.id === file.editionId);
-    return text && edition ? [{ edition, lines: text.split("\n").map((l) => l.trim()).filter(Boolean) }] : [];
+    return lines.length && edition ? [{ edition, lines }] : [];
   });
 
   if (found.length === 0) {
-    return <p className="t-sub py-8 text-center">이 문장의 대역 데이터가 없습니다.</p>;
+    return <p className="t-sub py-8 text-center">이 문장의 {label} 데이터가 없습니다.</p>;
   }
 
   return (
@@ -75,7 +89,7 @@ export function NissayaPanel({
           <p className="t-meta mb-2 font-semibold">{edition.label}</p>
           <div className="flex flex-col gap-1">
             {lines.map((line, i) => {
-              // "빠알리: 뜻" — 빠알리 부분은 굵게, 단어를 누르면 사전에서 찾는다.
+              // "빠알리: 풀이" — 빠알리 부분은 굵게, 단어를 누르면 사전에서 찾는다.
               const m = line.match(/^([^:：]+?)\s*[:：]\s*(.*)$/);
               return (
                 <p key={i}>

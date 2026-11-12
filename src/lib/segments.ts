@@ -120,6 +120,20 @@ export function unitOf(key: string, suttaId: string): string | null {
 }
 
 /**
+ * 문장이 든 문단(원래 앱의 카드 하나) 번호 — 대역·문법분석 배지를 다는 단위.
+ * 게송이 있는 경(법구경)은 게송 번호(dhp5), 그 밖에는 문장 번호에서 마지막 숫자를 뗀 것.
+ *   sn56.11:1.1 → sn56.11:1 / dn22:1.2.3 → dn22:1.2 / dn1:5 → dn1:5
+ */
+export function paragraphOf(key: string, suttaId: string): string {
+  const unit = unitOf(key, suttaId);
+  if (unit) return unit;
+  const colon = key.indexOf(":");
+  const tail = key.slice(colon + 1);
+  const dot = tail.lastIndexOf(".");
+  return dot > 0 ? `${key.slice(0, colon)}:${tail.slice(0, dot)}` : key;
+}
+
+/**
  * 줄의 종류 — 화면에서 어떻게 그릴지.
  *   hidden : 경·품 이름 줄(0.1~0.3). 페이지 제목이 대신한다.
  *   heading: 단락 제목(.0)과 법구경 게송의 일화 제목(dhp5:0.4 / dhp5:0)

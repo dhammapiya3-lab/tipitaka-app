@@ -2,21 +2,38 @@
 
 import { BookA, Search, X } from "lucide-react";
 import { useState } from "react";
-import { NissayaPanel } from "@/components/dictionary/nissaya-panel";
+import { ANALYSIS_LABEL, AnalysisPanel } from "@/components/dictionary/analysis-panel";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import type { Edition } from "@/types";
+import type { AnalysisKind, Edition } from "@/types";
 
-/** 사전 창에 띄울 것: 누른 단어와 그 단어가 있는 문장 번호 */
+export type PanelTab = "dictionary" | AnalysisKind;
+
+/**
+ * 풀이 창에 띄울 것.
+ *   단어를 누름   → word 와 그 문장, 사전 탭
+ *   문장을 누름   → 그 문장 하나, 대역·문법분석 탭
+ *   문단 배지     → 문단의 모든 문장, 그 배지의 탭
+ */
 export interface WordTarget {
-  word: string;
+  /** 사전에서 찾을 단어. 문장·문단을 눌렀으면 null */
+  word: string | null;
+  /** 창을 연 문장(문단이면 첫 문장) — 다시 그릴 때의 열쇠 */
   rowKey: string;
+  /** 대역·문법분석을 보여 줄 문장 번호들 */
+  keys: string[];
+  tab: PanelTab;
+  /** 단어가 없을 때 제목 (예: "SN 56.11:1 문단") */
+  title: string;
+  /** 고른 곳의 빠알리 원문 (대역·문법분석 위에 보여 준다) */
+  pali: string;
 }
 
-type Tab = "dictionary" | "nissaya";
+/** 이 경에서 대역·문법분석이 있는 판본 */
+export type AnalysisEditions = Record<AnalysisKind, Edition[]>;
 
 /**
  * 경 읽기에서 빠알리 단어를 누르면 열리는 창 — 좁은 화면용 (조회 드로어).
@@ -26,12 +43,12 @@ type Tab = "dictionary" | "nissaya";
 export function WordSheet({
   target,
   suttaId,
-  nissayaEditions,
+  analysisEditions,
   onClose,
 }: {
   target: WordTarget | null;
   suttaId: string;
-  nissayaEditions: Edition[];
+  analysisEditions: AnalysisEditions;
   onClose: () => void;
 }) {
   return (
@@ -39,10 +56,10 @@ export function WordSheet({
       <SheetContent side="right" className="w-[min(560px,92vw)] gap-0 p-0 sm:max-w-none">
         {target ? (
           <WordPanelBody
-            key={`${target.rowKey} ${target.word}`}
+            key={`${target.rowKey} ${target.word} ${target.tab} ${target.keys.length}`}
             target={target}
             suttaId={suttaId}
-            nissayaEditions={nissayaEditions}
+            analysisEditions={analysisEditions}
           />
         ) : null}
       </SheetContent>
@@ -54,24 +71,24 @@ export function WordSheet({
 export function WordDock({
   target,
   suttaId,
-  nissayaEditions,
+  analysisEditions,
   onClose,
 }: {
   target: WordTarget;
   suttaId: string;
-  nissayaEditions: Edition[];
+  analysisEditions: AnalysisEditions;
   onClose: () => void;
 }) {
   return (
     <aside
-      aria-label="사전"
+      aria-label="풀이"
       className="sticky top-30 flex h-[calc(100vh-8.5rem)] w-[400px] shrink-0 flex-col overflow-hidden rounded-2xl border bg-card shadow-xs"
     >
       <WordPanelBody
-        key={`${target.rowKey} ${target.word}`}
+        key={`${target.rowKey} ${target.word} ${target.tab} ${target.keys.length}`}
         target={target}
         suttaId={suttaId}
-        nissayaEditions={nissayaEditions}
+        analysisEditions={analysisEditions}
         onClose={onClose}
       />
     </aside>
@@ -82,42 +99,45 @@ export function WordDock({
 function WordPanelBody({
   target,
   suttaId,
-  nissayaEditions,
+  analysisEditions,
   onClose,
 }: {
   target: WordTarget;
   suttaId: string;
-  nissayaEditions: Edition[];
+  analysisEditions: AnalysisEditions;
   onClose?: () => void;
 }) {
-  const [tab, setTab] = useState<Tab>("dictionary");
-  const [query, setQuery] = useState(target.word);
-  const [searched, setSearched] = useState(target.word);
+  const [tab, setTab] = useState<PanelTab>(target.tab);
+  const [query, setQuery] = useState(target.word ?? "");
+  const [searched, setSearched] = useState(target.word ?? "");
 
-  /** 대역의 단어를 누르면 사전 탭으로 돌아가 그 단어를 찾는다 */
+  /** 대역·문법분석의 단어를 누르면 사전 탭으로 돌아가 그 단어를 찾는다 */
   function searchWord(word: string) {
     setQuery(word);
     setSearched(word);
     setTab("dictionary");
   }
 
-  const tabs: { id: Tab; label: string }[] = [
+  const tabs: { id: PanelTab; label: string }[] = [
+    ...(["nissaya", "grammar"] as const)
+      .filter((kind) => analysisEditions[kind].length > 0)
+      .map((kind) => ({ id: kind, label: ANALYSIS_LABEL[kind] })),
     { id: "dictionary", label: "사전" },
-    ...(nissayaEditions.length > 0 ? [{ id: "nissaya" as const, label: "대역" }] : []),
   ];
+  const heading = searched || target.title;
 
   return (
     <>
       {onClose ? (
         <div className="flex items-center gap-3 border-b p-4">
-          <PanelTitle searched={searched} docked />
-          <Button variant="ghost" size="icon" className="ml-auto" aria-label="사전 닫기" onClick={onClose}>
+          <PanelTitle heading={heading} isWord={Boolean(searched)} docked />
+          <Button variant="ghost" size="icon" className="ml-auto" aria-label="풀이 창 닫기" onClick={onClose}>
             <X aria-hidden />
           </Button>
         </div>
       ) : (
         <SheetHeader className="flex-row items-center gap-3 border-b p-4 pr-12">
-          <PanelTitle searched={searched} />
+          <PanelTitle heading={heading} isWord={Boolean(searched)} />
         </SheetHeader>
       )}
       <div className="flex flex-col gap-3 border-b p-4">
@@ -169,21 +189,42 @@ function WordPanelBody({
       </div>
       <div className="flex-1 overflow-y-auto p-4">
         {tab === "dictionary" ? (
-          <WordLookupResult word={searched} onSearch={searchWord} />
+          searched ? (
+            <WordLookupResult word={searched} onSearch={searchWord} />
+          ) : (
+            <p className="t-sub py-8 text-center">위 칸에 찾을 빠알리 단어를 넣으세요.</p>
+          )
         ) : (
-          <NissayaPanel
-            suttaId={suttaId}
-            rowKey={target.rowKey}
-            editions={nissayaEditions}
-            onWord={searchWord}
-          />
+          <>
+            {target.pali ? (
+              <p lang="pi" className="mb-3 font-pali whitespace-pre-line text-muted-foreground">
+                {target.pali}
+              </p>
+            ) : null}
+            <AnalysisPanel
+              key={tab}
+              kind={tab}
+              suttaId={suttaId}
+              keys={target.keys}
+              editions={analysisEditions[tab]}
+              onWord={searchWord}
+            />
+          </>
         )}
       </div>
     </>
   );
 }
 
-function PanelTitle({ searched, docked = false }: { searched: string; docked?: boolean }) {
+function PanelTitle({
+  heading,
+  isWord,
+  docked = false,
+}: {
+  heading: string;
+  isWord: boolean;
+  docked?: boolean;
+}) {
   const titleClass = "truncate text-lg leading-[26px] font-bold tracking-tight";
   return (
     <>
@@ -192,12 +233,12 @@ function PanelTitle({ searched, docked = false }: { searched: string; docked?: b
       </span>
       <div className="min-w-0">
         {docked ? (
-          <h2 lang="pi" className={titleClass}>
-            {searched}
+          <h2 lang={isWord ? "pi" : undefined} className={titleClass}>
+            {heading}
           </h2>
         ) : (
-          <SheetTitle lang="pi" className={titleClass}>
-            {searched}
+          <SheetTitle lang={isWord ? "pi" : undefined} className={titleClass}>
+            {heading}
           </SheetTitle>
         )}
         <p className="t-meta">

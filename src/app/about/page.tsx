@@ -53,6 +53,7 @@ export default function AboutPage() {
                     {[
                       summarize(allSuttas.filter((s) => s.editions.includes(e.id)).map((s) => s.id)),
                       summarize(allSuttas.filter((s) => s.nissaya.includes(e.id)).map((s) => s.id), "대역"),
+                      summarize(allSuttas.filter((s) => s.grammar.includes(e.id)).map((s) => s.id), "문법분석"),
                     ]
                       .filter(Boolean)
                       .join(" · ")}

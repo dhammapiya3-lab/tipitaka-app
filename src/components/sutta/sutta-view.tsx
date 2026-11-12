@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { toast } from "sonner";
-import { WordDock, WordSheet, type WordTarget } from "@/components/dictionary/word-sheet";
+import {
+  WordDock,
+  WordSheet,
+  type AnalysisEditions,
+  type WordTarget,
+} from "@/components/dictionary/word-sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
@@ -13,7 +18,7 @@ import { SegmentRow, type SentenceActions } from "@/components/sutta/segment-row
 import { TextSettingsSheet } from "@/components/sutta/text-settings-sheet";
 import { TocSheet, type TocItem } from "@/components/sutta/toc-sheet";
 import { useReaderKeys } from "@/components/sutta/use-reader-keys";
-import { useSuttaNotes, useSuttaTexts } from "@/components/sutta/use-sutta-content";
+import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LANGUAGE_SHORT, PALI_EDITION } from "@/lib/constants";
@@ -21,6 +26,7 @@ import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
   alignEditions,
+  paragraphOf,
   pickEditions,
   plainText,
   rowKind,
@@ -32,7 +38,7 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
 import { useSettingsStore } from "@/store/settings";
-import type { Edition, SuttaText } from "@/types";
+import type { AnalysisKind, Edition, SuttaText } from "@/types";
 
 export interface SuttaLink {
   id: string;
@@ -47,7 +53,7 @@ export function SuttaView({
   suttaTitle,
   editions,
   noteEditions,
-  nissayaEditions,
+  analysisEditions,
   prev,
   next,
 }: {
@@ -56,8 +62,8 @@ export function SuttaView({
   /** 이 경에 있는 판본 (빠알리 → 한국어 → 영어 순) */
   editions: Edition[];
   noteEditions: string[];
-  /** 대역이 있는 판본 */
-  nissayaEditions: Edition[];
+  /** 대역·문법분석이 있는 판본 */
+  analysisEditions: AnalysisEditions;
   prev: SuttaLink | null;
   next: SuttaLink | null;
 }) {
@@ -77,6 +83,16 @@ export function SuttaView({
   /** 사전 창에 띄울 빠알리 단어와 그 문장 */
   const [word, setWord] = useState<WordTarget | null>(null);
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
+  const analysisIds = useMemo(
+    () => ({
+      nissaya: analysisEditions.nissaya.map((e) => e.id),
+      grammar: analysisEditions.grammar.map((e) => e.id),
+    }),
+    [analysisEditions],
+  );
+  const analysisKeys = useAnalysisKeys(suttaId, analysisIds);
+  /** 마지막으로 본 풀이(대역·문법분석) — 문장을 누르면 이것부터 연다 */
+  const [lastKind, setLastKind] = useState<AnalysisKind>("nissaya");
   /** 키보드로 고른 문장과 그 안의 빠알리 단어 순번 */
   const [active, setActive] = useState<{ key: string; word: number } | null>(null);
   /** 메모를 쓰는 문장 */
@@ -137,6 +153,43 @@ export function SuttaView({
 
   const rowLabel = (key: string) =>
     `${suttaLabel(key.slice(0, key.indexOf(":")))}:${key.slice(key.indexOf(":") + 1)}`;
+
+  // ── 대역·문법분석: 문단 배지와 문장 누르기 ───────────────────────
+  /** 문단 번호 → 그 문단의 본문 문장 번호들 (차례대로) */
+  const paragraphs = new Map<string, string[]>();
+  for (const row of textRows) {
+    const p = paragraphOf(row.key, suttaId);
+    paragraphs.set(p, [...(paragraphs.get(p) ?? []), row.key]);
+  }
+  /** 이 문장들 가운데 풀이가 있는 종류 (게송 첫 줄에 게송 전체를 넣은 판본도 있어 게송 단위로도 본다) */
+  function kindsFor(keys: string[]): AnalysisKind[] {
+    const units = new Set(keys.map((k) => unitOf(k, suttaId)));
+    return (["nissaya", "grammar"] as const).filter((kind) =>
+      [...analysisKeys[kind]].some((k) => keys.includes(k) || (units.has(unitOf(k, suttaId)) && unitOf(k, suttaId) !== null)),
+    );
+  }
+  function paliOf(keys: string[]): string {
+    const root = texts[PALI_EDITION];
+    if (!root) return "";
+    return root.segments
+      .filter((seg) => keys.includes(seg.key))
+      .map((seg) => plainText(seg.parts))
+      .join("\n");
+  }
+  function openAnalysis(keys: string[], kind: AnalysisKind, title: string) {
+    setLastKind(kind);
+    setWord({ word: null, rowKey: keys[0], keys, tab: kind, title, pali: paliOf(keys) });
+  }
+  /** 문장을 누르면 그 문장 하나의 대역·문법분석 (풀이가 있는 문장만) */
+  function onSentence(row: AlignedRow) {
+    const kinds = kindsFor([row.key]);
+    if (kinds.length === 0) return;
+    const kind = kinds.includes(lastKind) ? lastKind : kinds[0];
+    openAnalysis([row.key], kind, rowLabel(row.key));
+  }
+  function paragraphTitle(paragraph: string): string {
+    return paragraph.includes(":") ? `${rowLabel(paragraph)} 문단` : `${unitLabel(paragraph)} 게송`;
+  }
 
   async function copy(text: string, done: string) {
     try {
@@ -201,7 +254,9 @@ export function SuttaView({
     },
     lookup: () => {
       const w = paliWords[active?.word ?? 0];
-      if (active && w) setWord({ word: w, rowKey: active.key });
+      if (active && w) {
+        setWord({ word: w, rowKey: active.key, keys: [active.key], tab: "dictionary", title: "", pali: "" });
+      }
     },
     bookmark: () => {
       if (activeRow) {
@@ -315,6 +370,17 @@ export function SuttaView({
                 const unit = unitOf(row.key, suttaId);
                 const prevUnit = i > 0 ? unitOf(rows[i - 1].key, suttaId) : null;
                 const kind = rowKind(row.key, suttaId);
+                // 문단 첫 문장에 그 문단의 대역·문법분석 배지를 단다
+                const paragraph = kind === "text" ? paragraphOf(row.key, suttaId) : null;
+                const paragraphKeys = paragraph ? (paragraphs.get(paragraph) ?? []) : [];
+                const badges =
+                  paragraph && paragraphKeys[0] === row.key
+                    ? kindsFor(paragraphKeys).map((k) => ({
+                        kind: k,
+                        onClick: () => openAnalysis(paragraphKeys, k, paragraphTitle(paragraph)),
+                      }))
+                    : [];
+                const hasAnalysis = kind === "text" && kindsFor([row.key]).length > 0;
                 return (
                   <SegmentRow
                     key={row.key}
@@ -330,7 +396,11 @@ export function SuttaView({
                     notes={notes}
                     openNotes={openNotes}
                     onNote={toggleNote}
-                    onWord={(w) => setWord({ word: w, rowKey: row.key })}
+                    onWord={(w) =>
+                      setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: "" })
+                    }
+                    badges={badges}
+                    onSentence={hasAnalysis ? () => onSentence(row) : undefined}
                   />
                 );
               })}
@@ -340,7 +410,7 @@ export function SuttaView({
             <WordDock
               target={word}
               suttaId={suttaId}
-              nissayaEditions={nissayaEditions}
+              analysisEditions={analysisEditions}
               onClose={() => setWord(null)}
             />
           </div>
@@ -350,7 +420,7 @@ export function SuttaView({
         <WordSheet
           target={word}
           suttaId={suttaId}
-          nissayaEditions={nissayaEditions}
+          analysisEditions={analysisEditions}
           onClose={() => setWord(null)}
         />
       ) : null}

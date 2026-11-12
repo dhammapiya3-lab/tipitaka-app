@@ -2,6 +2,7 @@
 
 import { Bookmark, Copy, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
+import { ANALYSIS_LABEL } from "@/components/dictionary/analysis-panel";
 import { InlineText } from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AlignedRow } from "@/lib/segments";
 import { cn } from "@/lib/utils";
-import type { Edition, Footnote, Language, SuttaText } from "@/types";
+import type { AnalysisKind, Edition, Footnote, Language, SuttaText } from "@/types";
 
 const LANG_ATTR: Record<Language, string> = { pli: "pi", ko: "ko", en: "en" };
 
@@ -27,6 +28,19 @@ export interface SentenceActions {
   onMemo: () => void;
   onCopyLink: () => void;
   onCopyText: () => void;
+}
+
+/** 문단 첫 줄 오른쪽 위의 [대역]·[문법분석] 배지 — 누르면 그 문단 전체의 풀이 */
+export interface AnalysisBadge {
+  kind: AnalysisKind;
+  onClick: () => void;
+}
+
+/** 누른 곳이 단어·각주 버튼·링크가 아니고, 글자를 끌어 고르는 중도 아닐 때만 문장 누르기로 본다 */
+function isPlainClick(target: EventTarget | null): boolean {
+  if (!(target instanceof Element) || target.closest("[data-word], button, a")) return false;
+  const selection = window.getSelection();
+  return !selection || selection.isCollapsed;
 }
 
 /** 문장 한 줄 — 판본들을 나란히(넓은 화면) 또는 위아래로(휴대폰) */
@@ -44,6 +58,8 @@ export function SegmentRow({
   openNotes,
   onNote,
   onWord,
+  badges = [],
+  onSentence,
 }: {
   row: AlignedRow;
   heading: boolean;
@@ -62,6 +78,10 @@ export function SegmentRow({
   onNote: (editionId: string, key: string, mark: string) => void;
   /** 빠알리 원문의 단어를 누를 때 */
   onWord: (word: string) => void;
+  /** 문단 첫 줄이면 그 문단의 풀이 배지 */
+  badges?: AnalysisBadge[];
+  /** 대역·문법분석이 있는 문장이면, 문장을 누를 때 */
+  onSentence?: () => void;
 }) {
   const compare = shown.length > 1;
 
@@ -78,8 +98,29 @@ export function SegmentRow({
       <div className="w-6 shrink-0 pt-[0.15em] print:hidden">
         {actions ? <SentenceMenu actions={actions} /> : null}
       </div>
-      <div className="min-w-0 flex-1">
-        {unitLabel ? <p className="t-meta mb-1 font-semibold">{unitLabel}</p> : null}
+      <div
+        className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}
+        onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
+      >
+        {unitLabel || badges.length ? (
+          <div className="mb-1 flex items-center gap-2">
+            {unitLabel ? <p className="t-meta font-semibold">{unitLabel}</p> : null}
+            {badges.length ? (
+              <div className="ml-auto flex gap-1 print:hidden">
+                {badges.map((badge) => (
+                  <button
+                    key={badge.kind}
+                    type="button"
+                    onClick={badge.onClick}
+                    className="h-6 rounded-md border border-transparent bg-brand-soft px-2 text-xs font-semibold text-brand-ink transition-colors outline-none hover:border-primary/40 focus-visible:ring-3 focus-visible:ring-ring/50"
+                  >
+                    {ANALYSIS_LABEL[badge.kind]}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
         {/* 모바일은 판본을 위아래로, md 이상은 나란히 */}
         <div
           className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-[var(--cols)] print:grid-cols-[var(--cols)]"

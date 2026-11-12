@@ -67,6 +67,7 @@ export const catalogSuttaSchema: z.ZodType<CatalogSutta> = z.object({
   editions: z.array(z.string()),
   noteEditions: z.array(z.string()),
   nissaya: z.array(z.string()),
+  grammar: z.array(z.string()),
 });
 
 export const suttaNissayaSchema: z.ZodType<SuttaNissaya> = z.object({

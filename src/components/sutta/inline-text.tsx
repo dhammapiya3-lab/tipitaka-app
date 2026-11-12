@@ -82,6 +82,7 @@ function Words({
     return (
       <span
         key={i}
+        data-word
         onClick={() => onWord(piece.text)}
         className={cn(
           "cursor-pointer rounded-sm hover:bg-brand-soft hover:text-brand-ink",

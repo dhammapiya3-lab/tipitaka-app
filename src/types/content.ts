@@ -48,6 +48,12 @@ export interface Footnote {
  * 대역(nissaya) — 빠알리 단어를 차례로 풀어 쓴 번역. 한 칸은 "빠알리: 뜻" 줄들(줄바꿈으로 나뉨).
  * 판본에 따라 문장마다 또는 게송 첫 줄에 게송 전체가 들어 있다.
  */
+/**
+ * 문법분석도 대역과 같은 모양이다 — 한 칸은 "단어: 원형. 품사·격·수. 뜻" 줄들.
+ * 대역과 문법분석을 함께 "풀이(analysis)"라 부른다.
+ */
+export type AnalysisKind = "nissaya" | "grammar";
+
 export interface SuttaNissaya {
   suttaId: string;
   editionId: string;

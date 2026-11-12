@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchSuttaNotes, fetchSuttaText } from "@/lib/content";
-import type { SuttaNotes, SuttaText } from "@/types";
+import { fetchSuttaAnalysis, fetchSuttaNotes, fetchSuttaText } from "@/lib/content";
+import type { AnalysisKind, SuttaNotes, SuttaText } from "@/types";
 
 // 같은 판본을 껐다 켜도 다시 받지 않도록 페이지 안에서 기억한다. 실패한 요청은 지워 다시 시도할 수 있게 한다.
 const textCache = new Map<string, Promise<SuttaText>>();
@@ -85,3 +85,35 @@ export function useSuttaNotes(suttaId: string) {
 
   return { notes, load };
 }
+
+/**
+ * 대역·문법분석이 있는 문장 번호들 — 문단 배지를 어디에 달지 정한다.
+ * 파일이 작아(경 하나, 판본 한두 개) 경을 열 때 바로 받는다. 못 받으면 배지만 안 보인다.
+ */
+export function useAnalysisKeys(suttaId: string, editions: Record<AnalysisKind, string[]>) {
+  const editionsKey = JSON.stringify(editions);
+  const [keys, setKeys] = useState<Record<AnalysisKind, ReadonlySet<string>>>(EMPTY_KEYS);
+
+  useEffect(() => {
+    let cancelled = false;
+    const wanted: Record<AnalysisKind, string[]> = JSON.parse(editionsKey);
+    const kinds = ["nissaya", "grammar"] as const;
+    Promise.all(
+      kinds.map((kind) =>
+        Promise.all(wanted[kind].map((id) => fetchSuttaAnalysis(kind, suttaId, id))).then(
+          (files) => new Set(files.flatMap((f) => Object.keys(f.entries))),
+          () => new Set<string>(),
+        ),
+      ),
+    ).then(([nissaya, grammar]) => {
+      if (!cancelled) setKeys({ nissaya, grammar });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [suttaId, editionsKey]);
+
+  return keys;
+}
+
+const EMPTY_KEYS: Record<AnalysisKind, ReadonlySet<string>> = { nissaya: new Set(), grammar: new Set() };

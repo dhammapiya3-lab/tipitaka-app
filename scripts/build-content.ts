@@ -38,6 +38,7 @@ import type {
 
 const SOURCE = path.join(SOURCE_ROOT, "sutta_pitaka");
 const NISSAYA_SOURCE = path.join(SOURCE_ROOT, "sutta_pitaka_nissaya");
+const GRAMMAR_SOURCE = path.join(SOURCE_ROOT, "sutta_pitaka_paligrammar");
 const ROOT = process.cwd();
 const OUT_DATA = path.join(ROOT, "src/data");
 const OUT_SUTTAS = path.join(ROOT, "public/data/suttas");
@@ -166,7 +167,8 @@ const editionById = new Map<string, Edition>(
 const usedEditions = new Set<string>();
 const texts: SuttaText[] = [];
 const notesFiles: SuttaNotes[] = [];
-const nissayaFiles: SuttaNissaya[] = [];
+/** 대역·문법분석 파일 (같은 모양) */
+const analysisFiles: (SuttaNissaya & { kind: "nissaya" | "grammar" })[] = [];
 
 function buildSutta(
   nikaya: (typeof NIKAYAS)[number],
@@ -183,6 +185,7 @@ function buildSutta(
     editions: [],
     noteEditions: [],
     nissaya: [],
+    grammar: [],
   };
 
   const rootEntry = editionList.find((e) => e.edition === ROOT_EDITION);
@@ -252,22 +255,29 @@ function buildSutta(
     sutta.noteEditions.push(entry.edition);
   }
 
-  // 대역: <판본 폴더>/<경>_root-nissaya-<판본>.json. 빈 칸은 뺀다. 문장 번호는 원문에 있어야 한다.
-  const nissaya = editionsFor(nikaya.folder, id, NISSAYA_SOURCE);
-  for (const entry of nissaya.list) {
-    const file = path.join(nissaya.dir, entry.folder, `${sub}_root-nissaya-${entry.edition}.json`);
-    if (!existsSync(file) || !root) continue;
-    const where = `${id} 대역 ${entry.edition}`;
-    if (!editionById.has(entry.edition)) errors.push(`${where}: edition-registry.json 에 판본 정보가 없습니다`);
-    const entries = Object.fromEntries(
-      Object.entries(rawTextSchema.parse(readJson(file))).filter(([, text]) => text.trim()),
-    );
-    const extra = Object.keys(entries).filter((key) => !(key in root));
-    if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
-    if (Object.keys(entries).length === 0) continue;
-    nissayaFiles.push({ suttaId: id, editionId: entry.edition, entries });
-    sutta.nissaya.push(entry.edition);
-    usedEditions.add(entry.edition);
+  // 대역: <판본 폴더>/<경>_root-nissaya-<판본>.json, 문법분석: ..._root-paligrammar-<판본>.json
+  // 빈 칸은 뺀다. 문장 번호는 원문에 있어야 한다.
+  const analyses = [
+    { kind: "nissaya", base: NISSAYA_SOURCE, file: "nissaya", label: "대역" },
+    { kind: "grammar", base: GRAMMAR_SOURCE, file: "paligrammar", label: "문법분석" },
+  ] as const;
+  for (const a of analyses) {
+    const found = editionsFor(nikaya.folder, id, a.base);
+    for (const entry of found.list) {
+      const file = path.join(found.dir, entry.folder, `${sub}_root-${a.file}-${entry.edition}.json`);
+      if (!existsSync(file) || !root) continue;
+      const where = `${id} ${a.label} ${entry.edition}`;
+      if (!editionById.has(entry.edition)) errors.push(`${where}: edition-registry.json 에 판본 정보가 없습니다`);
+      const entries = Object.fromEntries(
+        Object.entries(rawTextSchema.parse(readJson(file))).filter(([, text]) => text.trim()),
+      );
+      const extra = Object.keys(entries).filter((key) => !(key in root));
+      if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
+      if (Object.keys(entries).length === 0) continue;
+      analysisFiles.push({ kind: a.kind, suttaId: id, editionId: entry.edition, entries });
+      sutta[a.kind].push(entry.edition);
+      usedEditions.add(entry.edition);
+    }
   }
   return sutta;
 }
@@ -332,14 +342,17 @@ for (const notes of notesFiles) {
     JSON.stringify(suttaNotesSchema.parse(notes)),
   );
 }
-for (const nissaya of nissayaFiles) {
+for (const { kind, ...file } of analysisFiles) {
   writeFileSync(
-    path.join(OUT_SUTTAS, nissaya.suttaId, `${nissaya.editionId}.nissaya.json`),
-    JSON.stringify(suttaNissayaSchema.parse(nissaya)),
+    path.join(OUT_SUTTAS, file.suttaId, `${file.editionId}.${kind}.json`),
+    JSON.stringify(suttaNissayaSchema.parse(file)),
   );
 }
-if (nissayaFiles.length) {
-  console.log(`대역: ${nissayaFiles.map((n) => `${n.suttaId}(${n.editionId})`).join(", ")}`);
+for (const kind of ["nissaya", "grammar"] as const) {
+  const list = analysisFiles.filter((f) => f.kind === kind);
+  if (list.length) {
+    console.log(`${kind === "nissaya" ? "대역" : "문법분석"}: ${list.map((n) => `${n.suttaId}(${n.editionId})`).join(", ")}`);
+  }
 }
 
 // ── 검색 색인: 언어별 "단어 → { 경|판본 → 문장 번호들 }", 단어 앞글자별 조각 ─────────

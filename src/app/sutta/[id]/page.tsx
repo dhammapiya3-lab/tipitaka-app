@@ -49,7 +49,10 @@ export default async function SuttaPage({ params }: PageProps<"/sutta/[id]">) {
         suttaTitle={titleOf(sutta)}
         editions={editions.filter((e) => sutta.editions.includes(e.id))}
         noteEditions={sutta.noteEditions}
-        nissayaEditions={editions.filter((e) => sutta.nissaya.includes(e.id))}
+        analysisEditions={{
+          nissaya: editions.filter((e) => sutta.nissaya.includes(e.id)),
+          grammar: editions.filter((e) => sutta.grammar.includes(e.id)),
+        }}
         prev={linkOf(prev)}
         next={linkOf(next)}
       />

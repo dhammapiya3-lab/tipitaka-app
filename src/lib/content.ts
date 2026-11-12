@@ -32,6 +32,7 @@ import type {
   Language,
   PlainDictionaryId,
   PlainEntry,
+  AnalysisKind,
   SuttaNissaya,
   SuttaNotes,
   SuttaText,
@@ -57,16 +58,20 @@ export async function fetchSuttaNotes(suttaId: string, editionId: string): Promi
   return suttaNotesSchema.parse(await getJson(suttaUrl(suttaId, editionId, ".notes.json")));
 }
 
-const nissayaCache = new Map<string, Promise<SuttaNissaya>>();
+const analysisCache = new Map<string, Promise<SuttaNissaya>>();
 
-/** 대역 — 처음 열 때만 받고 페이지 안에서 기억한다 */
-export function fetchSuttaNissaya(suttaId: string, editionId: string): Promise<SuttaNissaya> {
-  const url = suttaUrl(suttaId, editionId, ".nissaya.json");
-  let promise = nissayaCache.get(url);
+/** 대역(.nissaya.json)·문법분석(.grammar.json) — 처음 열 때만 받고 페이지 안에서 기억한다 */
+export function fetchSuttaAnalysis(
+  kind: AnalysisKind,
+  suttaId: string,
+  editionId: string,
+): Promise<SuttaNissaya> {
+  const url = suttaUrl(suttaId, editionId, `.${kind}.json`);
+  let promise = analysisCache.get(url);
   if (!promise) {
     promise = getJson(url).then((data) => suttaNissayaSchema.parse(data));
-    nissayaCache.set(url, promise);
-    promise.catch(() => nissayaCache.delete(url));
+    analysisCache.set(url, promise);
+    promise.catch(() => analysisCache.delete(url));
   }
   return promise;
 }

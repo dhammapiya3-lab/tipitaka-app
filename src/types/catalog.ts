@@ -12,6 +12,8 @@ export interface CatalogSutta {
   noteEditions: string[];
   /** 대역이 있는 판본 id */
   nissaya: string[];
+  /** 문법분석이 있는 판본 id */
+  grammar: string[];
 }
 
 /** 품·상윳따·책처럼 경을 묶는 단위. 니까야마다 깊이가 다르다. */

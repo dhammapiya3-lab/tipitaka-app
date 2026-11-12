@@ -5,6 +5,7 @@ import {
   isHeadingKey,
   isTitleKey,
   noteMarks,
+  paragraphOf,
   parseInline,
   pickEditions,
   rowKind,
@@ -37,6 +38,20 @@ describe("rowKind · unitOf", () => {
     expect(rowKind("dhp1:0.3", "dhp1-20")).toBe("hidden");
     expect(rowKind("dhp1:0.4", "dhp1-20")).toBe("heading");
     expect(rowKind("dhp1:1", "dhp1-20")).toBe("text");
+  });
+});
+
+describe("paragraphOf", () => {
+  it("문장 번호의 마지막 숫자를 떼어 문단으로 묶는다", () => {
+    expect(paragraphOf("sn56.11:1.1", "sn56.11")).toBe("sn56.11:1");
+    expect(paragraphOf("sn56.11:2.4", "sn56.11")).toBe("sn56.11:2");
+    expect(paragraphOf("dn22:1.2.3", "dn22")).toBe("dn22:1.2");
+    expect(paragraphOf("dn1:5", "dn1")).toBe("dn1:5");
+  });
+
+  it("법구경은 게송 하나가 한 문단", () => {
+    expect(paragraphOf("dhp2:1", "dhp1-20")).toBe("dhp2");
+    expect(paragraphOf("dhp2:6", "dhp1-20")).toBe("dhp2");
   });
 });
 
