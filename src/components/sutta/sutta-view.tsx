@@ -364,6 +364,20 @@ export function SuttaView({
   const articleStyle: CSSProperties = { fontSize, lineHeight };
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
   const columns = isDesktop && shown.length > 1;
+  /**
+   * 본문 폭 — 게송처럼 짧은 줄은 어플처럼 가운데 알맞은 폭으로 모으고, 판본을 나란히 놓으면 그만큼 넓힌다.
+   * (게송 경: 법구경처럼 경 안에 게송 번호가 있는 경)
+   */
+  const verse = textRows.some((r) => unitOf(r.key, suttaId) !== null);
+  const readWidth = columns
+    ? shown.length === 2
+      ? verse
+        ? "max-w-4xl"
+        : "max-w-5xl"
+      : "max-w-none"
+    : verse
+      ? "max-w-xl"
+      : "max-w-2xl";
 
   // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
   const headingOf = new Map<string, string>();
@@ -583,7 +597,7 @@ export function SuttaView({
       {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
       <div className="mx-auto flex w-full max-w-[1280px] items-start gap-6 lg:px-6">
       <div className="min-w-0 flex-1">
-        <div className={cn("mx-auto flex gap-2 px-4 py-3 print:hidden", columns ? "max-w-none" : "max-w-3xl")} role="tablist" aria-label="본문 종류">
+        <div className={cn("mx-auto flex gap-2 px-4 py-3 print:hidden", readWidth)} role="tablist" aria-label="본문 종류">
           {(
             [
               ["sutta", "경"],
@@ -604,7 +618,7 @@ export function SuttaView({
         ) : (
           <>
             {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}
-            <div className={cn("mx-auto flex items-center justify-between px-4 py-2 print:hidden", columns ? "max-w-none" : "max-w-3xl")}>
+            <div className={cn("mx-auto flex items-center justify-between px-4 py-2 print:hidden", readWidth)}>
               {focus ? (
                 <>
                   <button type="button" className={navButton} disabled={focusIndex <= 0} onClick={() => openParagraph(paragraphList[focusIndex - 1])}>
@@ -666,7 +680,7 @@ export function SuttaView({
               <article
                 className={cn(
                   "mx-auto flex w-full min-w-0 flex-col gap-4 print:max-w-none",
-                  columns ? "max-w-none" : "max-w-3xl",
+                  readWidth,
                 )}
                 style={articleStyle}
               >
