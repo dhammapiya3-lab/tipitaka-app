@@ -372,11 +372,11 @@ export function SuttaView({
   const readWidth = columns
     ? shown.length === 2
       ? verse
-        ? "max-w-4xl"
+        ? "max-w-3xl"
         : "max-w-5xl"
       : "max-w-none"
     : verse
-      ? "max-w-xl"
+      ? "max-w-[30rem]"
       : "max-w-2xl";
 
   // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
@@ -571,8 +571,13 @@ export function SuttaView({
 
   return (
     <div className="flex flex-col">
+
+      {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
+      <div className="mx-auto flex w-full max-w-[1280px] items-start gap-6 lg:px-6">
+      <div className="min-w-0 flex-1">
+      {/* 머리(제목·번역자·위치 줄·판본)는 본문 상자 폭에 맞춰 함께 가운데로 */}
       <SubBar
-        wide={isDesktop}
+        widthClass={readWidth}
         title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : (editionTitle ?? head.title)}
         titleLang={focus || editionTitle ? undefined : head.titleLang}
         subtitle={focus ? undefined : firstTranslation?.label}
@@ -600,11 +605,7 @@ export function SuttaView({
         <Breadcrumb items={head.crumbs} />
         <EditionBadges editions={shown} onInfo={setInfoEdition} />
       </SubBar>
-
-      {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
-      <div className="mx-auto flex w-full max-w-[1280px] items-start gap-6 lg:px-6">
-      <div className="min-w-0 flex-1">
-        <div className={cn("mx-auto flex gap-2 px-4 py-3 print:hidden", readWidth)} role="tablist" aria-label="본문 종류">
+        <div className={cn("mx-auto box-content flex gap-2 px-4 py-3 print:hidden", readWidth)} role="tablist" aria-label="본문 종류">
           {(
             [
               ["sutta", "경"],
@@ -625,7 +626,7 @@ export function SuttaView({
         ) : (
           <>
             {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}
-            <div className={cn("mx-auto flex items-center justify-between px-4 py-2 print:hidden", readWidth)}>
+            <div className={cn("mx-auto box-content flex items-center justify-between px-4 py-2 print:hidden", readWidth)}>
               {focus ? (
                 <>
                   <button type="button" className={navButton} disabled={focusIndex <= 0} onClick={() => openParagraph(paragraphList[focusIndex - 1])}>

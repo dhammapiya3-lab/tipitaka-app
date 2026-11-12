@@ -60,7 +60,10 @@ export function SubBar({
   actions,
   children,
   wide = false,
+  widthClass,
 }: {
+  /** 머리 내용 폭 (경 읽기: 본문 상자와 같은 폭) — 주면 wide 대신 쓴다 */
+  widthClass?: string;
   title: ReactNode;
   titleLang?: string;
   subtitle?: ReactNode;
@@ -76,8 +79,8 @@ export function SubBar({
   const backClass =
     "-ml-2 flex shrink-0 rounded-full p-2 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50";
   return (
-    <div className="bg-background px-6 pt-4 pb-4 print:px-0">
-      <div className={cn("mx-auto", wide ? "max-w-[1280px] lg:px-4" : "max-w-3xl")}>
+    <div className={cn("bg-background pt-4 pb-4 print:px-0", widthClass ? "px-4" : "px-6")}>
+      <div className={cn("mx-auto", widthClass ?? (wide ? "max-w-[1280px] lg:px-4" : "max-w-3xl"))}>
         <div className="flex items-center gap-3">
           {onBack ? (
             <button type="button" aria-label="뒤로" className={backClass} onClick={onBack}>
