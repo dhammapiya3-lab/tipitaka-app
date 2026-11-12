@@ -211,12 +211,18 @@ export const extrasSchema: z.ZodType<Record<string, SuttaExtras>> = z.record(
 export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
   suttaId: z.string().min(1),
   layer: z.enum(["attha", "tika"]),
+  book: z.string().min(1),
   bookName: z.string().min(1),
+  title: z.string().nullable(),
+  nameKo: z.string().nullable(),
   paras: z.array(
     z.object({
+      para: z.number(),
       vripara: z.string().nullable(),
       refs: z.array(z.string()),
       lines: z.array(z.array(inlinePartSchema)),
+      lineRefs: z.array(z.array(z.string())),
+      ko: z.array(z.array(inlinePartSchema).nullable()),
     }),
   ),
 });

@@ -169,17 +169,35 @@ for (const suttaId of ids) {
     const from = Math.min(...links.map((l) => l.dst_para));
     const to = Math.max(...links.map((l) => l.dst_para));
     const lines = linesOf(dstBook, from, to);
+    let cursor = 0;
     const paras = [...new Set(lines.map((l) => l.para))].map((para) => {
       const own = links.filter((l) => l.dst_para === para);
       const refs = ([...new Set(own.map((l) => paraToMark(l.src_para, l.src_line)).filter(Boolean))] as string[]).sort(
         (a, b) => Number(a.split(":")[1]) - Number(b.split(":")[1]),
       );
+      const mine = lines.filter((l) => l.para === para && l.text);
+      let last: string[] | null = null;
       return {
         para,
         vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
         refs,
         words: [...new Set(own.map((l) => l.word).filter(Boolean))] as string[],
-        lines: lines.filter((l) => l.para === para).map((l) => l.text),
+        lines: mine.map((l) => l.text),
+        // 줄마다 풀이하는 경 문단 — 연결이 없는 줄은 바로 앞 줄을 따른다 (첫 줄들은 문단 전체의 연결)
+        lineRefs: mine.map((l) => {
+          const found = [
+            ...new Set(own.filter((k) => k.dst_line === l.line).map((k) => paraToMark(k.src_para, k.src_line)).filter(Boolean)),
+          ] as string[];
+          if (found.length) {
+            // 같은 낱말이 경의 여러 문단에 나오면 링크가 여럿 걸린다. 주석은 경의 차례를 따르므로
+            // 지금 자리(cursor) 이후의 가장 가까운 문단 하나를 고른다.
+            const num = (r: string) => Number(r.slice(r.indexOf(":") + 1));
+            const sorted = found.sort((a, b) => num(a) - num(b));
+            last = [sorted.find((r) => num(r) >= cursor) ?? sorted[0]];
+            cursor = num(last[0]);
+          }
+          return last ?? (refs.length ? [refs[0]] : []);
+        }),
       };
     });
     const info = db.prepare("select book_name, vri_id from books where book_id = ?").get(dstBook) as {

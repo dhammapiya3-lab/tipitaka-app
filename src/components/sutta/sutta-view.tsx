@@ -148,20 +148,37 @@ export function SuttaView({
       alive = false;
     };
   }, [commentary, suttaId]);
-  /** 경 문단 → 그 문단을 풀이한 주석서 문단 순번 (문단 머리의 "주석" 단추) */
-  const commentaryOf = useMemo(() => {
-    const map = new Map<string, number>();
-    comm.attha?.paras.forEach((para, i) => para.refs.forEach((ref) => map.has(ref) || map.set(ref, i)));
-    return map;
-  }, [comm.attha]);
+  /**
+   * 경 문단 → 그 문단을 풀이한 주석 줄들 (문단마다 묶음). 한국어 번역이 있는 줄이 하나라도 있어야
+   * 문단 머리에 "주석"·"복주석" 단추를 둔다.
+   */
+  const koCommentary = useMemo(() => {
+    const out = new Map<string, Partial<Record<CommentaryLayer, { para: SuttaCommentary["paras"][number]; lines: number[] }[]>>>();
+    for (const l of ["attha", "tika"] as const) {
+      const data = comm[l];
+      if (!data) continue;
+      for (const para of data.paras) {
+        const byRef = new Map<string, number[]>();
+        para.lineRefs.forEach((refs, i) => refs.forEach((r) => byRef.set(r, [...(byRef.get(r) ?? []), i])));
+        for (const [ref, lines] of byRef) {
+          if (!lines.some((i) => para.ko[i])) continue;
+          const row = out.get(ref) ?? {};
+          (row[l] ??= []).push({ para, lines });
+          out.set(ref, row);
+        }
+      }
+    }
+    return out;
+  }, [comm]);
+  /** 문단 아래에 펼친 주석 번역 (문단 → 펼친 층) */
+  const [openKo, setOpenKo] = useState<Record<string, CommentaryLayer[]>>({});
+  const toggleKo = (p: string, l: CommentaryLayer) =>
+    setOpenKo((cur) => {
+      const now = cur[p] ?? [];
+      return { ...cur, [p]: now.includes(l) ? now.filter((x) => x !== l) : [...now, l] };
+    });
   /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
-  const [parallelPref, setParallel] = useState(true);
-  function openCommentary(i: number) {
-    setLayer("attha");
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => document.getElementById(`attha-${i}`)?.scrollIntoView({ block: "start" })),
-    );
-  }
+  const [parallelPref, setParallel] = useState(false);
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
@@ -529,19 +546,28 @@ export function SuttaView({
           </span>
         )}
         <div className="flex items-center gap-1.5 print:hidden">
-          {commentaryOf.has(p) ? (
-            <button
-              type="button"
-              title="이 문단의 주석서 보기"
-              onClick={(e) => {
-                e.stopPropagation();
-                openCommentary(commentaryOf.get(p)!);
-              }}
-              className="inline-flex items-center justify-center rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 transition-colors hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-300"
-            >
-              주석
-            </button>
-          ) : null}
+          {(["attha", "tika"] as const).map((l) =>
+            koCommentary.get(p)?.[l] ? (
+              <button
+                key={l}
+                type="button"
+                title={`이 문단의 ${LAYER_NAME[l]} 번역 ${openKo[p]?.includes(l) ? "접기" : "보기"}`}
+                aria-pressed={openKo[p]?.includes(l) ?? false}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleKo(p, l);
+                }}
+                className={cn(
+                  "inline-flex items-center justify-center rounded px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+                  openKo[p]?.includes(l)
+                    ? "bg-amber-600 text-white"
+                    : "bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-300",
+                )}
+              >
+                {l === "attha" ? "주석" : "복주석"}
+              </button>
+            ) : null,
+          )}
           {kinds.map((k) => (
             <button
               key={k}
@@ -629,6 +655,58 @@ export function SuttaView({
               />
             );
           })}
+        </div>
+        {(openKo[p] ?? []).map((l) => koBlock(p, l))}
+      </div>
+    );
+  }
+
+  /** 문단 아래에 펼치는 주석·복주석 번역 — 빠알리 한 줄, 그 아래 한국어 */
+  function koBlock(p: string, l: CommentaryLayer) {
+    const groups = koCommentary.get(p)?.[l];
+    const data = comm[l];
+    if (!groups || !data) return null;
+    const other: CommentaryLayer = l === "attha" ? "tika" : "attha";
+    const otherGroups = koCommentary.get(p)?.[other];
+    const ref = (g: { para: { para: number } }[]) => `${(l === "attha" ? data : comm[other]!).book} ${g.map((x) => x.para.para).join(", ")}`;
+    return (
+      <div key={l} className="border-t border-gray-100 bg-gray-50/70 px-5 py-4 dark:border-border dark:bg-muted/30 print:hidden">
+        <button
+          type="button"
+          onClick={() => toggleKo(p, l)}
+          className="mb-3 inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 hover:underline dark:text-amber-300"
+        >
+          <span aria-hidden>▾</span> 이 문단의 {LAYER_NAME[l]} 접기
+        </button>
+        <div className="flex flex-col gap-4 border-l-2 border-amber-300 pl-4">
+          <p className="text-xs text-faint">
+            {[data.title, data.nameKo].filter(Boolean).join(" · ") || data.bookName} ({data.book}{" "}
+            {groups.map((g) => g.para.para).join(", ")})
+          </p>
+          {groups.flatMap(({ para, lines }) =>
+            lines.map((i) => (
+              <div key={`${para.para}-${i}`} className="flex flex-col gap-1">
+                <p lang="pi" className="font-pali text-amber-900 dark:text-amber-200">
+                  {i === 0 && para.vripara ? `${para.vripara}. ` : ""}
+                  <InlineText parts={para.lines[i]} onWord={onCommentaryWord} />
+                </p>
+                {para.ko[i] ? (
+                  <p className="text-[0.9em] leading-relaxed text-gray-600 dark:text-muted-foreground">
+                    <InlineText parts={para.ko[i]!} />
+                  </p>
+                ) : null}
+              </div>
+            )),
+          )}
+          {otherGroups && !(openKo[p] ?? []).includes(other) ? (
+            <button
+              type="button"
+              onClick={() => toggleKo(p, other)}
+              className="w-fit rounded-lg border bg-card px-3 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-gray-50"
+            >
+              {LAYER_NAME[other]}도 보기 ({ref(otherGroups)})
+            </button>
+          ) : null}
         </div>
       </div>
     );
@@ -876,8 +954,6 @@ export function SuttaView({
                         <>
                           {headingBlock(focus)}
                           {paragraphCard(focus, true)}
-                          {/* 문단 보기: 이 문단의 주석서 · 복주석서 */}
-                          {parallelLayers.flatMap((l) => commentaryCards(l, commentaryFor(focus)[l], true))}
                         </>
                       )
                     : parallel

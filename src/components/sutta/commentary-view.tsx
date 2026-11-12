@@ -134,9 +134,16 @@ export function CommentaryCard({
       </div>
       <div className="flex flex-col gap-3 px-5 py-4 font-pali text-gray-800 dark:text-foreground" lang="pi">
         {para.lines.map((parts, j) => (
-          <p key={j}>
-            <InlineText parts={parts} onWord={onWord} />
-          </p>
+          <div key={j}>
+            <p>
+              <InlineText parts={parts} onWord={onWord} />
+            </p>
+            {para.ko[j] ? (
+              <p className="mt-1 font-sans text-[0.9em] leading-relaxed text-gray-600 dark:text-muted-foreground" lang="ko">
+                <InlineText parts={para.ko[j]!} />
+              </p>
+            ) : null}
+          </div>
         ))}
       </div>
     </section>

@@ -94,14 +94,25 @@ export type SuttaExtras = Partial<Record<ExtraKind, ExtraItem[]>>;
 export interface SuttaCommentary {
   suttaId: string;
   layer: "attha" | "tika";
-  /** 책 이름 (예: Saṃyutta-aṭṭhakathā) */
+  /** E-Piṭaka 책 약어 (예: Spk-v) */
+  book: string;
+  /** 책 이름 (예: Mahāvagga-aṭṭhakathā) */
   bookName: string;
+  /** 한국어 번역 파일에 적은 책 제목·한국어 이름 (예: Sāratthappakāsinī · 상윳따 대품 주석서) */
+  title: string | null;
+  nameKo: string | null;
   paras: {
+    /** 책 안의 문단 번호 (예: 882) */
+    para: number;
     /** VRI 문단 번호 (있으면) */
     vripara: string | null;
     /** 이 문단이 풀이하는 경의 문단 (예: sn56.11:2) */
     refs: string[];
     lines: InlinePart[][];
+    /** 줄마다 풀이하는 경 문단 */
+    lineRefs: string[][];
+    /** 줄마다 한국어 번역 (없으면 null) */
+    ko: (InlinePart[] | null)[];
   }[];
 }
 
