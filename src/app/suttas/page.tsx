@@ -17,7 +17,7 @@ export default function SuttasPage() {
   return (
     <>
       <TopBar title="경전" pali="Tipiṭaka" />
-      <Screen className="py-2">
+      <Screen className="px-6 py-2">
         <PitakaTabs>
           <h2 className="px-2 pt-2 pb-3 text-sm font-bold">5부 니까야</h2>
           <NikayaCards items={getNikayaSummaries()} />

@@ -18,7 +18,7 @@ export function TopLevelPage({
   return (
     <>
       <TopBar title={title} pali={pali} />
-      <Screen wide={wide} className="flex flex-col gap-4 py-5">
+      <Screen wide={wide} className="flex flex-col gap-4 px-6 py-5">
         {description ? <p className="px-2 text-xs leading-relaxed text-muted-foreground">{description}</p> : null}
         {children}
       </Screen>

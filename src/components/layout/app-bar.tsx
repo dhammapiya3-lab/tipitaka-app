@@ -16,8 +16,9 @@ import { cn } from "@/lib/utils";
 export function TopBar({ title, pali }: { title: string; pali?: string }) {
   const pathname = usePathname();
   return (
-    <div className="sticky top-0 z-30 flex h-16 items-center bg-primary px-6 text-primary-foreground print:hidden">
-      <div className="mx-auto flex w-full max-w-3xl items-center gap-3">
+    <div className="sticky top-0 z-30 flex h-16 items-center bg-primary text-primary-foreground print:hidden">
+      {/* 아래 본문 카드와 같은 폭·여백으로 — 제목 왼쪽 끝이 카드 왼쪽 끝과 맞는다 */}
+      <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-6">
         <h1 className="min-w-0 flex-1 truncate text-lg font-bold">
           {title}
           {pali ? (
