@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import { Noto_Sans, Noto_Serif } from "next/font/google";
 import { BottomTabBar } from "@/components/layout/bottom-tab-bar";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
@@ -17,6 +17,13 @@ const notoSans = Noto_Sans({
   display: "swap",
 });
 
+// 빠알리 원문은 명조로 — 경전다운 느낌 (2026-11-13 디자인)
+const notoSerif = Noto_Serif({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-noto-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: SERVICE_NAME,
@@ -29,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" suppressHydrationWarning className={`h-full ${notoSans.variable}`}>
+    <html lang="ko" suppressHydrationWarning className={`h-full ${notoSans.variable} ${notoSerif.variable}`}>
       <head>
         <link
           rel="stylesheet"
@@ -44,14 +51,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <div className="flex min-h-screen w-full">
+            <Header />
+            <div className="flex w-full flex-1">
               <Sidebar />
-              <div className="flex min-w-0 flex-1 flex-col">
-                <Header />
-                <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-6 pb-24 lg:px-6 lg:pb-6 print:max-w-none print:p-0">
-                  {children}
-                </main>
-              </div>
+              <main className="mx-auto w-full max-w-[1440px] min-w-0 flex-1 px-4 pt-6 pb-28 lg:px-8 lg:pb-10 print:max-w-none print:p-0">
+                {children}
+              </main>
             </div>
             <BottomTabBar />
           </TooltipProvider>

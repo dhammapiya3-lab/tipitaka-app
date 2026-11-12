@@ -32,7 +32,7 @@ export default async function NikayaPage({ params }: PageProps<"/suttas/[nikaya]
         actions={
           <Button variant="outline" nativeButton={false} render={<Link href="/suttas" />}>
             <ChevronLeft aria-hidden />
-            경전 목록
+            경전
           </Button>
         }
       />

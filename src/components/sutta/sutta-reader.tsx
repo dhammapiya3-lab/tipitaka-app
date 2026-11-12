@@ -1,6 +1,7 @@
 "use client";
 
-import { BookX, CloudOff } from "lucide-react";
+import { BookX, ChevronRight, CloudOff } from "lucide-react";
+import { Fragment } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -86,6 +87,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
 
   return (
     <div className="flex flex-col gap-4">
+      <Breadcrumb sutta={sutta} />
       <PageHeader
         title={titleOf(sutta)}
         titleLang={sutta.nameKo ? undefined : "pi"}
@@ -111,5 +113,45 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
         next={sameNikaya(index[i + 1])}
       />
     </div>
+  );
+}
+
+/** 경 제목 위 위치 줄 — 경전 › 니까야 › 품 › 상윳따. 눌러서 다른 경으로 쉽게 옮겨 간다. */
+function Breadcrumb({ sutta }: { sutta: SuttaIndexEntry }) {
+  const { nikayaName, groups, groupPages } = sutta.trail;
+  const items: { label: string; href?: string }[] = [
+    { label: "경전", href: "/suttas" },
+    { label: nikayaName, href: `/suttas/${sutta.nikaya}` },
+    ...groups.map((g, i) => ({
+      label: g.label,
+      href:
+        groupPages && i === groups.length - 1
+          ? `/suttas/${sutta.nikaya}/${encodeURIComponent(g.id)}`
+          : undefined,
+    })),
+  ];
+  return (
+    <nav aria-label="위치" className="-mb-2 print:hidden">
+      <ol className="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[13px] text-muted-foreground">
+        {items.map((item, i) => (
+          <Fragment key={`${i}-${item.label}`}>
+            {i > 0 ? (
+              <li aria-hidden className="flex">
+                <ChevronRight className="size-3.5 opacity-60" />
+              </li>
+            ) : null}
+            <li>
+              {item.href ? (
+                <Link href={item.href} className="rounded underline-offset-3 hover:text-foreground hover:underline">
+                  {item.label}
+                </Link>
+              ) : (
+                <span>{item.label}</span>
+              )}
+            </li>
+          </Fragment>
+        ))}
+      </ol>
+    </nav>
   );
 }

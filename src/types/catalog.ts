@@ -24,6 +24,13 @@ export interface CatalogSutta {
 export interface SuttaIndexEntry extends CatalogSutta {
   /** 니까야 id (dn·mn·sn·an·kn) — 이전·다음 경은 같은 니까야 안에서 */
   nikaya: string;
+  /** 경 화면 위 위치 줄: 니까야 이름과 그 아래 묶음들 (품·상윳따 …) */
+  trail: {
+    nikayaName: string;
+    groups: { id: string; label: string }[];
+    /** 니까야 목록이 묶음별 페이지로 나뉘면 맨 아래 묶음에 링크를 건다 */
+    groupPages: boolean;
+  };
 }
 
 /** 품·상윳따·책처럼 경을 묶는 단위. 니까야마다 깊이가 다르다. */

@@ -89,3 +89,24 @@ export function getAdjacentSuttas(id: string): {
   const i = list.findIndex((s) => s.id === id);
   return { prev: list[i - 1] ?? null, next: list[i + 1] ?? null };
 }
+
+/** 한국어 번역 판본이 있는지 */
+function hasKorean(s: CatalogSutta): boolean {
+  return s.editions.some((id) => editionById.get(id)?.language === "ko");
+}
+
+/** 니까야 하나에서 한국어 번역이 있는 경 (목록 순서대로) */
+export function getKoreanSuttas(nikayaId: string): CatalogSutta[] {
+  const nikaya = getNikaya(nikayaId);
+  return nikaya ? nikaya.nodes.flatMap(collect).filter(hasKorean) : [];
+}
+
+/** 홈의 "지금 읽을 수 있는 경" — 니까야별 한국어 번역 경 수 */
+export function getKoreanSummaries(): { nikaya: Nikaya; count: number }[] {
+  return catalog.nikayas.map((n) => ({ nikaya: n, count: getKoreanSuttas(n.id).length }));
+}
+
+/** 이 경의 한국어 번역 판본 수 */
+export function koreanEditionCount(s: CatalogSutta): number {
+  return s.editions.filter((id) => editionById.get(id)?.language === "ko").length;
+}

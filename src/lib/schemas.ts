@@ -95,6 +95,11 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
     nissaya: z.array(z.string()),
     grammar: z.array(z.string()),
     nikaya: z.string().min(1),
+    trail: z.object({
+      nikayaName: z.string().min(1),
+      groups: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) })),
+      groupPages: z.boolean(),
+    }),
   }),
 );
 

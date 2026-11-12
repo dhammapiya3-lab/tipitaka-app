@@ -17,9 +17,9 @@ export function NikayaCards({ items }: { items: NikayaSummary[] }) {
         <Link
           key={nikaya.id}
           href={`/suttas/${nikaya.id}`}
-          className="group flex items-center gap-4 rounded-2xl border bg-card p-5 shadow-xs outline-none transition-colors hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="group flex items-center gap-4 rounded-xl bg-card p-5 shadow-card ring-1 ring-foreground/5 outline-none transition-colors hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-sm font-bold text-brand-ink">
+          <span lang="pi" className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand-soft text-[15px] font-semibold text-brand-ink">
             {nikaya.id.toUpperCase()}
           </span>
           <span className="flex min-w-0 flex-1 flex-col">

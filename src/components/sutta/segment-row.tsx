@@ -59,6 +59,8 @@ export function SegmentRow({
   onNote,
   onWord,
   badges = [],
+  paragraphMark = null,
+  onParagraph,
   onSentence,
 }: {
   row: AlignedRow;
@@ -80,6 +82,9 @@ export function SegmentRow({
   onWord: (word: string) => void;
   /** 문단 첫 줄이면 그 문단의 풀이 배지 */
   badges?: AnalysisBadge[];
+  /** 문단 첫 줄이면 문단 번호(¶) — 누르면 그 문단부터 한 문단씩 보기 */
+  paragraphMark?: string | null;
+  onParagraph?: () => void;
   /** 대역·문법분석이 있는 문장이면, 문장을 누를 때 */
   onSentence?: () => void;
 }) {
@@ -102,9 +107,19 @@ export function SegmentRow({
         className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}
         onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
       >
-        {unitLabel || badges.length ? (
+        {unitLabel || badges.length || paragraphMark ? (
           <div className="mb-1 flex items-center gap-2">
-            {unitLabel ? <p className="t-meta font-semibold">{unitLabel}</p> : null}
+            {paragraphMark && onParagraph ? (
+              <button
+                type="button"
+                onClick={onParagraph}
+                title="이 문단부터 한 문단씩 보기"
+                className="h-7 rounded-full bg-brand-softer px-3 font-pali text-[13px] font-semibold text-brand-ink transition-colors outline-none hover:bg-brand-soft focus-visible:ring-3 focus-visible:ring-ring/50 print:hidden"
+              >
+                ¶ {paragraphMark}
+              </button>
+            ) : null}
+            {unitLabel && unitLabel !== paragraphMark ? <p className="t-meta font-semibold">{unitLabel}</p> : null}
             {badges.length ? (
               <div className="ml-auto flex gap-1 print:hidden">
                 {badges.map((badge) => (

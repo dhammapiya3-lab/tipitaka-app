@@ -82,7 +82,7 @@ export function DailyVerse({ vaggas, editions }: { vaggas: DhpVagga[]; editions:
   return (
     <Card>
       <CardHeader>
-        <CardTitle>오늘의 게송</CardTitle>
+        <CardTitle className="t-section">오늘의 경전</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {verse === null ? (
@@ -93,17 +93,17 @@ export function DailyVerse({ vaggas, editions }: { vaggas: DhpVagga[]; editions:
           </>
         ) : (
           <>
-            <blockquote className="flex flex-col gap-1 text-base leading-7 font-semibold">
+            <blockquote className="flex flex-col text-[19px] leading-8 font-medium">
               {verse.lines.map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </blockquote>
-            <div lang="pi" className="t-sub flex flex-col">
+            <div lang="pi" className="flex flex-col text-[15px] leading-7 text-muted-foreground">
               {verse.paliLines.map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3">
               <p className="t-meta">
                 — 법구경 (Dhammapada) Dhp {verse.number}
                 {verse.title ? ` · ${verse.title}` : ""} · {verse.editionLabel}

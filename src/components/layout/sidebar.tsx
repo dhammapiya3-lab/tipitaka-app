@@ -2,40 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BrandMark } from "@/components/layout/brand-mark";
 import {
   isActiveItem,
   NAV_FOOTER,
-  NAV_GROUPS,
+  NAV_MAIN,
+  NAV_TOOLS,
   type NavItem,
 } from "@/components/layout/nav-items";
-import { SERVICE_NAME, SERVICE_TAGLINE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-function NavLink({
-  item,
-  active,
-  onNavigate,
-}: {
-  item: NavItem;
-  active: boolean;
-  onNavigate?: () => void;
-}) {
+function NavLink({ item, active }: { item: NavItem; active: boolean }) {
   return (
     <Link
       href={item.href}
-      onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex h-10 items-center gap-2 rounded-lg px-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "flex h-12 items-center gap-3.5 rounded-2xl px-4 text-[17px] transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         active
-          ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
+          ? "bg-sidebar-accent font-bold text-sidebar-accent-foreground"
           : "font-medium text-sidebar-foreground hover:bg-hover",
       )}
     >
       <item.icon
         className={cn(
-          "size-5 shrink-0",
+          "size-[22px] shrink-0",
           active ? "text-sidebar-accent-foreground" : "text-muted-foreground",
         )}
         aria-hidden
@@ -45,66 +35,27 @@ function NavLink({
   );
 }
 
-export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
-  const pathname = usePathname();
-  return (
-    <nav className="flex min-h-0 flex-1 flex-col px-3" aria-label="주 메뉴">
-      <div className="flex flex-col gap-5 overflow-y-auto">
-        {NAV_GROUPS.map((group) => (
-          <div key={group.label} className="flex flex-col gap-0.5">
-            <p className="px-3 pb-1 text-xs font-semibold text-muted-foreground">
-              {group.label}
-            </p>
-            {group.items.map((item) => (
-              <NavLink
-                key={item.href}
-                item={item}
-                active={isActiveItem(pathname, item)}
-                onNavigate={onNavigate}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-      <div className="mt-auto flex flex-col gap-0.5 border-t border-sidebar-border pt-3 pb-3">
-        {NAV_FOOTER.map((item) => (
-          <NavLink
-            key={item.href}
-            item={item}
-            active={isActiveItem(pathname, item)}
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
-    </nav>
-  );
-}
-
-export function SidebarBrand({ onNavigate }: { onNavigate?: () => void }) {
-  return (
-    <Link
-      href="/"
-      onClick={onNavigate}
-      className="flex h-14 shrink-0 items-center gap-2 px-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-    >
-      <BrandMark />
-      <span className="flex min-w-0 flex-col">
-        <span className="truncate text-base leading-5 font-bold tracking-tight">
-          {SERVICE_NAME}
-        </span>
-        <span lang="pi" className="truncate text-xs text-meta">
-          {SERVICE_TAGLINE}
-        </span>
-      </span>
-    </Link>
-  );
-}
-
+/**
+ * 컴퓨터 화면의 왼쪽 메뉴 — 위는 주 메뉴 5칸(폰 아래쪽 탭 막대와 같은 목록), 아래는 사전·내 서재 같은 도구.
+ * 폰(lg 미만)에서는 숨기고 아래쪽 탭 막대와 맨 위 단추가 맡는다.
+ */
 export function Sidebar() {
+  const pathname = usePathname();
+  const group = (items: NavItem[]) =>
+    items.map((item) => (
+      <NavLink key={item.href} item={item} active={isActiveItem(pathname, item)} />
+    ));
   return (
-    <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col gap-3 border-r border-sidebar-border bg-sidebar lg:flex print:hidden">
-      <SidebarBrand />
-      <SidebarNav />
+    <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-60 shrink-0 flex-col bg-sidebar lg:flex print:hidden">
+      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3.5 py-5" aria-label="주 메뉴">
+        {group(NAV_MAIN)}
+        <div className="mx-2 my-2.5 h-px bg-sidebar-border" />
+        {/* 검색은 맨 위 띠의 단추로만 (2026-11-13 요청) */}
+        {group(NAV_TOOLS.filter((item) => item.href !== "/search"))}
+        <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border pt-3">
+          {group(NAV_FOOTER)}
+        </div>
+      </nav>
     </aside>
   );
 }

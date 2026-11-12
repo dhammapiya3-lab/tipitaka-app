@@ -28,7 +28,7 @@ export default function AboutPage() {
     <div className="mx-auto flex w-full max-w-[860px] flex-col gap-6">
       <PageHeader title="정보" />
 
-      <Card>
+      <Card id="editions" className="scroll-mt-20">
         <CardHeader>
           <CardTitle>판본 정보</CardTitle>
         </CardHeader>

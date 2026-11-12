@@ -22,6 +22,7 @@ import {
 } from "../src/lib/schemas";
 import { searchShardName, tokenize, type SearchShard } from "../src/lib/search";
 import { noteMarks, parseInline, plainText, rowKind, splitNotes, toSuttaId } from "../src/lib/segments";
+import { INLINE_SUTTA_LIMIT } from "../src/lib/constants";
 import { seal } from "../src/lib/seal";
 import { SOURCE_ROOT } from "./paths";
 import { suttaFilePath } from "./source-paths";
@@ -35,6 +36,7 @@ import type {
   Segment,
   SuttaNissaya,
   SuttaNotes,
+  SuttaIndexEntry,
   SuttaText,
 } from "../src/types";
 
@@ -355,14 +357,24 @@ mkdirSync(OUT_DATA, { recursive: true });
 writeFileSync(path.join(OUT_DATA, "catalog.json"), JSON.stringify(catalogSchema.parse(catalog)));
 writeFileSync(path.join(OUT_DATA, "editions.json"), JSON.stringify(editionsSchema.parse(editions)));
 // 경 읽기 화면용 목록 — 본문이 있는 경만, 목록 순서대로 (SuttaIndexEntry)
-const suttaIndex = catalog.nikayas.flatMap((n) =>
-  n.nodes
-    .flatMap(function collect(node): CatalogSutta[] {
-      return [...node.suttas, ...node.children.flatMap(collect)];
-    })
-    .filter((s) => s.editions.length > 0)
-    .map((s) => ({ ...s, nikaya: n.id })),
-);
+const suttaIndex = catalog.nikayas.flatMap((n) => {
+  const entries: SuttaIndexEntry[] = [];
+  const walk = (node: CatalogNode, groups: { id: string; label: string }[]) => {
+    const here = [...groups, { id: node.id, label: node.nameKo ?? node.name ?? node.id }];
+    for (const s of node.suttas) {
+      if (s.editions.length > 0) {
+        entries.push({ ...s, nikaya: n.id, trail: { nikayaName: n.nameKo, groups: here, groupPages: false } });
+      }
+    }
+    node.children.forEach((child) => walk(child, here));
+  };
+  n.nodes.forEach((node) => walk(node, []));
+  // 경이 많은 니까야는 목록을 묶음별 페이지로 나눈다 (src/lib/data.ts splitsIntoGroups 와 같은 기준)
+  const total = n.nodes.flatMap(function collect(node): CatalogSutta[] {
+    return [...node.suttas, ...node.children.flatMap(collect)];
+  }).length;
+  return entries.map((e) => ({ ...e, trail: { ...e.trail, groupPages: total > INLINE_SUTTA_LIMIT } }));
+});
 mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
 writeFileSync(path.join(path.dirname(OUT_SUTTAS), "sutta-index.json"), JSON.stringify(suttaIndexSchema.parse(suttaIndex)));
 

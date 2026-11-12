@@ -19,8 +19,8 @@
   --font-sans: "Pretendard Variable", Pretendard, var(--font-noto-sans), -apple-system,
     BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   --font-heading: var(--font-sans);
-  /* 빠알리 원문 — 한 단어 안에서 글꼴이 섞이지 않도록 Noto Sans 로 통째로 쓴다 (class: font-pali 또는 lang="pi") */
-  --font-pali: var(--font-noto-sans), var(--font-sans);
+  /* 빠알리 원문 — 명조(Noto Serif)로 통째로 쓴다. 한 단어 안에서 글꼴이 섞이지 않게 (class: font-pali 또는 lang="pi") */
+  --font-pali: var(--font-noto-serif), "Noto Serif", Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* shadcn 표준 색 */
@@ -74,8 +74,8 @@
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 8px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
+  --radius-xl: 20px;
+  --radius-2xl: 22px;
   --radius-3xl: 24px;
   --radius-4xl: 4px; /* shadcn Badge 가 쓰는 값 → Renewal 칩 모서리 4 */
 
@@ -87,23 +87,23 @@
 
 /* ── 라이트 (기본) ───────────────────────────────────────────────────────── */
 :root {
-  --background: #f7f7f8; /* 페이지 바탕 */
-  --foreground: #171719; /* 제목·강조 글자 */
+  --background: #f6f3ee; /* 페이지 바탕 — 따뜻한 상아빛 (2026-11-13) */
+  --foreground: #2b2420; /* 제목·강조 글자 — 먹색 */
   --card: #ffffff;
-  --card-foreground: #171719;
+  --card-foreground: #2b2420;
   --popover: #ffffff;
-  --popover-foreground: #171719;
+  --popover-foreground: #2b2420;
   --primary: #b45309; /* 유일한 강조색 — 호박색(가사 빛), 2026-11-13 파랑에서 바꿈 */
   --primary-foreground: #ffffff;
-  --secondary: #f2f3f5;
-  --secondary-foreground: #2e2f33;
-  --muted: #f2f3f5;
-  --muted-foreground: #5a6070; /* 보조 설명 (대비 6.3) */
-  --accent: #f4f5f7; /* hover — 중립 회색 */
-  --accent-foreground: #171719;
+  --secondary: #f1ebe2;
+  --secondary-foreground: #3a302a;
+  --muted: #f1ebe2;
+  --muted-foreground: #66594f; /* 보조 설명 (상아빛 위 대비 6 이상) */
+  --accent: #f3ede4; /* hover — 따뜻한 중립 */
+  --accent-foreground: #2b2420;
   --destructive: #e5383b;
-  --border: #e6e8ec; /* 구분선·카드 테두리 */
-  --input: #d5d8de; /* 입력·버튼 테두리 */
+  --border: #ece4d8; /* 구분선·카드 테두리 */
+  --input: #dcd2c4; /* 입력·버튼 테두리 */
   --ring: #b45309;
   --radius: 8px;
 
@@ -114,30 +114,30 @@
   --chart-4: #6250d6;
   --chart-5: #e87ba4;
 
-  --sidebar: #ffffff;
-  --sidebar-foreground: #2e2f33;
+  --sidebar: #fbf8f3;
+  --sidebar-foreground: #3a302a;
   --sidebar-primary: #b45309;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #fdf1e3; /* 활성 메뉴 바탕 */
   --sidebar-accent-foreground: #92400e; /* 활성 메뉴 글자 */
-  --sidebar-border: #e6e8ec;
+  --sidebar-border: #ece4d8;
   --sidebar-ring: #b45309;
 
   /* Renewal 추가 */
   --brand-soft: #fdf1e3;
   --brand-softer: #fff8f0;
   --brand-ink: #92400e;
-  --surface-2: #f9f9fb;
-  --hover: rgba(112, 115, 124, 0.06);
-  --meta: #6f7682; /* 대비 4.6 (AA) — 본문에 쓰지 않는다 */
-  --line-strong: #d5d8de;
+  --surface-2: #faf6f0;
+  --hover: rgba(120, 90, 60, 0.06);
+  --meta: #75685d; /* 상아빛 위 대비 4.6 (AA) — 본문에 쓰지 않는다 */
+  --line-strong: #dcd2c4;
   --success: #007a3d;
   --success-soft: #ebf7f1;
   --warning: #9a5c00;
   --warning-soft: #faf4eb;
   --danger-soft: #fdefef;
   --overlay: rgba(23, 23, 25, 0.4);
-  --elev-card: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --elev-card: 0 1px 2px rgba(60, 40, 20, 0.05), 0 6px 20px rgba(60, 40, 20, 0.07);
   --elev-pop: 0 0 20px rgba(0, 0, 0, 0.1);
   --elev-drawer: -8px 0 24px rgba(0, 0, 0, 0.08);
   --scroll-thumb: #c9cdd4;

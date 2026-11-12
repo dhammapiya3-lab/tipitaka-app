@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, CloudOff, Printer } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, CloudOff, Info, Printer } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -21,7 +21,7 @@ import { useReaderKeys } from "@/components/sutta/use-reader-keys";
 import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LANGUAGE_SHORT, PALI_EDITION } from "@/lib/constants";
+import { PALI_EDITION } from "@/lib/constants";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
@@ -45,8 +45,8 @@ export interface SuttaLink {
   title: string;
 }
 
-/** 화면 위 고정 칸(헤더 + 판본 줄) 높이 — 이보다 아래에 있는 첫 문장을 "읽는 곳"으로 본다 */
-const TOP_OFFSET = 120;
+/** 화면 위 고정 칸(맨 위 띠) 높이 — 이보다 아래에 있는 첫 문장을 "읽는 곳"으로 본다 */
+const TOP_OFFSET = 80;
 
 export function SuttaView({
   suttaId,
@@ -97,6 +97,10 @@ export function SuttaView({
   const [active, setActive] = useState<{ key: string; word: number } | null>(null);
   /** 메모를 쓰는 문장 */
   const [memoRow, setMemoRow] = useState<AlignedRow | null>(null);
+  /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
+  const [focus, setFocus] = useState<string | null>(null);
+  /** 문단 보기를 마치면 돌아갈 문단 */
+  const returnTo = useRef<string | null>(null);
 
   const bookmarks = useBookmarksStore((s) => s.items);
   const toggleBookmark = useBookmarksStore((s) => s.toggle);
@@ -161,6 +165,16 @@ export function SuttaView({
   for (const row of textRows) {
     const p = paragraphOf(row.key, suttaId);
     paragraphs.set(p, [...(paragraphs.get(p) ?? []), row.key]);
+  }
+  const paragraphList = [...paragraphs.keys()];
+  const focusIndex = focus ? paragraphList.indexOf(focus) : -1;
+  function openParagraph(p: string) {
+    setFocus(p);
+    returnTo.current = paragraphs.get(p)?.[0] ?? null;
+    window.scrollTo({ top: 0 });
+  }
+  function closeParagraph() {
+    setFocus(null);
   }
   /** 이 문장들 가운데 풀이가 있는 종류 (게송 첫 줄에 게송 전체를 넣은 판본도 있어 게송 단위로도 본다) */
   function kindsFor(keys: string[]): AnalysisKind[] {
@@ -232,6 +246,13 @@ export function SuttaView({
     });
   }
 
+  // 문단 보기를 마치면 보던 문단으로 돌아간다
+  useEffect(() => {
+    if (focus !== null || !returnTo.current) return;
+    document.getElementById(returnTo.current)?.scrollIntoView({ block: "start" });
+    returnTo.current = null;
+  }, [focus]);
+
   // ── 키보드로 읽기 ───────────────────────────────────────────
   const activeRow = active ? textRows.find((r) => r.key === active.key) : undefined;
   const paliWords = activeRow?.cells[PALI_EDITION] ? wordsOf(activeRow.cells[PALI_EDITION].parts) : [];
@@ -286,13 +307,35 @@ export function SuttaView({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* 판본 고르기 · 목차 · 인쇄 · 텍스트 설정 (인쇄할 때는 뺀다) */}
-      <div className="sticky top-14 z-20 -mx-4 flex items-center gap-2 border-b bg-background/95 px-4 py-2 backdrop-blur lg:-mx-6 lg:px-6 print:hidden">
-        <div
-          className="flex min-w-0 flex-1 gap-1 overflow-x-auto sm:gap-1.5"
-          role="group"
-          aria-label="판본 선택"
-        >
+      {/* 함께 볼 판본 · 번역자 소개 · 목차 · 인쇄 · 텍스트 설정 (인쇄할 때는 뺀다) */}
+      <section
+        aria-label="함께 볼 판본"
+        className="mx-auto flex w-full max-w-[1200px] flex-col gap-2 rounded-xl bg-card px-3 pt-2 pb-3 shadow-card ring-1 ring-foreground/5 print:hidden"
+      >
+        <div className="flex items-center gap-1 pl-1">
+          <span className="t-sub">
+            함께 볼 판본 <b className="text-brand-ink">{shown.length}</b>
+          </span>
+          <Link
+            href="/about#editions"
+            className="t-sub ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 outline-none hover:bg-hover hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <Info className="size-4" aria-hidden />
+            번역자 소개
+          </Link>
+          <TocSheet items={toc} />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden sm:inline-flex"
+            aria-label="인쇄"
+            onClick={() => window.print()}
+          >
+            <Printer aria-hidden />
+          </Button>
+          <TextSettingsSheet />
+        </div>
+        <div className="flex flex-wrap gap-2" role="group" aria-label="판본 선택">
           {editions.map((edition) => {
             const on = shownIds.includes(edition.id);
             return (
@@ -300,41 +343,35 @@ export function SuttaView({
                 key={edition.id}
                 type="button"
                 aria-pressed={on}
-                aria-label={edition.label}
-                title={edition.label}
                 onClick={() =>
                   setEditions(toggleEdition(availableIds, preferred, shownIds, edition.id))
                 }
                 className={cn(
-                  "flex h-8 shrink-0 items-center gap-1.5 rounded-lg border px-2 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-2.5",
+                  "inline-flex h-9 items-center gap-1 rounded-full border px-3.5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
                   on
-                    ? "border-transparent bg-brand-soft font-semibold text-brand-ink"
+                    ? "border-primary/25 bg-brand-soft pl-2.5 font-bold text-brand-ink"
                     : "border-line-strong bg-card font-medium text-muted-foreground hover:bg-hover",
                 )}
               >
-                {/* 휴대폰 폭에서는 짧은 표시(M·김·S)만, 넓은 화면에서는 언어 + 판본 이름 */}
-                <span className="hidden text-xs font-bold sm:inline">
-                  {LANGUAGE_SHORT[edition.language]}
-                </span>
-                <span className="min-w-4 text-center sm:hidden">{edition.badge}</span>
-                <span className="hidden sm:inline">{edition.label}</span>
+                {on ? <Check className="size-3.5" strokeWidth={2.6} aria-hidden /> : null}
+                {edition.label}
               </button>
             );
           })}
         </div>
-        <TocSheet items={toc} />
-        <Button
-          variant="outline"
-          size="sm"
-          className="hidden sm:inline-flex"
-          aria-label="인쇄"
-          onClick={() => window.print()}
-        >
-          <Printer aria-hidden />
-          <span className="hidden lg:inline">인쇄</span>
-        </Button>
-        <TextSettingsSheet />
-      </div>
+      </section>
+
+      {focus ? (
+        <div className="mx-auto flex w-full max-w-[720px] items-center gap-3 print:hidden">
+          <Button variant="outline" size="sm" onClick={closeParagraph}>
+            <ArrowLeft aria-hidden />
+            전체 보기
+          </Button>
+          <span className="t-sub ml-auto">
+            문단 {focusIndex + 1} / {paragraphList.length}
+          </span>
+        </div>
+      ) : null}
 
       {error ? (
         <EmptyState
@@ -366,10 +403,10 @@ export function SuttaView({
 
           {waiting
             ? Array.from({ length: 8 }, (_, i) => <Skeleton key={i} className="h-6 w-full" />)
-            : rows.map((row, i) => {
+            : (focus ? rows.filter((r) => paragraphOf(r.key, suttaId) === focus && rowKind(r.key, suttaId) === "text") : rows).map((row, i, list) => {
                 // 법구경처럼 경 안에 게송이 있으면, 게송이 바뀌는 첫 줄 위에 번호를 단다.
                 const unit = unitOf(row.key, suttaId);
-                const prevUnit = i > 0 ? unitOf(rows[i - 1].key, suttaId) : null;
+                const prevUnit = i > 0 ? unitOf(list[i - 1].key, suttaId) : null;
                 const kind = rowKind(row.key, suttaId);
                 // 문단 첫 문장에 그 문단의 대역·문법분석 배지를 단다
                 const paragraph = kind === "text" ? paragraphOf(row.key, suttaId) : null;
@@ -401,10 +438,38 @@ export function SuttaView({
                       setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: "" })
                     }
                     badges={badges}
+                    paragraphMark={
+                      paragraph && paragraphKeys[0] === row.key && !focus ? paragraphMark(paragraph) : null
+                    }
+                    onParagraph={paragraph ? () => openParagraph(paragraph) : undefined}
                     onSentence={hasAnalysis ? () => onSentence(row) : undefined}
                   />
                 );
               })}
+          {focus ? (
+            <nav
+              aria-label="문단 이동"
+              className="sticky bottom-20 z-10 mt-4 grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-2.5 rounded-2xl bg-background/95 py-2 backdrop-blur lg:bottom-4 print:hidden"
+            >
+              <Button
+                variant="outline"
+                className="h-14 rounded-2xl text-base"
+                disabled={focusIndex <= 0}
+                onClick={() => openParagraph(paragraphList[focusIndex - 1])}
+              >
+                <ChevronLeft aria-hidden />
+                이전 문단
+              </Button>
+              <Button
+                className="h-14 rounded-2xl text-base font-bold"
+                disabled={focusIndex >= paragraphList.length - 1}
+                onClick={() => openParagraph(paragraphList[focusIndex + 1])}
+              >
+                다음 문단
+                <ChevronRight aria-hidden />
+              </Button>
+            </nav>
+          ) : null}
         </article>
         {isDesktop && word ? (
           <div className="contents print:hidden">
@@ -438,7 +503,10 @@ export function SuttaView({
       />
 
       <nav
-        className="mx-auto mt-6 flex w-full max-w-[720px] justify-between gap-3 border-t pt-6 print:hidden"
+        className={cn(
+          "mx-auto mt-6 flex w-full max-w-[720px] justify-between gap-3 border-t pt-6 print:hidden",
+          focus && "hidden",
+        )}
         aria-label="앞뒤 경"
       >
         {prev ? (
@@ -462,6 +530,12 @@ export function SuttaView({
 
 function gridStyle(columns: number): CSSProperties {
   return { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` };
+}
+
+/** 문단 번호 표시: sn56.11:2 → 2, sn56.11:2.3 → 2.3, 게송(dhp5) → Dhp 5 */
+function paragraphMark(paragraph: string): string {
+  const colon = paragraph.indexOf(":");
+  return colon >= 0 ? paragraph.slice(colon + 1) : unitLabel(paragraph);
 }
 
 /** 게송 번호 표시: dhp5 → Dhp 5 */
