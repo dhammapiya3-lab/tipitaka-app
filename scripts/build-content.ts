@@ -139,9 +139,26 @@ function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
 function readText(dir: string, folder: string, sub: string, edition: string) {
   for (const kind of ["root", "translation"]) {
     const file = path.join(dir, folder, `${sub}_${kind}-${edition}.json`);
-    if (existsSync(file)) return rawTextSchema.parse(readJson(file));
+    if (existsSync(file)) return applyLineMap(edition, rawTextSchema.parse(readJson(file)));
   }
   return null;
+}
+
+/**
+ * 줄 대응표(scripts/line-maps/<판본>.json): 게송을 다르게 나눈 판본(PTS 등)의 줄을
+ * 마하상기띠본의 같은 글 줄 번호로 옮긴다. 원본 파일은 그대로 두고 사이트 자료에만 적용한다.
+ */
+const lineMaps = new Map<string, Record<string, string>>();
+function applyLineMap(edition: string, raw: Record<string, string>): Record<string, string> {
+  if (!lineMaps.has(edition)) {
+    const file = path.join(process.cwd(), "scripts", "line-maps", `${edition}.json`);
+    const map = existsSync(file) ? z.record(z.string(), z.string()).parse(readJson(file)) : {};
+    delete map._설명;
+    lineMaps.set(edition, map);
+  }
+  const map = lineMaps.get(edition) ?? {};
+  if (!Object.keys(map).some((key) => key in raw)) return raw;
+  return Object.fromEntries(Object.entries(raw).map(([key, text]) => [map[key] ?? key, text]));
 }
 
 function toSegments(raw: Record<string, string>): Segment[] {

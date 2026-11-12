@@ -103,9 +103,14 @@ for (const file of walk(SOURCE_ROOT)) {
     for (const [k, v] of Object.entries(entries)) site.set(k, v.trim());
   }
 
-  // 원본 쪽 (각주는 한 칸에 여러 개가 붙어 있어 번호별로 나눈다)
+  // 원본 쪽 (각주는 한 칸에 여러 개가 붙어 있어 번호별로 나눈다).
+  // 줄 대응표(scripts/line-maps)가 있는 판본은 옮긴 번호로 비교한다 — 글자는 그대로여야 한다.
+  const lineMapFile = path.join(process.cwd(), "scripts", "line-maps", `${edition}.json`);
+  const lineMap: Record<string, string> =
+    kind === "text" && existsSync(lineMapFile) ? (readJson(lineMapFile) as Record<string, string>) : {};
   const want = new Map<string, string>();
-  for (const [key, value] of Object.entries(source)) {
+  for (const [rawKey, value] of Object.entries(source)) {
+    const key = lineMap[rawKey] ?? rawKey;
     if (kind === "notes") {
       for (const chunk of value.split(/(?=\*\*\d+(?:-\d+)?\)?\*\*)/)) {
         const mark = chunk.match(/^\*\*(\d+(?:-\d+)?)\)?\*\*/);
