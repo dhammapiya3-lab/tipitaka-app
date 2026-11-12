@@ -4,7 +4,7 @@ import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ANALYSIS_LABEL, AnalysisPanel } from "@/components/dictionary/analysis-panel";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
-import type { AnalysisEditions, WordTarget } from "@/components/dictionary/word-sheet";
+import { ClickablePali, type AnalysisEditions, type WordTarget } from "@/components/dictionary/word-sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -120,7 +120,13 @@ export function WordBottomDock({
                   lang="pi"
                   className="rounded-xl border border-amber-200 bg-amber-50 p-3 font-pali font-bold whitespace-pre-line text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
                 >
-                  {target.pali}
+                  <ClickablePali
+                    text={target.pali}
+                    onWord={(w) => {
+                      setQuery(w);
+                      setSearched(w);
+                    }}
+                  />
                 </p>
               ) : null}
               {kinds.map((kind) => (

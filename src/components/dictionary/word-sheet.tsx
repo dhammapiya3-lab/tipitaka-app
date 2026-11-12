@@ -7,6 +7,7 @@ import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { splitWords } from "@/lib/pali";
 import { cn } from "@/lib/utils";
 import type { AnalysisKind, Edition } from "@/types";
 
@@ -199,7 +200,7 @@ export function WordPanelBody({
                 lang="pi"
                 className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3 font-pali font-bold whitespace-pre-line text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
               >
-                {target.pali}
+                <ClickablePali text={target.pali} onWord={searchWord} />
               </p>
             ) : null}
             <AnalysisPanel
@@ -248,5 +249,30 @@ function PanelTitle({
         </p>
       </div>
     </>
+  );
+}
+
+/** 문장 상자 안의 빠알리 — 단어를 누르면 사전에서 찾는다 */
+export function ClickablePali({ text, onWord }: { text: string; onWord: (word: string) => void }) {
+  return splitWords(text).map((piece, i) =>
+    piece.word ? (
+      <span
+        key={i}
+        role="button"
+        tabIndex={0}
+        onClick={() => onWord(piece.text)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onWord(piece.text);
+          }
+        }}
+        className="cursor-pointer rounded-sm hover:bg-amber-200/60 hover:underline focus-visible:outline-2 focus-visible:outline-primary"
+      >
+        {piece.text}
+      </span>
+    ) : (
+      piece.text
+    ),
   );
 }
