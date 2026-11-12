@@ -22,6 +22,8 @@ import {
   lookupShardSchema,
   plainShardSchema,
   searchShardSchema,
+  editionInfoSchema,
+  suttaCommentarySchema,
   suttaNissayaSchema,
   suttaNotesSchema,
   sealedSuttaTextSchema,
@@ -37,6 +39,9 @@ import type {
   PlainDictionaryId,
   PlainEntry,
   AnalysisKind,
+  CommentaryLayer,
+  EditionInfo,
+  SuttaCommentary,
   SuttaExtras,
   SuttaIndexEntry,
   SuttaNissaya,
@@ -111,6 +116,37 @@ export function fetchSuttaAnalysis(
     promise = getJson(url).then((data) => suttaNissayaSchema.parse(data));
     analysisCache.set(url, promise);
     promise.catch(() => analysisCache.delete(url));
+  }
+  return promise;
+}
+
+const commentaryCache = new Map<string, Promise<SuttaCommentary>>();
+
+/** 주석서(attha.json)·복주석서(tika.json) — 처음 열 때만 받는다 */
+export function fetchCommentary(suttaId: string, layer: CommentaryLayer): Promise<SuttaCommentary> {
+  const url = `${SUTTA_BASE}/${encodeURIComponent(suttaId)}/${layer}.json`;
+  let promise = commentaryCache.get(url);
+  if (!promise) {
+    promise = getJson(url).then((data) => suttaCommentarySchema.parse(data));
+    commentaryCache.set(url, promise);
+    promise.catch(() => commentaryCache.delete(url));
+  }
+  return promise;
+}
+
+const editionInfoCache = new Map<string, Promise<EditionInfo | null>>();
+
+/** 판본 정보 창의 소개 글 — 없으면 null */
+export function fetchEditionInfo(editionId: string): Promise<EditionInfo | null> {
+  let promise = editionInfoCache.get(editionId);
+  if (!promise) {
+    promise = fetch(`/data/edition-info/${encodeURIComponent(editionId)}.json`).then(async (res) => {
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`자료를 받지 못했습니다 (${res.status})`);
+      return editionInfoSchema.parse(await res.json());
+    });
+    editionInfoCache.set(editionId, promise);
+    promise.catch(() => editionInfoCache.delete(editionId));
   }
   return promise;
 }

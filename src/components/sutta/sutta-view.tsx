@@ -13,6 +13,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
+import { CommentaryView } from "@/components/sutta/commentary-view";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
@@ -32,6 +33,7 @@ import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutt
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PALI_EDITION } from "@/lib/constants";
+import { fetchCommentary } from "@/lib/content";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
@@ -46,7 +48,7 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
 import { useSettingsStore } from "@/store/settings";
-import type { AnalysisKind, Edition } from "@/types";
+import type { AnalysisKind, CommentaryLayer, Edition } from "@/types";
 
 export interface SuttaLink {
   id: string;
@@ -74,7 +76,10 @@ export function SuttaView({
   next,
   head,
   initialEdition,
+  commentary = [],
 }: {
+  /** 이어 붙인 주석서·복주석서 */
+  commentary?: CommentaryLayer[];
   head: SuttaHead;
   /** 경 목록에서 고른 판본 (?ed=) */
   initialEdition?: string | null;
@@ -128,6 +133,29 @@ export function SuttaView({
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
   const [layer, setLayer] = useState<"sutta" | "attha" | "tika">("sutta");
+  /** 경 문단 → 그 문단을 풀이한 주석서 문단 순번 (문단 머리의 "주석" 단추) */
+  const [commentaryOf, setCommentaryOf] = useState<Map<string, number>>(() => new Map());
+  useEffect(() => {
+    if (!commentary.includes("attha")) return;
+    let alive = true;
+    fetchCommentary(suttaId, "attha")
+      .then((data) => {
+        if (!alive) return;
+        const map = new Map<string, number>();
+        data.paras.forEach((para, i) => para.refs.forEach((ref) => map.has(ref) || map.set(ref, i)));
+        setCommentaryOf(map);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [commentary, suttaId]);
+  function openCommentary(i: number) {
+    setLayer("attha");
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => document.getElementById(`attha-${i}`)?.scrollIntoView({ block: "start" })),
+    );
+  }
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
@@ -429,6 +457,19 @@ export function SuttaView({
           </span>
         )}
         <div className="flex items-center gap-1.5 print:hidden">
+          {commentaryOf.has(p) ? (
+            <button
+              type="button"
+              title="이 문단의 주석서 보기"
+              onClick={(e) => {
+                e.stopPropagation();
+                openCommentary(commentaryOf.get(p)!);
+              }}
+              className="inline-flex items-center justify-center rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 transition-colors hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-300"
+            >
+              주석
+            </button>
+          ) : null}
           {kinds.map((k) => (
             <button
               key={k}
@@ -620,9 +661,27 @@ export function SuttaView({
         </div>
 
         {layer !== "sutta" ? (
-          <p className="px-6 py-12 text-center text-sm text-faint">
-            {layer === "attha" ? "주석서(Aṭṭhakathā)" : "복주석서(Ṭīkā)"} 콘텐츠 준비 중입니다.
-          </p>
+          <div className="px-4 pt-2 pb-6">
+            <div className={cn("mx-auto w-full min-w-0", readWidth)}>
+              <CommentaryView
+                suttaId={suttaId}
+                layer={layer}
+                available={commentary.includes(layer)}
+                fontStyle={articleStyle}
+                onWord={(w) => setWord({ word: w, rowKey: layer, keys: [], tab: "dictionary", title: "", pali: "" })}
+                onGoParagraph={(p) => {
+                  setLayer("sutta");
+                  if (focus) openParagraph(p);
+                  else
+                    requestAnimationFrame(() =>
+                      requestAnimationFrame(() =>
+                        document.getElementById(`section-${p}`)?.scrollIntoView({ block: "start" }),
+                      ),
+                    );
+                }}
+              />
+            </div>
+          </div>
         ) : (
           <>
             {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}

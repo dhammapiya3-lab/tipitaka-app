@@ -2,12 +2,14 @@
 
 import { Check, Printer } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { BottomSheet } from "@/components/shared/bottom-sheet";
 import { editionBadgeClass, orderEditions } from "@/components/suttas/sutta-row";
 import { FONT_SIZES, LINE_HEIGHTS } from "@/lib/constants";
+import { fetchEditionInfo } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/store/settings";
-import type { Edition, Language } from "@/types";
+import type { AnalysisKind, Edition, EditionInfo, InlinePart, Language } from "@/types";
 
 const LANGUAGE_NAME: Record<Language, string> = { ko: "한국어", pli: "빠알리어", en: "영어" };
 
@@ -63,7 +65,16 @@ export function EditionPickerSheet({
 }
 
 /** 판본 배지를 누르면 — 판본 정보 */
-export function EditionInfoSheet({ open, onOpenChange, edition }: SheetProps & { edition: Edition | null }) {
+/**
+ * 판본 정보 — 판본 칩(본문)이나 대역·문법분석의 저자 이름을 누르면 연다.
+ * kind 가 대역·문법분석이면 그 소개를 먼저 보이고, 없으면 본문 소개를 보인다.
+ */
+export function EditionInfoSheet({
+  open,
+  onOpenChange,
+  edition,
+  kind = "text",
+}: SheetProps & { edition: Edition | null; kind?: "text" | AnalysisKind }) {
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="판본 정보">
       {edition ? (
@@ -83,6 +94,7 @@ export function EditionInfoSheet({ open, onOpenChange, edition }: SheetProps & {
             </div>
           </div>
           <div className="border-t" />
+          <EditionInfoBody editionId={edition.id} kind={kind} />
           {edition.allowCopy ? null : (
             <p className="text-sm leading-relaxed text-secondary-foreground">
               이 번역은 저작권자의 뜻에 따라 복사·인쇄할 수 없습니다.
@@ -94,6 +106,63 @@ export function EditionInfoSheet({ open, onOpenChange, edition }: SheetProps & {
         </div>
       ) : null}
     </BottomSheet>
+  );
+}
+
+/** 판본 소개 글 (번역자 소개 · 번역본 출처 · 저작권 안내 …) — 창을 열 때 받는다 */
+const GROUP_LABEL = { text: "번역", nissaya: "대역", grammar: "문법분석" } as const;
+
+function EditionInfoBody({ editionId, kind }: { editionId: string; kind: "text" | AnalysisKind }) {
+  const [state, setState] = useState<{ id: string; info: EditionInfo | null } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetchEditionInfo(editionId)
+      .then((info) => alive && setState({ id: editionId, info }))
+      .catch(() => alive && setState({ id: editionId, info: null }));
+    return () => {
+      alive = false;
+    };
+  }, [editionId]);
+  if (!state || state.id !== editionId) return <p className="text-sm text-faint">불러오는 중…</p>;
+  if (!state.info) return null;
+  // 고른 쪽(본문·대역·문법분석) 소개를 맨 앞에. 소개가 여러 묶음이면 묶음 이름을 단다.
+  const groups = [...state.info.groups].sort((a, b) => Number(b.kind === kind) - Number(a.kind === kind));
+  return (
+    <div className="flex flex-col gap-8">
+      {groups.map((group, g) => (
+        <div key={group.kind} className="flex flex-col gap-8">
+          {groups.length > 1 ? (
+            <p className={cn("-mb-3 text-xs font-bold tracking-wide text-primary", g > 0 && "border-t pt-6")}>
+              {GROUP_LABEL[group.kind]}
+            </p>
+          ) : null}
+          {group.sections.map((section, i) => (
+            <section key={i} className="flex flex-col gap-4">
+              <h3 className="font-pali text-lg font-semibold text-gray-900 dark:text-foreground">{section.title}</h3>
+              {section.paragraphs.map((parts, j) => (
+                <p key={j} className="text-[15px] leading-7 whitespace-pre-line text-gray-600 dark:text-muted-foreground">
+                  <InfoText parts={parts} />
+                </p>
+              ))}
+            </section>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function InfoText({ parts }: { parts: InlinePart[] }) {
+  return parts.map((part, i) =>
+    part.type === "bold" ? (
+      <strong key={i} className="font-pali font-bold text-gray-900 dark:text-foreground">
+        {part.text}
+      </strong>
+    ) : part.type === "note" ? null : part.type === "em" ? (
+      <em key={i}>{part.text}</em>
+    ) : (
+      <span key={i}>{part.text}</span>
+    ),
   );
 }
 

@@ -16,6 +16,8 @@ import {
   extrasSchema,
   catalogSchema,
   editionsSchema,
+  editionInfoSchema,
+  suttaCommentarySchema,
   suttaIndexSchema,
   suttaNissayaSchema,
   suttaNotesSchema,
@@ -32,9 +34,11 @@ import type {
   CatalogNode,
   CatalogSutta,
   Edition,
+  EditionInfo,
   Footnote,
   Language,
   Segment,
+  SuttaCommentary,
   SuttaNissaya,
   SuttaNotes,
   SuttaIndexEntry,
@@ -50,6 +54,19 @@ const OUT_SUTTAS = path.join(ROOT, "public/data/suttas");
 const OUT_SEARCH = path.join(ROOT, "public/data/search");
 /** 빠알리 원문 판본. 번역 문장 번호는 모두 이 판본에 있어야 한다. */
 const ROOT_EDITION = "pli-ms";
+/** content/vri/<경>.json 의 주석서·복주석서 한 권 (scripts/import-vri.ts 가 쓰는 모양) */
+const vriCommentarySchema = z.object({
+  book: z.string(),
+  bookName: z.string(),
+  paras: z.array(
+    z.object({
+      para: z.number(),
+      vripara: z.coerce.string().nullable(),
+      refs: z.array(z.string()),
+      lines: z.array(z.string()),
+    }),
+  ),
+});
 
 const NIKAYAS = [
   { id: "dn", folder: "digha_nikaya", name: "Dīgha Nikāya", nameKo: "디가 니까야" },
@@ -192,6 +209,23 @@ const editionById = new Map<string, Edition>(
     ];
   }),
 );
+// VRI 6차 결집본 — 원래 앱에 없던 판본이라 판본 정보를 여기서 정한다 (출처는 정보 페이지)
+const VRI_EDITION: Edition = {
+  id: "pli-vri",
+  label: "VRI 제6차 결집본",
+  badge: "V",
+  language: "pli",
+  translator: null,
+  license: "VRI Chaṭṭha Saṅgāyana Tipiṭaka — 비영리 무료, 출처 표시",
+  allowCopy: true,
+};
+editionById.set(VRI_EDITION.id, VRI_EDITION);
+const vriSchema = z.object({
+  segments: z.record(z.string(), z.string()),
+  attha: vriCommentarySchema.nullable(),
+  tika: vriCommentarySchema.nullable(),
+});
+const commentaryFiles: SuttaCommentary[] = [];
 const usedEditions = new Set<string>();
 const texts: SuttaText[] = [];
 const notesFiles: SuttaNotes[] = [];
@@ -281,6 +315,29 @@ function buildSutta(
     if (missing.length) errors.push(`${where}: 각주 내용이 없는 곳 ${missing.join(", ")}`);
     notesFiles.push({ suttaId: id, editionId: entry.edition, notes });
     sutta.noteEditions.push(entry.edition);
+  }
+
+  // VRI 6차 결집본 원문과 주석서·복주석서 (content/vri/<경>.json — `pnpm import:vri` 로 만든다)
+  const vriFile = path.join(ROOT, "content", "vri", `${id}.json`);
+  if (existsSync(vriFile) && root) {
+    const vri = vriSchema.parse(readJson(vriFile));
+    const where = `${id} VRI`;
+    const extra = Object.keys(vri.segments).filter((key) => !(key in root));
+    if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
+    texts.push({ suttaId: id, editionId: VRI_EDITION.id, segments: toSegments(vri.segments) });
+    sutta.editions.push(VRI_EDITION.id);
+    usedEditions.add(VRI_EDITION.id);
+    for (const layer of ["attha", "tika"] as const) {
+      const c = vri[layer];
+      if (!c) continue;
+      const paras = c.paras.map((p) => {
+        const bad = p.refs.filter((ref) => !Object.keys(root).some((key) => key.startsWith(`${ref}.`)));
+        if (bad.length) errors.push(`${where} ${c.book} ${p.para}: 경에 없는 문단 ${bad.join(", ")}`);
+        return { vripara: p.vripara, refs: p.refs, lines: p.lines.map((line) => parseInline(line)) };
+      });
+      commentaryFiles.push({ suttaId: id, layer, bookName: c.bookName, paras });
+      (sutta.commentary ??= []).push(layer);
+    }
   }
 
   // 대역: <판본 폴더>/<경>_root-nissaya-<판본>.json, 문법분석: ..._root-paligrammar-<판본>.json
@@ -433,6 +490,54 @@ for (const { kind, ...file } of analysisFiles) {
   writeFileSync(
     path.join(OUT_SUTTAS, file.suttaId, `${file.editionId}.${kind}.json`),
     JSON.stringify(suttaNissayaSchema.parse(file)),
+  );
+}
+// 판본 정보 창의 소개 글 (translator_info/<판본 id 의 - 를 _ 로>.txt). 대역·문법분석 소개는 nissaya_·paligrammar_ 가 붙는다.
+{
+  const dir = path.join(SOURCE_ROOT, "translator_info");
+  const outDir = path.join(ROOT, "public/data/edition-info");
+  rmSync(outDir, { recursive: true, force: true });
+  mkdirSync(outDir, { recursive: true });
+  const parse = (text: string) => {
+    const sections: EditionInfo["groups"][number]["sections"] = [];
+    // <big><b>제목<\b><\big> 으로 단락이 나뉜다. <\b> 는 </b> 로 읽는다.
+    const clean = text.replace(/<\\b>/g, "</b>").replace(/\r/g, "");
+    for (const chunk of clean.split(/<big>/).slice(1)) {
+      const [head, ...rest] = chunk.split(/<\\big>|<\/big>/);
+      const title = head.replace(/<\/?b>/g, "").trim();
+      const paragraphs = rest
+        .join("")
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .map((p) => parseInline(p));
+      sections.push({ title, paragraphs });
+    }
+    return sections;
+  };
+  let count = 0;
+  for (const edition of editionById.values()) {
+    if (!usedEditions.has(edition.id)) continue;
+    const base = edition.id.replace(/-/g, "_");
+    const groups: EditionInfo["groups"] = [];
+    for (const [prefix, kind] of [["", "text"], ["nissaya_", "nissaya"], ["paligrammar_", "grammar"]] as const) {
+      const file = path.join(dir, `${prefix}${base}.txt`);
+      if (!existsSync(file)) continue;
+      const sections = parse(readFileSync(file, "utf8"));
+      if (sections.length === 0) warnings.push(`판본 정보 ${path.basename(file)}: 단락 제목(<big>)이 없습니다`);
+      else groups.push({ kind, sections });
+    }
+    if (groups.length === 0) continue;
+    const info = editionInfoSchema.parse({ editionId: edition.id, groups });
+    writeFileSync(path.join(outDir, `${edition.id}.json`), JSON.stringify(info));
+    count++;
+  }
+  console.log(`판본 정보 ${count}개`);
+}
+for (const file of commentaryFiles) {
+  writeFileSync(
+    path.join(OUT_SUTTAS, file.suttaId, `${file.layer}.json`),
+    JSON.stringify(suttaCommentarySchema.parse(file)),
   );
 }
 for (const kind of ["nissaya", "grammar"] as const) {

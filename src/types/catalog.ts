@@ -14,7 +14,12 @@ export interface CatalogSutta {
   nissaya: string[];
   /** 문법분석이 있는 판본 id */
   grammar: string[];
+  /** 이어 붙인 주석서(attha)·복주석서(tika). 없으면 비워 둔다 */
+  commentary?: CommentaryLayer[];
 }
+
+/** 경에 이어 붙인 풀이 문헌: 주석서(Aṭṭhakathā) · 복주석서(Ṭīkā) */
+export type CommentaryLayer = "attha" | "tika";
 
 /**
  * 경 읽기 화면이 쓰는 가벼운 목록 (public/data/sutta-index.json).

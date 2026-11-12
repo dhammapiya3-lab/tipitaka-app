@@ -1,0 +1,48 @@
+<big><b>빠알리어 판본 소개<\b><\big>
+
+빠알리 성전 협회(Pali Text Society)는 1881년, 영국의 불교학자인 토머스 윌리엄 리스 데이비즈(Thomas William Rhys Davids)가 영국 런던에 설립한 학술 단체입니다. 당시 스리랑카 등의 사원에 남아있던 패엽경(야자수 잎에 새긴 경전) 문헌들을 대조하여 로마자로 표기 인쇄하였으며, 이후 학술 분야에서 PTS 판본이 기준점이 되고 있습니다. 
+
+한국에서도 현재 초기불전연구원, 한국빠알리성전협회에서 나온 대표적인 번역본들이 PTS 판본을 저본으로 삼고 있습니다.
+
+<b>디가 니까야<\b>
+T.W. Rhys Davids and J.E. Carpenter, London : Pali Text Society 1890.
+
+<b>맛지마 니까야<\b>
+Based on Vol. I, ed. by V. Trenckner, London : Pali Text Society 1888.
+(Reprinted 1948, 1964, 1979)
+
+<b>상윳따 니까야<\b>
+L. Feer, London : Pali Text Society 1884.
+
+<b>앙굿따라 니까야<\b>
+Based on the edition by R. Morris, London : Pali Text Society 1885.
+(second edition, revised by A.K. Warder, 1961).
+
+<b>담마빠다<\b>
+O. v. Hinüber and K.R. Norman, London : Pali Text Society 1995.
+
+# 위 PTS 판본을 기반으로 태국 담마까야 재단(Dhammakaya Foundation)에서 1989~1996년에 걸쳐 입력하여 디지털화하였습니다.
+
+
+<big><b>판본 데이터 출처<\b><\big>
+
+본 어플에서 사용하는 데이터는 GRETIL(괴팅겐 인도어 전자 텍스트 등록소)에서 운영하는 아카이브 사이트에서 가져왔습니다. 데이터를 제공해주신 GRETIL에 감사드립니다.
+(https://gretil.sub.uni-goettingen.de/gretil.html#Suttapit)
+
+# 빠알리어-번역본 문장 대조를 위해서 해당 데이터를 숫따센트럴의 Mahāsaṅgīti 판본 빌랄라 데이터(bilara-data) 형식에 따라 재정리하였습니다. 내용상의 차이는 없으나 문단 구분 등의 형식은 원래의 판본과 차이가 있을 수 있습니다.
+(혹시라도 내용상의 변형을 발견하는 경우 dhammapiya3@gmail.com으로 알려주시면 감사하겠습니다.)
+
+* 빌랄라 데이터: 빠알리어와 번역본의 문장 대조가 가능하도록 문장과 문단 단위로 고유번호를 매겨 정리한 데이터입니다.  
+
+
+<big><b>저작권 안내<\b><\big>
+
+This file is (C) Copyright the Pali Text Society and the Dhammakaya Foundation, 2015.
+This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+These files are provided by courtesy of the Pali Text Society for scholarly purposes only.
+
+본 데이터의 저작권은 빠알리 성전 협회(Pali Text Society)와 담마까야 재단(Dhammakaya Foundation)에 있습니다. 법보시 해주신 빠알리 성전 협회와 담마까야 재단에 감사드립니다. 
+
+본 저작물은 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License(CC BY-NC-SA 4.0. 저작자표시-비영리-동일조건변경허락 4.0 국제)에 따라 이용할 수 있습니다.
+
+본 데이터는 학술적인 목적에 한하여 빠알리 성전 협회(PTS)의 호의로 제공됩니다. 일련의 검증 과정을 거치기는 하였으나, 인쇄본과 완전히 일치한다고 단정할 수는 없으므로 경전을 인용하기 전에는 반드시 인쇄본과 대조하여 확인해 볼 것을 강력히 권장합니다.

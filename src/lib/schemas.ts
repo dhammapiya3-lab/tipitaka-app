@@ -10,6 +10,8 @@ import type {
   InlinePart,
   Nikaya,
   Segment,
+  SuttaCommentary,
+  EditionInfo,
   SuttaExtras,
   SuttaIndexEntry,
   SuttaNissaya,
@@ -77,6 +79,7 @@ export const catalogSuttaSchema: z.ZodType<CatalogSutta> = z.object({
   noteEditions: z.array(z.string()),
   nissaya: z.array(z.string()),
   grammar: z.array(z.string()),
+  commentary: z.array(z.enum(["attha", "tika"])).optional(),
 });
 
 export const suttaNissayaSchema: z.ZodType<SuttaNissaya> = z.object({
@@ -95,6 +98,7 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
     noteEditions: z.array(z.string()),
     nissaya: z.array(z.string()),
     grammar: z.array(z.string()),
+    commentary: z.array(z.enum(["attha", "tika"])).optional(),
     nikaya: z.string().min(1),
     trail: z.object({
       nikayaName: z.string().min(1),
@@ -203,3 +207,26 @@ export const extrasSchema: z.ZodType<Record<string, SuttaExtras>> = z.record(
     others: z.array(extraItemSchema).optional(),
   }),
 );
+
+export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
+  suttaId: z.string().min(1),
+  layer: z.enum(["attha", "tika"]),
+  bookName: z.string().min(1),
+  paras: z.array(
+    z.object({
+      vripara: z.string().nullable(),
+      refs: z.array(z.string()),
+      lines: z.array(z.array(inlinePartSchema)),
+    }),
+  ),
+});
+
+export const editionInfoSchema: z.ZodType<EditionInfo> = z.object({
+  editionId: z.string().min(1),
+  groups: z.array(
+    z.object({
+      kind: z.enum(["text", "nissaya", "grammar"]),
+      sections: z.array(z.object({ title: z.string(), paragraphs: z.array(z.array(inlinePartSchema)) })),
+    }),
+  ),
+});

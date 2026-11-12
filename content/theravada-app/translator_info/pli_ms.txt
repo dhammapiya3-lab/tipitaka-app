@@ -1,0 +1,35 @@
+<big><b>빠알리어 판본 소개<\b><\big>
+
+Mahāsaṅgīti Tipiṭaka Buddhavasse 2500 판본은 미얀마 6차 결집본을 기반으로 태국 방콕에 위치한 M.L. Maniratana Bunnag Dhamma Society Fund에서 재교정 검수한 판본입니다. 
+
+미얀마에서 열린 6차 결집에 직접 참석하셨던 태국의 제19대 승왕(상가라자) 솜뎃 프라 와지라냐나상와라Somdet Phra Vajirañānasaṁvara 큰스님의 지도 아래 독송 및 교정을 진행하였습니다.
+
+2002년에 40권 분량의 로마자 표기 초판본이 완성되었으며, 이후 오류를 추가 수정해 불기 2548년(2005년)에 완성된 판본을 디지털 소스(XML) 형태로 널리 보급했습니다. 이후에도 2009/10년, 2019년에 걸쳐 지속적으로 개정판이 출간되었습니다.
+
+<b>준비 과정<\b>
+
+Mahāsaṅgīti Tipiṭaka Buddhavasse 2500 판본은 'M.L. Maniratana Bunnag Dhamma Society Fund'에서 위빳사나 연구소(Vipassanā Research Institute)에서 디지털화한(불기 2537–2542년) 미얀마 6차 결집본 삼장을 기반으로 준비하였습니다.
+
+6차 결집본 텍스트 전체를 교정하였으며, 이에 더해 불기 2543–2545년(2000–2002년)과 불기 2549–2550년(2006–2007년) 사이에 네 차례에 걸쳐 독송을 진행함으로써 기존 40권 판본의 인쇄 오류를 수정하였습니다. 
+
+교정을 위한 1차 참조 자료는 1958년 미얀마에서 발행된 제6차 결집 삼장(Chaṭṭha Saṅgāyana Tipiṭaka)의 초판본이었습니다. 추가로 다른 국가들의 다양한 자국 문자로 표기된 18개 판본의 빠알리 삼장도 참조하였습니다.
+
+
+<big><b>판본 데이터 출처<\b><\big>
+
+본 어플에서는 숫따센트럴 사이트(suttacentral.net)에서 오픈소스로 제공하는 빌랄라 데이터(bilara-data)를 사용하고 있습니다. 
+(https://github.com/suttacentral)
+
+숫따센트럴 사이트의 데이터는 마하상기띠 판본(Mahāsaṅgīti, 40 Volume Edition in Roman Script B.E. 2548 (2005))의 소스 XML 파일에서 추출한 것으로, 번호 매기기와 문장 부호 등에 약간의 편집상 변경이 있었으나 텍스트 자체에는 아무런 변경도 가하지 않았습니다.
+
+데이터를 제공해주신 숫따센트럴에 감사드립니다.
+
+* 빌랄라 데이터: 빠알리어와 번역본의 문장 대조가 가능하도록 문장과 문단 단위로 고유번호를 매겨 정리한 데이터입니다.
+
+
+<big><b>저작권 안내<\b><\big>
+
+To the extent possible under law, Mahāsaṅgīti Tipiṭaka Buddhavasse 2500 has waived all copyright and related or neighboring rights to The Buddhist Era 2500 Great International Council Pāḷi Tipiṭaka.
+
+본 저작물은 수천 년 전에 만들어져 테라와다불교 상가에 의해 오늘날까지 유지되어 온 성스러운 문헌입니다. 퍼블릭 도메인(Public Domain, 공공 소유물)으로 누구나 제한 없이 자유롭게 이용할 수 있습니다. 법보시 해주신 상가에 감사드립니다.
+

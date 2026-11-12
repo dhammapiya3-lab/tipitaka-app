@@ -345,3 +345,16 @@ Firebase·recharts 는 쓰지 않는다.
 - 좁은 화면에서는 오른쪽 칸 없이 아래에서 올라오는 창
 - "읽을 수 있는 경만 보기" → "한글 번역이 있는 경만 보기" (빠알리 원문은 거의 모든 경에 있어 전에는 가려지는 게 없었다)
 - 홈의 "시작하기" 카드는 뺌 (요청)
+
+## VRI 6차 결집본 · 주석서 · 복주석서 (2026-11-13, SN 56.11 시범)
+
+- `pnpm import:vri sn56.11` (EPITAKA_DB=epitaka.db 경로) 가 E-Piṭaka DB 에서 VRI 원문·주석서·복주석서를 꺼내 `content/vri/<경>.json` 을 만든다. 이 작은 파일만 저장소에 둔다(DB 600MB 는 두지 않는다).
+- VRI 원문은 판본 `pli-vri`(VRI 제6차 결집본, 배지 V)로 붙인다. VRI 한 줄을 그 줄이 시작하는 마하상기띠 문장 번호에 둔다.
+- 주석서·복주석서는 `book_links` 로 이 경과 이어진 문단만. 문단마다 풀이하는 경 문단(refs)을 적어 서로 오갈 수 있다(경 문단 머리 "주석" 단추 ↔ 주석 문단 머리의 경 문단 번호).
+- 출처: VRI(비영리 무료·출처 표시), E-Piṭaka(CC BY-NC 4.0) — 판본 정보 창(translator_info/pli_vri.txt)과 주석 화면 아래에 적었다.
+- 다음: 법구경(Dhp ↔ DhpA) → 나머지.
+
+## 판본 정보 창 (2026-11-13)
+
+- 원래 앱의 `translator_info/*.txt` 를 `content/theravada-app/translator_info/` 에 두고, 변환 때 `public/data/edition-info/<판본>.json` 으로 옮긴다.
+- 판본 칩과 대역·문법분석의 저자 이름 단추가 같은 창을 연다(대역·문법분석에서 열면 그 소개가 먼저).

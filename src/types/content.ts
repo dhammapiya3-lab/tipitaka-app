@@ -86,3 +86,35 @@ export interface ExtraItem {
 export type ExtraKind = "refs" | "talks" | "others";
 
 export type SuttaExtras = Partial<Record<ExtraKind, ExtraItem[]>>;
+
+/**
+ * 경 하나에 이어진 주석서·복주석서 (VRI 6차 결집본, E-Piṭaka 의 문단 연결로 이음).
+ * 원본은 content/vri/<경>.json (`pnpm import:vri`), `pnpm build:content` 가 public/data/suttas/<경>/<attha|tika>.json 으로 옮긴다.
+ */
+export interface SuttaCommentary {
+  suttaId: string;
+  layer: "attha" | "tika";
+  /** 책 이름 (예: Saṃyutta-aṭṭhakathā) */
+  bookName: string;
+  paras: {
+    /** VRI 문단 번호 (있으면) */
+    vripara: string | null;
+    /** 이 문단이 풀이하는 경의 문단 (예: sn56.11:2) */
+    refs: string[];
+    lines: InlinePart[][];
+  }[];
+}
+
+/**
+ * 판본 정보 창의 소개 글 (원래 앱의 translator_info/<판본>.txt).
+ * `pnpm build:content` 가 public/data/edition-info/<판본>.json 으로 옮긴다.
+ * 대역·문법분석 소개가 따로 있으면 묶음(group)을 하나 더 둔다.
+ */
+export interface EditionInfo {
+  editionId: string;
+  groups: {
+    /** 본문(text) · 대역(nissaya) · 문법분석(grammar) 소개 */
+    kind: "text" | AnalysisKind;
+    sections: { title: string; paragraphs: InlinePart[][] }[];
+  }[];
+}

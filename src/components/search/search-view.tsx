@@ -153,7 +153,7 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
             aria-pressed={scope === s.id}
             onClick={() => go(input, s.id)}
             className={cn(
-              "h-8 flex-1 rounded-md px-4 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+              "h-9 flex-1 shrink-0 rounded-md px-5 text-sm whitespace-nowrap transition-colors outline-none sm:flex-none focus-visible:ring-3 focus-visible:ring-ring/50",
               scope === s.id
                 ? "bg-card font-semibold text-primary shadow-sm"
                 : "font-medium text-muted-foreground",

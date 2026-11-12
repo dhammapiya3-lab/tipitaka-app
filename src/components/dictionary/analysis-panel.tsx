@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { EditionInfoSheet } from "@/components/sutta/reader-sheets";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchSuttaAnalysis } from "@/lib/content";
 import { splitWords } from "@/lib/pali";
@@ -31,6 +32,8 @@ export function AnalysisPanel({
   onWord: (word: string) => void;
 }) {
   const [state, setState] = useState<State>({ status: "loading" });
+  /** 저자 이름을 눌러 연 판본 정보 */
+  const [info, setInfo] = useState<Edition | null>(null);
   const editionKey = editions.map((e) => e.id).join(",");
 
   useEffect(() => {
@@ -48,6 +51,9 @@ export function AnalysisPanel({
   }, [kind, suttaId, editionKey]);
 
   const label = ANALYSIS_LABEL[kind];
+  const infoSheet = (
+    <EditionInfoSheet open={info !== null} onOpenChange={(o) => !o && setInfo(null)} edition={info} kind={kind} />
+  );
   if (state.status === "loading") {
     return (
       <div className="flex flex-col gap-3" aria-busy>
@@ -86,7 +92,15 @@ export function AnalysisPanel({
     <div className="flex flex-col gap-3">
       {found.map(({ edition, lines }) => (
         <article key={edition.id} className="rounded-xl border bg-card p-4">
-          <p className="t-meta mb-2 font-semibold">{edition.label}</p>
+          {/* 저자 이름을 누르면 저자 소개·판본 정보 */}
+          <button
+            type="button"
+            onClick={() => setInfo(edition)}
+            title="저자 소개 · 판본 정보"
+            className="mb-2 inline-flex items-center rounded-md bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-85"
+          >
+            {edition.label}
+          </button>
           <div className="flex flex-col gap-1">
             {lines.map((line, i) => {
               // "빠알리: 풀이" — 빠알리 부분은 굵게, 단어를 누르면 사전에서 찾는다.
@@ -109,6 +123,7 @@ export function AnalysisPanel({
           </div>
         </article>
       ))}
+      {infoSheet}
     </div>
   );
 }
