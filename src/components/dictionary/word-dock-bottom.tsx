@@ -46,7 +46,8 @@ export function WordBottomDock({
     const move = (e: PointerEvent) => {
       if (!drag.current) return;
       const next = drag.current.h + (drag.current.y - e.clientY);
-      setHeight(Math.max(MIN_HEIGHT, Math.min(Math.round(window.innerHeight * 0.85), next)));
+      // 화면 맨 위 바로 아래까지 끌어 올릴 수 있다
+      setHeight(Math.max(MIN_HEIGHT, Math.min(window.innerHeight - 8, next)));
     };
     const up = () => {
       drag.current = null;
