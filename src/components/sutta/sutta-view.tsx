@@ -559,11 +559,19 @@ export function SuttaView({
   /** 문단 보기: 이 문단을 풀이한 주석 문단 전부 */
   const commentaryFor = (p: string) =>
     Object.fromEntries(
-      parallelLayers.map((l) => [l, comm[l]!.paras.flatMap((para, i) => (para.refs.includes(p) ? [i] : []))]),
+      parallelLayers.map((l) => [
+        l,
+        comm[l]!.paras.flatMap((para, i) => (para.lineRefs.some((refs) => refs.includes(p)) ? [i] : [])),
+      ]),
     ) as Partial<Record<CommentaryLayer, number[]>>;
-  const commentaryCards = (l: CommentaryLayer, ids: number[] | undefined, label?: boolean) =>
+  const commentaryCards = (l: CommentaryLayer, ids: number[] | undefined, label?: boolean, only?: string) =>
     (ids ?? []).map((i) => (
       <CommentaryCard
+        onlyLines={
+          only
+            ? comm[l]!.paras[i].lineRefs.flatMap((refs, j) => (refs.includes(only) ? [j] : []))
+            : undefined
+        }
         key={`${l}-${i}`}
         layer={l}
         index={i}
@@ -585,7 +593,7 @@ export function SuttaView({
       {withSutta ? <div className="flex min-w-0 flex-col gap-2">{card}</div> : null}
       {parallelLayers.map((l) => (
         <div key={l} className="flex min-w-0 flex-col gap-3 text-[0.94em]">
-          {commentaryCards(l, cells[l])}
+          {commentaryCards(l, cells[l], false, focus ?? undefined)}
         </div>
       ))}
     </div>
@@ -1060,6 +1068,8 @@ export function SuttaView({
                 layer={layer}
                 available={commentary.includes(layer)}
                 picked={commPicked}
+                paragraph={focus}
+                paragraphLabel={focus ? `${editionTitle ?? head.title} ${paragraphMark(focus)}` : undefined}
                 fontStyle={articleStyle}
                 onWord={(w) => setWord({ word: w, rowKey: layer, keys: [], tab: "dictionary", title: "", pali: "" })}
                 onGoParagraph={(p) => {

@@ -27,7 +27,12 @@ export function CommentaryView({
   onWord,
   fontStyle,
   picked,
+  paragraph,
+  paragraphLabel,
 }: {
+  /** 문단별로 보기 중이면 그 경 문단 (예: sn56.11:2) — 그 문단을 풀이한 줄만 보인다 */
+  paragraph?: string | null;
+  paragraphLabel?: string;
   /** 고른 주석 판본 — VRI 원문(pli-vri)과 번역자 id */
   picked: string[];
   suttaId: string;
@@ -80,13 +85,26 @@ export function CommentaryView({
     );
   }
 
+  // 문단별로 보기: 그 경 문단을 풀이한 줄만 (줄마다 풀이하는 경 문단이 적혀 있다)
+  const only = paragraph
+    ? data.paras.flatMap((para, i) => {
+        const lines = para.lineRefs.flatMap((refs, j) => (refs.includes(paragraph) ? [j] : []));
+        return lines.length ? [{ para, i, lines }] : [];
+      })
+    : null;
+
   return (
     <div className="flex flex-col gap-4" style={fontStyle}>
       <p className="px-1 text-xs leading-relaxed text-faint">
-        <span className="font-pali text-secondary-foreground">{data.bookName}</span> · VRI 제6차 결집본 — 이 경을 풀이한
-        문단 {data.paras.length}개
+        <span className="font-pali text-secondary-foreground">{data.bookName}</span> · VRI 제6차 결집본 —{" "}
+        {only ? `${paragraphLabel ?? "이"} 문단을 풀이한 곳 ${only.length}개` : `이 경을 풀이한 문단 ${data.paras.length}개`}
       </p>
-      {data.paras.map((para, i) => (
+      {only && only.length === 0 ? (
+        <p className="px-6 py-10 text-center text-sm text-faint">
+          이 문단을 풀이한 {LAYER_NAME[layer]} 내용이 없습니다.
+        </p>
+      ) : null}
+      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }) => (
         <CommentaryCard
           key={i}
           layer={layer}
@@ -96,6 +114,7 @@ export function CommentaryView({
           onWord={onWord}
           picked={picked}
           editions={data.editions}
+          onlyLines={lines}
         />
       ))}
       <p className="px-1 text-xs leading-relaxed text-faint">
@@ -115,7 +134,10 @@ export function CommentaryCard({
   label,
   picked,
   editions,
+  onlyLines,
 }: {
+  /** 이 줄들만 보인다 (문단별로 보기) */
+  onlyLines?: number[];
   picked: string[];
   /** 이 주석의 번역 판본 (배지에 쓴다) */
   editions: Edition[];
@@ -159,7 +181,7 @@ export function CommentaryCard({
           // 고른 번역이 이 문단에 없으면 빠알리 원문이라도 보인다
           const showPali = picked.includes(VRI_ID) || trs.length === 0;
           return para.lines.map((parts, j) =>
-            !showPali && !trs.some((e) => para.tr[e.id]![j]) ? null : (
+            (onlyLines && !onlyLines.includes(j)) || (!showPali && !trs.some((e) => para.tr[e.id]![j])) ? null : (
             <div key={j}>
               {showPali ? (
                 <p>
