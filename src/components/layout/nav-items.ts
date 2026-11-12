@@ -3,7 +3,7 @@ import {
   BookOpen,
   BookText,
   Flower2,
-  HandHeart,
+  Heart,
   House,
   Info,
   Library,
@@ -29,7 +29,7 @@ export const NAV_MAIN: NavItem[] = [
   { href: "/", label: "홈", icon: House },
   { href: "/suttas", label: "경전", icon: BookOpen, alsoActiveFor: ["/sutta/", "/readable/"] },
   { href: "/books", label: "서적", icon: BookText },
-  { href: "/practice", label: "실천", icon: HandHeart },
+  { href: "/practice", label: "실천", icon: Heart },
   { href: "/chanting", label: "예불", icon: Flower2 },
 ];
 

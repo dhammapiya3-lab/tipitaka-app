@@ -1,29 +1,27 @@
 import type { ReactNode } from "react";
+import { Screen, TopBar } from "@/components/layout/app-bar";
 
-/** 모든 화면 맨 위 — 제목(24/700) + 오른쪽 주요 버튼. 부제는 꼭 필요할 때만 한 줄. */
-export function PageHeader({
+/** 첫 단계 화면(홈·경전·사전·검색·내 서재·정보 …) — 호박색 띠 + 본문 칸. 설명은 꼭 필요할 때만 한 줄. */
+export function TopLevelPage({
   title,
-  titleLang,
+  pali,
   description,
-  actions,
+  children,
+  wide = false,
 }: {
   title: string;
-  /** 제목이 빠알리어면 "pi" — 빠알리 글꼴로 표시 */
-  titleLang?: string;
+  pali?: string;
   description?: ReactNode;
-  actions?: ReactNode;
+  children: ReactNode;
+  wide?: boolean;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-3">
-      <div className="min-w-0">
-        <h1 className="t-title" lang={titleLang}>
-          {title}
-        </h1>
-        {description ? <p className="t-sub mt-1">{description}</p> : null}
-      </div>
-      {actions ? (
-        <div className="flex flex-wrap items-center gap-2">{actions}</div>
-      ) : null}
-    </div>
+    <>
+      <TopBar title={title} pali={pali} />
+      <Screen wide={wide} className="flex flex-col gap-4 py-5">
+        {description ? <p className="px-2 text-xs leading-relaxed text-muted-foreground">{description}</p> : null}
+        {children}
+      </Screen>
+    </>
   );
 }

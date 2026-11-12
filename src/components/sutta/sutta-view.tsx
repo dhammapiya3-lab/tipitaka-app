@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, CloudOff, Info, Printer } from "lucide-react";
+import { BookA, BookOpen, ChevronLeft, ChevronRight, CloudOff, List, Type } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -13,10 +13,19 @@ import {
 } from "@/components/dictionary/word-sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
+import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
-import { TextSettingsSheet } from "@/components/sutta/text-settings-sheet";
-import { TocSheet, type TocItem } from "@/components/sutta/toc-sheet";
+import {
+  EditionBadges,
+  EditionInfoSheet,
+  EditionPickerSheet,
+  TextSettingsSheet,
+  TocSheet,
+  type TocEntry,
+} from "@/components/sutta/reader-sheets";
+import { orderEditions } from "@/components/suttas/sutta-row";
+import { ANALYSIS_LABEL } from "@/components/dictionary/analysis-panel";
 import { useReaderKeys } from "@/components/sutta/use-reader-keys";
 import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
@@ -38,11 +47,19 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
 import { useSettingsStore } from "@/store/settings";
-import type { AnalysisKind, Edition, SuttaText } from "@/types";
+import type { AnalysisKind, Edition } from "@/types";
 
 export interface SuttaLink {
   id: string;
   title: string;
+}
+
+/** 머리에 쓰는 경 정보 — 제목·부제·위치 줄·← 단추가 갈 곳 */
+export interface SuttaHead {
+  title: string;
+  titleLang?: string;
+  crumbs: { label: string; href?: string }[];
+  backHref: string;
 }
 
 /** 화면 위 고정 칸(맨 위 띠) 높이 — 이보다 아래에 있는 첫 문장을 "읽는 곳"으로 본다 */
@@ -56,7 +73,9 @@ export function SuttaView({
   analysisEditions,
   prev,
   next,
+  head,
 }: {
+  head: SuttaHead;
   suttaId: string;
   suttaTitle: string;
   /** 이 경에 있는 판본 (빠알리 → 한국어 → 영어 순) */
@@ -75,7 +94,8 @@ export function SuttaView({
 
   const availableIds = useMemo(() => editions.map((e) => e.id), [editions]);
   const shownIds = pickEditions(editions, preferred);
-  const shown = editions.filter((e) => shownIds.includes(e.id));
+  // 화면에는 원래 앱처럼 한국어 → 빠알리 → 영어 순서로
+  const shown = orderEditions(editions.filter((e) => shownIds.includes(e.id)));
 
   const { texts, error, retry } = useSuttaTexts(suttaId, shownIds);
   const { notes, load: loadNotes } = useSuttaNotes(suttaId);
@@ -99,8 +119,11 @@ export function SuttaView({
   const [memoRow, setMemoRow] = useState<AlignedRow | null>(null);
   /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
   const [focus, setFocus] = useState<string | null>(null);
-  /** 문단 보기를 마치면 돌아갈 문단 */
-  const returnTo = useRef<string | null>(null);
+  /** 경 · 주석서 · 복주석서 */
+  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">("sutta");
+  /** 열려 있는 아래 창 */
+  const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
+  const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
 
   const bookmarks = useBookmarksStore((s) => s.items);
   const toggleBookmark = useBookmarksStore((s) => s.toggle);
@@ -113,7 +136,6 @@ export function SuttaView({
     Object.fromEntries(loaded.map((t) => [t.editionId, t.segments])),
   ).filter((row) => rowKind(row.key, suttaId) !== "hidden");
   const textRows = rows.filter((row) => rowKind(row.key, suttaId) === "text");
-  const toc = tocItems(rows, loaded, suttaId);
   const waiting = loaded.length === 0 && !error;
 
   // 본문이 늦게 그려지므로, 주소의 #문장번호(북마크·목차·검색 링크)로 한 번만 이동한다.
@@ -170,11 +192,17 @@ export function SuttaView({
   const focusIndex = focus ? paragraphList.indexOf(focus) : -1;
   function openParagraph(p: string) {
     setFocus(p);
-    returnTo.current = paragraphs.get(p)?.[0] ?? null;
     window.scrollTo({ top: 0 });
   }
+  /** 문단 보기를 마치면 보던 문단으로 돌아간다 (전체가 다시 그려진 다음 프레임에) */
   function closeParagraph() {
+    const target = focus ? `section-${focus}` : null;
     setFocus(null);
+    if (target) {
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: "start" })),
+      );
+    }
   }
   /** 이 문장들 가운데 풀이가 있는 종류 (게송 첫 줄에 게송 전체를 넣은 판본도 있어 게송 단위로도 본다) */
   function kindsFor(keys: string[]): AnalysisKind[] {
@@ -246,13 +274,6 @@ export function SuttaView({
     });
   }
 
-  // 문단 보기를 마치면 보던 문단으로 돌아간다
-  useEffect(() => {
-    if (focus !== null || !returnTo.current) return;
-    document.getElementById(returnTo.current)?.scrollIntoView({ block: "start" });
-    returnTo.current = null;
-  }, [focus]);
-
   // ── 키보드로 읽기 ───────────────────────────────────────────
   const activeRow = active ? textRows.find((r) => r.key === active.key) : undefined;
   const paliWords = activeRow?.cells[PALI_EDITION] ? wordsOf(activeRow.cells[PALI_EDITION].parts) : [];
@@ -302,193 +323,262 @@ export function SuttaView({
     },
   });
 
-  const columns = shown.length;
   const articleStyle: CSSProperties = { fontSize, lineHeight };
 
-  return (
-    <div className="flex flex-col gap-4">
-      {/* 함께 볼 판본 · 번역자 소개 · 목차 · 인쇄 · 텍스트 설정 (인쇄할 때는 뺀다) */}
-      <section
-        aria-label="함께 볼 판본"
-        className="mx-auto flex w-full max-w-[1200px] flex-col gap-2 rounded-xl bg-card px-3 pt-2 pb-3 shadow-card ring-1 ring-foreground/5 print:hidden"
-      >
-        <div className="flex items-center gap-1 pl-1">
-          <span className="t-sub">
-            함께 볼 판본 <b className="text-brand-ink">{shown.length}</b>
-          </span>
-          <Link
-            href="/about#editions"
-            className="t-sub ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 outline-none hover:bg-hover hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <Info className="size-4" aria-hidden />
-            번역자 소개
-          </Link>
-          <TocSheet items={toc} />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hidden sm:inline-flex"
-            aria-label="인쇄"
-            onClick={() => window.print()}
-          >
-            <Printer aria-hidden />
-          </Button>
-          <TextSettingsSheet />
+  // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
+  const headingOf = new Map<string, string>();
+  {
+    let pending: string | null = null;
+    for (const row of rows) {
+      if (rowKind(row.key, suttaId) === "heading") {
+        const cell = [...shown.filter((e) => e.language !== "pli"), ...shown]
+          .map((e) => row.cells[e.id])
+          .find(Boolean);
+        pending = cell ? plainText(cell.parts) : pending;
+      } else if (pending) {
+        headingOf.set(paragraphOf(row.key, suttaId), pending);
+        pending = null;
+      }
+    }
+  }
+  const toc: TocEntry[] = paragraphList.map((p) => ({
+    paragraph: p,
+    label: paragraphMark(p),
+    title: headingOf.get(p),
+  }));
+  const rowByKey = new Map(rows.map((r) => [r.key, r]));
+  const firstTranslation = shown.find((e) => e.language !== "pli");
+
+  function paragraphCard(p: string, inFocus: boolean) {
+    const keys = paragraphs.get(p) ?? [];
+    const kinds = kindsFor(keys);
+    const header = (
+      <>
+        <h3 className="text-sm font-bold">{paragraphMark(p)}</h3>
+        <div className="flex items-center gap-1.5 print:hidden">
+          {kinds.map((k) => (
+            <button
+              key={k}
+              type="button"
+              title={`${ANALYSIS_LABEL[k]} 보기`}
+              onClick={(e) => {
+                e.stopPropagation();
+                openAnalysis(keys, k, paragraphTitle(p));
+              }}
+              className={cn(
+                "inline-flex items-center justify-center rounded px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+                k === "nissaya"
+                  ? "bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-950 dark:text-sky-300"
+                  : "bg-violet-50 text-violet-700 hover:bg-violet-100 dark:bg-violet-950 dark:text-violet-300",
+              )}
+            >
+              {ANALYSIS_LABEL[k]}
+            </button>
+          ))}
         </div>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="판본 선택">
-          {editions.map((edition) => {
-            const on = shownIds.includes(edition.id);
+      </>
+    );
+    return (
+      <div key={p} id={`section-${p}`} className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm break-inside-avoid">
+        {inFocus ? (
+          <div className="flex items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 dark:border-border">
+            {header}
+          </div>
+        ) : (
+          // 원래 앱처럼 문단 머리를 누르면 그 문단부터 한 문단씩 본다
+          <div
+            role="button"
+            tabIndex={0}
+            title="이 문단부터 한 문단씩 보기"
+            onClick={() => openParagraph(p)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openParagraph(p);
+              }
+            }}
+            className="flex cursor-pointer items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 transition-colors outline-none hover:bg-gray-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-border dark:hover:bg-muted"
+          >
+            {header}
+          </div>
+        )}
+        <div className={inFocus ? "px-5 py-4" : "px-5 py-3"}>
+          {keys.map((key) => {
+            const row = rowByKey.get(key);
+            if (!row) return null;
+            const unit = unitOf(row.key, suttaId);
             return (
-              <button
-                key={edition.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() =>
-                  setEditions(toggleEdition(availableIds, preferred, shownIds, edition.id))
+              <SegmentRow
+                key={row.key}
+                row={row}
+                heading={false}
+                unitLabel={null}
+                active={active?.key === row.key}
+                activeWord={active?.key === row.key ? active.word : null}
+                actions={actionsFor(row)}
+                shown={shown}
+                texts={texts}
+                noteEditions={noteEditions}
+                notes={notes}
+                openNotes={openNotes}
+                onNote={toggleNote}
+                onWord={(w) =>
+                  setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: "" })
                 }
-                className={cn(
-                  "inline-flex h-9 items-center gap-1 rounded-full border px-3.5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                  on
-                    ? "border-primary/25 bg-brand-soft pl-2.5 font-bold text-brand-ink"
-                    : "border-line-strong bg-card font-medium text-muted-foreground hover:bg-hover",
-                )}
-              >
-                {on ? <Check className="size-3.5" strokeWidth={2.6} aria-hidden /> : null}
-                {edition.label}
-              </button>
+                onSentence={() => onSentence(row)}
+                unit={unit}
+              />
             );
           })}
         </div>
-      </section>
-
-      {focus ? (
-        <div className="mx-auto flex w-full max-w-[720px] items-center gap-3 print:hidden">
-          <Button variant="outline" size="sm" onClick={closeParagraph}>
-            <ArrowLeft aria-hidden />
-            전체 보기
-          </Button>
-          <span className="t-sub ml-auto">
-            문단 {focusIndex + 1} / {paragraphList.length}
-          </span>
-        </div>
-      ) : null}
-
-      {error ? (
-        <EmptyState
-          icon={CloudOff}
-          title="본문을 불러오지 못했습니다"
-          description={`${error}. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.`}
-          action={<Button onClick={retry}>다시 시도</Button>}
-        />
-      ) : null}
-
-      {/* 넓은 화면에서 사전을 열면 본문 옆에 붙인다 (창을 연 채로 다른 단어를 누를 수 있게) */}
-      <div className="flex items-start gap-6">
-        <article
-          className={cn(
-            "mx-auto flex w-full min-w-0 flex-1 flex-col gap-4 print:max-w-none",
-            columns > 1 ? "max-w-[1200px]" : "max-w-[720px]",
-          )}
-          style={articleStyle}
-        >
-          {columns > 1 ? (
-            <div className="hidden gap-6 pl-8 md:grid print:grid" style={gridStyle(columns)}>
-              {shown.map((e) => (
-                <p key={e.id} className={cn("t-meta", !e.allowCopy && "print:invisible")}>
-                  {e.label}
-                </p>
-              ))}
-            </div>
-          ) : null}
-
-          {waiting
-            ? Array.from({ length: 8 }, (_, i) => <Skeleton key={i} className="h-6 w-full" />)
-            : (focus ? rows.filter((r) => paragraphOf(r.key, suttaId) === focus && rowKind(r.key, suttaId) === "text") : rows).map((row, i, list) => {
-                // 법구경처럼 경 안에 게송이 있으면, 게송이 바뀌는 첫 줄 위에 번호를 단다.
-                const unit = unitOf(row.key, suttaId);
-                const prevUnit = i > 0 ? unitOf(list[i - 1].key, suttaId) : null;
-                const kind = rowKind(row.key, suttaId);
-                // 문단 첫 문장에 그 문단의 대역·문법분석 배지를 단다
-                const paragraph = kind === "text" ? paragraphOf(row.key, suttaId) : null;
-                const paragraphKeys = paragraph ? (paragraphs.get(paragraph) ?? []) : [];
-                const badges =
-                  paragraph && paragraphKeys[0] === row.key
-                    ? kindsFor(paragraphKeys).map((k) => ({
-                        kind: k,
-                        onClick: () => openAnalysis(paragraphKeys, k, paragraphTitle(paragraph)),
-                      }))
-                    : [];
-                const hasAnalysis = kind === "text" && kindsFor([row.key]).length > 0;
-                return (
-                  <SegmentRow
-                    key={row.key}
-                    row={row}
-                    heading={kind === "heading"}
-                    unitLabel={unit && unit !== prevUnit ? unitLabel(unit) : null}
-                    active={active?.key === row.key}
-                    activeWord={active?.key === row.key ? active.word : null}
-                    actions={kind === "text" ? actionsFor(row) : undefined}
-                    shown={shown}
-                    texts={texts}
-                    noteEditions={noteEditions}
-                    notes={notes}
-                    openNotes={openNotes}
-                    onNote={toggleNote}
-                    onWord={(w) =>
-                      setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: "" })
-                    }
-                    badges={badges}
-                    paragraphMark={
-                      paragraph && paragraphKeys[0] === row.key && !focus ? paragraphMark(paragraph) : null
-                    }
-                    onParagraph={paragraph ? () => openParagraph(paragraph) : undefined}
-                    onSentence={hasAnalysis ? () => onSentence(row) : undefined}
-                  />
-                );
-              })}
-          {focus ? (
-            <nav
-              aria-label="문단 이동"
-              className="sticky bottom-20 z-10 mt-4 grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-2.5 rounded-2xl bg-background/95 py-2 backdrop-blur lg:bottom-4 print:hidden"
-            >
-              <Button
-                variant="outline"
-                className="h-14 rounded-2xl text-base"
-                disabled={focusIndex <= 0}
-                onClick={() => openParagraph(paragraphList[focusIndex - 1])}
-              >
-                <ChevronLeft aria-hidden />
-                이전 문단
-              </Button>
-              <Button
-                className="h-14 rounded-2xl text-base font-bold"
-                disabled={focusIndex >= paragraphList.length - 1}
-                onClick={() => openParagraph(paragraphList[focusIndex + 1])}
-              >
-                다음 문단
-                <ChevronRight aria-hidden />
-              </Button>
-            </nav>
-          ) : null}
-        </article>
-        {isDesktop && word ? (
-          <div className="contents print:hidden">
-            <WordDock
-              target={word}
-              suttaId={suttaId}
-              analysisEditions={analysisEditions}
-              onClose={() => setWord(null)}
-            />
-          </div>
-        ) : null}
       </div>
+    );
+  }
+
+  const tabClass = (on: boolean) =>
+    cn(
+      "flex-1 rounded-lg py-2 text-sm font-bold transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+      on ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground",
+    );
+  const navButton =
+    "flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-bold text-primary transition-colors hover:bg-brand-soft disabled:pointer-events-none disabled:opacity-30";
+
+  return (
+    <div className="flex flex-col">
+      <SubBar
+        title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : head.title}
+        titleLang={focus ? undefined : head.titleLang}
+        subtitle={focus ? undefined : firstTranslation?.label}
+        backHref={focus ? undefined : head.backHref}
+        onBack={focus ? closeParagraph : undefined}
+        actions={
+          <>
+            <BarButton label="판본 선택" onClick={() => setSheet("editions")}>
+              <BookOpen aria-hidden />
+            </BarButton>
+            {focus ? null : (
+              <BarButton label="목차" onClick={() => setSheet("toc")}>
+                <List aria-hidden />
+              </BarButton>
+            )}
+            <BarButton label="텍스트 설정" onClick={() => setSheet("text")}>
+              <Type aria-hidden />
+            </BarButton>
+            <BarButton label="사전" href="/dictionary">
+              <BookA aria-hidden />
+            </BarButton>
+          </>
+        }
+      >
+        <Breadcrumb items={head.crumbs} />
+        <EditionBadges editions={shown} onInfo={setInfoEdition} />
+      </SubBar>
+
+      <div className="mx-auto w-full max-w-[1200px]">
+        <div className="mx-auto flex max-w-3xl gap-2 px-4 py-3 print:hidden" role="tablist" aria-label="본문 종류">
+          {(
+            [
+              ["sutta", "경"],
+              ["attha", "주석서"],
+              ["tika", "복주석서"],
+            ] as const
+          ).map(([id, label]) => (
+            <button key={id} type="button" role="tab" aria-selected={layer === id} onClick={() => setLayer(id)} className={tabClass(layer === id)}>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {layer !== "sutta" ? (
+          <p className="px-6 py-12 text-center text-sm text-faint">
+            {layer === "attha" ? "주석서(Aṭṭhakathā)" : "복주석서(Ṭīkā)"} 콘텐츠 준비 중입니다.
+          </p>
+        ) : (
+          <>
+            {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}
+            <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-2 print:hidden">
+              {focus ? (
+                <>
+                  <button type="button" className={navButton} disabled={focusIndex <= 0} onClick={() => openParagraph(paragraphList[focusIndex - 1])}>
+                    <ChevronLeft className="size-4" aria-hidden />
+                    이전
+                  </button>
+                  <span className="text-xs text-faint">
+                    {focusIndex + 1} / {paragraphList.length}
+                  </span>
+                  <button
+                    type="button"
+                    className={navButton}
+                    disabled={focusIndex >= paragraphList.length - 1}
+                    onClick={() => openParagraph(paragraphList[focusIndex + 1])}
+                  >
+                    다음
+                    <ChevronRight className="size-4" aria-hidden />
+                  </button>
+                </>
+              ) : (
+                <>
+                  {prev ? (
+                    <Link href={suttaHref(prev.id)} className={navButton} title={prev.title}>
+                      <ChevronLeft className="size-4" aria-hidden />
+                      이전
+                    </Link>
+                  ) : (
+                    <span className={cn(navButton, "opacity-30")}>
+                      <ChevronLeft className="size-4" aria-hidden />
+                      이전
+                    </span>
+                  )}
+                  {next ? (
+                    <Link href={suttaHref(next.id)} className={navButton} title={next.title}>
+                      다음
+                      <ChevronRight className="size-4" aria-hidden />
+                    </Link>
+                  ) : (
+                    <span className={cn(navButton, "opacity-30")}>
+                      다음
+                      <ChevronRight className="size-4" aria-hidden />
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+
+            {error ? (
+              <EmptyState
+                icon={CloudOff}
+                title="본문을 불러오지 못했습니다"
+                description={`${error}. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.`}
+                action={<Button onClick={retry}>다시 시도</Button>}
+              />
+            ) : null}
+
+            {/* 넓은 화면에서 사전을 열면 본문 옆에 붙인다 (창을 연 채로 다른 단어를 누를 수 있게) */}
+            <div className="flex items-start gap-6 px-4 pt-2 pb-6">
+              <article className="mx-auto flex w-full max-w-3xl min-w-0 flex-1 flex-col gap-4 print:max-w-none" style={articleStyle}>
+                {waiting
+                  ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)
+                  : focus
+                    ? paragraphCard(focus, true)
+                    : paragraphList.map((p) => (
+                        <div key={p} className="flex flex-col gap-2">
+                          {headingOf.get(p) ? <h2 className="px-2 pt-2 text-[0.95em] font-bold">{headingOf.get(p)}</h2> : null}
+                          {paragraphCard(p, false)}
+                        </div>
+                      ))}
+              </article>
+              {isDesktop && word ? (
+                <div className="contents print:hidden">
+                  <WordDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
+                </div>
+              ) : null}
+            </div>
+          </>
+        )}
+      </div>
+
       {!isDesktop ? (
-        <WordSheet
-          target={word}
-          suttaId={suttaId}
-          analysisEditions={analysisEditions}
-          onClose={() => setWord(null)}
-        />
+        <WordSheet target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
       ) : null}
 
       <MemoDialog
@@ -502,57 +592,37 @@ export function SuttaView({
         onClose={() => setMemoRow(null)}
       />
 
-      <nav
-        className={cn(
-          "mx-auto mt-6 flex w-full max-w-[720px] justify-between gap-3 border-t pt-6 print:hidden",
-          focus && "hidden",
-        )}
-        aria-label="앞뒤 경"
-      >
-        {prev ? (
-          <Button variant="outline" nativeButton={false} render={<Link href={suttaHref(prev.id)} />}>
-            <ChevronLeft aria-hidden />
-            {prev.title}
-          </Button>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Button variant="outline" nativeButton={false} render={<Link href={suttaHref(next.id)} />}>
-            {next.title}
-            <ChevronRight aria-hidden />
-          </Button>
-        ) : null}
-      </nav>
+      <EditionPickerSheet
+        open={sheet === "editions"}
+        onOpenChange={(o) => setSheet(o ? "editions" : null)}
+        editions={editions}
+        shownIds={shownIds}
+        onToggle={(id) => setEditions(toggleEdition(availableIds, preferred, shownIds, id))}
+      />
+      <TocSheet
+        open={sheet === "toc"}
+        onOpenChange={(o) => setSheet(o ? "toc" : null)}
+        title={head.title}
+        items={toc}
+        onPick={(p) => {
+          setSheet(null);
+          document.getElementById(`section-${p}`)?.scrollIntoView({ block: "start" });
+        }}
+      />
+      <TextSettingsSheet open={sheet === "text"} onOpenChange={(o) => setSheet(o ? "text" : null)} />
+      <EditionInfoSheet open={infoEdition !== null} onOpenChange={(o) => !o && setInfoEdition(null)} edition={infoEdition} />
     </div>
   );
-}
-
-function gridStyle(columns: number): CSSProperties {
-  return { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` };
 }
 
 /** 문단 번호 표시: sn56.11:2 → 2, sn56.11:2.3 → 2.3, 게송(dhp5) → Dhp 5 */
 function paragraphMark(paragraph: string): string {
   const colon = paragraph.indexOf(":");
-  return colon >= 0 ? paragraph.slice(colon + 1) : unitLabel(paragraph);
+  // 게송(dhp5)은 원래 앱처럼 번호만
+  return colon >= 0 ? paragraph.slice(colon + 1) : paragraph.replace(/^[a-z-]+/, "");
 }
 
 /** 게송 번호 표시: dhp5 → Dhp 5 */
 function unitLabel(unit: string): string {
   return unit.replace(/^([a-z-]+)/, (letters) => `${letters[0].toUpperCase()}${letters.slice(1)} `);
-}
-
-/** 목차 글자: 번역이 있으면 첫 번역의 단락 제목, 없으면 빠알리 제목 */
-function tocItems(rows: AlignedRow[], loaded: SuttaText[], suttaId: string): TocItem[] {
-  const order = [
-    ...loaded.filter((t) => t.editionId !== PALI_EDITION),
-    ...loaded.filter((t) => t.editionId === PALI_EDITION),
-  ].map((t) => t.editionId);
-  return rows
-    .filter((row) => rowKind(row.key, suttaId) === "heading")
-    .flatMap((row) => {
-      const cell = order.map((id) => row.cells[id]).find(Boolean);
-      return cell ? [{ key: row.key, parts: cell.parts }] : [];
-    });
 }

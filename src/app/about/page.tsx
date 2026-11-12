@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/layout/page-header";
+import { TopLevelPage } from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LANGUAGE_LABELS, LICENSE_UNKNOWN } from "@/lib/constants";
 import { allSuttas, editions } from "@/lib/data";
@@ -25,8 +25,7 @@ function summarize(ids: string[], prefix = ""): string {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto flex w-full max-w-[860px] flex-col gap-6">
-      <PageHeader title="정보" />
+    <TopLevelPage title="정보">
 
       <Card id="editions" className="scroll-mt-20">
         <CardHeader>
@@ -129,6 +128,6 @@ export default function AboutPage() {
           공유되지 않습니다.
         </CardContent>
       </Card>
-    </div>
+    </TopLevelPage>
   );
 }

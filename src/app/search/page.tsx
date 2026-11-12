@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageHeader } from "@/components/layout/page-header";
+import { TopLevelPage } from "@/components/layout/page-header";
 import { SearchView } from "@/components/search/search-view";
 import { editions, getReadableSuttas } from "@/lib/data";
 import { suttaLabel } from "@/lib/format";
@@ -15,12 +15,11 @@ export default function SearchPage() {
   }));
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageHeader title="검색" description="읽을 수 있는 경의 원문과 번역에서 찾습니다." />
+    <TopLevelPage title="검색" description="읽을 수 있는 경의 원문과 번역에서 찾습니다.">
       {/* 찾는 말(?q=)은 브라우저에서 읽으므로 정적 빌드에서는 Suspense 로 감싼다 */}
       <Suspense>
         <SearchView suttas={suttas} editions={editions} />
       </Suspense>
-    </div>
+    </TopLevelPage>
   );
 }

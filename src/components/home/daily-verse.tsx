@@ -3,7 +3,6 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchSuttaText } from "@/lib/content";
 import { PALI_EDITION } from "@/lib/constants";
@@ -79,46 +78,47 @@ export function DailyVerse({ vaggas, editions }: { vaggas: DhpVagga[]; editions:
 
   if (!translation || verse === "error") return null;
 
+  const card = "block w-full rounded-2xl border bg-card p-6 text-left shadow-sm transition-shadow hover:shadow-md";
+  if (verse === null) {
+    return (
+      <div className={card}>
+        <p className="mb-3 text-base font-bold">오늘의 게송</p>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-3 w-1/2" />
+        </div>
+      </div>
+    );
+  }
+  // 원래 앱처럼 카드 전체를 누르면 그 게송이 있는 품으로 간다
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="t-section">오늘의 경전</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {verse === null ? (
-          <>
-            <Skeleton className="h-5 w-2/3" />
-            <Skeleton className="h-5 w-1/2" />
-            <Skeleton className="h-4 w-1/2" />
-          </>
-        ) : (
-          <>
-            <blockquote className="flex flex-col text-[19px] leading-8 font-medium">
-              {verse.lines.map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
-            </blockquote>
-            <div lang="pi" className="flex flex-col text-[15px] leading-7 text-muted-foreground">
-              {verse.paliLines.map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3">
-              <p className="t-meta">
-                — 법구경 (Dhammapada) Dhp {verse.number}
-                {verse.title ? ` · ${verse.title}` : ""} · {verse.editionLabel}
-              </p>
-              <Link
-                href={suttaHref(verse.vaggaId, `dhp${verse.number}:1`)}
-                className="flex items-center gap-0.5 text-sm font-semibold text-primary hover:underline"
-              >
-                품 전체 읽기
-                <ChevronRight className="size-4" aria-hidden />
-              </Link>
-            </div>
-          </>
-        )}
-      </CardContent>
-    </Card>
+    <Link
+      href={suttaHref(verse.vaggaId, `dhp${verse.number}:1`)}
+      className={`${card} outline-none focus-visible:ring-3 focus-visible:ring-ring/50`}
+    >
+      <div className="mb-3 flex items-start justify-between gap-2">
+        <h2 className="text-base font-bold">오늘의 게송</h2>
+        <ChevronRight className="mt-0.5 size-4 shrink-0 text-faint" aria-hidden />
+      </div>
+      <div>
+        {verse.lines.map((line, i) => (
+          <p key={i} className="text-base leading-relaxed text-gray-800 dark:text-foreground">
+            {line}
+          </p>
+        ))}
+      </div>
+      <div lang="pi" className="mt-2">
+        {verse.paliLines.map((line, i) => (
+          <p key={i} className="text-xs leading-relaxed text-faint">
+            {line}
+          </p>
+        ))}
+      </div>
+      <p className="mt-3 text-xs font-bold text-primary">
+        — 법구경 (Dhammapada) Dhp.{verse.number}
+        <span className="ml-1 font-medium text-muted-foreground">· {verse.editionLabel}</span>
+      </p>
+    </Link>
   );
 }

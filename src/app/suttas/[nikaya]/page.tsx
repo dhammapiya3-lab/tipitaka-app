@@ -1,12 +1,11 @@
-import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/layout/page-header";
+import { Screen } from "@/components/layout/app-bar";
 import { CatalogTree } from "@/components/suttas/catalog-tree";
+import { NikayaBar } from "@/components/suttas/nikaya-bar";
 import { ReadableFilter } from "@/components/suttas/readable-filter";
-import { Button } from "@/components/ui/button";
-import { catalog, getNikaya, splitsIntoGroups } from "@/lib/data";
+import { EditionsProvider } from "@/components/suttas/sutta-row";
+import { catalog, editions, getNikaya, splitsIntoGroups } from "@/lib/data";
 
 export const dynamicParams = false;
 
@@ -20,32 +19,27 @@ export async function generateMetadata({
   return { title: getNikaya((await params).nikaya)?.nameKo };
 }
 
+/** 니까야 — 원래 앱처럼 품·상윳따 카드를 눌러 펼치고, 경 줄을 누르면 경을 연다 */
 export default async function NikayaPage({ params }: PageProps<"/suttas/[nikaya]">) {
   const nikaya = getNikaya((await params).nikaya);
   if (!nikaya) notFound();
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageHeader
+    <>
+      <NikayaBar
         title={nikaya.nameKo}
-        description={<span lang="pi">{nikaya.name}</span>}
-        actions={
-          <Button variant="outline" nativeButton={false} render={<Link href="/suttas" />}>
-            <ChevronLeft aria-hidden />
-            경전
-          </Button>
-        }
+        pali={nikaya.name}
+        introduction={nikaya.introduction}
+        backHref="/suttas"
+        crumbs={[{ label: "경", href: "/suttas" }, { label: nikaya.nameKo }]}
       />
-      <ReadableFilter>
-        <CatalogTree
-          nodes={nikaya.nodes}
-          groupHref={
-            splitsIntoGroups(nikaya)
-              ? (node) => `/suttas/${nikaya.id}/${encodeURIComponent(node.id)}`
-              : undefined
-          }
-        />
-      </ReadableFilter>
-    </div>
+      <Screen>
+        <EditionsProvider editions={editions}>
+          <ReadableFilter>
+            <CatalogTree nikaya={nikaya.id} nodes={nikaya.nodes} lazy={splitsIntoGroups(nikaya)} />
+          </ReadableFilter>
+        </EditionsProvider>
+      </Screen>
+    </>
   );
 }

@@ -10,6 +10,7 @@ export default function ChantingPage() {
       title="예불"
       description="예불문과 독송"
       icon={Flower2}
+      top
       note="예불문과 독송 자료를 준비하고 있습니다."
     />
   );

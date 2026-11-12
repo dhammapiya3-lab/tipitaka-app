@@ -14,7 +14,7 @@ export function ReadableFilter({ children }: { children: ReactNode }) {
   const setOnlyReadable = useSettingsStore((s) => s.setOnlyReadable);
   return (
     <div className="group/catalog flex flex-col gap-3" data-only={onlyReadable}>
-      <Label className="t-sub flex w-fit cursor-pointer items-center gap-2">
+      <Label className="flex w-fit cursor-pointer items-center gap-2 px-2 text-xs text-muted-foreground">
         <Switch checked={onlyReadable} onCheckedChange={setOnlyReadable} />
         읽을 수 있는 경만 보기
       </Label>

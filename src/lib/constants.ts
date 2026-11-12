@@ -20,17 +20,12 @@ export const DICTIONARY_LABELS: Record<DictionaryId, string> = {
   mm: "Tipiṭaka Pāḷi–Myanmar",
 };
 
-/** 본문 글자 크기(px) 단계 */
-export const FONT_SIZES = [14, 16, 18, 20, 22, 24, 26] as const;
-export const DEFAULT_FONT_SIZE = 18;
-/** 줄 간격 단계 */
-export const LINE_HEIGHTS = [1.6, 1.9, 2.2] as const;
-export const DEFAULT_LINE_HEIGHT = 1.9;
-export const LINE_HEIGHT_LABELS: Record<number, string> = {
-  1.6: "좁게",
-  1.9: "보통",
-  2.2: "넓게",
-};
+/** 본문 글자 크기(px) — 원래 앱과 같이 12~24, 처음 16 */
+export const FONT_SIZES = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] as const;
+export const DEFAULT_FONT_SIZE = 16;
+/** 줄 간격 — 원래 앱과 같이 1.25~2.5 (0.25씩), 처음 1.75 */
+export const LINE_HEIGHTS = [1.25, 1.5, 1.75, 2, 2.25, 2.5] as const;
+export const DEFAULT_LINE_HEIGHT = 1.75;
 
 export const LANGUAGE_LABELS = { pli: "빠알리어", ko: "한국어", en: "영어" } as const;
 /** 판본 칩에 붙이는 짧은 언어 표시 */

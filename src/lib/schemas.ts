@@ -119,6 +119,8 @@ export const nikayaSchema: z.ZodType<Nikaya> = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   nameKo: z.string().min(1),
+  description: z.string().nullable(),
+  introduction: z.string().nullable(),
   nodes: z.array(catalogNodeSchema),
 });
 

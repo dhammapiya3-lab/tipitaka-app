@@ -1,16 +1,17 @@
 "use client";
 
-import { BookX, ChevronRight, CloudOff } from "lucide-react";
-import { Fragment } from "react";
+import { BookX, CloudOff } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PageHeader } from "@/components/layout/page-header";
+import { Screen, SubBar } from "@/components/layout/app-bar";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SuttaView } from "@/components/sutta/sutta-view";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchSuttaIndex } from "@/lib/content";
+import { suttaLabel } from "@/lib/format";
+import { useSettingsStore } from "@/store/settings";
 import type { Edition, SuttaIndexEntry } from "@/types";
 
 type State =
@@ -22,7 +23,12 @@ const titleOf = (s: SuttaIndexEntry) => s.nameKo ?? s.name;
 
 /** 주소의 ?id= 로 경을 찾아 SuttaView 를 그린다. 이전·다음 경은 같은 니까야 안에서. */
 export function SuttaReader({ editions }: { editions: Edition[] }) {
-  const id = useSearchParams().get("id") ?? "";
+  const params = useSearchParams();
+  const id = params.get("id") ?? "";
+  /** 경 목록에서 판본 하나를 골라 들어오면 (?ed=) 그 판본으로 연다 */
+  const ed = params.get("ed");
+  const router = useRouter();
+  const setEditions = useSettingsStore((s) => s.setEditions);
   const [state, setState] = useState<State>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
 
@@ -48,27 +54,39 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
     if (sutta) document.title = `${titleOf(sutta)} | 초기불교경전`;
   }, [sutta]);
 
+  useEffect(() => {
+    if (!sutta || !ed || !sutta.editions.includes(ed)) return;
+    setEditions([ed]);
+    // 주소에서 ?ed= 를 지워, 새로고침이나 공유한 링크가 고른 판본을 계속 덮어쓰지 않게 한다
+    router.replace(`/sutta/?id=${encodeURIComponent(sutta.id)}${window.location.hash}`);
+  }, [sutta, ed, setEditions, router]);
+
   if (state.status === "loading") {
     return (
-      <div className="flex flex-col gap-4" aria-busy>
+      <Screen className="flex flex-col gap-4 px-6 pt-6" aria-busy>
         <Skeleton className="h-8 w-60" />
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-full" />
-      </div>
+        <Skeleton className="h-32 w-full rounded-2xl" />
+        <Skeleton className="h-32 w-full rounded-2xl" />
+      </Screen>
     );
   }
   if (state.status === "error") {
     return (
+      <>
+      <SubBar title="경 읽기" backHref="/suttas" />
       <EmptyState
         icon={CloudOff}
         title="경 목록을 불러오지 못했습니다"
         description="인터넷 연결을 확인한 뒤 다시 시도해 주세요."
         action={<Button onClick={() => setAttempt((n) => n + 1)}>다시 시도</Button>}
       />
+      </>
     );
   }
   if (!sutta) {
     return (
+      <>
+      <SubBar title="경 읽기" backHref="/suttas" />
       <EmptyState
         icon={BookX}
         title="찾는 경이 없습니다"
@@ -79,48 +97,16 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
           </Link>
         }
       />
+      </>
     );
   }
 
   const sameNikaya = (s: SuttaIndexEntry | undefined) =>
     s && s.nikaya === sutta.nikaya ? { id: s.id, title: titleOf(s) } : null;
 
-  return (
-    <div className="flex flex-col gap-4">
-      <Breadcrumb sutta={sutta} />
-      <PageHeader
-        title={titleOf(sutta)}
-        titleLang={sutta.nameKo ? undefined : "pi"}
-        description={
-          <>
-            {sutta.id.toUpperCase()}
-            {sutta.nameKo ? <span lang="pi"> · {sutta.name}</span> : null}
-          </>
-        }
-      />
-      {/* 경이 바뀌면 읽기 화면을 새로 그린다 (열어 둔 각주·사전 창 등을 비운다) */}
-      <SuttaView
-        key={sutta.id}
-        suttaId={sutta.id}
-        suttaTitle={titleOf(sutta)}
-        editions={editions.filter((e) => sutta.editions.includes(e.id))}
-        noteEditions={sutta.noteEditions}
-        analysisEditions={{
-          nissaya: editions.filter((e) => sutta.nissaya.includes(e.id)),
-          grammar: editions.filter((e) => sutta.grammar.includes(e.id)),
-        }}
-        prev={sameNikaya(index[i - 1])}
-        next={sameNikaya(index[i + 1])}
-      />
-    </div>
-  );
-}
-
-/** 경 제목 위 위치 줄 — 경전 › 니까야 › 품 › 상윳따. 눌러서 다른 경으로 쉽게 옮겨 간다. */
-function Breadcrumb({ sutta }: { sutta: SuttaIndexEntry }) {
   const { nikayaName, groups, groupPages } = sutta.trail;
-  const items: { label: string; href?: string }[] = [
-    { label: "경전", href: "/suttas" },
+  const crumbs = [
+    { label: "경", href: "/suttas" },
     { label: nikayaName, href: `/suttas/${sutta.nikaya}` },
     ...groups.map((g, i) => ({
       label: g.label,
@@ -129,29 +115,29 @@ function Breadcrumb({ sutta }: { sutta: SuttaIndexEntry }) {
           ? `/suttas/${sutta.nikaya}/${encodeURIComponent(g.id)}`
           : undefined,
     })),
+    { label: suttaLabel(sutta.id) },
   ];
+
+  // 경이 바뀌면 읽기 화면을 새로 그린다 (열어 둔 각주·사전 창 등을 비운다)
   return (
-    <nav aria-label="위치" className="-mb-2 print:hidden">
-      <ol className="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[13px] text-muted-foreground">
-        {items.map((item, i) => (
-          <Fragment key={`${i}-${item.label}`}>
-            {i > 0 ? (
-              <li aria-hidden className="flex">
-                <ChevronRight className="size-3.5 opacity-60" />
-              </li>
-            ) : null}
-            <li>
-              {item.href ? (
-                <Link href={item.href} className="rounded underline-offset-3 hover:text-foreground hover:underline">
-                  {item.label}
-                </Link>
-              ) : (
-                <span>{item.label}</span>
-              )}
-            </li>
-          </Fragment>
-        ))}
-      </ol>
-    </nav>
+    <SuttaView
+      key={sutta.id}
+      head={{
+        title: titleOf(sutta),
+        titleLang: sutta.nameKo ? undefined : "pi",
+        crumbs,
+        backHref: `/suttas/${sutta.nikaya}`,
+      }}
+      suttaId={sutta.id}
+      suttaTitle={titleOf(sutta)}
+      editions={editions.filter((e) => sutta.editions.includes(e.id))}
+      noteEditions={sutta.noteEditions}
+      analysisEditions={{
+        nissaya: editions.filter((e) => sutta.nissaya.includes(e.id)),
+        grammar: editions.filter((e) => sutta.grammar.includes(e.id)),
+      }}
+      prev={sameNikaya(index[i - 1])}
+      next={sameNikaya(index[i + 1])}
+    />
   );
 }

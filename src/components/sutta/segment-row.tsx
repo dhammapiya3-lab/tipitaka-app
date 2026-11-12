@@ -2,7 +2,6 @@
 
 import { Bookmark, Copy, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { ANALYSIS_LABEL } from "@/components/dictionary/analysis-panel";
 import { InlineText } from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AlignedRow } from "@/lib/segments";
 import { cn } from "@/lib/utils";
-import type { AnalysisKind, Edition, Footnote, Language, SuttaText } from "@/types";
+import type { Edition, Footnote, Language, SuttaText } from "@/types";
 
 const LANG_ATTR: Record<Language, string> = { pli: "pi", ko: "ko", en: "en" };
 
@@ -30,12 +29,6 @@ export interface SentenceActions {
   onCopyText: () => void;
 }
 
-/** 문단 첫 줄 오른쪽 위의 [대역]·[문법분석] 배지 — 누르면 그 문단 전체의 풀이 */
-export interface AnalysisBadge {
-  kind: AnalysisKind;
-  onClick: () => void;
-}
-
 /** 누른 곳이 단어·각주 버튼·링크가 아니고, 글자를 끌어 고르는 중도 아닐 때만 문장 누르기로 본다 */
 function isPlainClick(target: EventTarget | null): boolean {
   if (!(target instanceof Element) || target.closest("[data-word], button, a")) return false;
@@ -43,11 +36,21 @@ function isPlainClick(target: EventTarget | null): boolean {
   return !selection || selection.isCollapsed;
 }
 
-/** 문장 한 줄 — 판본들을 나란히(넓은 화면) 또는 위아래로(휴대폰) */
+/** 판본 배지 색 — 원래 앱처럼 한국어는 호박색, 빠알리는 짙은 회색, 영어는 회색 */
+function badgeColor(language: Language): string {
+  if (language === "ko") return "bg-primary";
+  if (language === "pli") return "bg-gray-600";
+  return "bg-gray-500";
+}
+
+/**
+ * 문장 한 줄 (문단 카드 안) — 원래 앱과 같은 모양.
+ * 판본이 하나면 글만, 여럿이면 판본마다 배지(한) M) …)를 달아 위아래로 번갈아 보이고 아래에 가는 선.
+ * 넓은 화면에서는 판본을 나란히 놓는다(새로 더한 기능).
+ */
 export function SegmentRow({
   row,
   heading,
-  unitLabel,
   active,
   activeWord,
   actions,
@@ -58,15 +61,13 @@ export function SegmentRow({
   openNotes,
   onNote,
   onWord,
-  badges = [],
-  paragraphMark = null,
-  onParagraph,
   onSentence,
 }: {
   row: AlignedRow;
   heading: boolean;
-  /** 게송이 바뀌는 첫 줄이면 게송 번호 (Dhp 5) */
-  unitLabel: string | null;
+  /** (쓰지 않음 — 게송 번호는 문단 카드 머리에) */
+  unitLabel?: string | null;
+  unit?: string | null;
   /** 키보드로 고른 문장인지 */
   active: boolean;
   /** 키보드로 고른 빠알리 단어 순번 */
@@ -80,12 +81,7 @@ export function SegmentRow({
   onNote: (editionId: string, key: string, mark: string) => void;
   /** 빠알리 원문의 단어를 누를 때 */
   onWord: (word: string) => void;
-  /** 문단 첫 줄이면 그 문단의 풀이 배지 */
-  badges?: AnalysisBadge[];
-  /** 문단 첫 줄이면 문단 번호(¶) — 누르면 그 문단부터 한 문단씩 보기 */
-  paragraphMark?: string | null;
-  onParagraph?: () => void;
-  /** 대역·문법분석이 있는 문장이면, 문장을 누를 때 */
+  /** 문장을 누를 때 (대역·문법분석·사전 창) */
   onSentence?: () => void;
 }) {
   const compare = shown.length > 1;
@@ -94,64 +90,48 @@ export function SegmentRow({
     <div
       id={row.key}
       className={cn(
-        "-mx-2 flex scroll-mt-32 gap-2 rounded-lg px-2 break-inside-avoid",
-        heading && "mt-4",
-        active && "bg-brand-softer ring-2 ring-primary/30",
+        "group/row relative flex scroll-mt-32 gap-1 break-inside-avoid",
+        compare && "py-1",
+        active && "-mx-2 rounded-lg bg-brand-softer px-2 ring-2 ring-primary/30",
       )}
     >
-      {/* 문장 메뉴 칸 — 제목 줄에는 버튼 없이 자리만 맞춘다. 인쇄할 때는 뺀다. */}
-      <div className="w-6 shrink-0 pt-[0.15em] print:hidden">
-        {actions ? <SentenceMenu actions={actions} /> : null}
-      </div>
       <div
         className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}
         onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
       >
-        {unitLabel || badges.length || paragraphMark ? (
-          <div className="mb-1 flex items-center gap-2">
-            {paragraphMark && onParagraph ? (
-              <button
-                type="button"
-                onClick={onParagraph}
-                title="이 문단부터 한 문단씩 보기"
-                className="h-7 rounded-full bg-brand-softer px-3 font-pali text-[13px] font-semibold text-brand-ink transition-colors outline-none hover:bg-brand-soft focus-visible:ring-3 focus-visible:ring-ring/50 print:hidden"
-              >
-                ¶ {paragraphMark}
-              </button>
-            ) : null}
-            {unitLabel && unitLabel !== paragraphMark ? <p className="t-meta font-semibold">{unitLabel}</p> : null}
-            {badges.length ? (
-              <div className="ml-auto flex gap-1 print:hidden">
-                {badges.map((badge) => (
-                  <button
-                    key={badge.kind}
-                    type="button"
-                    onClick={badge.onClick}
-                    className="h-6 rounded-md border border-transparent bg-brand-soft px-2 text-xs font-semibold text-brand-ink transition-colors outline-none hover:border-primary/40 focus-visible:ring-3 focus-visible:ring-ring/50"
-                  >
-                    {ANALYSIS_LABEL[badge.kind]}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-        {/* 모바일은 판본을 위아래로, md 이상은 나란히 */}
         <div
-          className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-[var(--cols)] print:grid-cols-[var(--cols)]"
+          className={cn(compare && "md:grid md:grid-cols-[var(--cols)] md:gap-x-6 print:grid print:grid-cols-[var(--cols)]")}
           style={{ "--cols": `repeat(${shown.length}, minmax(0, 1fr))` } as CSSProperties}
         >
           {shown.map((edition) => {
             const segment = row.cells[edition.id];
-            if (!texts[edition.id]) return <Skeleton key={edition.id} className="h-5" />;
+            if (!texts[edition.id]) return <Skeleton key={edition.id} className="my-2 h-5" />;
             if (!segment) return <div key={edition.id} />;
             const isPali = edition.language === "pli";
             const marks = new Set(
               segment.parts.flatMap((p) =>
-                p.type === "note" && openNotes.has(`${edition.id} ${row.key} ${p.mark}`)
-                  ? [p.mark]
-                  : [],
+                p.type === "note" && openNotes.has(`${edition.id} ${row.key} ${p.mark}`) ? [p.mark] : [],
               ),
+            );
+            const text = (
+              <p
+                className={cn(
+                  // 원래 앱처럼 원문·번역 모두 명조(.pali)로
+                  "rounded font-pali whitespace-pre-line wrap-anywhere text-gray-800 transition-colors hover:bg-gray-50 dark:text-foreground dark:hover:bg-muted",
+                  compare ? "py-0.5" : "py-2",
+                  heading && "font-bold",
+                  // 원래 앱이 복사를 막은 번역(법현 스님)은 글자 선택을 막는다
+                  !edition.allowCopy && "select-none",
+                )}
+              >
+                <InlineText
+                  parts={segment.parts}
+                  openMarks={marks}
+                  onWord={isPali ? onWord : undefined}
+                  activeWord={isPali && active ? activeWord : null}
+                  onNote={noteEditions.includes(edition.id) ? (mark) => onNote(edition.id, row.key, mark) : undefined}
+                />
+              </p>
             );
             return (
               <div
@@ -161,29 +141,24 @@ export function SegmentRow({
                 className={cn(!edition.allowCopy && "print:invisible")}
                 onCopy={edition.allowCopy ? undefined : (e) => e.preventDefault()}
               >
-                <p
-                  className={cn(
-                    // 긴 빠알리 복합어도 칸 안에서 줄바꿈
-                    "whitespace-pre-line wrap-anywhere",
-                    heading ? "text-[1.1em] font-bold" : "",
-                    isPali && "font-pali",
-                    isPali && compare && "text-muted-foreground",
-                    // 원래 앱이 복사를 막은 번역(법현 스님)은 글자 선택을 막는다
-                    !edition.allowCopy && "select-none",
-                  )}
-                >
-                  <InlineText
-                    parts={segment.parts}
-                    openMarks={marks}
-                    onWord={isPali ? onWord : undefined}
-                    activeWord={isPali && active ? activeWord : null}
-                    onNote={
-                      noteEditions.includes(edition.id)
-                        ? (mark) => onNote(edition.id, row.key, mark)
-                        : undefined
-                    }
-                  />
-                </p>
+                {compare ? (
+                  <div className="flex items-start gap-2 py-1">
+                    <span className="mt-0.5 inline-flex h-7 shrink-0 items-center">
+                      <span
+                        className={cn(
+                          "inline-flex items-center justify-center rounded px-1.5 py-0.5 font-sans text-[10px] font-bold text-white",
+                          badgeColor(edition.language),
+                        )}
+                        title={edition.label}
+                      >
+                        {edition.badge})
+                      </span>
+                    </span>
+                    <div className="min-w-0 flex-1">{text}</div>
+                  </div>
+                ) : (
+                  text
+                )}
                 {[...marks].map((mark) => (
                   <NoteBox key={mark} mark={mark} state={notes[edition.id]} rowKey={row.key} />
                 ))}
@@ -197,7 +172,10 @@ export function SegmentRow({
             {actions.memo}
           </p>
         ) : null}
+        {compare ? <div className="mt-1 border-b border-gray-100 dark:border-border" /> : null}
       </div>
+      {/* 문장 메뉴(북마크·메모·복사) — 새로 더한 기능. 인쇄할 때는 뺀다 */}
+      <div className="w-6 shrink-0 pt-2 print:hidden">{actions ? <SentenceMenu actions={actions} /> : null}</div>
     </div>
   );
 }

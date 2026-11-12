@@ -1,6 +1,6 @@
 "use client";
 
-import { BookA, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { ANALYSIS_LABEL, AnalysisPanel } from "@/components/dictionary/analysis-panel";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
@@ -53,7 +53,7 @@ export function WordSheet({
 }) {
   return (
     <Sheet open={target !== null} onOpenChange={(open) => (open ? null : onClose())}>
-      <SheetContent side="right" className="w-[min(560px,92vw)] gap-0 p-0 sm:max-w-none">
+      <SheetContent side="bottom" className="mx-auto max-h-[85vh] w-full max-w-md gap-0 overflow-hidden rounded-t-3xl border-0 p-0">
         {target ? (
           <WordPanelBody
             key={`${target.rowKey} ${target.word} ${target.tab} ${target.keys.length}`}
@@ -124,7 +124,7 @@ function WordPanelBody({
       .map((kind) => ({ id: kind, label: ANALYSIS_LABEL[kind] })),
     { id: "dictionary", label: "사전" },
   ];
-  const heading = searched || target.title;
+  const heading = searched || target.title || "빠알리어 분석";
 
   return (
     <>
@@ -142,7 +142,7 @@ function WordPanelBody({
       )}
       <div className="flex flex-col gap-3 border-b p-4">
         {tabs.length > 1 ? (
-          <div className="flex rounded-lg bg-muted p-0.5" role="tablist" aria-label="보기">
+          <div className="flex gap-2" role="tablist" aria-label="보기">
             {tabs.map((t) => (
               <button
                 key={t.id}
@@ -151,10 +151,8 @@ function WordPanelBody({
                 aria-selected={tab === t.id}
                 onClick={() => setTab(t.id)}
                 className={cn(
-                  "h-8 flex-1 rounded-md text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                  tab === t.id
-                    ? "bg-card font-semibold text-primary shadow-sm"
-                    : "font-medium text-muted-foreground",
+                  "flex-1 rounded-lg py-2 text-sm font-bold transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                  tab === t.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
                 )}
               >
                 {t.label}
@@ -197,7 +195,10 @@ function WordPanelBody({
         ) : (
           <>
             {target.pali ? (
-              <p lang="pi" className="mb-3 font-pali whitespace-pre-line text-muted-foreground">
+              <p
+                lang="pi"
+                className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3 font-pali font-bold whitespace-pre-line text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
+              >
                 {target.pali}
               </p>
             ) : null}
@@ -225,12 +226,9 @@ function PanelTitle({
   isWord: boolean;
   docked?: boolean;
 }) {
-  const titleClass = "truncate text-lg leading-[26px] font-bold tracking-tight";
+  const titleClass = "truncate text-sm font-bold";
   return (
     <>
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink">
-        <BookA className="size-5" aria-hidden />
-      </span>
       <div className="min-w-0">
         {docked ? (
           <h2 lang={isWord ? "pi" : undefined} className={titleClass}>

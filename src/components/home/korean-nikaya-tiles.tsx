@@ -19,12 +19,12 @@ export function KoreanNikayaTiles({ items }: { items: { nikaya: Nikaya; count: n
           key={nikaya.id}
           href={`/readable/${nikaya.id}`}
           className={cn(
-            "flex min-h-20 flex-col items-center justify-center gap-1 rounded-2xl border bg-card px-1 outline-none transition-colors hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50 sm:col-span-1",
+            "flex min-h-20 flex-col items-center justify-center gap-1 rounded-xl border bg-gray-50 px-1 outline-none transition-colors hover:border-amber-200 hover:bg-amber-50 dark:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 sm:col-span-1",
             i < 3 ? "col-span-2" : "col-span-3",
           )}
         >
-          <span className="text-lg font-bold">{shortName(nikaya)}</span>
-          <span className="rounded-full bg-brand-softer px-2.5 py-0.5 text-[13px] font-bold text-brand-ink">
+          <span className="text-base font-bold">{shortName(nikaya)}</span>
+          <span className="text-sm font-bold text-primary">
             {count}
           </span>
         </Link>

@@ -12,9 +12,9 @@ export function ContinueReading() {
   return (
     <Link
       href={suttaHref(last.suttaId, last.key)}
-      className="flex items-center gap-3 rounded-xl bg-card p-4 shadow-card ring-1 ring-foreground/5 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
+      className="flex items-center gap-3 rounded-2xl border bg-card p-4 shadow-sm outline-none transition-shadow hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50"
     >
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
         <BookOpenCheck className="size-5" aria-hidden />
       </span>
       <span className="flex min-w-0 flex-1 flex-col">

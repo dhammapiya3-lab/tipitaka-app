@@ -1,150 +1,121 @@
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { collect } from "@/lib/data";
+import { ChevronDown } from "lucide-react";
+import { LazyGroup } from "@/components/suttas/lazy-group";
+import { SuttaRow } from "@/components/suttas/sutta-row";
 import { HIDE_WHEN_ONLY_READABLE } from "@/lib/constants";
-import { formatCount, suttaHref, suttaLabel } from "@/lib/format";
+import { collect } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { CatalogNode, CatalogSutta } from "@/types";
 
 /**
- * 경전 목록 나무 — 품·상윳따 같은 묶음은 접고 펼 수 있다(<details>, 자바스크립트 없이).
- * 본문이 있는 경이 든 묶음만 처음부터 펼쳐 둔다.
- * groupHref 가 있으면 맨 아래 묶음은 경 목록 대신 그 묶음 페이지로 가는 줄이 된다.
+ * 경전 목록 나무 — 원래 앱처럼 품·상윳따 카드를 눌러 아래로 펼친다(<details>).
+ * lazy 면 맨 아래 묶음의 경 목록은 펼칠 때 불러온다(경이 많은 니까야).
  */
 export function CatalogTree({
+  nikaya,
   nodes,
-  groupHref,
+  lazy = false,
 }: {
+  nikaya: string;
   nodes: CatalogNode[];
-  groupHref?: (node: CatalogNode) => string;
+  lazy?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-3">
-      {nodes.map((node) => (
-        <CatalogGroup key={node.id} node={node} depth={0} groupHref={groupHref} />
+      {nodes.map((node, i) => (
+        <CatalogGroup key={node.id} nikaya={nikaya} node={node} index={i + 1} depth={0} lazy={lazy} />
       ))}
     </div>
   );
 }
 
-function GroupTitle({ node, depth }: { node: CatalogNode; depth: number }) {
-  const suttas = collect(node);
-  const readable = suttas.filter((s) => s.editions.length > 0).length;
+function GroupHeader({ node, index, depth }: { node: CatalogNode; index: number; depth: number }) {
+  const title = node.nameKo ?? node.name ?? node.id;
   return (
     <>
-      <span className="flex min-w-0 flex-1 flex-col">
-        <span className={depth === 0 ? "t-card" : "font-semibold"}>
-          {node.nameKo ?? node.name ?? node.id}
-          {node.nameKo && node.name ? (
-            <span lang="pi" className="ml-2 t-sub font-medium">
+      <div
+        className={cn(
+          "flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
+          depth === 0 ? "bg-primary" : "bg-amber-600",
+        )}
+      >
+        {index}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="mb-0.5 flex flex-wrap items-baseline gap-x-1.5">
+          <h3 className="text-base font-bold">{title}</h3>
+          {node.description && node.name && node.name !== title ? (
+            <span lang="pi" className="text-xs text-faint">
               {node.name}
             </span>
           ) : null}
-        </span>
-        {node.description ? <span className="t-sub">{node.description}</span> : null}
-      </span>
-      <span className="t-meta shrink-0 text-right">
-        {node.range ? `${node.range} · ` : ""}
-        {formatCount(suttas.length)}경
-        {readable > 0 ? ` · 읽기 ${formatCount(readable)}` : ""}
-      </span>
+        </div>
+        {node.description ? (
+          <p className="font-pali text-xs text-muted-foreground">{node.description}</p>
+        ) : node.name && node.name !== title ? (
+          <p lang="pi" className="font-pali text-xs text-muted-foreground">
+            {node.name}
+          </p>
+        ) : null}
+      </div>
+      {node.range ? <span className="shrink-0 text-sm font-bold text-primary">{node.range}</span> : null}
     </>
   );
 }
 
 function CatalogGroup({
+  nikaya,
   node,
+  index,
   depth,
-  groupHref,
+  lazy,
 }: {
+  nikaya: string;
   node: CatalogNode;
+  index: number;
   depth: number;
-  groupHref?: (node: CatalogNode) => string;
+  lazy: boolean;
 }) {
   const hasReadable = collect(node).some((s) => s.editions.length > 0);
-  const frame = cn(
-    depth === 0 ? "rounded-2xl border bg-card shadow-xs" : "border-t first:border-t-0",
-    // "읽을 수 있는 경만 보기"를 켜면 본문 있는 경이 하나도 없는 묶음은 가린다
-    !hasReadable && HIDE_WHEN_ONLY_READABLE,
-  );
+  const hide = !hasReadable && HIDE_WHEN_ONLY_READABLE;
 
-  if (groupHref && node.suttas.length > 0) {
+  // 경이 많은 니까야의 맨 아래 묶음은 펼칠 때 불러온다
+  if (lazy && node.suttas.length > 0 && node.children.length === 0) {
     return (
-      <Link
-        href={groupHref(node)}
-        className={`flex items-center gap-3 px-5 py-3.5 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50 ${frame}`}
-      >
-        <GroupTitle node={node} depth={depth} />
-        <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-      </Link>
+      <LazyGroup
+        nikaya={nikaya}
+        groupId={node.id}
+        nested={depth > 0}
+        className={hide || undefined}
+        header={<GroupHeader node={node} index={index} depth={depth} />}
+      />
     );
   }
 
   return (
-    <details
-      open={hasReadable}
-      className={`group ${frame}`}
-    >
-      <summary className="flex cursor-pointer list-none items-center gap-3 px-5 py-3.5 hover:bg-hover [&::-webkit-details-marker]:hidden">
-        <ChevronRight
-          className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
-          aria-hidden
-        />
-        <GroupTitle node={node} depth={depth} />
+    <details className={cn("group/g", hide)}>
+      <summary
+        className={cn(
+          "block cursor-pointer list-none rounded-2xl border bg-card p-4 shadow-sm transition-shadow outline-none hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden",
+          depth > 0 && "ml-4",
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <GroupHeader node={node} index={index} depth={depth} />
+          <ChevronDown className="size-5 shrink-0 text-faint transition-transform group-open/g:rotate-180" aria-hidden />
+        </div>
       </summary>
-      <div className={depth === 0 ? "border-t" : "pl-5"}>
-        {node.children.map((child) => (
-          <CatalogGroup key={child.id} node={child} depth={depth + 1} groupHref={groupHref} />
+      <div className={cn("mt-2 flex flex-col gap-2", depth > 0 && "ml-4")}>
+        {node.children.map((child, i) => (
+          <CatalogGroup key={child.id} nikaya={nikaya} node={child} index={i + 1} depth={depth + 1} lazy={lazy} />
         ))}
-        {node.suttas.length > 0 ? <SuttaList suttas={node.suttas} /> : null}
+        {node.suttas.map((s) => (
+          <SuttaRow key={s.id} sutta={rowData(s)} />
+        ))}
       </div>
     </details>
   );
 }
 
-export function SuttaList({ suttas }: { suttas: CatalogSutta[] }) {
-  return (
-    <ul className="flex flex-col py-1">
-      {suttas.map((sutta) => (
-        <SuttaItem key={sutta.id} sutta={sutta} />
-      ))}
-    </ul>
-  );
-}
-
-function SuttaItem({ sutta }: { sutta: CatalogSutta }) {
-  const readable = sutta.editions.length > 0;
-  const body = (
-    <>
-      <span className="t-meta w-24 shrink-0">{suttaLabel(sutta.id)}</span>
-      <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2">
-        {sutta.nameKo ? <span className="truncate">{sutta.nameKo}</span> : null}
-        <span lang="pi" className={sutta.nameKo ? "t-sub truncate" : "truncate"}>
-          {sutta.name}
-        </span>
-      </span>
-    </>
-  );
-
-  if (!readable) {
-    return (
-      <li className={cn("flex items-center gap-3 px-5 py-2 text-muted-foreground", HIDE_WHEN_ONLY_READABLE)}>
-        {body}
-        <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs font-semibold">
-          준비 중
-        </span>
-      </li>
-    );
-  }
-  return (
-    <li>
-      <Link
-        href={suttaHref(sutta.id)}
-        className="flex items-center gap-3 px-5 py-2 font-semibold outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
-      >
-        {body}
-        <ChevronRight className="size-4 shrink-0 text-primary" aria-hidden />
-      </Link>
-    </li>
-  );
+function rowData(s: CatalogSutta) {
+  return { id: s.id, name: s.name, nameKo: s.nameKo, editions: s.editions };
 }

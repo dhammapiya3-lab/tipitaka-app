@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Noto_Serif } from "next/font/google";
 import { BottomTabBar } from "@/components/layout/bottom-tab-bar";
-import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { SettingsHydrator } from "@/components/shared/settings-hydrator";
@@ -37,12 +36,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" suppressHydrationWarning className={`h-full ${notoSans.variable} ${notoSerif.variable}`}>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
-      </head>
       <body className="flex min-h-full flex-col">
         <ThemeProvider
           attribute="class"
@@ -51,12 +44,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <Header />
             <div className="flex w-full flex-1">
               <Sidebar />
-              <main className="mx-auto w-full max-w-[1440px] min-w-0 flex-1 px-4 pt-6 pb-28 lg:px-8 lg:pb-10 print:max-w-none print:p-0">
-                {children}
-              </main>
+              <main className="w-full min-w-0 flex-1 pb-24 lg:pb-10 print:p-0">{children}</main>
             </div>
             <BottomTabBar />
           </TooltipProvider>

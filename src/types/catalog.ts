@@ -48,6 +48,10 @@ export interface Nikaya {
   id: string;
   name: string;
   nameKo: string;
+  /** 한 줄 설명 (긴 경전 모음 …) */
+  description: string | null;
+  /** ⓘ 단추로 여는 소개 글 */
+  introduction: string | null;
   nodes: CatalogNode[];
 }
 

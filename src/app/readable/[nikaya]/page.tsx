@@ -1,11 +1,9 @@
-import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/layout/page-header";
-import { Card } from "@/components/ui/card";
-import { catalog, getKoreanGroups, getKoreanSuttas, getNikaya, koreanEditionCount } from "@/lib/data";
-import { suttaHref, suttaLabel } from "@/lib/format";
+import { Screen } from "@/components/layout/app-bar";
+import { NikayaBar } from "@/components/suttas/nikaya-bar";
+import { EditionsProvider, SuttaRow } from "@/components/suttas/sutta-row";
+import { catalog, editions, getKoreanGroups, getNikaya } from "@/lib/data";
 
 export const dynamicParams = false;
 
@@ -24,62 +22,46 @@ export async function generateMetadata({
 export default async function ReadableNikayaPage({ params }: PageProps<"/readable/[nikaya]">) {
   const nikaya = getNikaya((await params).nikaya);
   if (!nikaya) notFound();
-  const suttas = getKoreanSuttas(nikaya.id);
   const groups = getKoreanGroups(nikaya.id);
+  const count = groups.reduce((n, g) => n + g.suttas.length, 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-[860px] flex-col gap-6">
-      <PageHeader
+    <>
+      <NikayaBar
         title={nikaya.nameKo}
-        description={
-          <>
-            <span lang="pi">{nikaya.name}</span> · 한글 번역 {suttas.length}개 경
-          </>
-        }
+        pali={nikaya.name}
+        introduction={nikaya.introduction}
+        backHref="/"
+        crumbs={[{ label: "지금 읽을 수 있는 경", href: "/" }, { label: `${nikaya.nameKo} · 한글 번역 ${count}개 경` }]}
       />
-      {suttas.length === 0 ? (
-        <Card>
-          <p className="t-sub px-5">아직 한글 번역이 있는 경이 없습니다.</p>
-        </Card>
-      ) : (
-        groups.map((group) => (
-          <section key={group.id} className="flex flex-col gap-2" aria-labelledby={`g-${group.id}`}>
-            <h2 id={`g-${group.id}`} className="flex flex-wrap items-baseline gap-x-2 px-1">
-              <span className="t-section">{group.label}</span>
-              {group.pali && group.pali !== group.label ? (
-                <span lang="pi" className="t-sub">
-                  {group.pali}
-                </span>
-              ) : null}
-              <span className="t-meta ml-auto">{group.suttas.length}개 경</span>
-            </h2>
-            <Card className="gap-0 px-2 py-2">
-              <ul className="flex flex-col">
-                {group.suttas.map((s, i) => (
-                  <li key={s.id} className={i > 0 ? "border-t" : undefined}>
-                    <Link
-                      href={suttaHref(s.id)}
-                      className="flex min-h-15 items-center gap-3 rounded-2xl px-3 py-2 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
-                    >
-                      <span className="flex min-w-0 flex-1 flex-col">
-                        <span className="text-base font-bold">{s.nameKo ?? <span lang="pi">{s.name}</span>}</span>
-                        <span className="t-meta">
-                          {suttaLabel(s.id)}
-                          {s.nameKo ? <span lang="pi"> · {s.name}</span> : null}
-                        </span>
-                      </span>
-                      <span className="shrink-0 rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-ink">
-                        번역 {koreanEditionCount(s)}
-                      </span>
-                      <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-                    </Link>
-                  </li>
+      <Screen className="flex flex-col gap-5">
+        {groups.length === 0 ? (
+          <p className="px-6 py-12 text-center text-sm text-faint">아직 한글 번역이 있는 경이 없습니다.</p>
+        ) : (
+          <EditionsProvider editions={editions}>
+            {groups.map((group) => (
+              <section key={group.id} className="flex flex-col gap-2" aria-labelledby={`g-${group.id}`}>
+                <h2 id={`g-${group.id}`} className="flex flex-wrap items-baseline gap-x-1.5 px-2">
+                  <span className="text-sm font-bold">{group.label}</span>
+                  {group.pali && group.pali !== group.label ? (
+                    <span lang="pi" className="text-xs text-faint">
+                      {group.pali}
+                    </span>
+                  ) : null}
+                  <span className="ml-auto text-xs font-bold text-primary">{group.suttas.length}경</span>
+                </h2>
+                {group.suttas.map((s) => (
+                  <SuttaRow
+                    key={s.id}
+                    nested={false}
+                    sutta={{ id: s.id, name: s.name, nameKo: s.nameKo, editions: s.editions }}
+                  />
                 ))}
-              </ul>
-            </Card>
-          </section>
-        ))
-      )}
-    </div>
+              </section>
+            ))}
+          </EditionsProvider>
+        )}
+      </Screen>
+    </>
   );
 }

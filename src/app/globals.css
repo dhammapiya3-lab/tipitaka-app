@@ -16,8 +16,9 @@
 @theme inline {
   /* 글꼴 — Pretendard (layout.tsx <head> 의 CDN link 로 불러온다).
      Pretendard 에 없는 빠알리 글자(ā ṃ ṭ …)는 Noto Sans(--font-noto-sans, layout.tsx)가 채운다. */
-  --font-sans: "Pretendard Variable", Pretendard, var(--font-noto-sans), -apple-system,
-    BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  /* 원래 앱(theravada-application)과 같은 시스템 글꼴 */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Malgun Gothic", var(--font-noto-sans), sans-serif;
   --font-heading: var(--font-sans);
   /* 빠알리 원문 — 명조(Noto Serif)로 통째로 쓴다. 한 단어 안에서 글꼴이 섞이지 않게 (class: font-pali 또는 lang="pi") */
   --font-pali: var(--font-noto-serif), "Noto Serif", Georgia, serif;
@@ -63,6 +64,7 @@
   --color-surface-2: var(--surface-2); /* 표 머리·섹션 머리 */
   --color-hover: var(--hover); /* 행·항목 hover (중립 — 파랑은 선택에만) */
   --color-meta: var(--meta); /* 시간·건수·placeholder 전용 */
+  --color-faint: var(--faint); /* 빠알리 이름 등 옅은 글자 */
   --color-line-strong: var(--line-strong); /* 입력·보조 버튼 테두리 */
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
@@ -74,8 +76,8 @@
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 8px;
-  --radius-xl: 20px;
-  --radius-2xl: 22px;
+  --radius-xl: 16px;
+  --radius-2xl: 16px;
   --radius-3xl: 24px;
   --radius-4xl: 4px; /* shadcn Badge 가 쓰는 값 → Renewal 칩 모서리 4 */
 
@@ -87,23 +89,23 @@
 
 /* ── 라이트 (기본) ───────────────────────────────────────────────────────── */
 :root {
-  --background: #f6f3ee; /* 페이지 바탕 — 따뜻한 상아빛 (2026-11-13) */
-  --foreground: #2b2420; /* 제목·강조 글자 — 먹색 */
+  --background: #f9fafb; /* 페이지 바탕 — 원래 앱과 같은 연회색 (gray-50) */
+  --foreground: #111827; /* 제목·강조 글자 (gray-900) */
   --card: #ffffff;
-  --card-foreground: #2b2420;
+  --card-foreground: #111827;
   --popover: #ffffff;
-  --popover-foreground: #2b2420;
+  --popover-foreground: #111827;
   --primary: #b45309; /* 유일한 강조색 — 호박색(가사 빛), 2026-11-13 파랑에서 바꿈 */
   --primary-foreground: #ffffff;
-  --secondary: #f1ebe2;
-  --secondary-foreground: #3a302a;
-  --muted: #f1ebe2;
-  --muted-foreground: #66594f; /* 보조 설명 (상아빛 위 대비 6 이상) */
-  --accent: #f3ede4; /* hover — 따뜻한 중립 */
-  --accent-foreground: #2b2420;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #374151;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280; /* 보조 설명 (gray-500) */
+  --accent: #f3f4f6; /* hover */
+  --accent-foreground: #111827;
   --destructive: #e5383b;
-  --border: #ece4d8; /* 구분선·카드 테두리 */
-  --input: #dcd2c4; /* 입력·버튼 테두리 */
+  --border: #e5e7eb; /* 구분선·카드 테두리 (gray-200) */
+  --input: #e5e7eb; /* 입력·버튼 테두리 */
   --ring: #b45309;
   --radius: 8px;
 
@@ -114,30 +116,31 @@
   --chart-4: #6250d6;
   --chart-5: #e87ba4;
 
-  --sidebar: #fbf8f3;
-  --sidebar-foreground: #3a302a;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #374151;
   --sidebar-primary: #b45309;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #fdf1e3; /* 활성 메뉴 바탕 */
-  --sidebar-accent-foreground: #92400e; /* 활성 메뉴 글자 */
-  --sidebar-border: #ece4d8;
+  --sidebar-accent: #fffbeb; /* 활성 메뉴 바탕 (amber-50) */
+  --sidebar-accent-foreground: #b45309; /* 활성 메뉴 글자 */
+  --sidebar-border: #e5e7eb;
   --sidebar-ring: #b45309;
 
   /* Renewal 추가 */
-  --brand-soft: #fdf1e3;
-  --brand-softer: #fff8f0;
-  --brand-ink: #92400e;
-  --surface-2: #faf6f0;
-  --hover: rgba(120, 90, 60, 0.06);
-  --meta: #75685d; /* 상아빛 위 대비 4.6 (AA) — 본문에 쓰지 않는다 */
-  --line-strong: #dcd2c4;
+  --brand-soft: #fffbeb; /* amber-50 */
+  --brand-softer: #fffbeb;
+  --brand-ink: #b45309; /* amber-700 */
+  --surface-2: #f9fafb;
+  --hover: rgba(17, 24, 39, 0.04);
+  --meta: #6b7280; /* 시간·건수 (gray-500) */
+  --faint: #9ca3af; /* 빠알리 이름처럼 옅게 (gray-400, 원래 앱) */
+  --line-strong: #e5e7eb;
   --success: #007a3d;
   --success-soft: #ebf7f1;
   --warning: #9a5c00;
   --warning-soft: #faf4eb;
   --danger-soft: #fdefef;
   --overlay: rgba(23, 23, 25, 0.4);
-  --elev-card: 0 1px 2px rgba(60, 40, 20, 0.05), 0 6px 20px rgba(60, 40, 20, 0.07);
+  --elev-card: 0 1px 2px rgba(0, 0, 0, 0.05); /* shadow-sm */
   --elev-pop: 0 0 20px rgba(0, 0, 0, 0.1);
   --elev-drawer: -8px 0 24px rgba(0, 0, 0, 0.08);
   --scroll-thumb: #c9cdd4;
@@ -185,6 +188,7 @@
   --surface-2: #0a1118;
   --hover: rgba(98, 150, 229, 0.07);
   --meta: #7e8ea5;
+  --faint: #6b7a90;
   --line-strong: #35455d;
   --success: #3fd699;
   --success-soft: rgba(54, 211, 153, 0.14);

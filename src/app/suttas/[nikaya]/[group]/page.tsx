@@ -1,14 +1,10 @@
-import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/layout/page-header";
-import { SuttaList } from "@/components/suttas/catalog-tree";
+import { Screen } from "@/components/layout/app-bar";
+import { NikayaBar } from "@/components/suttas/nikaya-bar";
 import { ReadableFilter } from "@/components/suttas/readable-filter";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { catalog, getLeafGroups, getNikaya, splitsIntoGroups } from "@/lib/data";
-import { formatCount } from "@/lib/format";
+import { EditionsProvider, SuttaRow } from "@/components/suttas/sutta-row";
+import { catalog, editions, getLeafGroups, getNikaya, splitsIntoGroups } from "@/lib/data";
 
 // 경이 많은 니까야만 묶음별 페이지를 만든다.
 export const dynamicParams = false;
@@ -41,29 +37,35 @@ export default async function GroupPage({ params }: PageProps<"/suttas/[nikaya]/
   const found = await findGroup(params);
   if (!found) notFound();
   const { nikaya, node, parents } = found;
-  const path = [nikaya.nameKo, ...parents.map((p) => p.nameKo ?? p.name ?? p.id)].join(" › ");
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageHeader
+    <>
+      <NikayaBar
         title={node.nameKo ?? node.name ?? node.id}
-        description={`${path} · ${node.range ? `${node.range} · ` : ""}${formatCount(node.suttas.length)}경`}
-        actions={
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={<Link href={`/suttas/${nikaya.id}`} />}
-          >
-            <ChevronLeft aria-hidden />
-            {nikaya.nameKo}
-          </Button>
-        }
+        pali={node.name}
+        backHref={`/suttas/${nikaya.id}`}
+        crumbs={[
+          { label: "경", href: "/suttas" },
+          { label: nikaya.nameKo, href: `/suttas/${nikaya.id}` },
+          ...parents.map((p) => ({ label: p.nameKo ?? p.name ?? p.id })),
+          { label: node.nameKo ?? node.name ?? node.id },
+        ]}
       />
-      <ReadableFilter>
-        <Card className="gap-0 p-0">
-          <SuttaList suttas={node.suttas} />
-        </Card>
-      </ReadableFilter>
-    </div>
+      <Screen>
+        <EditionsProvider editions={editions}>
+          <ReadableFilter>
+            <div className="flex flex-col gap-2">
+              {node.suttas.map((s) => (
+                <SuttaRow
+                  key={s.id}
+                  nested={false}
+                  sutta={{ id: s.id, name: s.name, nameKo: s.nameKo, editions: s.editions }}
+                />
+              ))}
+            </div>
+          </ReadableFilter>
+        </EditionsProvider>
+      </Screen>
+    </>
   );
 }

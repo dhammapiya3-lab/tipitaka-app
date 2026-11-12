@@ -34,6 +34,14 @@ export function getLeafGroups(nikaya: Nikaya): { node: CatalogNode; parents: Cat
   return nikaya.nodes.flatMap((node) => walk(node, []));
 }
 
+/** 경전 목록 카드 오른쪽의 범위 (원래 앱과 같다): 디가·맛지마는 경 번호, 상윳따는 상윳따 번호, 앙굿따라는 법수 */
+function nikayaRange(n: Nikaya, total: number): string | null {
+  if (n.id === "dn" || n.id === "mn") return `1–${total}`;
+  if (n.id === "sn") return `1–${n.nodes.flatMap((v) => v.children).length}`;
+  if (n.id === "an") return `1–${n.nodes.length}`;
+  return null;
+}
+
 /** 니까야별 경 수와 본문이 있는 경 수 */
 export function getNikayaSummaries() {
   return catalog.nikayas.map((n) => {
@@ -42,6 +50,7 @@ export function getNikayaSummaries() {
       nikaya: n,
       total: suttas.length,
       readable: suttas.filter((s) => s.editions.length > 0).length,
+      range: nikayaRange(n, suttas.length),
     };
   });
 }

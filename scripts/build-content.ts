@@ -327,7 +327,21 @@ const catalog: Catalog = {
       .array(rawNodeSchema)
       .parse(readJson(path.join(SOURCE, nikaya.folder, "structure.json")))
       .map((node) => buildNode(nikaya, node));
-    return { id: nikaya.id, name: nikaya.name, nameKo: nikaya.nameKo, nodes };
+    // 니까야 소개(경전 목록의 한 줄 설명·ⓘ 단추의 소개 글) — 원래 앱의 intro.json
+    const introPath = path.join(SOURCE, nikaya.folder, "intro.json");
+    const intro = existsSync(introPath)
+      ? z
+          .object({ description: z.string().optional(), introduction: z.string().optional() })
+          .parse(readJson(introPath))
+      : {};
+    return {
+      id: nikaya.id,
+      name: nikaya.name,
+      nameKo: nikaya.nameKo,
+      description: orNull(intro.description),
+      introduction: orNull(intro.introduction),
+      nodes,
+    };
   }),
 };
 
