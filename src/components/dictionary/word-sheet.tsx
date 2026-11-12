@@ -1,13 +1,15 @@
 "use client";
 
 import { Search, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ANALYSIS_LABEL, AnalysisPanel } from "@/components/dictionary/analysis-panel";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { fetchSuttaText } from "@/lib/content";
 import { splitWords } from "@/lib/pali";
+import { plainText } from "@/lib/segments";
 import { cn } from "@/lib/utils";
 import type { AnalysisKind, Edition } from "@/types";
 
@@ -126,6 +128,7 @@ export function WordPanelBody({
     { id: "dictionary", label: "사전" },
   ];
   const heading = searched || target.title || "빠알리어 분석";
+  const pali = usePaliText(suttaId, target.keys, target.pali);
 
   return (
     <>
@@ -195,12 +198,12 @@ export function WordPanelBody({
           )
         ) : (
           <>
-            {target.pali ? (
+            {pali ? (
               <p
                 lang="pi"
                 className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3 font-pali font-bold whitespace-pre-line text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
               >
-                <ClickablePali text={target.pali} onWord={searchWord} />
+                <ClickablePali text={pali} onWord={searchWord} />
               </p>
             ) : null}
             <AnalysisPanel
@@ -275,4 +278,32 @@ export function ClickablePali({ text, onWord }: { text: string; onWord: (word: s
       piece.text
     ),
   );
+}
+
+/**
+ * 문장 상자에 보일 빠알리 원문 — 화면에 빠알리 판본을 띄우지 않았으면(번역만 볼 때) 마하상기띠본을 받아서 채운다.
+ */
+export function usePaliText(suttaId: string, keys: string[], given: string): string {
+  const keyList = keys.join("|");
+  const [state, setState] = useState<{ for: string; text: string } | null>(null);
+  useEffect(() => {
+    if (given || !keyList) return;
+    let alive = true;
+    const wanted = keyList.split("|");
+    fetchSuttaText(suttaId, "pli-ms")
+      .then((t) => {
+        if (!alive) return;
+        const text = t.segments
+          .filter((seg) => wanted.includes(seg.key))
+          .map((seg) => plainText(seg.parts))
+          .join("\n");
+        setState({ for: `${suttaId}|${keyList}`, text });
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [suttaId, keyList, given]);
+  if (given) return given;
+  return state?.for === `${suttaId}|${keyList}` ? state.text : "";
 }

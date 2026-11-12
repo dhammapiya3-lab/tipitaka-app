@@ -4,7 +4,12 @@ import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ANALYSIS_LABEL, AnalysisPanel } from "@/components/dictionary/analysis-panel";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
-import { ClickablePali, type AnalysisEditions, type WordTarget } from "@/components/dictionary/word-sheet";
+import {
+  ClickablePali,
+  usePaliText,
+  type AnalysisEditions,
+  type WordTarget,
+} from "@/components/dictionary/word-sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -64,6 +69,7 @@ export function WordBottomDock({
   const kinds = (["nissaya", "grammar"] as const).filter((k) => analysisEditions[k].length > 0);
   const showAnalysis = target.keys.length > 0 && kinds.length > 0;
   const heading = searched || target.title || "빠알리어 분석";
+  const pali = usePaliText(suttaId, target.keys, target.pali);
 
   return (
     <>
@@ -116,13 +122,13 @@ export function WordBottomDock({
         <div className="flex min-h-0 flex-1 gap-4 px-6 py-3">
           {showAnalysis ? (
             <div className="flex w-[38%] min-w-0 shrink-0 flex-col gap-3 overflow-y-auto pr-1">
-              {target.pali ? (
+              {pali ? (
                 <p
                   lang="pi"
                   className="rounded-xl border border-amber-200 bg-amber-50 p-3 font-pali font-bold whitespace-pre-line text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
                 >
                   <ClickablePali
-                    text={target.pali}
+                    text={pali}
                     onWord={(w) => {
                       setQuery(w);
                       setSearched(w);
