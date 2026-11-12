@@ -63,9 +63,12 @@ export function DictionaryPicker() {
 export function WordLookupResult({
   word,
   onSearch,
+  columns = false,
 }: {
   word: string;
   onSearch?: (word: string) => void;
+  /** 넓은 칸(컴퓨터 아래 칸): 사전들을 옆으로 나란히 */
+  columns?: boolean;
 }) {
   const dictionaries = useSettingsStore((s) => s.dictionaries);
   const dictKey = DICTIONARY_ORDER.filter((d) => dictionaries.includes(d)).join(",");
@@ -136,7 +139,7 @@ export function WordLookupResult({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={columns ? "grid items-start gap-4 xl:grid-cols-2 [&>*:first-child:not(section)]:col-span-full" : "flex flex-col gap-6"}>
       {resolved}
       {dictionaries.includes("dpd") && result.dpd.length > 0 ? (
         <section className="rounded-2xl border bg-card px-5 pt-4 pb-3 shadow-sm">

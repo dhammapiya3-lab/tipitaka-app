@@ -14,6 +14,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
+import { WordBottomDock } from "@/components/dictionary/word-dock-bottom";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
@@ -330,7 +331,9 @@ export function SuttaView({
     );
   }
   function paliOf(keys: string[]): string {
-    const root = texts[PALI_EDITION];
+    const root =
+      texts[PALI_EDITION] ??
+      shown.filter((e) => e.language === "pli").map((e) => texts[e.id]).find(Boolean);
     if (!root) return "";
     return root.segments
       .filter((seg) => keys.includes(seg.key))
@@ -416,7 +419,7 @@ export function SuttaView({
     lookup: () => {
       const w = paliWords[active?.word ?? 0];
       if (active && w) {
-        setWord({ word: w, rowKey: active.key, keys: [active.key], tab: "dictionary", title: "", pali: "" });
+        setWord({ word: w, rowKey: active.key, keys: [active.key], tab: "dictionary", title: "", pali: paliOf([active.key]) });
       }
     },
     bookmark: () => {
@@ -702,7 +705,7 @@ export function SuttaView({
                 openNotes={openNotes}
                 onNote={toggleNote}
                 onWord={(w) =>
-                  setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: "" })
+                  setWord({ word: w, rowKey: row.key, keys: [row.key], tab: "dictionary", title: "", pali: paliOf([row.key]) })
                 }
                 onSentence={() => onSentence(row)}
                 unit={unit}
@@ -1085,8 +1088,11 @@ export function SuttaView({
       ) : null}
       </div>
 
-      {!isDesktop || parallel ? (
+      {!isDesktop ? (
         <WordSheet target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
+      ) : word && parallel ? (
+        // 주석 나란히 보기: Digital Pāḷi Reader 처럼 화면 아래 칸 (끄면 오른쪽 칸)
+        <WordBottomDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
       ) : null}
 
       <MemoDialog
