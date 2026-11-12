@@ -422,7 +422,8 @@ if (errors.length) {
 // ── 쓰기 (쓰기 전에 앱이 읽을 형식인지 한 번 더 검사) ──────────────
 // 판본 순서: 빠알리 → 한국어 → 영어, 같은 언어 안에서는 원래 판본 정보의 순서
 const LANGUAGE_ORDER: Language[] = ["pli", "ko", "en"];
-const editions: Edition[] = [...editionById.values()]
+// VRI 6차 결집본은 빠알리 판본 중 맨 위 (마하상기띠본 · PTS 보다 먼저)
+const editions: Edition[] = [VRI_EDITION, ...[...editionById.values()].filter((e) => e.id !== VRI_EDITION.id)]
   .filter((e) => usedEditions.has(e.id))
   .sort((a, b) => LANGUAGE_ORDER.indexOf(a.language) - LANGUAGE_ORDER.indexOf(b.language));
 mkdirSync(OUT_DATA, { recursive: true });
