@@ -50,6 +50,7 @@ const report = {
   missingSentences: [] as string[],
   extraSentences: [] as string[],
   emptySkipped: 0,
+  misplaced: [] as string[],
 };
 
 const NAME = /^(.+?)_(root|translation|comment)-(.+)\.json$/;
@@ -64,6 +65,15 @@ for (const file of walk(SOURCE_ROOT)) {
   let edition = rest;
   if (rest.startsWith("nissaya-")) [kind, edition] = ["nissaya", rest.slice("nissaya-".length)];
   if (rest.startsWith("paligrammar-")) [kind, edition] = ["grammar", rest.slice("paligrammar-".length)];
+
+  // 파일 이름의 판본이 들어 있는 폴더와 맞지 않으면(예: 한국어 폴더 안의 "…-pli-ms.json") 앱이 읽지 않는 파일이다
+  const folder = path.basename(path.dirname(file)).replace(/_comment$/, "");
+  const parent = path.basename(path.dirname(path.dirname(file)));
+  const editionFolder = (/^(an|sn)\d/.test(folder) || folder.startsWith("vagga") ? parent : folder).replace(/_comment$/, "");
+  if (!editionFolder.endsWith(edition.replace(/-/g, "_"))) {
+    report.misplaced.push(`${rel} (폴더 ${editionFolder} 와 판본 ${edition} 이 맞지 않음)`);
+    continue;
+  }
 
   let source: Record<string, string>;
   try {
@@ -130,4 +140,5 @@ list("글자가 달라진 곳", report.changed);
 list("사이트에 빠진 문장", report.missingSentences);
 list("사이트에만 있는 문장", report.extraSentences);
 list("사이트에 올라가지 않은 원본 파일", report.missingFiles, 60);
+list("폴더와 판본 이름이 맞지 않아 앱이 읽지 않는 파일", report.misplaced);
 process.exit(report.changed.length || report.missingSentences.length || report.extraSentences.length ? 1 : 0);
