@@ -144,9 +144,10 @@ export function SuttaView({
     };
   }, [rowKeys, suttaId, suttaTitle, saveReading]);
 
-  /** 북마크·메모에 남길 문장: 번역이 있으면 첫 번역, 없으면 원문 */
+  /** 북마크·메모에 남길 문장: 번역이 있으면 첫 번역, 없으면 원문 (복사를 막아 둔 번역은 쓰지 않는다) */
   function baseOf(row: AlignedRow) {
-    const order = [...shown.filter((e) => e.language !== "pli"), ...shown];
+    const usable = shown.filter((e) => e.allowCopy);
+    const order = [...usable.filter((e) => e.language !== "pli"), ...usable];
     const cell = order.map((e) => row.cells[e.id]).find(Boolean);
     return { suttaId, key: row.key, suttaTitle, snippet: cell ? plainText(cell.parts) : "" };
   }
@@ -356,7 +357,7 @@ export function SuttaView({
           {columns > 1 ? (
             <div className="hidden gap-6 pl-8 md:grid print:grid" style={gridStyle(columns)}>
               {shown.map((e) => (
-                <p key={e.id} className="t-meta">
+                <p key={e.id} className={cn("t-meta", !e.allowCopy && "print:invisible")}>
                   {e.label}
                 </p>
               ))}

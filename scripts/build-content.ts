@@ -21,6 +21,7 @@ import {
 } from "../src/lib/schemas";
 import { searchShardName, tokenize, type SearchShard } from "../src/lib/search";
 import { noteMarks, parseInline, plainText, rowKind, splitNotes, toSuttaId } from "../src/lib/segments";
+import { seal } from "../src/lib/seal";
 import { SOURCE_ROOT } from "./paths";
 import { suttaFilePath } from "./source-paths";
 import type {
@@ -334,7 +335,12 @@ rmSync(OUT_SUTTAS, { recursive: true, force: true });
 for (const text of texts) {
   const dir = path.join(OUT_SUTTAS, text.suttaId);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, `${text.editionId}.json`), JSON.stringify(suttaTextSchema.parse(text)));
+  const checked = suttaTextSchema.parse(text);
+  // 복사를 막아 둔 번역(법현 스님)은 자료 파일을 그대로 읽을 수 없게 감싼다 (src/lib/seal.ts)
+  const body = editionById.get(text.editionId)?.allowCopy === false
+    ? { suttaId: checked.suttaId, editionId: checked.editionId, sealed: seal(checked.segments, checked.suttaId, checked.editionId) }
+    : checked;
+  writeFileSync(path.join(dir, `${text.editionId}.json`), JSON.stringify(body));
 }
 for (const notes of notesFiles) {
   writeFileSync(
@@ -359,6 +365,8 @@ for (const kind of ["nissaya", "grammar"] as const) {
 rmSync(OUT_SEARCH, { recursive: true, force: true });
 const searchShards = new Map<string, SearchShard>(); // "언어/조각" → 조각
 for (const text of texts) {
+  // 복사를 막아 둔 번역은 검색 색인과 검색 결과 미리보기에 넣지 않는다 (색인 파일도 공개되므로)
+  if (editionById.get(text.editionId)?.allowCopy === false) continue;
   const language = editionById.get(text.editionId)?.language ?? "ko";
   const doc = `${text.suttaId}|${text.editionId}`;
   for (const segment of text.segments) {

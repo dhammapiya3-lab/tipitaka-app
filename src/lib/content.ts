@@ -6,6 +6,7 @@
  */
 import type { z } from "zod";
 import { cleanLemma, foldPali, normalizeWord, shardOf } from "@/lib/pali";
+import { unseal } from "@/lib/seal";
 import {
   intersectHits,
   matchPrefix,
@@ -23,6 +24,7 @@ import {
   searchShardSchema,
   suttaNissayaSchema,
   suttaNotesSchema,
+  sealedSuttaTextSchema,
   suttaTextSchema,
 } from "@/lib/schemas";
 import type {
@@ -51,7 +53,14 @@ const suttaUrl = (suttaId: string, editionId: string, suffix: string) =>
   `${SUTTA_BASE}/${encodeURIComponent(suttaId)}/${encodeURIComponent(editionId)}${suffix}`;
 
 export async function fetchSuttaText(suttaId: string, editionId: string): Promise<SuttaText> {
-  return suttaTextSchema.parse(await getJson(suttaUrl(suttaId, editionId, ".json")));
+  const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
+  // 복사를 막아 둔 번역은 감싸 둔 글을 풀어서 같은 검사를 한다
+  const sealed = sealedSuttaTextSchema.safeParse(data);
+  if (sealed.success) {
+    const { sealed: body, ...ids } = sealed.data;
+    return suttaTextSchema.parse({ ...ids, segments: unseal(body, ids.suttaId, ids.editionId) });
+  }
+  return suttaTextSchema.parse(data);
 }
 
 export async function fetchSuttaNotes(suttaId: string, editionId: string): Promise<SuttaNotes> {

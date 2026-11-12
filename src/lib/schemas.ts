@@ -47,6 +47,13 @@ export const suttaTextSchema: z.ZodType<SuttaText> = z.object({
   segments: z.array(segmentSchema),
 });
 
+/** 복사를 막아 둔 번역의 본문 파일 — segments 를 lib/seal 로 감싼 것 */
+export const sealedSuttaTextSchema = z.object({
+  suttaId: z.string().min(1),
+  editionId: z.string().min(1),
+  sealed: z.string().min(1),
+});
+
 export const footnoteSchema: z.ZodType<Footnote> = z.object({
   mark: z.string().min(1),
   key: z.string().min(1),

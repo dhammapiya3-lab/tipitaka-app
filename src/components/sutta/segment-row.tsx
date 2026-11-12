@@ -139,7 +139,13 @@ export function SegmentRow({
               ),
             );
             return (
-              <div key={edition.id} lang={LANG_ATTR[edition.language]}>
+              <div
+                key={edition.id}
+                lang={LANG_ATTR[edition.language]}
+                // 복사를 막아 둔 번역(법현 스님)은 인쇄에서 빼고, 복사 단축키로도 가져가지 못하게 한다
+                className={cn(!edition.allowCopy && "print:invisible")}
+                onCopy={edition.allowCopy ? undefined : (e) => e.preventDefault()}
+              >
                 <p
                   className={cn(
                     // 긴 빠알리 복합어도 칸 안에서 줄바꿈
