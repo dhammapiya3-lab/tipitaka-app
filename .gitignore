@@ -53,11 +53,6 @@ firebase-debug*.log
 # ── 공개 저장소에 넣지 않는 자료 ── (비공개 저장소에 따로 두고 사이트를 만들 때만 합친다: scripts/fetch-private.mjs)
 # 법구경 법현 스님 번역 — 사이트에는 보이되 저장소에는 올리지 않는다
 /content/theravada-app/sutta_pitaka/khuddaka_nikaya/dhammapada/dhammapada_kor_beophyun/
-# 이용 조건 확인 중인 사전 (K-PTS 원본·조각, PTS, 미얀마)
-/content/theravada-app/dictionary/
-/public/data/dict/kpts/
-/public/data/dict/pts/
-/public/data/dict/mm/
 # 사전 원본 DB (크고, 다시 만들 때만 필요)
 /content/dpd/
 /content/epitaka.db

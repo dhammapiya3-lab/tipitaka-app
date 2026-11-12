@@ -21,6 +21,6 @@
 - 변환 규칙(`scripts/source-paths.ts` 의 파일 위치 등)은 원래 앱과 같아야 한다.
 - 고친 뒤에는 `pnpm typecheck && pnpm test && pnpm lint` 와 `pnpm build` 를 통과시킨다.
 - **번역문·사전 자료는 저작권자가 따로 있다.** 번역문은 법보시 허락을 받아 공개 저장소에 둔다(2026-11-13).
-  예외 — 법구경 법현 스님 번역, 이용 조건 확인 중인 사전(K-PTS·PTS·미얀마)은 비공개 저장소 `dhammapiya3-lab/tipitaka-private` 에만 두고
+  예외 — 법구경 법현 스님 번역은 비공개 저장소 `dhammapiya3-lab/tipitaka-private` 에만 두고
   `scripts/fetch-private.mjs` 로 사이트를 만들 때만 합친다. 목록은 `.gitignore`. 새로 허락이 불분명한 자료가 생기면 먼저 묻는다.
 - `design/` 은 원본이라 읽기만 한다.

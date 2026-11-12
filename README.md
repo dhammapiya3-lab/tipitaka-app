@@ -79,13 +79,13 @@ Next.js 16 (정적 내보내기) · TypeScript · Tailwind CSS v4 · shadcn/ui �
 사이트를 만들 때만 합칩니다 (`.gitignore` 에 목록, 합치는 프로그램은 `scripts/fetch-private.mjs`).
 
 - 법구경 **법현 스님** 번역 — 사이트에는 보이되 원본은 공개하지 않습니다(화면에서 복사도 막음).
-- 이용 조건 확인 중인 사전 — K-PTS 원본·조각, PTS, 미얀마.
+- 사전 4종(DPD · K-PTS · PTS · 미얀마)은 공개 저장소에 둡니다 (2026-11-13 허락 확인).
 
 | 어디서 만드나 | 비공개 자료를 넣는 법 |
 |---|---|
 | 사이트 올리는 곳(Cloudflare Pages·Vercel) | 환경 변수 `PRIVATE_REPO`(예: `이름/tipitaka-private`)와 `PRIVATE_REPO_TOKEN`(읽기 전용 토큰). 만들기 명령은 `pnpm build:site` |
 | 내 컴퓨터 | 비공개 저장소를 앱 폴더 안 `.private/` 로 받아 두면 `pnpm build:site` 가 합칩니다 |
-| 둘 다 없으면 | 그 판본·사전만 빠지고 나머지는 그대로 만들어집니다 |
+| 둘 다 없으면 | 그 판본만 빠지고 나머지는 그대로 만들어집니다 |
 
 시험 사이트는 환경 변수 `NEXT_PUBLIC_NOINDEX=1` 로 검색 엔진에 나오지 않게 합니다.
 
@@ -94,4 +94,4 @@ Next.js 16 (정적 내보내기) · TypeScript · Tailwind CSS v4 · shadcn/ui �
 - 번역문의 저작권은 각 번역자에게 있습니다. **이용 허락을 확인하기 전에는 인터넷에 공개하지 마세요.**
   원래 앱이 복사를 막은 판본(법현 스님)은 이 앱에서도 글자 선택·복사를 막았습니다.
 - Digital Pāḷi Dictionary: CC BY-NC-SA 4.0 (비상업·출처 표시·같은 조건 공유) — 광고나 유료 기능을 넣지 않습니다.
-- K-PTS·PTS·미얀마 사전: 이용 조건 확인 필요.
+- K-PTS·PTS·미얀마 사전: 사용·공개 허락 확인 (2026-11-13).
