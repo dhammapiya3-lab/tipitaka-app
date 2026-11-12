@@ -110,3 +110,23 @@ export function getKoreanSummaries(): { nikaya: Nikaya; count: number }[] {
 export function koreanEditionCount(s: CatalogSutta): number {
   return s.editions.filter((id) => editionById.get(id)?.language === "ko").length;
 }
+
+/**
+ * 니까야의 한국어 번역 경을 책·묶음별로 — 상윳따는 상윳따(둘째 단계), 나머지는 맨 위 묶음
+ * (디가·맛지마의 품, 앙굿따라의 법수, 쿳다까의 책: 담마빠다·숫따니빠따 …)
+ */
+export function getKoreanGroups(
+  nikayaId: string,
+): { id: string; label: string; pali: string | null; suttas: CatalogSutta[] }[] {
+  const nikaya = getNikaya(nikayaId);
+  if (!nikaya) return [];
+  const groupNodes = nikaya.id === "sn" ? nikaya.nodes.flatMap((n) => n.children) : nikaya.nodes;
+  return groupNodes
+    .map((node) => ({
+      id: node.id,
+      label: node.nameKo ?? node.name ?? node.id,
+      pali: node.name,
+      suttas: collect(node).filter(hasKorean),
+    }))
+    .filter((g) => g.suttas.length > 0);
+}
