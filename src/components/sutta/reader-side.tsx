@@ -75,7 +75,11 @@ export function ReaderSide({
   return (
     <aside
       aria-label="목차와 풀이"
-      className="sticky top-4 flex h-[calc(100vh-2rem)] w-[340px] shrink-0 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm print:hidden"
+      className={cn(
+        "sticky top-4 flex h-[calc(100vh-2rem)] shrink-0 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-[width] print:hidden",
+        // 풀이(문법분석·사전)를 볼 때는 화면에 여유가 있는 만큼 넓힌다
+        panel === "analysis" && word ? "w-[340px] xl:w-[440px] 2xl:w-[560px]" : "w-[340px]",
+      )}
     >
       {/* 덧붙임 자료 — 참고 경전 · 해설 법문 · 기타 자료 */}
       <div className="grid shrink-0 grid-cols-3 gap-1.5 px-3 pt-3" role="tablist" aria-label="덧붙임 자료">

@@ -868,7 +868,7 @@ export function SuttaView({
     <div className="flex flex-col">
 
       {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
-      <div className="mx-auto flex w-full max-w-[1280px] items-start gap-6 lg:px-6">
+      <div className="mx-auto flex w-full max-w-[1440px] items-start gap-6 lg:px-6">
       <div className="min-w-0 flex-1">
       {/* 머리(제목·번역자·위치 줄·판본)는 본문 상자 폭에 맞춰 함께 가운데로 */}
       <SubBar
@@ -1128,7 +1128,7 @@ export function SuttaView({
         )}
       </div>
       {isDesktop && !parallel ? (
-        <div className="hidden pt-3 lg:block">
+        <div className="hidden self-stretch pt-3 lg:block">
           <ReaderSide
             panel={panel}
             onPanel={(p) => setChosen({ panel: p, for: word })}
