@@ -420,7 +420,14 @@ export function SuttaView({
     const kinds = kindsFor(keys);
     const header = (
       <>
-        <h3 className="text-sm font-bold">{paragraphMark(p)}</h3>
+        <h3 className="text-sm font-bold transition-colors group-hover/head:text-primary">{paragraphMark(p)}</h3>
+        {inFocus ? null : (
+          // 마우스를 올리면 누를 수 있다는 것을 알린다
+          <span className="mr-auto hidden items-center gap-0.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover/head:opacity-100 group-focus-visible/head:opacity-100 sm:inline-flex print:hidden">
+            이 문단만 보기
+            <ChevronRight className="size-3.5" aria-hidden />
+          </span>
+        )}
         <div className="flex items-center gap-1.5 print:hidden">
           {kinds.map((k) => (
             <button
@@ -463,7 +470,7 @@ export function SuttaView({
                 openParagraph(p);
               }
             }}
-            className="flex cursor-pointer items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 transition-colors outline-none hover:bg-gray-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-border dark:hover:bg-muted"
+            className="group/head flex cursor-pointer items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 transition-colors outline-none hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-border dark:hover:bg-amber-950/40"
           >
             {header}
           </div>
