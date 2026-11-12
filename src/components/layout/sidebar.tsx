@@ -57,8 +57,8 @@ export function Sidebar() {
       <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto border-r border-sidebar-border px-3.5 py-5" aria-label="주 메뉴">
         {group(NAV_MAIN)}
         <div className="mx-2 my-2.5 h-px bg-sidebar-border" />
-        {/* 검색은 맨 위 띠의 단추로만 (2026-11-13 요청) */}
-        {group(NAV_TOOLS.filter((item) => item.href !== "/search"))}
+        {/* 검색 · 사전 · 내 서재 */}
+        {group(NAV_TOOLS)}
         <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border pt-3">
           {group(NAV_FOOTER)}
         </div>
