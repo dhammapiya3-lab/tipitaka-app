@@ -53,7 +53,7 @@ export function WordSheet({
 }) {
   return (
     <Sheet open={target !== null} onOpenChange={(open) => (open ? null : onClose())}>
-      <SheetContent side="bottom" className="mx-auto max-h-[85vh] w-full max-w-md gap-0 overflow-hidden rounded-t-3xl border-0 p-0">
+      <SheetContent side="bottom" className="mx-auto max-h-[85vh] w-full max-w-md gap-0 overflow-hidden rounded-t-3xl border-0 p-0 lg:max-h-[90vh] lg:max-w-4xl">
         {target ? (
           <WordPanelBody
             key={`${target.rowKey} ${target.word} ${target.tab} ${target.keys.length}`}
