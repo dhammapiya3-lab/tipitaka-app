@@ -19,6 +19,9 @@ interface SettingsState {
   dictionaries: DictionaryId[];
   /** 경전 목록에서 본문이 있는 경만 보기 */
   onlyReadable: boolean;
+  /** 컴퓨터에서 판본 여럿을 볼 때: 옆으로 나란히(side) · 문장마다 번갈아(alternate) */
+  compareMode: "side" | "alternate";
+  setCompareMode: (mode: "side" | "alternate") => void;
   setOnlyReadable: (on: boolean) => void;
   setFontSize: (size: number) => void;
   setLineHeight: (height: number) => void;
@@ -43,6 +46,8 @@ export const useSettingsStore = create<SettingsState>()(
       editions: DEFAULT_EDITIONS,
       dictionaries: DEFAULT_DICTIONARIES,
       onlyReadable: false,
+      compareMode: "side",
+      setCompareMode: (mode) => set({ compareMode: mode }),
       setOnlyReadable: (on) => set({ onlyReadable: on }),
       setFontSize: (size) => set({ fontSize: clampTo(FONT_SIZES, size) }),
       setLineHeight: (height) => set({ lineHeight: clampTo(LINE_HEIGHTS, height) }),
@@ -66,7 +71,8 @@ export const useSettingsStore = create<SettingsState>()(
       name: "reader-settings",
       storage: createJSONStorage(() => window.localStorage),
       skipHydration: true,
-      partialize: ({ fontSize, lineHeight, editions, dictionaries, onlyReadable }) => ({
+      partialize: ({ fontSize, lineHeight, editions, dictionaries, onlyReadable, compareMode }) => ({
+        compareMode,
         fontSize,
         lineHeight,
         editions,

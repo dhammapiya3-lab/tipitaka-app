@@ -96,6 +96,8 @@ export function SuttaView({
   const router = useRouter();
   const fontSize = useSettingsStore((s) => s.fontSize);
   const lineHeight = useSettingsStore((s) => s.lineHeight);
+  const compareMode = useSettingsStore((s) => s.compareMode);
+  const setCompareMode = useSettingsStore((s) => s.setCompareMode);
 
   /**
    * 보이는 판본 — 경을 그냥 열면 목록 맨 위 번역 하나만 (한국어 → 빠알리 → 영어 순서의 첫째).
@@ -398,7 +400,9 @@ export function SuttaView({
   /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
   const parallel = isDesktop && parallelPref && commentary.length > 0 && layer === "sutta";
   const parallelLayers = commentary.filter((l) => comm[l]);
-  const columns = isDesktop && shown.length > 1 && !parallel;
+  /** 판본 대조 방식을 고를 수 있는 때 (컴퓨터, 판본 둘 이상, 주석 나란히 보기가 아닐 때) */
+  const canCompare = isDesktop && shown.length > 1 && !parallel;
+  const columns = canCompare && compareMode === "side";
   /**
    * 본문 폭 — 게송처럼 짧은 줄은 어플처럼 가운데 알맞은 폭으로 모으고, 판본을 나란히 놓으면 그만큼 넓힌다.
    * (게송 경: 법구경처럼 경 안에 게송 번호가 있는 경)
@@ -712,7 +716,32 @@ export function SuttaView({
         }
       >
         <Breadcrumb items={head.crumbs} />
-        <EditionBadges editions={shown} onInfo={setInfoEdition} />
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <EditionBadges editions={shown} onInfo={setInfoEdition} />
+          {canCompare ? (
+            <div className="ml-auto flex rounded-lg bg-muted p-0.5 print:hidden" role="group" aria-label="판본 대조 방식">
+              {(
+                [
+                  ["side", "옆으로 나란히"],
+                  ["alternate", "문장마다 번갈아"],
+                ] as const
+              ).map(([mode, label]) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={compareMode === mode}
+                  onClick={() => setCompareMode(mode)}
+                  className={cn(
+                    "h-7 rounded-md px-3 text-xs whitespace-nowrap transition-colors",
+                    compareMode === mode ? "bg-card font-bold text-primary shadow-sm" : "font-medium text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </SubBar>
         <div className={cn("mx-auto box-content flex gap-2 px-4 py-3 print:hidden", readWidth)} role="tablist" aria-label="본문 종류">
           {(
