@@ -236,7 +236,11 @@ export function TocSheet({
 }
 
 /** 텍스트 설정 — 글자 크기·줄 간격 (원래 앱과 같은 범위) + 인쇄 */
-export function TextSettingsSheet({ open, onOpenChange }: SheetProps) {
+export function TextSettingsSheet({
+  open,
+  onOpenChange,
+  onWordLinksOn,
+}: SheetProps & { onWordLinksOn?: () => void }) {
   const fontSize = useSettingsStore((s) => s.fontSize);
   const lineHeight = useSettingsStore((s) => s.lineHeight);
   const setFontSize = useSettingsStore((s) => s.setFontSize);
@@ -247,7 +251,13 @@ export function TextSettingsSheet({ open, onOpenChange }: SheetProps) {
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="텍스트 설정">
       <div className="flex flex-col gap-6">
-        <WordLinksSwitch on={wordLinks} onChange={setWordLinks} />
+        <WordLinksSwitch
+          on={wordLinks}
+          onChange={(on) => {
+            if (on) onWordLinksOn?.();
+            setWordLinks(on);
+          }}
+        />
         <div>
           <label htmlFor="font-size" className="mb-3 block text-sm font-bold">
             글자 크기: {fontSize}px

@@ -227,6 +227,12 @@ export function SuttaView({
     const f = foldPali(word);
     return (linkIndex.get(key) ?? []).filter((h) => h.fold === f);
   };
+  /** 밑줄은 빠알리 원문에만 긋는다 — 켤 때 빠알리 판본이 안 보이면 VRI(없으면 첫 빠알리 판본)를 함께 띄운다 */
+  function showPaliForLinks() {
+    if (shown.some((e) => e.language === "pli")) return;
+    const pli = editions.find((e) => e.id === "pli-vri") ?? editions.find((e) => e.language === "pli");
+    if (pli) setPicked((cur) => (cur.includes(pli.id) ? cur : [...cur, pli.id]));
+  }
   /** 누른 연결 낱말과 그 주석 줄들 */
   const [linkView, setLinkView] = useState<{ key: string; word: string; hits: ReturnType<typeof linkHits> } | null>(null);
   /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
@@ -956,15 +962,22 @@ export function SuttaView({
           {isDesktop && commentary.length > 0 ? (
             <button
               type="button"
-              aria-pressed={wordLinksOn}
-              onClick={() => setWordLinks(!wordLinksOn)}
+              aria-pressed={wordLinksOn && shown.some((e) => e.language === "pli")}
+              onClick={() => {
+                // 켜져 있어도 빠알리가 안 보이면 밑줄이 안 보이므로, 먼저 빠알리를 띄운다
+                if (wordLinksOn && !shown.some((e) => e.language === "pli")) return showPaliForLinks();
+                if (!wordLinksOn) showPaliForLinks();
+                setWordLinks(!wordLinksOn);
+              }}
               title="빠알리 원문에서 주석이 풀이한 낱말에 점선 밑줄 (누르면 그 풀이)"
               className={cn(
                 "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
-                wordLinksOn ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
+                wordLinksOn && shown.some((e) => e.language === "pli")
+                  ? "border-amber-300 bg-amber-50 text-amber-800"
+                  : "bg-card text-muted-foreground hover:bg-gray-50",
               )}
             >
-              {wordLinksOn ? "✓ " : ""}주석 낱말
+              {wordLinksOn && shown.some((e) => e.language === "pli") ? "✓ " : ""}주석 낱말
             </button>
           ) : null}
           {isDesktop && commentary.length > 0 ? (
@@ -1238,7 +1251,11 @@ export function SuttaView({
           </div>
         ) : null}
       </BottomSheet>
-      <TextSettingsSheet open={sheet === "text"} onOpenChange={(o) => setSheet(o ? "text" : null)} />
+      <TextSettingsSheet
+        open={sheet === "text"}
+        onOpenChange={(o) => setSheet(o ? "text" : null)}
+        onWordLinksOn={showPaliForLinks}
+      />
       <EditionInfoSheet open={infoEdition !== null} onOpenChange={(o) => !o && setInfoEdition(null)} edition={infoEdition} />
     </div>
   );
