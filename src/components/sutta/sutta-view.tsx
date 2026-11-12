@@ -384,6 +384,16 @@ export function SuttaView({
   }));
   const rowByKey = new Map(rows.map((r) => [r.key, r]));
   const firstTranslation = shown.find((e) => e.language !== "pli");
+  /**
+   * 경 제목 — 원래 앱처럼 처음 고른 번역의 제목(0.x 줄의 마지막 글, 예: 담마간다 스님 "무아특성경",
+   * 한국테라와다불교 교단 "무아상경(無我相經)"). 번역이 없거나 아직 불러오지 못했으면 목록의 이름.
+   */
+  const titleText = firstTranslation ? texts[firstTranslation.id] : undefined;
+  const editionTitle = titleText?.segments
+    .filter((seg) => rowKind(seg.key, suttaId) === "hidden")
+    .map((seg) => plainText(seg.parts).trim())
+    .filter(Boolean)
+    .at(-1);
 
   function paragraphCard(p: string, inFocus: boolean) {
     const keys = paragraphs.get(p) ?? [];
@@ -536,8 +546,8 @@ export function SuttaView({
     <div className="flex flex-col">
       <SubBar
         wide={isDesktop}
-        title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : head.title}
-        titleLang={focus ? undefined : head.titleLang}
+        title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : (editionTitle ?? head.title)}
+        titleLang={focus || editionTitle ? undefined : head.titleLang}
         subtitle={focus ? undefined : firstTranslation?.label}
         backHref={focus ? undefined : head.backHref}
         onBack={focus ? closeParagraph : undefined}
