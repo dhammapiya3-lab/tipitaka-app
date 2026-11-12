@@ -16,8 +16,8 @@ import { cn } from "@/lib/utils";
 export function TopBar({ title, pali }: { title: string; pali?: string }) {
   const pathname = usePathname();
   return (
-    <div className="sticky top-0 z-30 bg-primary px-6 py-4 text-primary-foreground print:hidden">
-      <div className="mx-auto flex max-w-3xl items-center gap-3">
+    <div className="sticky top-0 z-30 flex h-16 items-center bg-primary px-6 text-primary-foreground print:hidden">
+      <div className="mx-auto flex w-full max-w-3xl items-center gap-3">
         <h1 className="min-w-0 flex-1 truncate text-lg font-bold">
           {title}
           {pali ? (

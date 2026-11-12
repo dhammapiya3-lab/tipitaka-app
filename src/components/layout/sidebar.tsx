@@ -47,14 +47,14 @@ export function Sidebar() {
       <NavLink key={item.href} item={item} active={isActiveItem(pathname, item)} />
     ));
   return (
-    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex print:hidden">
-      <Link href="/" className="flex shrink-0 flex-col justify-center bg-primary px-5 py-3 text-primary-foreground outline-none focus-visible:ring-3 focus-visible:ring-white/60">
+    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col bg-sidebar lg:flex print:hidden">
+      <Link href="/" className="flex h-16 shrink-0 flex-col justify-center bg-primary px-5 text-primary-foreground outline-none focus-visible:ring-3 focus-visible:ring-white/60">
         <span className="truncate text-lg leading-6 font-bold">{SERVICE_NAME}</span>
         <span lang="pi" className="truncate text-xs text-primary-foreground/70">
           {SERVICE_TAGLINE}
         </span>
       </Link>
-      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3.5 py-5" aria-label="주 메뉴">
+      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto border-r border-sidebar-border px-3.5 py-5" aria-label="주 메뉴">
         {group(NAV_MAIN)}
         <div className="mx-2 my-2.5 h-px bg-sidebar-border" />
         {/* 검색은 맨 위 띠의 단추로만 (2026-11-13 요청) */}
