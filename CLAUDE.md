@@ -10,7 +10,7 @@
 - [README.md](./README.md) — 쓰는 법, 명령, 폴더
 - [자료-넣는-법.md](./자료-넣는-법.md) — 자료 구조와 검사 결과 읽는 법
 - [MASTER-PLAN.md](./MASTER-PLAN.md) — 설계 기록: 3층 구조, 아키텍처 규칙, 지금까지의 결정
-- [design/DESIGN.md](./design/DESIGN.md) — 디자인 규칙 (파랑 하나, 토큰 색만, 글자 위계)
+- [design/DESIGN.md](./design/DESIGN.md) — 디자인 규칙 (강조색 하나, 토큰 색만, 글자 위계). **이 앱의 강조색은 파랑이 아니라 호박색**이다 — 값은 `src/app/globals.css` 가 정본
 
 ## 항상 지킬 것
 

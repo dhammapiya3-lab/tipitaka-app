@@ -2,7 +2,7 @@
    Renewal 디자인 시스템 — src/app/globals.css 에 "통째로" 복사해 쓰는 파일.
    규칙 설명은 design/DESIGN.md. 색·모서리·그림자는 여기 토큰만 쓴다(화면 코드에 #hex 금지).
 
-   · 강조색은 파랑 하나 — 선택·활성·포커스·링크·오늘 날짜 전부 --primary.
+   · 강조색은 호박색 하나 — 선택·활성·포커스·링크·오늘 날짜 전부 --primary. (Renewal 원본은 파랑, 이 앱은 호박색)
    · 기본은 라이트, 다크는 네이비 계열(.dark). next-themes 가 <html class="dark"> 를 붙인다.
    · shadcn/ui 변수 이름(--background, --primary …)은 그대로 두고 값만 Renewal 로 바꿨다.
      그래서 components/ui/ 를 고치지 않아도 버튼·입력·카드가 전부 따라온다.
@@ -93,7 +93,7 @@
   --card-foreground: #171719;
   --popover: #ffffff;
   --popover-foreground: #171719;
-  --primary: #0066ff; /* 유일한 강조색 */
+  --primary: #b45309; /* 유일한 강조색 — 호박색(가사 빛), 2026-11-13 파랑에서 바꿈 */
   --primary-foreground: #ffffff;
   --secondary: #f2f3f5;
   --secondary-foreground: #2e2f33;
@@ -104,11 +104,11 @@
   --destructive: #e5383b;
   --border: #e6e8ec; /* 구분선·카드 테두리 */
   --input: #d5d8de; /* 입력·버튼 테두리 */
-  --ring: #0066ff;
+  --ring: #b45309;
   --radius: 8px;
 
   /* 차트 5색 — 색약 검사 통과 순서(1→5 고정, 돌려쓰지 않는다) */
-  --chart-1: #0066ff;
+  --chart-1: #b45309;
   --chart-2: #eb6834;
   --chart-3: #1baf7a;
   --chart-4: #6250d6;
@@ -116,17 +116,17 @@
 
   --sidebar: #ffffff;
   --sidebar-foreground: #2e2f33;
-  --sidebar-primary: #0066ff;
+  --sidebar-primary: #b45309;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ebf3ff; /* 활성 메뉴 바탕 */
-  --sidebar-accent-foreground: #0054d1; /* 활성 메뉴 글자 */
+  --sidebar-accent: #fdf1e3; /* 활성 메뉴 바탕 */
+  --sidebar-accent-foreground: #92400e; /* 활성 메뉴 글자 */
   --sidebar-border: #e6e8ec;
-  --sidebar-ring: #0066ff;
+  --sidebar-ring: #b45309;
 
   /* Renewal 추가 */
-  --brand-soft: #ebf3ff;
-  --brand-softer: #f5f9ff;
-  --brand-ink: #0054d1;
+  --brand-soft: #fdf1e3;
+  --brand-softer: #fff8f0;
+  --brand-ink: #92400e;
   --surface-2: #f9f9fb;
   --hover: rgba(112, 115, 124, 0.06);
   --meta: #6f7682; /* 대비 4.6 (AA) — 본문에 쓰지 않는다 */
@@ -151,8 +151,8 @@
   --card-foreground: #d7dfea;
   --popover: #101b27;
   --popover-foreground: #d7dfea;
-  --primary: #6296e5;
-  --primary-foreground: #08162a; /* 밝은 파랑 위 글자는 진한 남색 */
+  --primary: #eea05a;
+  --primary-foreground: #2a1404; /* 밝은 호박색 위 글자는 진한 갈색 */
   --secondary: #132030;
   --secondary-foreground: #bdc8d8;
   --muted: #132030;
@@ -162,9 +162,9 @@
   --destructive: #f07178;
   --border: #202c3d;
   --input: #35455d;
-  --ring: #6296e5;
+  --ring: #eea05a;
 
-  --chart-1: #3987e5;
+  --chart-1: #e08a3c;
   --chart-2: #d95926;
   --chart-3: #199e70;
   --chart-4: #9085e9;
@@ -172,16 +172,16 @@
 
   --sidebar: #0b131b;
   --sidebar-foreground: #bdc8d8;
-  --sidebar-primary: #6296e5;
-  --sidebar-primary-foreground: #08162a;
-  --sidebar-accent: rgba(98, 150, 229, 0.16);
-  --sidebar-accent-foreground: #a4c4f4;
+  --sidebar-primary: #eea05a;
+  --sidebar-primary-foreground: #2a1404;
+  --sidebar-accent: rgba(238, 160, 90, 0.16);
+  --sidebar-accent-foreground: #f6c99a;
   --sidebar-border: #202c3d;
-  --sidebar-ring: #6296e5;
+  --sidebar-ring: #eea05a;
 
-  --brand-soft: rgba(98, 150, 229, 0.16);
-  --brand-softer: rgba(98, 150, 229, 0.09);
-  --brand-ink: #a4c4f4;
+  --brand-soft: rgba(238, 160, 90, 0.16);
+  --brand-softer: rgba(238, 160, 90, 0.09);
+  --brand-ink: #f6c99a;
   --surface-2: #0a1118;
   --hover: rgba(98, 150, 229, 0.07);
   --meta: #7e8ea5;
