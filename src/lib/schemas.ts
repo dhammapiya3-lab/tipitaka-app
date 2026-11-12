@@ -179,7 +179,14 @@ export const dpdEntrySchema: z.ZodType<DpdEntry> = z.object({
   sanskrit: z.string(),
   examples: z.array(z.object({ text: z.string(), source: z.string() })),
   hasInflections: z.boolean(),
+  stem: z.string().optional(),
+  pattern: z.string().optional(),
 });
+
+export const dpdTemplatesSchema = z.record(
+  z.string(),
+  z.object({ like: z.string(), rows: z.array(z.array(z.array(z.string()))) }),
+);
 
 /** 조각 파일들 */
 export const lookupShardSchema = z.record(z.string(), z.array(z.number().int()));

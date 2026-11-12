@@ -3,14 +3,13 @@
 import { BookA, BookOpen, ChevronLeft, ChevronRight, CloudOff, List, Type } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { toast } from "sonner";
 import {
   WordSheet,
   type AnalysisEditions,
   type WordTarget,
 } from "@/components/dictionary/word-sheet";
-import { BottomSheet } from "@/components/shared/bottom-sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
@@ -720,8 +719,8 @@ export function SuttaView({
             if (!row) return null;
             const unit = unitOf(row.key, suttaId);
             return (
+              <Fragment key={row.key}>
               <SegmentRow
-                key={row.key}
                 row={row}
                 heading={false}
                 unitLabel={null}
@@ -741,8 +740,14 @@ export function SuttaView({
                 unit={unit}
                 columns={columns}
                 linked={wordLinksOn && linkIndex.has(row.key) ? (w) => linkHits(row.key, w).length > 0 : undefined}
-                onLinked={(w) => setLinkView({ key: row.key, word: w, hits: linkHits(row.key, w) })}
+                onLinked={(w) =>
+                  setLinkView((cur) =>
+                    cur?.key === row.key && cur.word === w ? null : { key: row.key, word: w, hits: linkHits(row.key, w) },
+                  )
+                }
               />
+              {linkView?.key === row.key ? linkBox(linkView) : null}
+              </Fragment>
             );
           })}
         </div>
@@ -813,6 +818,54 @@ export function SuttaView({
           ) : null}
         </div>
       </div>
+    );
+  }
+
+  /** 주석 연결 낱말을 누르면 — 각주처럼 그 문장 바로 아래에 펼친다 (다시 누르면 접힌다) */
+  function linkBox(view: NonNullable<typeof linkView>) {
+    return (
+      <aside
+        aria-label={`주석: ${view.word}`}
+        className="mt-1 mb-2 flex flex-col gap-3 rounded-lg border-l-2 border-amber-300 bg-amber-50/60 px-3 py-2.5 text-[0.9em] dark:bg-amber-950/30"
+      >
+        {view.hits.map((h, i) => {
+          const data = comm[h.layer];
+          const para = data?.paras[h.para];
+          if (!data || !para) return null;
+          return (
+            <div key={i} className="flex flex-col gap-1">
+              <p className="text-xs font-bold text-primary">
+                {LAYER_NAME[h.layer]} <span className="font-normal text-faint">{data.book} {para.para}</span>
+              </p>
+              <p lang="pi" className="font-pali text-amber-900 dark:text-amber-200">
+                <InlineText parts={para.lines[h.line]} onWord={onCommentaryWord} />
+              </p>
+              {koShown(para).map((e) =>
+                para.tr[e.id]?.[h.line] ? (
+                  <p key={e.id} className="leading-relaxed text-gray-600 dark:text-muted-foreground">
+                    <InlineText parts={para.tr[e.id]![h.line]!} />
+                  </p>
+                ) : null,
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setLinkView(null);
+                  setLayer(h.layer);
+                  requestAnimationFrame(() =>
+                    requestAnimationFrame(() =>
+                      document.getElementById(`${h.layer}-${h.para}`)?.scrollIntoView({ block: "start" }),
+                    ),
+                  );
+                }}
+                className="w-fit text-xs font-bold text-primary hover:underline"
+              >
+                {LAYER_NAME[h.layer]}에서 이어 읽기 →
+              </button>
+            </div>
+          );
+        })}
+      </aside>
     );
   }
 
@@ -1190,67 +1243,6 @@ export function SuttaView({
           document.getElementById(`section-${p}`)?.scrollIntoView({ block: "start" });
         }}
       />
-      <BottomSheet
-        open={linkView !== null}
-        onOpenChange={(o) => !o && setLinkView(null)}
-        title={linkView?.word ?? ""}
-        subtitle="이 낱말을 풀이한 주석"
-        subtitleLang={undefined}
-      >
-        {linkView ? (
-          <div className="flex flex-col gap-4">
-            {linkView.hits.map((h, i) => {
-              const data = comm[h.layer];
-              const para = data?.paras[h.para];
-              if (!data || !para) return null;
-              return (
-                <div key={i} className="flex flex-col gap-2 rounded-xl border bg-gray-50/70 p-4 dark:bg-muted/30">
-                  <p className="text-xs font-bold text-primary">
-                    {LAYER_NAME[h.layer]} <span className="font-normal text-faint">{data.book} {para.para}</span>
-                  </p>
-                  <p lang="pi" className="font-pali text-amber-900 dark:text-amber-200">
-                    <InlineText parts={para.lines[h.line]} />
-                  </p>
-                  {koShown(para).map((e) =>
-                    para.tr[e.id]?.[h.line] ? (
-                      <p key={e.id} className="text-sm leading-relaxed text-gray-600 dark:text-muted-foreground">
-                        <InlineText parts={para.tr[e.id]![h.line]!} />
-                      </p>
-                    ) : null,
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLinkView(null);
-                      setLayer(h.layer);
-                      requestAnimationFrame(() =>
-                        requestAnimationFrame(() =>
-                          document.getElementById(`${h.layer}-${h.para}`)?.scrollIntoView({ block: "start" }),
-                        ),
-                      );
-                    }}
-                    className="w-fit text-xs font-bold text-primary hover:underline"
-                  >
-                    {LAYER_NAME[h.layer]}에서 이어 읽기 →
-                  </button>
-                </div>
-              );
-            })}
-            <button
-              type="button"
-              onClick={() => {
-                const w = linkView.word;
-                const key = linkView.key;
-                setLinkView(null);
-                setWord({ word: w, rowKey: key, keys: [key], tab: "dictionary", title: "", pali: paliOf([key]) });
-              }}
-              className="w-fit rounded-lg border bg-card px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
-            >
-              사전에서 “{linkView.word}” 찾기
-            </button>
-          </div>
-        ) : null}
-      </BottomSheet>
       <TextSettingsSheet
         open={sheet === "text"}
         onOpenChange={(o) => setSheet(o ? "text" : null)}

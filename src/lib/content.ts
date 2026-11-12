@@ -17,6 +17,7 @@ import {
 import {
   dictionaryIndexSchema,
   dpdShardSchema,
+  dpdTemplatesSchema,
   foldShardSchema,
   inflectionShardSchema,
   lookupShardSchema,
@@ -35,6 +36,7 @@ import type {
   DictionaryId,
   DictionaryIndex,
   DpdEntry,
+  DpdTemplate,
   Language,
   PlainDictionaryId,
   PlainEntry,
@@ -317,6 +319,19 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
 }
 
 /** DPD 표제어의 어형 변화 목록 (펼칠 때만 받는다) */
+let templatesPromise: Promise<Record<string, DpdTemplate>> | null = null;
+
+/** DPD 어형 변화표 틀 — 한 번만 받는다 */
+export function fetchDpdTemplates(): Promise<Record<string, DpdTemplate>> {
+  if (!templatesPromise) {
+    templatesPromise = getJson(`${DICT_BASE}/dpd-templates.json`).then((d) => dpdTemplatesSchema.parse(d));
+    templatesPromise.catch(() => {
+      templatesPromise = null;
+    });
+  }
+  return templatesPromise;
+}
+
 export async function fetchInflections(id: number): Promise<string[]> {
   const index = await fetchDictionaryIndex();
   const shard = await getShard(

@@ -49,6 +49,15 @@ export interface DpdEntry {
   sanskrit: string;
   examples: { text: string; source: string }[];
   hasInflections: boolean;
+  /** 어형 변화표: 어간 + 변화 유형 (dpd-templates.json 의 표 틀) */
+  stem?: string;
+  pattern?: string;
+}
+
+/** DPD 변화 유형별 표 틀: rows[줄][칸] = 어미들. 0번 줄은 머리, 0번 칸은 줄 이름, 홀수 칸이 어미, 짝수 칸은 문법 이름 */
+export interface DpdTemplate {
+  like: string;
+  rows: string[][][];
 }
 
 /** PTS·미얀마 사전의 표제어 하나 (같은 표제어의 뜻 여러 개) */

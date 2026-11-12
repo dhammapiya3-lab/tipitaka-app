@@ -6,14 +6,14 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchInflections, lookupWord, type WordLookup } from "@/lib/content";
+import { fetchDpdTemplates, fetchInflections, lookupWord, type WordLookup } from "@/lib/content";
 import { normalizeWord } from "@/lib/pali";
 import { DICTIONARY_LABELS, DICTIONARY_ORDER, LICENSE_UNKNOWN } from "@/lib/constants";
 import { parseInline } from "@/lib/segments";
 import { cn } from "@/lib/utils";
 import { useRecentStore } from "@/store/recent";
 import { useSettingsStore } from "@/store/settings";
-import type { DictionaryId, DpdEntry, PlainDictionaryId, PlainEntry } from "@/types";
+import type { DictionaryId, DpdEntry, DpdTemplate, PlainDictionaryId, PlainEntry } from "@/types";
 
 /** 뜻풀이 글만 있는 사전들 — 표시 순서, 글 언어, 출처 */
 const PLAIN_SECTIONS: { id: PlainDictionaryId; lang: string; credit: string | null }[] = [
@@ -347,14 +347,100 @@ function DpdCard({ entry }: { entry: DpdEntry }) {
       ) : null}
       {tab === "declension" ? (
         <div className="mt-1 rounded-xl bg-gray-50 p-3 dark:bg-muted">
-          <Inflections id={entry.id} />
+          <Inflections entry={entry} verb={verb} />
         </div>
       ) : null}
     </article>
   );
 }
 
-function Inflections({ id }: { id: number }) {
+function Inflections({ entry, verb }: { entry: DpdEntry; verb: boolean }) {
+  const [templates, setTemplates] = useState<Record<string, DpdTemplate> | "error" | null>(null);
+  useEffect(() => {
+    if (!entry.pattern) return;
+    let cancelled = false;
+    fetchDpdTemplates().then(
+      (t) => !cancelled && setTemplates(t),
+      () => !cancelled && setTemplates("error"),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [entry.pattern]);
+  const template = entry.pattern && templates && templates !== "error" ? templates[entry.pattern] : undefined;
+  if (!entry.pattern || templates === "error" || (templates && !template)) return <InflectionList id={entry.id} />;
+  if (!template) return <Skeleton className="h-24 w-full" />;
+  return <InflectionTable entry={entry} template={template} verb={verb} />;
+}
+
+/** DPD 와 같은 어형 변화표 — 어간 + 어미(굵게). 이 낱말 자신은 강조 */
+function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template: DpdTemplate; verb: boolean }) {
+  const stem = entry.stem ?? "";
+  const lemma = entry.lemma.replace(/\s+\d.*$/, "");
+  const num = entry.lemma.match(/\s+(\d.*)$/)?.[1];
+  const [head, ...body] = template.rows;
+  const cols = head.flatMap((_, i) => (i % 2 === 1 ? [i] : []));
+  return (
+    <div className="flex flex-col gap-3">
+      <p lang="pi" className="font-pali text-[15px]">
+        <b>{lemma}</b>
+        {num ? <sup>{num}</sup> : null} is <b>{entry.pattern}</b> {verb ? "conjugation" : "declension"}
+        {template.like && template.like !== "irreg" ? (
+          <>
+            {" "}
+            (like <b>{template.like}</b>)
+          </>
+        ) : template.like === "irreg" ? (
+          " (irregular)"
+        ) : null}
+      </p>
+      <div className="overflow-x-auto rounded-xl border bg-card">
+        <table lang="pi" className="w-full border-collapse text-center font-pali text-sm">
+          <thead>
+            <tr className="bg-amber-50/70 dark:bg-muted">
+              <th className="border-b px-3 py-2" />
+              {cols.map((c) => (
+                <th key={c} className="border-b border-l px-3 py-2 font-sans text-xs font-bold whitespace-nowrap">
+                  {head[c].join(", ")}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {body.map((row, r) => (
+              <tr key={r} className="even:bg-gray-50/60 dark:even:bg-muted/40">
+                <th className="border-t px-3 py-2 font-sans text-xs font-bold whitespace-nowrap">{row[0]?.join(", ")}</th>
+                {cols.map((c) => (
+                  <td key={c} title={row[c + 1]?.join(", ")} className="border-t border-l px-3 py-1.5 align-middle">
+                    {(row[c] ?? []).map((ending, k) => {
+                      const word = `${stem}${ending}`;
+                      const self = word === lemma;
+                      return (
+                        <span
+                          key={k}
+                          className={cn(
+                            "block whitespace-nowrap",
+                            self && "mx-auto w-fit rounded-md bg-amber-100 px-1.5 text-amber-900 ring-1 ring-amber-300",
+                          )}
+                        >
+                          {stem}
+                          <b>{ending}</b>
+                        </span>
+                      );
+                    })}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-muted-foreground">Digital Pāḷi Dictionary 어형 변화표</p>
+    </div>
+  );
+}
+
+function InflectionList({ id }: { id: number }) {
   const [forms, setForms] = useState<string[] | "error" | null>(null);
   useEffect(() => {
     let cancelled = false;

@@ -13,7 +13,8 @@
     "serve": "node scripts/serve.mjs",
     "build:site": "node scripts/fetch-private.mjs && tsx scripts/build-content.ts && next build",
     "verify:content": "tsx scripts/verify-content.ts",
-    "import:vri": "tsx scripts/import-vri.ts"
+    "import:vri": "tsx scripts/import-vri.ts",
+    "build:dpd-tables": "tsx scripts/build-dpd-tables.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
