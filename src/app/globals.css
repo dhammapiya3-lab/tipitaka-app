@@ -1,0 +1,304 @@
+/* ============================================================================
+   Renewal 디자인 시스템 — src/app/globals.css 에 "통째로" 복사해 쓰는 파일.
+   규칙 설명은 design/DESIGN.md. 색·모서리·그림자는 여기 토큰만 쓴다(화면 코드에 #hex 금지).
+
+   · 강조색은 파랑 하나 — 선택·활성·포커스·링크·오늘 날짜 전부 --primary.
+   · 기본은 라이트, 다크는 네이비 계열(.dark). next-themes 가 <html class="dark"> 를 붙인다.
+   · shadcn/ui 변수 이름(--background, --primary …)은 그대로 두고 값만 Renewal 로 바꿨다.
+     그래서 components/ui/ 를 고치지 않아도 버튼·입력·카드가 전부 따라온다.
+   ============================================================================ */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* 글꼴 — Pretendard (layout.tsx <head> 의 CDN link 로 불러온다).
+     Pretendard 에 없는 빠알리 글자(ā ṃ ṭ …)는 Noto Sans(--font-noto-sans, layout.tsx)가 채운다. */
+  --font-sans: "Pretendard Variable", Pretendard, var(--font-noto-sans), -apple-system,
+    BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-heading: var(--font-sans);
+  /* 빠알리 원문 — 한 단어 안에서 글꼴이 섞이지 않도록 Noto Sans 로 통째로 쓴다 (class: font-pali 또는 lang="pi") */
+  --font-pali: var(--font-noto-sans), var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* shadcn 표준 색 */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Renewal 추가 색 — Tailwind 클래스로 쓴다 (bg-brand-soft, text-brand-ink, bg-surface-2 …) */
+  --color-brand-soft: var(--brand-soft); /* 선택 배경 (칩·사이드바 활성) */
+  --color-brand-softer: var(--brand-softer); /* 선택된 표 행 */
+  --color-brand-ink: var(--brand-ink); /* 연한 파랑 바탕 위 글자 */
+  --color-surface-2: var(--surface-2); /* 표 머리·섹션 머리 */
+  --color-hover: var(--hover); /* 행·항목 hover (중립 — 파랑은 선택에만) */
+  --color-meta: var(--meta); /* 시간·건수·placeholder 전용 */
+  --color-line-strong: var(--line-strong); /* 입력·보조 버튼 테두리 */
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger-soft: var(--danger-soft);
+
+  /* 모서리 — 칩 4 · 버튼·입력 8 · 카드 16 · 로그인 카드 20 */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 4px; /* shadcn Badge 가 쓰는 값 → Renewal 칩 모서리 4 */
+
+  /* 그림자 */
+  --shadow-card: var(--elev-card);
+  --shadow-pop: var(--elev-pop);
+  --shadow-drawer: var(--elev-drawer);
+}
+
+/* ── 라이트 (기본) ───────────────────────────────────────────────────────── */
+:root {
+  --background: #f7f7f8; /* 페이지 바탕 */
+  --foreground: #171719; /* 제목·강조 글자 */
+  --card: #ffffff;
+  --card-foreground: #171719;
+  --popover: #ffffff;
+  --popover-foreground: #171719;
+  --primary: #0066ff; /* 유일한 강조색 */
+  --primary-foreground: #ffffff;
+  --secondary: #f2f3f5;
+  --secondary-foreground: #2e2f33;
+  --muted: #f2f3f5;
+  --muted-foreground: #5a6070; /* 보조 설명 (대비 6.3) */
+  --accent: #f4f5f7; /* hover — 중립 회색 */
+  --accent-foreground: #171719;
+  --destructive: #e5383b;
+  --border: #e6e8ec; /* 구분선·카드 테두리 */
+  --input: #d5d8de; /* 입력·버튼 테두리 */
+  --ring: #0066ff;
+  --radius: 8px;
+
+  /* 차트 5색 — 색약 검사 통과 순서(1→5 고정, 돌려쓰지 않는다) */
+  --chart-1: #0066ff;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #6250d6;
+  --chart-5: #e87ba4;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2e2f33;
+  --sidebar-primary: #0066ff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ebf3ff; /* 활성 메뉴 바탕 */
+  --sidebar-accent-foreground: #0054d1; /* 활성 메뉴 글자 */
+  --sidebar-border: #e6e8ec;
+  --sidebar-ring: #0066ff;
+
+  /* Renewal 추가 */
+  --brand-soft: #ebf3ff;
+  --brand-softer: #f5f9ff;
+  --brand-ink: #0054d1;
+  --surface-2: #f9f9fb;
+  --hover: rgba(112, 115, 124, 0.06);
+  --meta: #6f7682; /* 대비 4.6 (AA) — 본문에 쓰지 않는다 */
+  --line-strong: #d5d8de;
+  --success: #007a3d;
+  --success-soft: #ebf7f1;
+  --warning: #9a5c00;
+  --warning-soft: #faf4eb;
+  --danger-soft: #fdefef;
+  --overlay: rgba(23, 23, 25, 0.4);
+  --elev-card: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --elev-pop: 0 0 20px rgba(0, 0, 0, 0.1);
+  --elev-drawer: -8px 0 24px rgba(0, 0, 0, 0.08);
+  --scroll-thumb: #c9cdd4;
+}
+
+/* ── 다크 (네이비) ───────────────────────────────────────────────────────── */
+.dark {
+  --background: #070b10;
+  --foreground: #d7dfea;
+  --card: #0d151d;
+  --card-foreground: #d7dfea;
+  --popover: #101b27;
+  --popover-foreground: #d7dfea;
+  --primary: #6296e5;
+  --primary-foreground: #08162a; /* 밝은 파랑 위 글자는 진한 남색 */
+  --secondary: #132030;
+  --secondary-foreground: #bdc8d8;
+  --muted: #132030;
+  --muted-foreground: #8a98ae;
+  --accent: #101b27;
+  --accent-foreground: #d7dfea;
+  --destructive: #f07178;
+  --border: #202c3d;
+  --input: #35455d;
+  --ring: #6296e5;
+
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #9085e9;
+  --chart-5: #d55181;
+
+  --sidebar: #0b131b;
+  --sidebar-foreground: #bdc8d8;
+  --sidebar-primary: #6296e5;
+  --sidebar-primary-foreground: #08162a;
+  --sidebar-accent: rgba(98, 150, 229, 0.16);
+  --sidebar-accent-foreground: #a4c4f4;
+  --sidebar-border: #202c3d;
+  --sidebar-ring: #6296e5;
+
+  --brand-soft: rgba(98, 150, 229, 0.16);
+  --brand-softer: rgba(98, 150, 229, 0.09);
+  --brand-ink: #a4c4f4;
+  --surface-2: #0a1118;
+  --hover: rgba(98, 150, 229, 0.07);
+  --meta: #7e8ea5;
+  --line-strong: #35455d;
+  --success: #3fd699;
+  --success-soft: rgba(54, 211, 153, 0.14);
+  --warning: #f3b562;
+  --warning-soft: rgba(251, 189, 35, 0.13);
+  --danger-soft: rgba(240, 113, 120, 0.14);
+  --overlay: rgba(0, 0, 0, 0.6);
+  --elev-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --elev-pop: 0 10px 28px rgba(0, 0, 0, 0.5);
+  --elev-drawer: -8px 0 24px rgba(0, 0, 0, 0.5);
+  --scroll-thumb: #35455d;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* 빠알리 글(경 이름 등)은 lang="pi" 만 붙이면 빠알리 글꼴로 */
+  [lang="pi"] {
+    @apply font-pali;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5714; /* 22/14 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-variant-numeric: tabular-nums; /* 표·KPI 숫자 열이 흔들리지 않게 */
+  }
+  ::selection {
+    background: var(--brand-soft);
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--meta);
+    opacity: 1;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ── 글자 위계 4단계 — 고정 px 대신 이 클래스 (Tailwind 유틸이 덮을 수 있다) ── */
+@layer components {
+  .t-title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: -0.5px;
+    color: var(--foreground);
+  }
+  .t-section {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+    color: var(--foreground);
+  }
+  .t-card {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.1px;
+    color: var(--foreground);
+  }
+  .t-body {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+  }
+  .t-sub {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: var(--muted-foreground);
+  }
+  .t-meta {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.25px;
+    color: var(--meta);
+  }
+}
+
+/* ── shadcn 원자 보정 — components/ui/ 를 고치지 않고 Renewal 모양으로 맞춘다 ──
+   (레이어 밖 선언이라 shadcn 의 유틸 클래스보다 우선한다) */
+[data-slot="card"] {
+  --tw-ring-color: var(--border); /* 카드 = 1px 선 */
+  --tw-shadow: var(--elev-card); /* + 옅은 그림자 */
+}
+[data-slot="card"]:not([data-size="sm"]) {
+  --card-spacing: 1.25rem; /* 카드 안쪽 20 */
+}
+[data-slot="card-title"] {
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+[data-slot="sheet-overlay"],
+[data-slot="dialog-overlay"] {
+  background: var(--overlay);
+}

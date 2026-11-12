@@ -1,0 +1,273 @@
+# MASTER-PLAN — 초기불교경전 설계 기록
+
+> 앱을 만들면서 정한 구조·규칙·결정을 순서대로 적은 기록이다. 지금 쓰는 법은 README.md, 자료 넣는 법은 자료-넣는-법.md.
+> 아래 STEP 1~6 은 처음 만들 때의 순서이고, 맨 아래 "컴퓨터용으로 넘겨드리며"가 가장 최근 상태다.
+
+# 만들 것
+
+서비스 이름: **초기불교경전** / 둘째 줄 **Theravāda Tipiṭaka** (`constants.ts` 의 `SERVICE_NAME`·`SERVICE_TAGLINE` 만 바꾸면 전체가 바뀐다.)
+누구나 로그인 없이 쓰는 경전 읽기 앱이다. theravada-application.vercel.app 에서 실제로 작동하는 기능을 같은 흐름으로 다시 만든다.
+
+앱의 핵심 원리는 **문장 번호**다. 모든 문장은 `dn22:1.2` 같은 번호를 갖고, 빠알리 원문·번역·각주를 이 번호로 짝짓는다.
+
+## 범위
+
+| 단계 | 기능 | STEP |
+|---|---|---|
+| 1단계 | 홈, 5부 니까야 경전 목록, 경 읽기, 판본 선택과 문장별 비교, 각주, 글자 크기·줄 간격, 판본 정보·출처 | 1~3 |
+| 2단계 | 빠알리 단어 사전 검색, 대역, 문법분석 | 4 |
+| 3단계 | 오늘의 게송, 북마크 | 5 |
+
+**만들지 않는 것:** 율장·논장·주석서·복주석서·실천·예불(원래 앱에서도 준비 중), 로그인, 회원, 서버 프로그램, 위키, 문서 관리, 킬러 모듈.
+
+## 화면 구성
+
+| 화면 | 경로 | 내용 |
+|---|---|---|
+| 홈 | `/` | 앱 소개, 경전 바로가기. 3단계에서 오늘의 게송 추가 |
+| 경전 목록 | `/suttas` → `/suttas/<니까야>` | 5부 니까야 → 품 → 경. 경이 200개 넘는 니까야(SN·AN·KN)는 `/suttas/<니까야>/<묶음>` 페이지로 나눈다(한 페이지가 3MB 를 넘지 않게) |
+| 경 읽기 | `/sutta/<경 번호>` | 원문·번역, 판본 선택, 각주, 이전·다음 경, 텍스트 설정 |
+| 사전 | `/dictionary` | 2단계. 단어 검색, 사전 선택 |
+| 북마크 | `/bookmarks` | 3단계. 이 기기에 저장 |
+| 정보 | `/about` | 판본 정보, 출처, 이용 조건, 테마 |
+
+- 모든 화면은 **고유 주소**를 갖는다. 경 주소를 복사해 보내면 같은 경이 열려야 한다. 원래 앱보다 나아지는 핵심이다.
+- 목록의 경 번호는 원래 앱 자료의 형식을 따르되, 주소에는 `dn22` 형식을 쓴다(자료의 `dn.22` 는 변환 때 바꾼다).
+
+# 데이터 구조 — 3층
+
+```
+1층 원본         앱 폴더 안 content/theravada-app/ (원래 사이트 /data/ 와 같은 폴더 구조, scripts/paths.ts)
+      ↓
+2층 변환         scripts/build-content.ts — 경별 파일로 정리하고 오류를 검사한다
+      ↓
+3층 앱이 쓰는 파일  src/data/catalog.json (목록), public/data/suttas/<경 번호>/<판본>.json (본문)
+```
+
+- 원본 폴더 구조: `edition-registry.json`(판본 정보) · `sutta_pitaka/<니까야>/structure.json`(목록) · `editions.json`(판본 목록) ·
+  `sutta_pitaka/<니까야>/<판본 폴더>/<경>_<root|translation|comment>-<판본>.json`. 쿳다까 니까야는 책 폴더(`dhammapada/` 등)마다 editions.json 이 있다.
+  원래 앱의 주소 구조와 같으므로 새로 받은 파일은 같은 자리에 넣고 `pnpm build:content` 만 다시 돌린다.
+- 판본 표시 이름·언어·복사 허용은 원래 앱의 `edition-registry.json` 에서 읽는다. 이용 조건은 아직 모두 "확인 중"이다.
+- 판본은 빠알리(`pli-ms`), 한국어(`kor-*`), 영어(`en-sujato`) 등이다. 판본 목록은 파일 이름에 박아 넣지 않고 판본 목록 자료에서 읽는다.
+- 각주는 판본 파일과 별도이며 같은 문장 번호로 잇는다. 번역문의 `**42)**` 표시는 지우지 않고 각주 표시로 바꾼다.
+  같은 번호의 각주가 여러 문장에 붙기도 하므로(DN 22의 71번) 각주는 **문장 번호 + 각주 번호**로 찾는다.
+- `src/data/`·`public/data/` 는 저장소에 넣지 않는다. 새 컴퓨터에서는 `pnpm build:content` 와 `pnpm build:dictionary` 를 먼저 실행해야 빌드된다.
+- 번역문의 HTML 태그는 화면에서 해석하지 않는다. 변환 단계에서 필요한 표시만 안전한 형식으로 바꾼다. `dangerouslySetInnerHTML` 금지.
+- 문장 번호·판본 파일이 어긋나면 변환을 실패시키고 어떤 경의 어떤 문장인지 알려 준다.
+- 빠른 시작을 위해 처음에 전부 받지 않는다. 경 읽기 화면은 고른 판본의 파일만 받는다.
+
+# 기술 스택
+
+- Next.js (App Router, src 디렉터리, TypeScript strict, `output: "export"`) · Tailwind CSS v4 · shadcn/ui (`-b base`)
+- zustand (화면 상태) · zod (데이터 검증) · lucide-react (아이콘) · next-themes (테마)
+- tsx (변환 스크립트 실행, dev 의존성) · vitest (순수 함수 시험) · 패키지 매니저 pnpm
+- 디자인: **Renewal 디자인 시스템** — `design/DESIGN.md`(규칙) + `design/globals.css`(토큰, 그대로 복사). 글꼴 Pretendard(CDN link).
+
+이 목록에 있는 것은 허락 없이 설치해도 된다. 그 밖의 라이브러리는 이유를 한 줄로 말하고 허락을 받는다.
+Firebase·recharts 는 쓰지 않는다.
+
+**중요**: 이 버전의 Next.js 는 학습 데이터와 다를 수 있다. 코드를 쓰기 전에 `node_modules/next/dist/docs/` 의 관련 가이드와 shadcn/ui 컴포넌트 API 를 확인한다.
+`reference/` 폴더의 셸(사이드바·헤더·PageHeader)과 관용구는 읽어서 참고하되 수정하지 않는다. 로그인·위키·문서 관리·차트 코드는 가져오지 않는다.
+
+# 아키텍처 규칙 (반드시 지킬 것)
+
+1. **서버 없이 동작한다.** 빌드 결과(`out/`)는 정적 파일이다. API 경로, `proxy.ts`, 쿠키, 서버에서만 되는 기능을 쓰지 않는다.
+2. **데이터는 한 길로만 들어온다.**
+   목록: `src/data/*.json` → `src/lib/schemas.ts`(zod) → `src/lib/data.ts` → `page.tsx` → props.
+   본문·사전: `public/data/**` → `src/lib/content.ts`(fetch + zod) → 클라이언트 뷰. 다른 곳에서 fetch 하지 않는다.
+3. **타입 단언(as) 금지.** JSON 은 반드시 zod `parse()` 로 통과시킨다.
+4. **기기 저장은 한 곳에서만.** 글자 크기·줄 간격·고른 판본·북마크는 `src/store/` 의 zustand 스토어가 localStorage 에 저장한다.
+   localStorage 는 막혀 있을 수 있으므로 읽기·쓰기 실패해도 화면이 깨지지 않게 한다.
+5. **원문·번역 자료를 코드에 직접 쓰지 않는다.** 화면 코드와 자료를 섞지 않는다.
+6. **폴더 구조 — 아래 트리를 그대로 만든다. 여기 없는 위치에 파일을 두지 않는다.**
+
+   ```
+   scripts/build-content.ts            1층 원본 → 3층 파일 (경전 목록·본문·각주)
+   scripts/build-dictionary.ts         사전 원본(SQLite) → 조각 사전 public/data/dict/
+   src/
+     app/
+       layout.tsx                      루트: html lang="ko", 폰트, ThemeProvider, Toaster, 공통 셸
+       globals.css                     design/globals.css 복사본
+       page.tsx                        홈
+       suttas/page.tsx                 경전 목록 (니까야 카드)
+       suttas/[nikaya]/page.tsx        니까야별 목록
+       suttas/[nikaya]/[group]/page.tsx  경이 많은 니까야의 묶음별 목록
+       sutta/[id]/page.tsx             경 읽기 — generateStaticParams 로 모든 경 생성
+       dictionary/page.tsx             사전 (2단계)
+       bookmarks/page.tsx              북마크 (3단계)
+       about/page.tsx                  정보
+     components/
+       ui/                             shadcn 생성물 — 직접 수정 금지
+       layout/                         sidebar · header · nav-items · page-header · brand-mark · theme-provider · theme-toggle
+       shared/                         여러 화면이 같이 쓰는 부품 — empty-state 등
+       <screen>/                       화면별 폴더. 진입은 <screen>-view.tsx ("use client")
+     lib/
+       constants.ts                    SERVICE_NAME · 기본 설정값 · 라벨 맵
+       schemas.ts                      zod 스키마 — types/ 와 1:1
+       data.ts                         빌드 때 읽는 목록 자료의 유일한 진입점
+       content.ts                      본문 자료를 받는 유일한 진입점
+       segments.ts                     판본 합치기·문장 정렬·판본 고르기 — 화면을 모르는 순수 함수 (시험 포함)
+       format.ts                       경 번호·숫자 표시
+       pali.ts                         빠알리 단어 정리·조각 파일 이름 (변환 스크립트와 화면이 같이 씀)
+       utils.ts                        cn() (shadcn 생성)
+     store/<name>.ts                   zustand 스토어 — settings.ts 필수
+     types/<domain>.ts + index.ts      도메인별 타입 + barrel
+     data/*.json                       build-content 산출물 (손으로 고치지 않는다)
+   public/data/                        build-content 산출물 (번역 포함 — 허락 전 커밋 금지)
+   curriculum/ · reference/ · design/  앱 코드가 아니다 (tsconfig exclude)
+   ```
+
+   규약:
+   - 파일명 kebab-case. 컴포넌트는 PascalCase named export, page/layout 만 default export.
+   - `page.tsx` 는 서버 컴포넌트: 자료 읽기·props 전달만. 상호작용은 `<screen>-view.tsx` 이하 "use client" 에서.
+   - 모든 화면은 맨 위에 `PageHeader` 를 둔다.
+   - 새 화면 추가 순서: types → schemas → build-content → data.ts 또는 content.ts → components/<screen>/ → app/<screen>/page.tsx → nav-items.ts
+7. 한국어 UI. 빠알리 표기는 자료에 있는 그대로 둔다(변환 스크립트가 철자를 고치지 않는다).
+8. **디자인은 `design/DESIGN.md` 가 정본이다.** 색은 토큰 클래스만 쓰고 `#hex`·팔레트 색을 쓰지 않는다. 강조색은 파랑 하나.
+
+## 디자인 적용 — 이 앱에서 달라지는 부분
+
+- 사이드바 그룹: **경전**(홈·경전 목록·사전·북마크) / 맨 아래 **정보**. 사전·북마크 메뉴는 해당 단계에서 추가한다.
+- 헤더: 테마 전환만 둔다. 프로필·로그아웃은 없다.
+- 경 읽기 본문은 긴 글이라 14px 고정을 따르지 않는다. 기본 18px, 줄 간격 넉넉하게, 최대 폭 약 720px, 설정에서 조절한다.
+- 판본을 비교할 때 데스크톱은 나란히, 모바일은 위아래로 쌓는다.
+- 모바일이 주 사용 환경이다. 390px 폭을 우선 확인한다.
+- Pretendard 에는 빠알리 글자(ā ī ū ṁ ṃ ñ ṅ ṭ ḍ ṇ ḷ)가 없다. 빠진 글자는 Noto Sans(next/font, 빌드 때 앱에 포함)가 채우고,
+  빠알리 글(원문·경 이름)은 `lang="pi"` 또는 `font-pali` 로 통째로 Noto Sans 를 쓴다(한 단어 안에서 글꼴이 섞이지 않게).
+- 긴 빠알리 복합어가 휴대폰 폭을 넘지 않게 본문 칸은 `wrap-anywhere` 로 줄바꿈한다.
+
+# 작업 순서 — 각 STEP 끝에서 반드시 멈추고 보고한다
+
+각 STEP 끝에서:
+  (a) `pnpm typecheck`, `pnpm test`, `pnpm build` 통과 확인
+  (b) `git add -A && git commit` 으로 단계 결과 저장 (되돌리기용)
+  (c) 사용자가 브라우저에서 뭘 확인하면 되는지 1~3줄
+  (d) **거기서 멈춘다.** 사용자가 "다음"이라고 할 때까지 넘어가지 않는다.
+
+## STEP 1 — 뼈대
+
+- 루트에 문서가 이미 있어 create-next-app 이 루트를 거부한다. **임시 폴더에 만들고, shadcn/ui 까지 그 안에서 설치한 뒤 루트로 옮긴다**:
+  1. `pnpm create next-app@latest scaffold-tmp --ts --tailwind --eslint --app --src-dir --import-alias "@/*" --use-pnpm --yes`
+  2. `pnpm dlx shadcn@latest init -c scaffold-tmp -b base -p nova -y --no-monorepo`
+     → `pnpm dlx shadcn@latest add -c scaffold-tmp -y badge button card dialog dropdown-menu input label scroll-area select separator sheet skeleton slider sonner switch tabs textarea tooltip`
+  3. `rm -f scaffold-tmp/README.md scaffold-tmp/AGENTS.md scaffold-tmp/CLAUDE.md` (루트 문서 유지) → `find scaffold-tmp -mindepth 1 -maxdepth 1 -exec mv {} . \;` → `rmdir scaffold-tmp`
+- ⚠️ **shadcn init 을 루트에서 실행하지 않는다.** 루트에서 돌리면 `design/globals.css` 나 `reference/` 쪽 파일을 덮어쓸 수 있다.
+  옮긴 뒤 `components.json` 의 `tailwind.css` 가 `src/app/globals.css` 인지 확인한다.
+- 이 컴퓨터에서 pnpm 설치가 `readStream must be readable` 로 멈춘 적이 있다. 같은 오류면 다시 시도하고, 그래도 안 되면 `node node_modules/...` 로 도구를 직접 실행해 확인한다.
+- `package.json` 의 `name` 을 `tipitaka-reader` 로, `scripts.typecheck` 를 `"next typegen && tsc --noEmit"` 로, `scripts.test` 를 `"vitest run"` 으로, `scripts.build:content` 를 `"tsx scripts/build-content.ts"` 로 등록.
+- `next.config.ts` 에 `output: "export"` 를 넣는다.
+- `tsconfig.json` 의 `exclude` 에 `"reference"`, `"curriculum"`, `"design"` 추가.
+- `.gitignore` 에 `public/data/`, `src/data/*.json` 은 STEP 2 판단 전까지 포함한다.
+- 대화형 명령은 전부 비대화형 플래그로 실행한다.
+- **디자인 적용**: `src/app/globals.css` 를 `design/globals.css` 로 통째로 교체하고, `layout.tsx` 에 Pretendard link·ThemeProvider(`defaultTheme="light"`, `enableSystem={false}`)를 둔다.
+- 사이드바, 헤더, PageHeader, 1단계 화면을 "PageHeader 만 있는 빈 화면"으로 만든다.
+- 개발 서버(`pnpm dev`)는 백그라운드로 켜 두고, 이미 켜져 있으면 다시 켜지 않는다.
+- 보고: 메뉴가 보이고, 클릭하면 화면이 바뀌고, 테마가 바뀌는지.
+
+## STEP 2 — 자료 변환
+
+- 먼저 DN 1, DN 22 두 경으로 만든다. 자료 종류와 건수를 표로 보여주고 승인받는다.
+- `src/types/`, `src/lib/schemas.ts`, `scripts/build-content.ts`, `src/lib/data.ts`, `src/lib/content.ts` 를 만든다.
+- 5부 니까야 목록 자료(`*_structure.json`)와 판본 목록(`*_editions.json`)도 변환한다. 아직 본문이 없는 경은 목록에 "준비 중"으로 표시한다.
+- `lib/segments.ts` 시험을 만든다: 판본에 없는 문장, 번호 순서, 각주 연결.
+- 나머지 경의 자료를 받는 일은 STEP 3 이 끝난 뒤 따로 승인받는다.
+- 보고: 경 수, 문장 수, 판본별 문장 수, 변환 오류 수.
+
+## STEP 3 — 1단계 화면
+
+순서: 경 읽기 → 경전 목록 → 홈 → 정보.
+
+- 경 읽기: 문장 단위 표시, 빠알리 켜기·끄기, 판본 여러 개 선택과 문장별 비교, 각주(누르면 열림), 목차, 이전·다음 경, 텍스트 설정.
+- 고른 판본과 텍스트 설정은 다시 열어도 유지한다.
+- 판본에 문장이 없으면 빈 칸으로 두고 앱이 멈추지 않게 한다. 자료를 못 받으면 원인을 짧게 보여 주고 다시 시도 버튼을 둔다.
+- 정보 화면: 판본별 번역자·출처·이용 조건을 보여 준다. 조건을 모르는 자료는 "확인 중"이라고 쓴다.
+- `design/DESIGN.md` 8장 검사를 통과시키고 라이트·다크, 390px·1280px 폭을 눈으로 확인한다.
+- 보고: 화면마다 눌러볼 것 한 가지씩.
+
+## STEP 4 — 2단계: 사전·대역·문법분석
+
+**결정 (2026-11-03):** 원래 앱처럼 SQLite 전체(DPD 287MB)를 브라우저에 받지 않고 **조각 사전**으로 만든다.
+- 원본: DPD 공식 배포본 `content/dpd/dpd.db` (GitHub dpd-db v0.4.20261026), PTS·미얀마는 `epitaka.db` 의 dictionary 표(book_id 5·1).
+- `pnpm build:dictionary` → `public/data/dict/` (index.json · lookup · dpd · dpd-inflections · pts · mm). 조각이 150KB 를 넘으면 앞 글자를 한 글자씩 늘려 나눈다(`lib/pali.ts` shardOf).
+- 찾는 순서: DPD "변화형 → 표제어" 표 → DPD 표제어 → 그 기본형으로 PTS·미얀마. 받는 자료는 단어 하나에 수십 KB.
+- DPD 합성어 분해(deconstructor, 76MB)는 찾는 비율이 0.4%p 만 늘어 넣지 않았다.
+- **추가 (2026-11-03 오후, 원래 사이트가 다시 응답):**
+  - K-PTS 빠알리–한국어 사전: 원래 앱의 `dictionary/korean-pali/dictionary.sqlite`(7.5MB, 16,848항목)를 받아 조각 사전 `kpts` 로 넣었다. 처음 켜진 사전은 DPD + K-PTS.
+  - 대역(nissaya): `sutta_pitaka_nissaya/` 를 받아 `build:content` 가 `public/data/suttas/<경>/<판본>.nissaya.json` 으로 바꾼다.
+    원래 앱에도 법구경 일부(상가락키따 스님 1~20번 게송 품, 한국마하시 사야도 4개 품의 일부 게송)뿐이다. 단어 창의 "대역" 탭으로 보여 준다(게송 단위로 모음).
+  - 문법분석(paligrammar): 원래 사이트에 DN 1·DN 22·법구경 자료가 없다(404). 본문이 있는 경이 늘어나면 같은 방식(대역 탭 옆 "문법분석" 탭)으로 붙인다.
+
+원래 명세:
+
+- 시작 전에 사전 자료의 크기와 받는 방법을 조사해 **선택지로 보고한다.** 원래 앱의 사전 자료는 287MB 라 사용자가 처음에 통째로 받게 만들지 않는다.
+- SQLite 를 브라우저에서 쓰는 라이브러리가 필요하면 이유를 말하고 허락을 받는다.
+- 경 읽기에서 단어를 누르면 사전을 연다. 사전은 DPD, PTS, K-PTS 빠알리–한국어, Tipiṭaka Pāḷi–Myanmar 를 고를 수 있다.
+- 대역·문법분석은 자료가 있는 문장에서만 보여 주고, 없으면 "이 문장의 자료가 없습니다"라고 쓴다.
+- DPD 표시에 출처와 CC BY-NC-SA 4.0 을 밝힌다. 이 조건은 상업적 이용을 막으므로 앱에 광고나 유료 기능을 넣지 않는다.
+- 보고: 단어 하나를 눌러 찾는 데 걸린 시간과 처음 받는 자료의 크기.
+
+## STEP 5 — 3단계: 오늘의 게송·북마크
+
+**결과 (2026-11-03):**
+- 원래 사이트 자료는 `scripts/fetch-from-site.mjs` 로 받는다(사이트와 같은 폴더 구조, 이미 받은 파일은 건너뜀).
+  원본 폴더를 사이트 구조(`theravada-app/sutta_pitaka/…`, `edition-registry.json`)로 옮겼고, 판본 정보는 손으로 적은 파일 대신 원래 앱의 것을 쓴다.
+- 법구경 26품(판본 6개)이 들어와 경 읽기로도 열린다. 게송 번호(Dhp 5)와 일화 제목을 원래 앱과 같은 규칙(`lib/segments.ts` rowKind)으로 표시한다.
+- DN 1 한국어 번역은 원래 앱에도 없다(판본 목록에만 있고 파일은 빠알리·영어뿐).
+- 원래 자료 문제는 경고로만 알린다: 문념 스님 273~289 각주 파일 깨짐(각주 3개 뺌), 오원탁 각주 파일의 201:4 칸에 본문 한 줄, PTS 판본 375번 게송 6줄.
+- 원래 앱이 복사를 막은 판본(`allowCopy: false`, 법현 스님)은 글자 선택을 막는다.
+- 북마크는 `store/bookmarks.ts`(이 기기 저장), 오늘의 게송은 날짜마다 1~423번을 차례로(`lib/format.ts` dailyNumber).
+
+원래 명세:
+
+- 오늘의 게송: 법구경에서 날짜별로 게송 하나를 고른다. 같은 날에는 같은 게송을 보여 준다.
+- 북마크: 문장 단위로 저장하고 `/bookmarks` 에서 다시 열 수 있다. 이 기기에만 저장된다고 화면에 알린다.
+- 보고: 게송과 북마크를 확인할 방법.
+
+## 시험 공개 (2026-11-03, 나중에 지울 것)
+
+- Firebase 프로젝트 `tipitaka-reader-test` (holdmenowww@gmail.com 계정, 무료 요금제), 주소 https://tipitaka-reader-test.web.app
+- 로그인 없이 링크로 열린다. 번역 이용 허락 전이라 검색 엔진 제외(`layout.tsx` robots, `firebase.json` X-Robots-Tag).
+- 다시 올리기: `pnpm build` → `firebase deploy --only hosting`
+- 지우기: 사이트만 내리기 `firebase hosting:disable --project tipitaka-reader-test`,
+  프로젝트째 지우기는 Firebase 콘솔 → 프로젝트 설정 → 프로젝트 삭제 (30일 뒤 완전 삭제).
+- 정식 공개 때는 아래 STEP 6 을 따르고, robots·X-Robots-Tag 검색 제외를 지운다.
+
+## STEP 6 — 인터넷 공개
+
+사용자가 "공개해줘"라고 할 때만 진행한다.
+
+0. **먼저 확인한다**: ① 번역 판본별 이용 허락 ② 사전 자료 이용 조건 ③ 앱 이름 ④ 사용할 호스팅과 비용. 하나라도 비면 공개하지 않고, 허락받지 못한 판본은 빼는 방법을 제안한다.
+1. 호스팅은 정적 파일을 올릴 수 있는 곳 중에서 자료 크기와 사용량을 계산해 2~3개로 좁혀 제안한다.
+2. `pnpm build` 결과 `out/` 을 올린다. 번역 자료를 공개 Git 저장소에 넣지 않는다.
+3. 공개 후 확인: 홈 열기, 경 주소 직접 열기, 판본 바꾸기, 없는 주소, 휴대폰 화면.
+4. 결과 표와 주소를 보고한다.
+
+# 운영 모드 (프로젝트가 이미 있을 때)
+
+- 요청을 처리한 뒤 `pnpm typecheck && pnpm test && pnpm build` 통과를 확인하고 커밋한다.
+- 새 화면·자료는 위 "새 화면 추가 순서"를 따른다. 구조를 바꾸지 않는다.
+- 주석서 연결 요청이 오면 먼저 `D:\mskim\epitaka-db\prototype\reports\주석연결_검수표_DN22.xlsx` 의 검수 결과가 있는지 확인한다. 검수 전에는 문장별 주석을 공개 화면에 넣지 않는다.
+
+# 컴퓨터용으로 넘겨드리며 (2026-11-04)
+
+원래 앱 제작자가 "PC 로 보기에 이 버전이 편하다"고 해서, 직접 자료를 넣어 쓸 수 있는 컴퓨터용으로 정리했다.
+
+**구조**
+- 원본 자료는 앱 폴더 안 `content/` (위치는 `scripts/paths.ts`, 환경 변수로 바꿀 수 있음). 원래 앱의 /data/ 를 통째로 복사해 넣으면 된다.
+- 경 번호 → 파일 위치는 원래 앱 코드와 같은 규칙(`scripts/source-paths.ts`, 시험 포함): sn1/sn1.1, an1/an1.1-10, vagga1/ud1.1 …
+- 경 주소는 폴더 방식(`trailingSlash`) — sn1.1 처럼 점이 든 번호를 정적 서버가 확장자로 착각하지 않게. 링크는 `suttaHref()` 한 곳에서.
+  Next 는 점이 든 주소에서 끝 / 를 떼고 화면 안 이동 자료를 `/sutta/sn1.1.txt` 로 찾는다 → `scripts/serve.mjs` 가 `sutta/sn1.1/index.txt` 로 찾아 준다.
+  (Firebase 시험 공개에서는 이 경우 페이지를 통째로 다시 불러온다 — 동작은 한다.)
+- 실행: `시작.bat`(설치·빌드가 없으면 하고 `scripts/serve.mjs` 로 http://localhost:4321), `자료-반영.bat`(build:content → build → 열기).
+
+**더한 기능**
+- 경 본문 검색: 언어별 "단어 → 경|판본 → 문장" 색인을 앞글자별 조각으로(`src/lib/search.ts`, build:content 가 만듦). 앞부분 일치, 여러 단어는 같은 문장.
+- 빠알리 자판 없이 찾기: `foldPali`(ā→a …). 사전에 fold 색인, 검색 색인은 처음부터 기호를 뗀 글자.
+- 사전 칸: 1024px 이상은 본문 옆에 붙음(연 채로 다른 단어), 좁으면 드로어.
+- 문장 메뉴(북마크·메모·링크 복사·원문+번역 복사), 키보드로 읽기(j/k, ←/→, Enter, b, c, Esc, /, ?), 이어 읽기, 인쇄.
+- 북마크 내보내기·가져오기(`src/lib/bookmark-file.ts`), 경전 목록 "읽을 수 있는 경만", 최근 찾은 단어.
+- 원래 사이트에서 맛지마·상윳따 일부를 받아 읽을 수 있는 경 415개.
+
+**원래 자료에서 찾은 것 (변환 검사)**
+- 맛지마 119경 현음 스님 각주는 번호를 `**17**`(괄호 없음)로 적음 → 두 형식 모두 읽게 함.
+- 앙굿따라 니까야, 법구경 밖의 쿳다까 니까야는 원래 앱에도 번역 자료가 없음.

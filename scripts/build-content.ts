@@ -1,0 +1,394 @@
+/**
+ * 1층 원본 → 3층 앱이 쓰는 파일.
+ *   원본: 원래 앱의 자료를 사이트와 같은 폴더 구조로 모은 곳 (기본 content/theravada-app, scripts/paths.ts)
+ *         edition-registry.json · sutta_pitaka/<니까야>/structure.json · editions.json · <판본 폴더>/<경>_<root|translation|comment>-<판본>.json
+ *         쿳다까 니까야는 책마다 sutta_pitaka/khuddaka_nikaya/<책>/editions.json 이 따로 있다.
+ *   결과: src/data/catalog.json · src/data/editions.json · public/data/suttas/<경>/<판본>.json (+ .notes.json)
+ * 문장 번호·각주가 어긋나면 아무것도 쓰지 않고 어디가 틀렸는지 알려 준다.
+ * 원래 사이트의 각주 파일 자체가 깨진 경우만 경고로 알리고 그 각주는 빼고 넘어간다.
+ *
+ * 사용법: pnpm build:content   (원본 위치를 바꾸려면 CONTENT_SOURCE=<폴더> pnpm build:content)
+ */
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { z } from "zod";
+import {
+  catalogSchema,
+  editionsSchema,
+  suttaNissayaSchema,
+  suttaNotesSchema,
+  suttaTextSchema,
+} from "../src/lib/schemas";
+import { searchShardName, tokenize, type SearchShard } from "../src/lib/search";
+import { noteMarks, parseInline, plainText, rowKind, splitNotes, toSuttaId } from "../src/lib/segments";
+import { SOURCE_ROOT } from "./paths";
+import { suttaFilePath } from "./source-paths";
+import type {
+  Catalog,
+  CatalogNode,
+  CatalogSutta,
+  Edition,
+  Footnote,
+  Language,
+  Segment,
+  SuttaNissaya,
+  SuttaNotes,
+  SuttaText,
+} from "../src/types";
+
+const SOURCE = path.join(SOURCE_ROOT, "sutta_pitaka");
+const NISSAYA_SOURCE = path.join(SOURCE_ROOT, "sutta_pitaka_nissaya");
+const ROOT = process.cwd();
+const OUT_DATA = path.join(ROOT, "src/data");
+const OUT_SUTTAS = path.join(ROOT, "public/data/suttas");
+const OUT_SEARCH = path.join(ROOT, "public/data/search");
+/** 빠알리 원문 판본. 번역 문장 번호는 모두 이 판본에 있어야 한다. */
+const ROOT_EDITION = "pli-ms";
+
+const NIKAYAS = [
+  { id: "dn", folder: "digha_nikaya", name: "Dīgha Nikāya", nameKo: "디가 니까야" },
+  { id: "mn", folder: "majjhima_nikaya", name: "Majjhima Nikāya", nameKo: "맛지마 니까야" },
+  { id: "sn", folder: "samyutta_nikaya", name: "Saṁyutta Nikāya", nameKo: "상윳따 니까야" },
+  { id: "an", folder: "anguttara_nikaya", name: "Aṅguttara Nikāya", nameKo: "앙굿따라 니까야" },
+  { id: "kn", folder: "khuddaka_nikaya", name: "Khuddaka Nikāya", nameKo: "쿳다까 니까야" },
+];
+
+/** 쿳다까 니까야 책 → 폴더 (원래 앱과 같은 이름) */
+const KN_BOOKS: Record<string, string> = {
+  kp: "khuddakapatha", dhp: "dhammapada", ud: "udana", iti: "itivuttaka", snp: "suttanipata",
+  vv: "vimanavatthu", pv: "petavatthu", thag: "theragatha", thig: "therigatha",
+  "tha-ap": "thera-apadana", "thi-ap": "theri-apadana", bv: "buddhavamsa", cp: "cariyapitaka",
+  ja: "jataka", mnd: "mahaniddesa", cnd: "culaniddesa", ps: "patisambhidamagga",
+  ne: "nettippakaraṇa", pe: "petakopadesa", mil: "milindapanha",
+};
+
+/** 원래 앱 판본 정보의 언어 이름 → 앱의 언어 코드 */
+const LANGUAGES: Record<string, Language> = { 빠알리어: "pli", 한국어: "ko", 영어: "en" };
+
+// ── 원본 자료 형식 ────────────────────────────────────────────
+interface RawNode {
+  id: string;
+  name?: string;
+  nameKo?: string;
+  description?: string;
+  range?: string;
+  children?: RawNode[];
+  suttas?: { id: string; name: string; nameKo?: string }[];
+}
+
+const rawNodeSchema: z.ZodType<RawNode> = z.lazy(() =>
+  z.object({
+    id: z.string(),
+    name: z.string().optional(),
+    nameKo: z.string().optional(),
+    description: z.string().optional(),
+    range: z.string().optional(),
+    children: z.array(rawNodeSchema).optional(),
+    suttas: z
+      .array(z.object({ id: z.string(), name: z.string(), nameKo: z.string().optional() }))
+      .optional(),
+  }),
+);
+const rawEditionListSchema = z.array(
+  z.object({ folder: z.string(), edition: z.string(), footnote: z.string().optional() }),
+);
+const rawTextSchema = z.record(z.string(), z.string());
+const registrySchema = z.record(
+  z.string(),
+  z.object({
+    label: z.string(),
+    badge: z.string().optional(),
+    language: z.string(),
+    allowCopy: z.boolean().optional(),
+  }),
+);
+type EditionList = z.infer<typeof rawEditionListSchema>;
+
+// ── 읽기 도우미 ──────────────────────────────────────────────
+const errors: string[] = [];
+const warnings: string[] = [];
+const readJson = (file: string): unknown => JSON.parse(readFileSync(file, "utf8"));
+const orNull = (s: string | undefined) => (s && s.trim() ? s.trim() : null);
+
+/**
+ * 경이 든 폴더와 판본 목록. 쿳다까 니까야는 책마다 따로 있다.
+ * base 는 본문(sutta_pitaka) 또는 대역(sutta_pitaka_nissaya) 폴더.
+ */
+const editionLists = new Map<string, { dir: string; list: EditionList }>();
+function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
+  const book = nikaya === "khuddaka_nikaya" ? suttaId.match(/^([a-z-]+?)(?=\d|$)/)?.[1] : undefined;
+  const dir = path.join(base, nikaya, ...(book && KN_BOOKS[book] ? [KN_BOOKS[book]] : []));
+  let found = editionLists.get(dir);
+  if (!found) {
+    const file = path.join(dir, "editions.json");
+    found = { dir, list: existsSync(file) ? rawEditionListSchema.parse(readJson(file)) : [] };
+    editionLists.set(dir, found);
+  }
+  return found;
+}
+
+/** sub: 판본 폴더 안의 경 경로 (suttaFilePath — 예: sn1/sn1.1) */
+function readText(dir: string, folder: string, sub: string, edition: string) {
+  for (const kind of ["root", "translation"]) {
+    const file = path.join(dir, folder, `${sub}_${kind}-${edition}.json`);
+    if (existsSync(file)) return rawTextSchema.parse(readJson(file));
+  }
+  return null;
+}
+
+function toSegments(raw: Record<string, string>): Segment[] {
+  return Object.entries(raw)
+    .map(([key, text]) => ({ key, parts: parseInline(text) }))
+    .filter((s) => s.parts.length > 0);
+}
+
+// ── 변환 ────────────────────────────────────────────────────
+const registry = registrySchema.parse(readJson(path.join(SOURCE_ROOT, "edition-registry.json")));
+const editionById = new Map<string, Edition>(
+  Object.entries(registry).map(([id, e]) => {
+    const language = LANGUAGES[e.language];
+    if (!language) errors.push(`${id}: 알 수 없는 언어 "${e.language}"`);
+    return [
+      id,
+      {
+        id,
+        label: e.label,
+        // 원래 앱의 badge 는 "김)" 처럼 닫는 괄호가 붙어 있어 뗀다. 없으면 이름 앞 두 글자.
+        badge: (e.badge ?? "").replace(/\)\s*$/, "").trim() || e.label.slice(0, 2),
+        language: language ?? "ko",
+        translator: language === "pli" ? null : e.label,
+        license: null,
+        allowCopy: e.allowCopy ?? true,
+      },
+    ];
+  }),
+);
+const usedEditions = new Set<string>();
+const texts: SuttaText[] = [];
+const notesFiles: SuttaNotes[] = [];
+const nissayaFiles: SuttaNissaya[] = [];
+
+function buildSutta(
+  nikaya: (typeof NIKAYAS)[number],
+  raw: { id: string; name: string; nameKo?: string },
+): CatalogSutta {
+  const id = toSuttaId(raw.id);
+  const { dir, list: editionList } = editionsFor(nikaya.folder, id);
+  const sub = suttaFilePath(raw.id);
+  const sutta: CatalogSutta = {
+    id,
+    sourceId: raw.id,
+    name: raw.name,
+    nameKo: orNull(raw.nameKo),
+    editions: [],
+    noteEditions: [],
+    nissaya: [],
+  };
+
+  const rootEntry = editionList.find((e) => e.edition === ROOT_EDITION);
+  const root = rootEntry ? readText(dir, rootEntry.folder, sub, ROOT_EDITION) : null;
+
+  for (const entry of editionList) {
+    const raw = entry.edition === ROOT_EDITION ? root : readText(dir, entry.folder, sub, entry.edition);
+    if (!raw) continue;
+    const where = `${id} ${entry.edition}`;
+    if (!editionById.has(entry.edition)) errors.push(`${where}: edition-registry.json 에 판본 정보가 없습니다`);
+    if (!root) {
+      errors.push(`${where}: 빠알리 원문(${ROOT_EDITION}) 없이 번역만 있습니다`);
+      continue;
+    }
+    // 번역에 원문에 없는 문장 번호가 있으면 오류. 다른 빠알리 판본(PTS 등)은 줄 나눔이 달라 경고만 한다.
+    const extra = Object.keys(raw).filter((key) => !(key in root));
+    if (extra.length) {
+      const message = `${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`;
+      if (editionById.get(entry.edition)?.language === "pli") warnings.push(message);
+      else errors.push(message);
+    }
+
+    const segments = toSegments(raw);
+    texts.push({ suttaId: id, editionId: entry.edition, segments });
+    sutta.editions.push(entry.edition);
+    usedEditions.add(entry.edition);
+
+    // 각주: 본문의 (문장, 각주 번호)와 각주 파일이 1:1 로 맞아야 한다.
+    // 같은 번호의 각주가 두 문장에 붙기도 해서(dn22 71번) 번호만으로는 찾지 않는다.
+    const marks = new Set(segments.flatMap((s) => noteMarks(s.parts).map((m) => `${s.key} ${m})`)));
+    const noteFile = entry.footnote
+      ? path.join(dir, entry.footnote, `${sub}_comment-${entry.edition}.json`)
+      : null;
+    if (!noteFile || !existsSync(noteFile)) {
+      if (marks.size) errors.push(`${where}: 각주 번호 ${marks.size}개가 있는데 각주 파일이 없습니다`);
+      continue;
+    }
+    let noteJson: unknown;
+    try {
+      noteJson = readJson(noteFile);
+    } catch {
+      // 원래 사이트의 파일 자체가 깨졌다(따옴표 누락 등). 이 판본의 각주 번호는 누를 수 없게 둔다.
+      warnings.push(`${where}: 원래 사이트의 각주 파일 형식이 깨져 각주 ${marks.size}개를 뺐습니다 (${path.basename(noteFile)})`);
+      continue;
+    }
+    const notes: Footnote[] = [];
+    for (const [key, text] of Object.entries(rawTextSchema.parse(noteJson))) {
+      const { notes: split, leftover } = splitNotes(text);
+      // 각주 번호 앞의 따옴표 한 글자는 원본 입력 실수라 무시한다.
+      if (split.length === 0) {
+        warnings.push(`${where} ${key}: 각주 파일에 각주가 아닌 글이 있어 뺐습니다 "${leftover.slice(0, 20)}"`);
+        continue;
+      }
+      if (leftover && !/^[\s‘’“”'"]*$/.test(leftover)) {
+        errors.push(`${where} ${key}: 각주 번호 없이 시작하는 글자 "${leftover.slice(0, 20)}"`);
+      }
+      for (const note of split) {
+        if (!marks.has(`${key} ${note.mark})`)) {
+          errors.push(`${where} ${key}: 각주 ${note.mark}) 가 본문의 같은 문장에 없습니다`);
+        }
+        notes.push({ mark: note.mark, key, parts: parseInline(note.text) });
+      }
+    }
+    const missing = [...marks].filter((m) => !notes.some((n) => `${n.key} ${n.mark})` === m));
+    if (missing.length) errors.push(`${where}: 각주 내용이 없는 곳 ${missing.join(", ")}`);
+    notesFiles.push({ suttaId: id, editionId: entry.edition, notes });
+    sutta.noteEditions.push(entry.edition);
+  }
+
+  // 대역: <판본 폴더>/<경>_root-nissaya-<판본>.json. 빈 칸은 뺀다. 문장 번호는 원문에 있어야 한다.
+  const nissaya = editionsFor(nikaya.folder, id, NISSAYA_SOURCE);
+  for (const entry of nissaya.list) {
+    const file = path.join(nissaya.dir, entry.folder, `${sub}_root-nissaya-${entry.edition}.json`);
+    if (!existsSync(file) || !root) continue;
+    const where = `${id} 대역 ${entry.edition}`;
+    if (!editionById.has(entry.edition)) errors.push(`${where}: edition-registry.json 에 판본 정보가 없습니다`);
+    const entries = Object.fromEntries(
+      Object.entries(rawTextSchema.parse(readJson(file))).filter(([, text]) => text.trim()),
+    );
+    const extra = Object.keys(entries).filter((key) => !(key in root));
+    if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
+    if (Object.keys(entries).length === 0) continue;
+    nissayaFiles.push({ suttaId: id, editionId: entry.edition, entries });
+    sutta.nissaya.push(entry.edition);
+    usedEditions.add(entry.edition);
+  }
+  return sutta;
+}
+
+function buildNode(nikaya: (typeof NIKAYAS)[number], raw: RawNode): CatalogNode {
+  return {
+    id: raw.id,
+    name: orNull(raw.name),
+    nameKo: orNull(raw.nameKo),
+    description: orNull(raw.description),
+    range: orNull(raw.range),
+    children: (raw.children ?? []).map((child) => buildNode(nikaya, child)),
+    suttas: (raw.suttas ?? []).map((s) => buildSutta(nikaya, s)),
+  };
+}
+
+const catalog: Catalog = {
+  nikayas: NIKAYAS.map((nikaya) => {
+    const nodes = z
+      .array(rawNodeSchema)
+      .parse(readJson(path.join(SOURCE, nikaya.folder, "structure.json")))
+      .map((node) => buildNode(nikaya, node));
+    return { id: nikaya.id, name: nikaya.name, nameKo: nikaya.nameKo, nodes };
+  }),
+};
+
+// 같은 주소가 두 번 나오면 경 하나가 다른 경을 가린다.
+const allSuttas = catalog.nikayas.flatMap((n) => n.nodes.flatMap(function collect(node): CatalogSutta[] {
+  return [...node.suttas, ...node.children.flatMap(collect)];
+}));
+const seen = new Set<string>();
+for (const s of allSuttas) {
+  if (seen.has(s.id)) errors.push(`${s.id}: 같은 경 번호가 목록에 두 번 있습니다`);
+  seen.add(s.id);
+}
+
+if (errors.length) {
+  console.error(`변환 실패 — 오류 ${errors.length}건. 아무 파일도 쓰지 않았습니다.`);
+  for (const e of errors) console.error(`  - ${e}`);
+  process.exit(1);
+}
+
+// ── 쓰기 (쓰기 전에 앱이 읽을 형식인지 한 번 더 검사) ──────────────
+// 판본 순서: 빠알리 → 한국어 → 영어, 같은 언어 안에서는 원래 판본 정보의 순서
+const LANGUAGE_ORDER: Language[] = ["pli", "ko", "en"];
+const editions: Edition[] = [...editionById.values()]
+  .filter((e) => usedEditions.has(e.id))
+  .sort((a, b) => LANGUAGE_ORDER.indexOf(a.language) - LANGUAGE_ORDER.indexOf(b.language));
+mkdirSync(OUT_DATA, { recursive: true });
+writeFileSync(path.join(OUT_DATA, "catalog.json"), JSON.stringify(catalogSchema.parse(catalog)));
+writeFileSync(path.join(OUT_DATA, "editions.json"), JSON.stringify(editionsSchema.parse(editions)));
+
+rmSync(OUT_SUTTAS, { recursive: true, force: true });
+for (const text of texts) {
+  const dir = path.join(OUT_SUTTAS, text.suttaId);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(path.join(dir, `${text.editionId}.json`), JSON.stringify(suttaTextSchema.parse(text)));
+}
+for (const notes of notesFiles) {
+  writeFileSync(
+    path.join(OUT_SUTTAS, notes.suttaId, `${notes.editionId}.notes.json`),
+    JSON.stringify(suttaNotesSchema.parse(notes)),
+  );
+}
+for (const nissaya of nissayaFiles) {
+  writeFileSync(
+    path.join(OUT_SUTTAS, nissaya.suttaId, `${nissaya.editionId}.nissaya.json`),
+    JSON.stringify(suttaNissayaSchema.parse(nissaya)),
+  );
+}
+if (nissayaFiles.length) {
+  console.log(`대역: ${nissayaFiles.map((n) => `${n.suttaId}(${n.editionId})`).join(", ")}`);
+}
+
+// ── 검색 색인: 언어별 "단어 → { 경|판본 → 문장 번호들 }", 단어 앞글자별 조각 ─────────
+rmSync(OUT_SEARCH, { recursive: true, force: true });
+const searchShards = new Map<string, SearchShard>(); // "언어/조각" → 조각
+for (const text of texts) {
+  const language = editionById.get(text.editionId)?.language ?? "ko";
+  const doc = `${text.suttaId}|${text.editionId}`;
+  for (const segment of text.segments) {
+    if (rowKind(segment.key, text.suttaId) === "hidden") continue;
+    for (const token of tokenize(plainText(segment.parts), language)) {
+      const shardKey = `${language}/${searchShardName(token)}`;
+      const shard = searchShards.get(shardKey) ?? {};
+      const docs = (shard[token] ??= {});
+      (docs[doc] ??= []).push(segment.key);
+      searchShards.set(shardKey, shard);
+    }
+  }
+}
+let searchBytes = 0;
+for (const [shardKey, shard] of searchShards) {
+  const file = path.join(OUT_SEARCH, `${shardKey}.json`);
+  mkdirSync(path.dirname(file), { recursive: true });
+  const json = JSON.stringify(shard);
+  searchBytes += json.length;
+  writeFileSync(file, json);
+}
+console.log(`검색 색인: 조각 ${searchShards.size}개, ${(searchBytes / 1e6).toFixed(1)}MB`);
+
+// ── 보고 ────────────────────────────────────────────────────
+const withText = allSuttas.filter((s) => s.editions.length > 0);
+console.log(`경전 목록: ${allSuttas.length}개 경 (본문 있음 ${withText.length}개)`);
+for (const n of catalog.nikayas) {
+  const count = n.nodes.flatMap(function collect(node): CatalogSutta[] {
+    return [...node.suttas, ...node.children.flatMap(collect)];
+  }).length;
+  console.log(`  ${n.nameKo}: ${count}`);
+}
+// 판본별 합계 (경이 많아지면 경마다 줄을 찍지 않는다)
+const byEdition = new Map<string, { 경: number; 문장: number; 각주: number }>();
+for (const t of texts) {
+  const row = byEdition.get(t.editionId) ?? { 경: 0, 문장: 0, 각주: 0 };
+  row.경++;
+  row.문장 += t.segments.length;
+  row.각주 +=
+    notesFiles.find((n) => n.suttaId === t.suttaId && n.editionId === t.editionId)?.notes.length ?? 0;
+  byEdition.set(t.editionId, row);
+}
+console.table(Object.fromEntries(byEdition));
+console.log(`본문 있는 경: ${withText.map((s) => s.id).join(", ")}`);
+for (const w of warnings) console.warn(`경고: ${w}`);
+console.log("변환 오류: 0건");
