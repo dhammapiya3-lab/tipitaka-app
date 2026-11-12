@@ -424,7 +424,7 @@ export function SuttaView({
         {inFocus ? null : (
           // 마우스를 올리면 누를 수 있다는 것을 알린다
           <span className="mr-auto hidden items-center gap-0.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover/head:opacity-100 group-focus-visible/head:opacity-100 sm:inline-flex print:hidden">
-            이 문단만 보기
+            문단별로 보기
             <ChevronRight className="size-3.5" aria-hidden />
           </span>
         )}
@@ -462,7 +462,7 @@ export function SuttaView({
           <div
             role="button"
             tabIndex={0}
-            title="이 문단부터 한 문단씩 보기"
+            title="문단별로 보기"
             onClick={() => openParagraph(p)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
