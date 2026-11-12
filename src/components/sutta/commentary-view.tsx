@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fetchCommentary } from "@/lib/content";
 import type { CommentaryLayer, SuttaCommentary } from "@/types";
 
-const LAYER_NAME: Record<CommentaryLayer, string> = { attha: "주석서", tika: "복주석서" };
+export const LAYER_NAME: Record<CommentaryLayer, string> = { attha: "주석서", tika: "복주석서" };
 
 /**
  * 주석서·복주석서 — VRI 6차 결집본의 해당 문단들. 문단마다 이 경의 어느 문단을 풀이하는지 보여 주고,
@@ -80,18 +80,46 @@ export function CommentaryView({
         문단 {data.paras.length}개
       </p>
       {data.paras.map((para, i) => (
-        <section
-          key={i}
-          id={`${layer}-${i}`}
-          className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm"
-        >
-          <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-5 py-3 dark:border-border">
-            <h3 className="mr-auto text-sm font-bold">
-              {i + 1}
-              {para.vripara ? <span className="ml-2 text-xs font-medium text-faint">VRI {para.vripara}</span> : null}
-            </h3>
-            {para.refs.length ? <span className="text-xs text-faint">경 문단</span> : null}
-            {para.refs.map((ref) => (
+        <CommentaryCard key={i} layer={layer} index={i} para={para} onGoParagraph={onGoParagraph} onWord={onWord} />
+      ))}
+      <p className="px-1 text-xs leading-relaxed text-faint">
+        출처: VRI Chaṭṭha Saṅgāyana Tipiṭaka · 문단 연결 E-Piṭaka (CC BY-NC 4.0)
+      </p>
+    </div>
+  );
+}
+
+/** 주석서·복주석서 문단 하나 — 머리에 풀이하는 경 문단 번호(누르면 그 문단으로) */
+export function CommentaryCard({
+  layer,
+  index,
+  para,
+  onGoParagraph,
+  onWord,
+  label,
+}: {
+  layer: CommentaryLayer;
+  index: number;
+  para: SuttaCommentary["paras"][number];
+  onGoParagraph?: (paragraph: string) => void;
+  onWord: (word: string) => void;
+  /** 머리 왼쪽에 붙일 이름 (나란히 보기·문단 보기에서 "주석서" 등) */
+  label?: string;
+}) {
+  return (
+    <section
+      id={label ? undefined : `${layer}-${index}`}
+      className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm"
+    >
+      <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-5 py-3 dark:border-border">
+        <h3 className="mr-auto text-sm font-bold">
+          {label ? <span className="mr-2 text-primary">{label}</span> : null}
+          {index + 1}
+          {para.vripara ? <span className="ml-2 text-xs font-medium text-faint">VRI {para.vripara}</span> : null}
+        </h3>
+        {para.refs.length && onGoParagraph ? <span className="text-xs text-faint">경 문단</span> : null}
+        {onGoParagraph
+          ? para.refs.map((ref) => (
               <button
                 key={ref}
                 type="button"
@@ -101,20 +129,16 @@ export function CommentaryView({
               >
                 {ref.slice(ref.indexOf(":") + 1)}
               </button>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3 px-5 py-4 font-pali text-gray-800 dark:text-foreground" lang="pi">
-            {para.lines.map((parts, j) => (
-              <p key={j}>
-                <InlineText parts={parts} onWord={onWord} />
-              </p>
-            ))}
-          </div>
-        </section>
-      ))}
-      <p className="px-1 text-xs leading-relaxed text-faint">
-        출처: VRI Chaṭṭha Saṅgāyana Tipiṭaka · 문단 연결 E-Piṭaka (CC BY-NC 4.0)
-      </p>
-    </div>
+            ))
+          : null}
+      </div>
+      <div className="flex flex-col gap-3 px-5 py-4 font-pali text-gray-800 dark:text-foreground" lang="pi">
+        {para.lines.map((parts, j) => (
+          <p key={j}>
+            <InlineText parts={parts} onWord={onWord} />
+          </p>
+        ))}
+      </div>
+    </section>
   );
 }

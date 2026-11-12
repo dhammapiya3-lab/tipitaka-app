@@ -13,7 +13,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
-import { CommentaryView } from "@/components/sutta/commentary-view";
+import { CommentaryCard, CommentaryView, LAYER_NAME } from "@/components/sutta/commentary-view";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
@@ -48,7 +48,7 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
 import { useSettingsStore } from "@/store/settings";
-import type { AnalysisKind, CommentaryLayer, Edition } from "@/types";
+import type { AnalysisKind, CommentaryLayer, Edition, SuttaCommentary } from "@/types";
 
 export interface SuttaLink {
   id: string;
@@ -133,23 +133,27 @@ export function SuttaView({
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
   const [layer, setLayer] = useState<"sutta" | "attha" | "tika">("sutta");
-  /** 경 문단 → 그 문단을 풀이한 주석서 문단 순번 (문단 머리의 "주석" 단추) */
-  const [commentaryOf, setCommentaryOf] = useState<Map<string, number>>(() => new Map());
+  /** 이어 붙인 주석서·복주석서 (작은 파일이라 경을 열 때 함께 받는다) */
+  const [comm, setComm] = useState<Partial<Record<CommentaryLayer, SuttaCommentary>>>({});
   useEffect(() => {
-    if (!commentary.includes("attha")) return;
     let alive = true;
-    fetchCommentary(suttaId, "attha")
-      .then((data) => {
-        if (!alive) return;
-        const map = new Map<string, number>();
-        data.paras.forEach((para, i) => para.refs.forEach((ref) => map.has(ref) || map.set(ref, i)));
-        setCommentaryOf(map);
-      })
-      .catch(() => {});
+    for (const l of commentary) {
+      fetchCommentary(suttaId, l)
+        .then((data) => alive && setComm((cur) => ({ ...cur, [l]: data })))
+        .catch(() => {});
+    }
     return () => {
       alive = false;
     };
   }, [commentary, suttaId]);
+  /** 경 문단 → 그 문단을 풀이한 주석서 문단 순번 (문단 머리의 "주석" 단추) */
+  const commentaryOf = useMemo(() => {
+    const map = new Map<string, number>();
+    comm.attha?.paras.forEach((para, i) => para.refs.forEach((ref) => map.has(ref) || map.set(ref, i)));
+    return map;
+  }, [comm.attha]);
+  /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
+  const [parallelPref, setParallel] = useState(true);
   function openCommentary(i: number) {
     setLayer("attha");
     requestAnimationFrame(() =>
@@ -391,13 +395,18 @@ export function SuttaView({
 
   const articleStyle: CSSProperties = { fontSize, lineHeight };
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
-  const columns = isDesktop && shown.length > 1;
+  /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
+  const parallel = isDesktop && parallelPref && commentary.length > 0 && layer === "sutta";
+  const parallelLayers = commentary.filter((l) => comm[l]);
+  const columns = isDesktop && shown.length > 1 && !parallel;
   /**
    * 본문 폭 — 게송처럼 짧은 줄은 어플처럼 가운데 알맞은 폭으로 모으고, 판본을 나란히 놓으면 그만큼 넓힌다.
    * (게송 경: 법구경처럼 경 안에 게송 번호가 있는 경)
    */
   const verse = textRows.some((r) => unitOf(r.key, suttaId) !== null);
-  const readWidth = columns
+  const readWidth = parallel
+    ? "max-w-none"
+    : columns
     ? shown.length === 2
       ? verse
         ? "max-w-3xl"
@@ -442,6 +451,65 @@ export function SuttaView({
     .map((seg) => plainText(seg.parts).trim())
     .filter(Boolean)
     .at(-1);
+
+  const onCommentaryWord = (w: string) =>
+    setWord({ word: w, rowKey: "commentary", keys: [], tab: "dictionary", title: "", pali: "" });
+  /** 나란히 보기에서 경 문단마다 붙일 주석 문단 — 풀이하는 첫 경 문단에 둔다 */
+  const commentaryRows = new Map<string, Partial<Record<CommentaryLayer, number[]>>>();
+  for (const l of parallelLayers) {
+    comm[l]!.paras.forEach((para, i) => {
+      const at = paragraphList.includes(para.refs[0] ?? "") ? para.refs[0] : paragraphList[0];
+      if (!at) return;
+      const row = commentaryRows.get(at) ?? {};
+      (row[l] ??= []).push(i);
+      commentaryRows.set(at, row);
+    });
+  }
+  /** 문단 보기: 이 문단을 풀이한 주석 문단 전부 */
+  const commentaryFor = (p: string) =>
+    Object.fromEntries(
+      parallelLayers.map((l) => [l, comm[l]!.paras.flatMap((para, i) => (para.refs.includes(p) ? [i] : []))]),
+    ) as Partial<Record<CommentaryLayer, number[]>>;
+  const commentaryCards = (l: CommentaryLayer, ids: number[] | undefined, label?: boolean) =>
+    (ids ?? []).map((i) => (
+      <CommentaryCard
+        key={`${l}-${i}`}
+        layer={l}
+        index={i}
+        para={comm[l]!.paras[i]}
+        onWord={onCommentaryWord}
+        label={label ? LAYER_NAME[l] : undefined}
+      />
+    ));
+  /** 경 문단 하나와 그 주석을 한 줄에 (나란히 보기) */
+  const parallelRow = (p: string, cells: Partial<Record<CommentaryLayer, number[]>>, card: React.ReactNode) => (
+    <div
+      key={p}
+      className="grid items-start gap-4"
+      style={{ gridTemplateColumns: `minmax(0,1.15fr) repeat(${parallelLayers.length}, minmax(0,1fr))` }}
+    >
+      <div className="flex min-w-0 flex-col gap-2">{card}</div>
+      {parallelLayers.map((l) => (
+        <div key={l} className="flex min-w-0 flex-col gap-3 text-[0.94em]">
+          {commentaryCards(l, cells[l])}
+        </div>
+      ))}
+    </div>
+  );
+
+  const parallelHeader = (
+    <div
+      className="sticky top-0 z-10 -mb-1 grid gap-4 bg-background/95 py-2 text-sm font-bold backdrop-blur"
+      style={{ gridTemplateColumns: `minmax(0,1.15fr) repeat(${parallelLayers.length}, minmax(0,1fr))` }}
+    >
+      <span>경</span>
+      {parallelLayers.map((l) => (
+        <span key={l} className="truncate">
+          {LAYER_NAME[l]} <span className="font-pali text-xs font-medium text-faint">{comm[l]!.bookName}</span>
+        </span>
+      ))}
+    </div>
+  );
 
   function paragraphCard(p: string, inFocus: boolean) {
     const keys = paragraphs.get(p) ?? [];
@@ -658,6 +726,20 @@ export function SuttaView({
               {label}
             </button>
           ))}
+          {isDesktop && commentary.length > 0 && layer === "sutta" ? (
+            <button
+              type="button"
+              aria-pressed={parallelPref}
+              onClick={() => setParallel((v) => !v)}
+              title="경 · 주석서 · 복주석서를 문단마다 나란히 봅니다"
+              className={cn(
+                "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
+                parallelPref ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
+              )}
+            >
+              {parallelPref ? "✓ " : ""}주석 나란히 보기
+            </button>
+          ) : null}
         </div>
 
         {layer !== "sutta" ? (
@@ -754,13 +836,31 @@ export function SuttaView({
                 {waiting
                   ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)
                   : focus
-                    ? (
+                    ? parallel
+                      ? (
+                          <>
+                            {parallelHeader}
+                            {parallelRow(focus, commentaryFor(focus), <>{headingBlock(focus)}{paragraphCard(focus, true)}</>)}
+                          </>
+                        )
+                      : (
                         <>
                           {headingBlock(focus)}
                           {paragraphCard(focus, true)}
+                          {/* 문단 보기: 이 문단의 주석서 · 복주석서 */}
+                          {parallelLayers.flatMap((l) => commentaryCards(l, commentaryFor(focus)[l], true))}
                         </>
                       )
-                    : paragraphList.map((p) => (
+                    : parallel
+                      ? (
+                          <>
+                            {parallelHeader}
+                            {paragraphList.map((p) =>
+                              parallelRow(p, commentaryRows.get(p) ?? {}, <>{headingBlock(p)}{paragraphCard(p, false)}</>),
+                            )}
+                          </>
+                        )
+                      : paragraphList.map((p) => (
                         <div key={p} className="flex flex-col gap-2">
                           {headingBlock(p)}
                           {paragraphCard(p, false)}
@@ -771,7 +871,7 @@ export function SuttaView({
           </>
         )}
       </div>
-      {isDesktop ? (
+      {isDesktop && !parallel ? (
         <div className="hidden pt-3 lg:block">
           <ReaderSide
             panel={panel}
@@ -788,7 +888,7 @@ export function SuttaView({
       ) : null}
       </div>
 
-      {!isDesktop ? (
+      {!isDesktop || parallel ? (
         <WordSheet target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
       ) : null}
 
