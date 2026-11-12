@@ -1,0 +1,37 @@
+{
+  "pli-ms":       { "label": "Mahāsaṅgīti Tipiṭaka Buddhavasse 2500", "badge": "M)", "badgeColor": "bg-gray-600", "language": "빠알리어"},
+  "pli-pts":      { "label": "Pāli Text Society",                      "badge": "P)", "badgeColor": "bg-gray-600", "language": "빠알리어"},
+
+  "kor-koreatheravada": { "label": "한국테라와다불교 교단", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어"},
+
+  "kor-koreamahasi-dhammagandha" : { "label": "한국마하시 사야도 (담)", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-mingun-dhammagandha": { "label": "밍군 사야도 (담)", "badge": "밍)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-dhammagandha": { "label": "담마간다 스님", "badge": "담)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-kavissara": { "label": "까윗사라 스님", "badge": "까)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-sangharakkhita": { "label": "상가락키따 스님", "badge": "상)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  
+  "kor-manapika" :{"label": "마나삐까 아야", "badge": "마", "badgeColor": "bg-amber-700", "language": "한국어" },  
+
+  "kor-moonyum": { "label": "무념 스님", "badge": "무)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-beophyun":  { "label": "법현 스님", "badge": "법)", "badgeColor": "bg-amber-700", "language": "한국어", "allowCopy": false},
+  "kor-seonil": { "label": "선일 스님", "badge": "선)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-seongchan": { "label": "성찬 스님", "badge": "성)", "badgeColor": "bg-amber-700", "language": "한국어"},
+
+  "kor-hyuneum-calmvoice": { "label": "현음 스님(고요한소리)", "badge": "현)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-gyuhye-calmvoice": { "label": "규혜 스님(고요한소리)", "badge": "규)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-jeongseungseok-calmvoice": { "label": "정승석(고요한소리)", "badge": "정)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-kangdaejahaeng-calmvoice": { "label": "강대자행(고요한소리)", "badge": "강)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-baekdosoo-calmvoice": { "label": "백도수(고요한소리)", "badge": "백)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-jeonchaerin-calmvoice": { "label": "전채린(고요한소리)", "badge": "전)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-kimjaeseong-calmvoice": { "label": "김재성(고요한소리)", "badge": "김)", "badgeColor": "bg-amber-700", "language": "한국어"},
+
+  
+
+  "kor-ohwontak": { "label": "오원탁", "badge": "오)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-kimjaeseong": { "label": "김재성", "badge": "김)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-myowon": { "label": "묘원", "badge": "묘)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  
+  "kor-gemini":   { "label": "Gemini 번역", "badge": "제)", "badgeColor": "bg-amber-700", "language": "한국어"},
+
+  "en-sujato":    { "label": "Bhikkhu Sujato", "badge": "S)", "badgeColor": "bg-gray-500", "language": "영어"}
+}

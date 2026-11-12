@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     template: `%s | ${SERVICE_NAME}`,
   },
   description: `${SERVICE_TAGLINE} — 빠알리 원문과 여러 번역을 문장마다 나란히 놓고 읽습니다.`,
+  // 시험 사이트는 검색 엔진에 나오지 않게 한다. 사이트를 올리는 곳에서 NEXT_PUBLIC_NOINDEX=1 로 켠다.
+  ...(process.env.NEXT_PUBLIC_NOINDEX === "1" ? { robots: { index: false, follow: false } } : {}),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

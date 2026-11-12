@@ -10,7 +10,8 @@
     "test": "vitest run --passWithNoTests",
     "build:content": "tsx scripts/build-content.ts",
     "build:dictionary": "tsx scripts/build-dictionary.ts",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "build:site": "node scripts/fetch-private.mjs && tsx scripts/build-content.ts && next build"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

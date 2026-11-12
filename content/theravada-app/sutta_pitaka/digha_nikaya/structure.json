@@ -1,0 +1,199 @@
+[
+  {
+    "id": "silakkhandha",
+    "nameKo": "계온품",
+    "name": "Sīlakkhandhavagga",
+    "description": "계의 다발에 대한 품",
+    "range" : "DN 1-13",
+    "suttas": [
+      {
+        "id": "dn.1",
+        "name": "Brahmajālasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.2",
+        "name": "Sāmaññaphalasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.3",
+        "name": "Ambaṭṭhasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.4",
+        "name": "Soṇadaṇḍasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.5",
+        "name": "Kūṭadantasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.6",
+        "name": "Mahālisutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.7",
+        "name": "Jāliyasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.8",
+        "name": "Mahāsīhanādasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.9",
+        "name": "Poṭṭhapādasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.10",
+        "name": "Subhasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.11",
+        "name": "Kevaṭṭasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.12",
+        "name": "Lohiccasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.13",
+        "name": "Tevijjasutta",
+        "nameKo": ""
+      }
+    ]
+  },
+  {
+    "id": "maha",
+    "nameKo": "대품",
+    "name": "Mahāvagga",
+    "description": "큰 경전들의 품",
+    "range" : "DN 14-23",
+    "suttas": [
+      {
+        "id": "dn.14",
+        "name": "Mahāpadānasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.15",
+        "name": "Mahānidānasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.16",
+        "name": "Mahāparinibbānasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.17",
+        "name": "Mahāsudassanasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.18",
+        "name": "Janavasabhasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.19",
+        "name": "Mahāgovindasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.20",
+        "name": "Mahāsamayasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.21",
+        "name": "Sakkapañhasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.22",
+        "name": "Mahāsatipaṭṭhānasutta",
+        "nameKo": "대념처경"
+      },
+      {
+        "id": "dn.23",
+        "name": "Pāyāsisutta",
+        "nameKo": ""
+      }
+    ]
+  },
+  {
+    "id": "pathika",
+    "nameKo": "빠티까품",
+    "name": "Pāthikavagga",
+    "description": "빠티까에 대한 품",
+    "range" : "DN 24-34",
+    "suttas": [
+      {
+        "id": "dn.24",
+        "name": "Pāthikasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.25",
+        "name": "Udumbarikasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.26",
+        "name": "Cakkavattisutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.27",
+        "name": "Aggaññasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.28",
+        "name": "Sampasādanīyasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.29",
+        "name": "Pāsādikasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.30",
+        "name": "Lakkhaṇasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.31",
+        "name": "Siṅgālasutta",
+        "nameKo": "싱갈라 경"
+      },
+      {
+        "id": "dn.32",
+        "name": "Āṭānāṭiyasutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.33",
+        "name": "Saṅgītisutta",
+        "nameKo": ""
+      },
+      {
+        "id": "dn.34",
+        "name": "Dasuttarasutta",
+        "nameKo": ""
+      }
+    ]
+  }
+]

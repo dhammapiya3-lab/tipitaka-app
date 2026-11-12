@@ -1,0 +1,924 @@
+[
+  {
+    "id": "mulapannasa",
+    "nameKo": "근본오십경",
+    "name": "Mūlapaṇṇāsa",
+    "description": "근본 50가지 경전들",
+    "range": "MN 1-50",
+    "children": [
+      {
+        "id": "mulapariyaya",
+        "nameKo": "근본법문품",
+        "name": "",
+        "description": "Mūlapariyāyavagga",
+        "range": "MN 1-10",
+        "suttas": [
+          {
+            "id": "mn.1",
+            "name": "Mūlapariyāyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.2",
+            "name": "Sabbāsavasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.3",
+            "name": "Dhammadāyādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.4",
+            "name": "Bhayabheravasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.5",
+            "name": "Anaṅgaṇasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.6",
+            "name": "Ākaṅkheyyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.7",
+            "name": "Vatthasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.8",
+            "name": "Sallekhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.9",
+            "name": "Sammādiṭṭhisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.10",
+            "name": "Satipaṭṭhānasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "sihanada",
+        "nameKo": "사자후품",
+        "name": "",
+        "description": "Sīhanādavagga",
+        "range": "MN 11-20",
+        "suttas": [
+          {
+            "id": "mn.11",
+            "name": "Cūḷasīhanādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.12",
+            "name": "Mahāsīhanādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.13",
+            "name": "Mahādukkhakkhandhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.14",
+            "name": "Cūḷadukkhakkhandhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.15",
+            "name": "Anumānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.16",
+            "name": "Cetokhilasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.17",
+            "name": "Vanapatthasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.18",
+            "name": "Madhupiṇḍikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.19",
+            "name": "Dvedhāvitakkasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.20",
+            "name": "Vitakkasaṇṭhānasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "tatiya",
+        "nameKo": "제삼품",
+        "name": "",
+        "description": "Opammavagga",
+        "range": "MN 21-30",
+        "suttas": [
+          {
+            "id": "mn.21",
+            "name": "Kakacūpamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.22",
+            "name": "Alagaddūpamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.23",
+            "name": "Vammikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.24",
+            "name": "Rathavinītasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.25",
+            "name": "Nivāpasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.26",
+            "name": "Pāsarāsisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.27",
+            "name": "Cūḷahatthipadopamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.28",
+            "name": "Mahāhatthipadopamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.29",
+            "name": "Mahāsāropamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.30",
+            "name": "Cūḷasāropamasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "mahayamaka",
+        "nameKo": "대쌍품",
+        "name": "",
+        "description": "Mahāyamakavagga",
+        "range": "MN 31-40",
+        "suttas": [
+          {
+            "id": "mn.31",
+            "name": "Cūḷagosiṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.32",
+            "name": "Mahāgosiṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.33",
+            "name": "Mahāgopālakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.34",
+            "name": "Cūḷagopālakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.35",
+            "name": "Cūḷasaccakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.36",
+            "name": "Mahāsaccakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.37",
+            "name": "Cūḷataṇhāsaṅkhayasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.38",
+            "name": "Mahātaṇhāsaṅkhayasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.39",
+            "name": "Mahāassapurasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.40",
+            "name": "Cūḷaassapurasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "culayamaka",
+        "nameKo": "소쌍품",
+        "name": "",
+        "description": "Cūḷayamakavagga",
+        "range": "MN 41-50",
+        "suttas": [
+          {
+            "id": "mn.41",
+            "name": "Sāleyyakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.42",
+            "name": "Verañjakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.43",
+            "name": "Mahāvedallasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.44",
+            "name": "Cūḷavedallasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.45",
+            "name": "Cūḷadhammasamādānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.46",
+            "name": "Mahādhammasamādānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.47",
+            "name": "Vīmaṁsakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.48",
+            "name": "Kosambiyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.49",
+            "name": "Brahmanimantanikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.50",
+            "name": "Māratajjanīyasutta",
+            "nameKo": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "majjhimapannasa",
+    "nameKo": "중간오십경",
+    "name": "Majjhimapaṇṇāsa",
+    "description": "중간 50가지 경전들",
+    "range": "MN 51-100",
+    "children": [
+      {
+        "id": "gahapati",
+        "nameKo": "재가자품",
+        "name": "",
+        "description": "Gahapativagga",
+        "range": "MN 51-60",
+        "suttas": [
+          {
+            "id": "mn.51",
+            "name": "Kandarakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.52",
+            "name": "Aṭṭhakanāgarasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.53",
+            "name": "Sekhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.54",
+            "name": "Potaliyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.55",
+            "name": "Jīvakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.56",
+            "name": "Upālisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.57",
+            "name": "Kukkuravatikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.58",
+            "name": "Abhayarājakumārasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.59",
+            "name": "Bahuvedanīyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.60",
+            "name": "Apaṇṇakasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "bhikkhu",
+        "nameKo": "비구품",
+        "name": "",
+        "description": "Bhikkhuvagga",
+        "range": "MN 61-70",
+        "suttas": [
+          {
+            "id": "mn.61",
+            "name": "Ambalaṭṭhikarāhulovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.62",
+            "name": "Mahārāhulovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.63",
+            "name": "Cūḷamālukyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.64",
+            "name": "Mahāmālukyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.65",
+            "name": "Bhaddālisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.66",
+            "name": "Laṭukikopamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.67",
+            "name": "Cātumasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.68",
+            "name": "Naḷakapānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.69",
+            "name": "Goliyānisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.70",
+            "name": "Kīṭāgirisutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "paribbajaka",
+        "nameKo": "유행자품",
+        "name": "",
+        "description": "Paribbājakavagga",
+        "range": "MN 71-80",
+        "suttas": [
+          {
+            "id": "mn.71",
+            "name": "Tevijjavacchasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.72",
+            "name": "Aggivacchasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.73",
+            "name": "Mahāvacchasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.74",
+            "name": "Dīghanakhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.75",
+            "name": "Māgaṇḍiyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.76",
+            "name": "Sandakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.77",
+            "name": "Mahāsakuludāyisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.78",
+            "name": "Samaṇamuṇḍikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.79",
+            "name": "Cūḷasakuludāyisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.80",
+            "name": "Vekhanasasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "raja",
+        "nameKo": "왕품",
+        "name": "",
+        "description": "Rājavagga",
+        "range": "MN 81-90",
+        "suttas": [
+          {
+            "id": "mn.81",
+            "name": "Ghaṭikārasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.82",
+            "name": "Raṭṭhapālasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.83",
+            "name": "Maghadevasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.84",
+            "name": "Madhurasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.85",
+            "name": "Bodhirājakumārasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.86",
+            "name": "Aṅgulimālasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.87",
+            "name": "Piyajātikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.88",
+            "name": "Bāhitikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.89",
+            "name": "Dhammacetiyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.90",
+            "name": "Kaṇṇakatthalasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "brahmana",
+        "nameKo": "바라문품",
+        "name": "",
+        "description": "Brāhmaṇavagga",
+        "range": "MN 91-100",
+        "suttas": [
+          {
+            "id": "mn.91",
+            "name": "Brahmāyusutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.92",
+            "name": "Selasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.93",
+            "name": "Assalāyanasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.94",
+            "name": "Ghoṭamukhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.95",
+            "name": "Caṅkīsutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.96",
+            "name": "Esukārīsutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.97",
+            "name": "Dhanañjānisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.98",
+            "name": "Vāseṭṭhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.99",
+            "name": "Subhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.100",
+            "name": "Saṅgāravasutta",
+            "nameKo": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "uparipannasa",
+    "nameKo": "후오십경",
+    "name": "Uparipaṇṇāsa",
+    "description": "나머지 52가지 경전들",
+    "range": "MN 101-152",
+    "children": [
+      {
+        "id": "devadaha",
+        "nameKo": "데와다하품",
+        "name": "",
+        "description": "Devadahavagga",
+        "range": "MN 101-110",
+        "suttas": [
+          {
+            "id": "mn.101",
+            "name": "Devadahasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.102",
+            "name": "Pañcattayasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.103",
+            "name": "Kintisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.104",
+            "name": "Sāmagāmasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.105",
+            "name": "Sunakkhattasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.106",
+            "name": "Āneñjasappāyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.107",
+            "name": "Gaṇakamoggallānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.108",
+            "name": "Gopakamoggallānasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.109",
+            "name": "Mahāpuṇṇamasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.110",
+            "name": "Cūḷapuṇṇamasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "anupadha",
+        "nameKo": "집착없음품",
+        "name": "",
+        "description": "Anupādavagga",
+        "range": "MN 111-120",
+        "suttas": [
+          {
+            "id": "mn.111",
+            "name": "Anupadasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.112",
+            "name": "Chabbisodhanasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.113",
+            "name": "Sappurisasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.114",
+            "name": "Sevitabbāsevitabbasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.115",
+            "name": "Bahudhātukasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.116",
+            "name": "Isigilisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.117",
+            "name": "Mahācattārīsakasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.118",
+            "name": "Ānāpānassatisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.119",
+            "name": "Kāyagatāsatisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.120",
+            "name": "Saṅkhārupapattisutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "suññata",
+        "nameKo": "공품",
+        "name": "",
+        "description": "Suññatavagga",
+        "range": "MN 121-130",
+        "suttas": [
+          {
+            "id": "mn.121",
+            "name": "Cūḷasuññatasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.122",
+            "name": "Mahāsuññatasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.123",
+            "name": "Acchariyaabbhutasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.124",
+            "name": "Bākulasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.125",
+            "name": "Dantabhūmisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.126",
+            "name": "Bhūmijasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.127",
+            "name": "Anuruddhasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.128",
+            "name": "Upakkilesasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.129",
+            "name": "Bālapaṇḍitasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.130",
+            "name": "Devadūtasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "vibhanga",
+        "nameKo": "분석품",
+        "name": "",
+        "description": "Vibhaṅgavagga",
+        "range": "MN 131-142",
+        "suttas": [
+          {
+            "id": "mn.131",
+            "name": "Bhaddekarattasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.132",
+            "name": "Ānandabhaddekarattasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.133",
+            "name": "Mahākaccānabhaddekarattasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.134",
+            "name": "Lomasakaṅgiyabhaddekarattasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.135",
+            "name": "Cūḷakammavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.136",
+            "name": "Mahākammavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.137",
+            "name": "Saḷāyatanavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.138",
+            "name": "Uddesavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.139",
+            "name": "Araṇavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.140",
+            "name": "Dhātuvibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.141",
+            "name": "Saccavibhaṅgasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.142",
+            "name": "Dakkhiṇāvibhaṅgasutta",
+            "nameKo": ""
+          }
+        ]
+      },
+      {
+        "id": "salayatana",
+        "nameKo": "육처품",
+        "name": "",
+        "description": "Saḷāyatanavagga",
+        "range": "MN 143-152",
+        "suttas": [
+          {
+            "id": "mn.143",
+            "name": "Anāthapiṇḍikovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.144",
+            "name": "Channovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.145",
+            "name": "Puṇṇovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.146",
+            "name": "Nandakovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.147",
+            "name": "Cūḷarāhulovādasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.148",
+            "name": "Chachakkasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.149",
+            "name": "Mahāsaḷāyatanikasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.150",
+            "name": "Nagaravindeyyasutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.151",
+            "name": "Piṇḍapātapārisuddhisutta",
+            "nameKo": ""
+          },
+          {
+            "id": "mn.152",
+            "name": "Indriyabhāvanāsutta",
+            "nameKo": ""
+          }
+        ]
+      }
+    ]
+  }
+]
