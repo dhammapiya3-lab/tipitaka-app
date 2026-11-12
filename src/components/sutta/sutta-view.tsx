@@ -473,7 +473,8 @@ export function SuttaView({
     },
   });
 
-  const articleStyle: CSSProperties = { fontSize, lineHeight };
+  const noteFontSize = useSettingsStore((s) => s.noteFontSize);
+  const articleStyle = { fontSize, lineHeight, "--note-fs": `${noteFontSize}px` } as CSSProperties;
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
   /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
   const parallel = isDesktop && parallelPref && commentary.length > 0 && layer === "sutta";
@@ -834,7 +835,7 @@ export function SuttaView({
     return (
       <aside
         aria-label={`주석: ${view.word}`}
-        className="mt-1 mb-2 flex flex-col gap-3 rounded-lg border-l-2 border-amber-300 bg-amber-50/60 px-3 py-2.5 text-[0.9em] dark:bg-amber-950/30"
+        className="mt-1 mb-2 flex flex-col gap-3 rounded-lg border-l-2 border-amber-300 bg-amber-50/60 px-3 py-2.5 text-[length:var(--note-fs,0.9em)] dark:bg-amber-950/30"
       >
         {view.hits.map((h, i) => {
           const data = comm[h.layer];

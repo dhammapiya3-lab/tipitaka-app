@@ -11,6 +11,7 @@ import { fetchSuttaText } from "@/lib/content";
 import { splitWords } from "@/lib/pali";
 import { plainText } from "@/lib/segments";
 import { cn } from "@/lib/utils";
+import { useSettingsStore } from "@/store/settings";
 import type { AnalysisKind, Edition } from "@/types";
 
 export type PanelTab = "dictionary" | AnalysisKind;
@@ -129,6 +130,7 @@ export function WordPanelBody({
   ];
   const heading = searched || target.title || "빠알리어 분석";
   const pali = usePaliText(suttaId, target.keys, target.pali);
+  const panelFontSize = useSettingsStore((s) => s.panelFontSize);
 
   return (
     <>
@@ -189,7 +191,8 @@ export function WordPanelBody({
           </>
         ) : null}
       </div>
-      <div className="flex-1 overflow-y-auto p-4">
+      {/* 풀이 창 글자 크기 (텍스트 설정) — 창 안 전체를 같은 비율로 키운다 */}
+      <div className="flex-1 overflow-y-auto p-4" style={{ zoom: panelFontSize / 16 }}>
         {tab === "dictionary" ? (
           searched ? (
             <WordLookupResult word={searched} onSearch={searchWord} />

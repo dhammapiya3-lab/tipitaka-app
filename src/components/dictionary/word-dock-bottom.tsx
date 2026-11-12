@@ -12,6 +12,7 @@ import {
 } from "@/components/dictionary/word-sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSettingsStore } from "@/store/settings";
 
 const MIN_HEIGHT = 180;
 
@@ -70,6 +71,7 @@ export function WordBottomDock({
   const showAnalysis = target.keys.length > 0 && kinds.length > 0;
   const heading = searched || target.title || "빠알리어 분석";
   const pali = usePaliText(suttaId, target.keys, target.pali);
+  const panelFontSize = useSettingsStore((s) => s.panelFontSize);
 
   return (
     <>
@@ -119,7 +121,7 @@ export function WordBottomDock({
             <X aria-hidden />
           </Button>
         </div>
-        <div className="flex min-h-0 flex-1 gap-4 px-6 py-3">
+        <div className="flex min-h-0 flex-1 gap-4 px-6 py-3" style={{ zoom: panelFontSize / 16 }}>
           {showAnalysis ? (
             <div className="flex w-[38%] min-w-0 shrink-0 flex-col gap-3 overflow-y-auto pr-1">
               {pali ? (

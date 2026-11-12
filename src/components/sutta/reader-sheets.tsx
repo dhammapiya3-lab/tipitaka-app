@@ -246,6 +246,10 @@ export function TextSettingsSheet({
   const setFontSize = useSettingsStore((s) => s.setFontSize);
   const setLineHeight = useSettingsStore((s) => s.setLineHeight);
   const wordLinks = useSettingsStore((s) => s.wordLinks);
+  const noteFontSize = useSettingsStore((s) => s.noteFontSize);
+  const panelFontSize = useSettingsStore((s) => s.panelFontSize);
+  const setNoteFontSize = useSettingsStore((s) => s.setNoteFontSize);
+  const setPanelFontSize = useSettingsStore((s) => s.setPanelFontSize);
   const setWordLinks = useSettingsStore((s) => s.setWordLinks);
   const style = { fontSize, lineHeight };
   return (
@@ -296,12 +300,22 @@ export function TextSettingsSheet({
             <span>넓게</span>
           </div>
         </div>
+        <SizeSlider id="note-size" label="각주 글자 크기" value={noteFontSize} onChange={setNoteFontSize} />
+        <SizeSlider
+          id="panel-size"
+          label="풀이 창 글자 크기 (문법분석·대역·사전)"
+          value={panelFontSize}
+          onChange={setPanelFontSize}
+        />
         <div className="rounded-xl border bg-gray-50 p-4 dark:bg-muted">
           <p lang="pi" className="font-pali" style={style}>
             Manopubbaṅgamā dhammā, manoseṭṭhā manomayā;
           </p>
           <p className="mt-2 font-pali text-muted-foreground" style={style}>
             마음이 모든 법의 선두이며, 마음이 으뜸이고, 마음으로 이루어진다.
+          </p>
+          <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-muted-foreground" style={{ fontSize: noteFontSize }}>
+            <span className="mr-1 font-semibold text-primary">1)</span>각주는 이 크기로 보입니다.
           </p>
         </div>
         <button
@@ -372,5 +386,35 @@ export function WordLinksSwitch({ on, onChange }: { on: boolean; onChange: (on: 
         />
       </span>
     </button>
+  );
+}
+
+function SizeSlider({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: number;
+  onChange: (size: number) => void;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-3 block text-sm font-bold">
+        {label}: {value}px
+      </label>
+      <input
+        id={id}
+        type="range"
+        min={FONT_SIZES[0]}
+        max={FONT_SIZES.at(-1)}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full accent-primary"
+      />
+    </div>
   );
 }

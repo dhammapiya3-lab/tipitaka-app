@@ -13,6 +13,12 @@ import {
 interface SettingsState {
   fontSize: number;
   lineHeight: number;
+  /** 각주(·주석 펼침) 글자 크기 px */
+  noteFontSize: number;
+  /** 풀이 창(문법분석·대역·사전) 글자 크기 px */
+  panelFontSize: number;
+  setNoteFontSize: (size: number) => void;
+  setPanelFontSize: (size: number) => void;
   /** 읽을 때 고른 판본 (경마다 있는 판본만 골라 쓴다) */
   editions: string[];
   /** 단어를 찾을 사전 */
@@ -46,6 +52,10 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       fontSize: DEFAULT_FONT_SIZE,
       lineHeight: DEFAULT_LINE_HEIGHT,
+      noteFontSize: 14,
+      panelFontSize: 16,
+      setNoteFontSize: (size) => set({ noteFontSize: clampTo(FONT_SIZES, size) }),
+      setPanelFontSize: (size) => set({ panelFontSize: clampTo(FONT_SIZES, size) }),
       editions: DEFAULT_EDITIONS,
       dictionaries: DEFAULT_DICTIONARIES,
       onlyReadable: false,
@@ -69,6 +79,8 @@ export const useSettingsStore = create<SettingsState>()(
         set({
           fontSize: DEFAULT_FONT_SIZE,
           lineHeight: DEFAULT_LINE_HEIGHT,
+          noteFontSize: 14,
+          panelFontSize: 16,
           editions: DEFAULT_EDITIONS,
         }),
     }),
@@ -76,7 +88,19 @@ export const useSettingsStore = create<SettingsState>()(
       name: "reader-settings",
       storage: createJSONStorage(() => window.localStorage),
       skipHydration: true,
-      partialize: ({ fontSize, lineHeight, editions, dictionaries, onlyReadable, compareMode, wordLinks }) => ({
+      partialize: ({
+        fontSize,
+        lineHeight,
+        noteFontSize,
+        panelFontSize,
+        editions,
+        dictionaries,
+        onlyReadable,
+        compareMode,
+        wordLinks,
+      }) => ({
+        noteFontSize,
+        panelFontSize,
         compareMode,
         wordLinks,
         fontSize,

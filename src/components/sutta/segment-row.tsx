@@ -253,7 +253,7 @@ export function NoteBox({
   }
   return (
     <aside
-      className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-[0.85em] whitespace-pre-line text-muted-foreground"
+      className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-[length:var(--note-fs,0.85em)] whitespace-pre-line text-muted-foreground"
       aria-label={`각주 ${mark}`}
     >
       <span className="mr-1 font-semibold text-primary">{mark})</span>
