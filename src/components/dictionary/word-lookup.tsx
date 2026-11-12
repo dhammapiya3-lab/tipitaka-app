@@ -141,32 +141,40 @@ export function WordLookupResult({
   return (
     <div className={columns ? "grid items-start gap-4 xl:grid-cols-2 [&>*:first-child:not(section)]:col-span-full" : "flex flex-col gap-6"}>
       {resolved}
-      {dictionaries.includes("dpd") && result.dpd.length > 0 ? (
-        <section className="rounded-2xl border bg-card px-5 pt-4 pb-3 shadow-sm">
-          <div className="mb-1 flex items-center justify-between gap-2">
-            <h3 className="font-pali text-base font-bold">{DICTIONARY_LABELS.dpd}</h3>
-            <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-semibold text-muted-foreground">English</span>
-          </div>
-          <div className="flex flex-col divide-y">
-            {result.dpd.map((entry) => (
-              <DpdCard key={entry.id} entry={entry} />
-            ))}
-          </div>
-          <p className="t-meta mt-2">Digital Pāḷi Dictionary 제공 · CC BY-NC-SA 4.0</p>
-        </section>
-      ) : null}
-      {PLAIN_SECTIONS.map(({ id, lang, credit }) =>
-        dictionaries.includes(id) && result[id].length > 0 ? (
-          <section key={id} className="flex flex-col gap-3">
-            <SectionTitle id={id} />
-            {result[id].map((entry) => (
-              <PlainCard key={entry.headword} entry={entry} lang={lang} />
-            ))}
-            <p className="t-meta">
-              {credit ? `${credit} · ` : ""}이용 조건 {LICENSE_UNKNOWN}
-            </p>
-          </section>
-        ) : null,
+      {/* 사전은 고른 차례대로 (먼저 켠 사전이 앞) */}
+      {dictionaries.map((id) =>
+        id === "dpd" ? (
+          result.dpd.length > 0 ? (
+            <section key="dpd" className="rounded-2xl border bg-card px-5 pt-4 pb-3 shadow-sm">
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <h3 className="font-pali text-base font-bold">{DICTIONARY_LABELS.dpd}</h3>
+                <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-semibold text-muted-foreground">English</span>
+              </div>
+              <div className="flex flex-col divide-y">
+                {result.dpd.map((entry) => (
+                  <DpdCard key={entry.id} entry={entry} />
+                ))}
+              </div>
+              <p className="t-meta mt-2">Digital Pāḷi Dictionary 제공 · CC BY-NC-SA 4.0</p>
+            </section>
+          ) : null
+        ) : (
+          (() => {
+            const sec = PLAIN_SECTIONS.find((x) => x.id === id);
+            if (!sec || result[id].length === 0) return null;
+            return (
+              <section key={id} className="flex flex-col gap-3">
+                <SectionTitle id={id} />
+                {result[id].map((entry) => (
+                  <PlainCard key={entry.headword} entry={entry} lang={sec.lang} />
+                ))}
+                <p className="t-meta">
+                  {sec.credit ? `${sec.credit} · ` : ""}이용 조건 {LICENSE_UNKNOWN}
+                </p>
+              </section>
+            );
+          })()
+        ),
       )}
     </div>
   );
