@@ -4,6 +4,8 @@ export interface NavItem {
   href: string;
   label: string;
   icon: LucideIcon;
+  /** 폰 아래쪽 탭 막대처럼 좁은 자리에 쓸 짧은 이름 */
+  shortLabel?: string;
   /** href 외에 이 메뉴를 활성으로 표시할 경로 앞부분 (예: 경 읽기 화면은 경전 목록 메뉴) */
   alsoActiveFor?: string[];
 }
@@ -19,7 +21,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "경전",
     items: [
       { href: "/", label: "홈", icon: House },
-      { href: "/suttas", label: "경전 목록", icon: Library, alsoActiveFor: ["/sutta/"] },
+      { href: "/suttas", label: "경전 목록", shortLabel: "경전", icon: Library, alsoActiveFor: ["/sutta/"] },
       { href: "/search", label: "검색", icon: Search },
       { href: "/dictionary", label: "사전", icon: BookA },
       { href: "/bookmarks", label: "북마크", icon: Bookmark },

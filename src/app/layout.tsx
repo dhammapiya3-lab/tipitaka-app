@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
+import { BottomTabBar } from "@/components/layout/bottom-tab-bar";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
@@ -47,11 +48,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Sidebar />
               <div className="flex min-w-0 flex-1 flex-col">
                 <Header />
-                <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 py-6 lg:px-6 print:max-w-none print:p-0">
+                <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 pt-6 pb-24 lg:px-6 lg:pb-6 print:max-w-none print:p-0">
                   {children}
                 </main>
               </div>
             </div>
+            <BottomTabBar />
           </TooltipProvider>
           <Toaster position="top-center" />
           <SettingsHydrator />
