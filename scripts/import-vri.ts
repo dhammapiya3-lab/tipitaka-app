@@ -246,7 +246,6 @@ for (const suttaId of ids) {
         para,
         vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
         refs,
-        words: [...new Set(own.map((l) => l.word).filter(Boolean))] as string[],
         lines: mine.map((l) => l.text),
         // 줄마다 풀이하는 경 문단 — 연결이 없는 줄은 바로 앞 줄을 따른다 (첫 줄들은 문단 전체의 연결)
         lineRefs: mine.map((l) => {
@@ -269,7 +268,28 @@ for (const suttaId of ids) {
       book_name: string;
       vri_id: string;
     };
-    return { book: dstBook, bookName: info.book_name, vriCode: info.vri_id, from, to, paras };
+    // 낱말 연결: [경 문장 번호, 낱말, 주석 문단 순번, 그 문단 안 줄 순번] — 경의 낱말을 누르면 그 주석 줄로 간다
+    const paraIndex = new Map(paras.map((p, i) => [p.para, i]));
+    const lineIndex = new Map<string, number>();
+    for (const para of paras) {
+      lines.filter((l) => l.para === para.para && l.text).forEach((l, i) => lineIndex.set(`${l.para}:${l.line}`, i));
+    }
+    const wordLinks: [string, string, number, number][] = [];
+    const seenLink = new Set<string>();
+    for (const l of links) {
+      const key = vriToKey.get(`${l.src_para}:${l.src_line}`);
+      const pi = paraIndex.get(l.dst_para);
+      const li = lineIndex.get(`${l.dst_para}:${l.dst_line}`);
+      const word = (l.word ?? "").toLowerCase().replace(/ṁ/g, "ṃ").replace(/\s+/g, " ").trim();
+      if (!key || pi === undefined || li === undefined || !word) continue;
+      // 같은 낱말이 경의 여러 곳에 나와 걸린 엉뚱한 연결은 뺀다 (그 주석 줄이 풀이하는 문단만)
+      if (!paras[pi].lineRefs[li].includes(key.slice(0, key.lastIndexOf(".")))) continue;
+      const id = `${key}|${word}|${pi}|${li}`;
+      if (seenLink.has(id)) continue;
+      seenLink.add(id);
+      wordLinks.push([key, word, pi, li]);
+    }
+    return { book: dstBook, bookName: info.book_name, vriCode: info.vri_id, from, to, paras, wordLinks };
   }
 
   const out = {

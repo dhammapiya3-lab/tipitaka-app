@@ -67,6 +67,7 @@ const vriCommentarySchema = z.object({
       lineRefs: z.array(z.array(z.string())),
     }),
   ),
+  wordLinks: z.array(z.tuple([z.string(), z.string(), z.number(), z.number()])).default([]),
 });
 /**
  * content/vri/<경>.ko.json — 주석서·복주석서 번역 (사람이 쓰는 파일).
@@ -408,6 +409,9 @@ function buildSutta(
         title: ko?.[layer]?.title ?? null,
         nameKo: ko?.[layer]?.nameKo ?? null,
         editions: layerEditions,
+        links: c.wordLinks
+          .filter(([key]) => key in root)
+          .map(([key, word, para, line]) => ({ key, word, para, line })),
         paras,
       });
       (sutta.commentary ??= []).push(layer);

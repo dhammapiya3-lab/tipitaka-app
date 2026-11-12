@@ -14,7 +14,12 @@ export function InlineText({
   openMarks,
   onWord,
   activeWord,
+  linked,
+  onLinked,
 }: {
+  /** 주석과 이어진 낱말인지 (켜 두면 밑줄, 누르면 onLinked) */
+  linked?: (word: string) => boolean;
+  onLinked?: (word: string) => void;
   parts: InlinePart[];
   onNote?: (mark: string) => void;
   openMarks?: ReadonlySet<string>;
@@ -27,7 +32,16 @@ export function InlineText({
     if (!onWord) return value;
     const start = wordIndex;
     wordIndex += splitWords(value).filter((w) => w.word).length;
-    return <Words text={value} onWord={onWord} start={start} activeWord={activeWord ?? null} />;
+    return (
+      <Words
+        text={value}
+        onWord={onWord}
+        start={start}
+        activeWord={activeWord ?? null}
+        linked={linked}
+        onLinked={onLinked}
+      />
+    );
   };
 
   return parts.map((part, i) => {
@@ -69,23 +83,30 @@ function Words({
   onWord,
   start,
   activeWord,
+  linked,
+  onLinked,
 }: {
   text: string;
   onWord: (word: string) => void;
   start: number;
   activeWord: number | null;
+  linked?: (word: string) => boolean;
+  onLinked?: (word: string) => void;
 }) {
   let n = start;
   return splitWords(text).map((piece, i) => {
     if (!piece.word) return piece.text;
     const index = n++;
+    const isLinked = Boolean(linked && onLinked && linked(piece.text));
     return (
       <span
         key={i}
         data-word
-        onClick={() => onWord(piece.text)}
+        title={isLinked ? "주석 보기" : undefined}
+        onClick={() => (isLinked ? onLinked!(piece.text) : onWord(piece.text))}
         className={cn(
           "cursor-pointer rounded-sm hover:bg-brand-soft hover:text-brand-ink",
+          isLinked && "text-amber-800 underline decoration-amber-500 decoration-dotted decoration-2 underline-offset-4 dark:text-amber-300",
           index === activeWord && "bg-brand-soft text-brand-ink ring-2 ring-primary/40",
         )}
       >

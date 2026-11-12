@@ -10,6 +10,7 @@ import {
   type AnalysisEditions,
   type WordTarget,
 } from "@/components/dictionary/word-sheet";
+import { BottomSheet } from "@/components/shared/bottom-sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
@@ -34,6 +35,7 @@ import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutt
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PALI_EDITION } from "@/lib/constants";
+import { foldPali } from "@/lib/pali";
 import { fetchCommentary } from "@/lib/content";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
@@ -205,6 +207,28 @@ export function SuttaView({
       const now = cur[p] ?? [];
       return { ...cur, [p]: now.includes(l) ? now.filter((x) => x !== l) : [...now, l] };
     });
+  /** 주석 연결 낱말 (켜고 끄기는 텍스트 설정·탭 줄) */
+  const wordLinksOn = useSettingsStore((s) => s.wordLinks);
+  const setWordLinks = useSettingsStore((s) => s.setWordLinks);
+  /** 경 문장 → 그 문장에서 주석이 풀이한 낱말들 (첫 낱말을 접어 맞춘다: pabbajitenā ↔ pabbajitena) */
+  const linkIndex = useMemo(() => {
+    const map = new Map<string, { fold: string; word: string; layer: CommentaryLayer; para: number; line: number }[]>();
+    for (const l of ["attha", "tika"] as const) {
+      for (const link of comm[l]?.links ?? []) {
+        const first = link.word.split(" ")[0];
+        const list = map.get(link.key) ?? [];
+        list.push({ fold: foldPali(first), word: link.word, layer: l, para: link.para, line: link.line });
+        map.set(link.key, list);
+      }
+    }
+    return map;
+  }, [comm]);
+  const linkHits = (key: string, word: string) => {
+    const f = foldPali(word);
+    return (linkIndex.get(key) ?? []).filter((h) => h.fold === f);
+  };
+  /** 누른 연결 낱말과 그 주석 줄들 */
+  const [linkView, setLinkView] = useState<{ key: string; word: string; hits: ReturnType<typeof linkHits> } | null>(null);
   /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
   const [parallelPref, setParallel] = useState(false);
   /** 나란히 볼 칸 — 경·주석서·복주석서 중 둘 이상 (경+주석, 경+복주석, 주석+복주석, 셋 다) */
@@ -710,6 +734,8 @@ export function SuttaView({
                 onSentence={() => onSentence(row)}
                 unit={unit}
                 columns={columns}
+                linked={wordLinksOn && linkIndex.has(row.key) ? (w) => linkHits(row.key, w).length > 0 : undefined}
+                onLinked={(w) => setLinkView({ key: row.key, word: w, hits: linkHits(row.key, w) })}
               />
             );
           })}
@@ -859,9 +885,12 @@ export function SuttaView({
             <BarButton label="텍스트 설정" onClick={() => setSheet("text")}>
               <Type aria-hidden />
             </BarButton>
-            <BarButton label="사전" href="/dictionary">
-              <BookA aria-hidden />
-            </BarButton>
+            {isDesktop ? null : (
+              // 컴퓨터에서는 왼쪽 메뉴에 사전이 있어 빼 둔다
+              <BarButton label="사전" href="/dictionary">
+                <BookA aria-hidden />
+              </BarButton>
+            )}
           </>
         }
       >
@@ -927,6 +956,20 @@ export function SuttaView({
           {isDesktop && commentary.length > 0 ? (
             <button
               type="button"
+              aria-pressed={wordLinksOn}
+              onClick={() => setWordLinks(!wordLinksOn)}
+              title="빠알리 원문에서 주석이 풀이한 낱말에 점선 밑줄 (누르면 그 풀이)"
+              className={cn(
+                "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
+                wordLinksOn ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
+              )}
+            >
+              {wordLinksOn ? "✓ " : ""}주석 낱말
+            </button>
+          ) : null}
+          {isDesktop && commentary.length > 0 ? (
+            <button
+              type="button"
               aria-pressed={parallel}
               onClick={() => {
                 setLayer("sutta");
@@ -934,7 +977,7 @@ export function SuttaView({
               }}
               title="경 · 주석서 · 복주석서를 문단마다 나란히 봅니다"
               className={cn(
-                "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
+                "shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
                 parallel ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
               )}
             >
@@ -1134,6 +1177,67 @@ export function SuttaView({
           document.getElementById(`section-${p}`)?.scrollIntoView({ block: "start" });
         }}
       />
+      <BottomSheet
+        open={linkView !== null}
+        onOpenChange={(o) => !o && setLinkView(null)}
+        title={linkView?.word ?? ""}
+        subtitle="이 낱말을 풀이한 주석"
+        subtitleLang={undefined}
+      >
+        {linkView ? (
+          <div className="flex flex-col gap-4">
+            {linkView.hits.map((h, i) => {
+              const data = comm[h.layer];
+              const para = data?.paras[h.para];
+              if (!data || !para) return null;
+              return (
+                <div key={i} className="flex flex-col gap-2 rounded-xl border bg-gray-50/70 p-4 dark:bg-muted/30">
+                  <p className="text-xs font-bold text-primary">
+                    {LAYER_NAME[h.layer]} <span className="font-normal text-faint">{data.book} {para.para}</span>
+                  </p>
+                  <p lang="pi" className="font-pali text-amber-900 dark:text-amber-200">
+                    <InlineText parts={para.lines[h.line]} />
+                  </p>
+                  {koShown(para).map((e) =>
+                    para.tr[e.id]?.[h.line] ? (
+                      <p key={e.id} className="text-sm leading-relaxed text-gray-600 dark:text-muted-foreground">
+                        <InlineText parts={para.tr[e.id]![h.line]!} />
+                      </p>
+                    ) : null,
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLinkView(null);
+                      setLayer(h.layer);
+                      requestAnimationFrame(() =>
+                        requestAnimationFrame(() =>
+                          document.getElementById(`${h.layer}-${h.para}`)?.scrollIntoView({ block: "start" }),
+                        ),
+                      );
+                    }}
+                    className="w-fit text-xs font-bold text-primary hover:underline"
+                  >
+                    {LAYER_NAME[h.layer]}에서 이어 읽기 →
+                  </button>
+                </div>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => {
+                const w = linkView.word;
+                const key = linkView.key;
+                setLinkView(null);
+                setWord({ word: w, rowKey: key, keys: [key], tab: "dictionary", title: "", pali: paliOf([key]) });
+              }}
+              className="w-fit rounded-lg border bg-card px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
+            >
+              사전에서 “{linkView.word}” 찾기
+            </button>
+          </div>
+        ) : null}
+      </BottomSheet>
       <TextSettingsSheet open={sheet === "text"} onOpenChange={(o) => setSheet(o ? "text" : null)} />
       <EditionInfoSheet open={infoEdition !== null} onOpenChange={(o) => !o && setInfoEdition(null)} edition={infoEdition} />
     </div>

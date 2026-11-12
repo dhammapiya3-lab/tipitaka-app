@@ -21,6 +21,9 @@ interface SettingsState {
   onlyReadable: boolean;
   /** 컴퓨터에서 판본 여럿을 볼 때: 옆으로 나란히(side) · 문장마다 번갈아(alternate) */
   compareMode: "side" | "alternate";
+  /** 주석과 이어진 낱말에 밑줄 (누르면 그 주석 줄) */
+  wordLinks: boolean;
+  setWordLinks: (on: boolean) => void;
   setCompareMode: (mode: "side" | "alternate") => void;
   setOnlyReadable: (on: boolean) => void;
   setFontSize: (size: number) => void;
@@ -47,6 +50,8 @@ export const useSettingsStore = create<SettingsState>()(
       dictionaries: DEFAULT_DICTIONARIES,
       onlyReadable: false,
       compareMode: "side",
+      wordLinks: true,
+      setWordLinks: (on) => set({ wordLinks: on }),
       setCompareMode: (mode) => set({ compareMode: mode }),
       setOnlyReadable: (on) => set({ onlyReadable: on }),
       setFontSize: (size) => set({ fontSize: clampTo(FONT_SIZES, size) }),
@@ -71,8 +76,9 @@ export const useSettingsStore = create<SettingsState>()(
       name: "reader-settings",
       storage: createJSONStorage(() => window.localStorage),
       skipHydration: true,
-      partialize: ({ fontSize, lineHeight, editions, dictionaries, onlyReadable, compareMode }) => ({
+      partialize: ({ fontSize, lineHeight, editions, dictionaries, onlyReadable, compareMode, wordLinks }) => ({
         compareMode,
+        wordLinks,
         fontSize,
         lineHeight,
         editions,

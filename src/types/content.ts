@@ -103,6 +103,8 @@ export interface SuttaCommentary {
   nameKo: string | null;
   /** 이 주석의 번역 판본들 (번역자) — 빠알리 원문은 VRI 판본(pli-vri) */
   editions: Edition[];
+  /** 낱말 연결: 경 문장(key)의 낱말(word) → 이 주석의 문단 순번(para)·줄 순번(line) */
+  links: { key: string; word: string; para: number; line: number }[];
   paras: {
     /** 책 안의 문단 번호 (예: 882) */
     para: number;

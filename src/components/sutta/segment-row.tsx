@@ -63,7 +63,12 @@ export function SegmentRow({
   onWord,
   onSentence,
   columns = false,
+  linked,
+  onLinked,
 }: {
+  /** 이 문장에서 주석과 이어진 낱말인지 / 누를 때 */
+  linked?: (word: string) => boolean;
+  onLinked?: (word: string) => void;
   /** 넓은 화면에서 판본을 칸으로 나란히 (배지 대신 카드 위 판본 이름) */
   columns?: boolean;
   row: AlignedRow;
@@ -131,6 +136,8 @@ export function SegmentRow({
                   parts={segment.parts}
                   openMarks={marks}
                   onWord={isPali ? onWord : undefined}
+                  linked={isPali ? linked : undefined}
+                  onLinked={isPali ? onLinked : undefined}
                   activeWord={isPali && active ? activeWord : null}
                   onNote={noteEditions.includes(edition.id) ? (mark) => onNote(edition.id, row.key, mark) : undefined}
                 />

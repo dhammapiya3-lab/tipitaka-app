@@ -241,10 +241,13 @@ export function TextSettingsSheet({ open, onOpenChange }: SheetProps) {
   const lineHeight = useSettingsStore((s) => s.lineHeight);
   const setFontSize = useSettingsStore((s) => s.setFontSize);
   const setLineHeight = useSettingsStore((s) => s.setLineHeight);
+  const wordLinks = useSettingsStore((s) => s.wordLinks);
+  const setWordLinks = useSettingsStore((s) => s.setWordLinks);
   const style = { fontSize, lineHeight };
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="텍스트 설정">
       <div className="flex flex-col gap-6">
+        <WordLinksSwitch on={wordLinks} onChange={setWordLinks} />
         <div>
           <label htmlFor="font-size" className="mb-3 block text-sm font-bold">
             글자 크기: {fontSize}px
@@ -321,5 +324,43 @@ export function EditionBadges({ editions, onInfo }: { editions: Edition[]; onInf
         </button>
       ))}
     </div>
+  );
+}
+
+/** 주석 연결 낱말 켜기·끄기 — 빠알리 원문에서 주석이 풀이한 낱말에 점선 밑줄, 누르면 그 주석 줄 */
+export function WordLinksSwitch({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      onClick={() => onChange(!on)}
+      className="flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-muted"
+    >
+      <span>
+        <span className="block text-sm font-bold">주석 연결 낱말</span>
+        <span className="mt-0.5 block text-xs text-muted-foreground">
+          빠알리 원문에서 주석서·복주석서가 풀이한 낱말에{" "}
+          <span className="text-amber-800 underline decoration-amber-500 decoration-dotted decoration-2 underline-offset-4">
+            점선 밑줄
+          </span>
+          을 긋고, 누르면 그 풀이를 보여 줍니다.
+        </span>
+      </span>
+      <span
+        aria-hidden
+        className={cn(
+          "relative h-6 w-11 shrink-0 rounded-full transition-colors",
+          on ? "bg-primary" : "bg-gray-300 dark:bg-muted",
+        )}
+      >
+        <span
+          className={cn(
+            "absolute top-0.5 size-5 rounded-full bg-white shadow transition-all",
+            on ? "left-[22px]" : "left-0.5",
+          )}
+        />
+      </span>
+    </button>
   );
 }
