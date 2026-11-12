@@ -13,6 +13,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import path from "node:path";
 import { z } from "zod";
 import {
+  extrasSchema,
   catalogSchema,
   editionsSchema,
   suttaIndexSchema,
@@ -390,6 +391,25 @@ const suttaIndex = catalog.nikayas.flatMap((n) => {
   return entries.map((e) => ({ ...e, trail: { ...e.trail, groupPages: total > INLINE_SUTTA_LIMIT } }));
 });
 mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
+// 경 읽기 오른쪽 칸의 참고 경전 · 해설 법문 · 기타 자료 (content/extras.json — 이 저장소에서 직접 고치는 파일)
+{
+  const extrasPath = path.join(ROOT, "content/extras.json");
+  const extras = existsSync(extrasPath) ? extrasSchema.parse(readJson(extrasPath)) : {};
+  const known = new Set(suttaIndex.map((s) => s.id));
+  for (const [id, kinds] of Object.entries(extras)) {
+    if (!known.has(id)) errors.push(`content/extras.json: "${id}" 경이 목록에 없습니다`);
+    for (const item of Object.values(kinds).flat()) {
+      if (item?.suttaId && !known.has(item.suttaId)) {
+        errors.push(`content/extras.json: ${id} 의 참고 경 "${item.suttaId}" 가 목록에 없습니다`);
+      }
+    }
+  }
+  if (errors.length) {
+    for (const e of errors) console.error(`  - ${e}`);
+    process.exit(1);
+  }
+  writeFileSync(path.join(path.dirname(OUT_SUTTAS), "extras.json"), JSON.stringify(extras));
+}
 writeFileSync(path.join(path.dirname(OUT_SUTTAS), "sutta-index.json"), JSON.stringify(suttaIndexSchema.parse(suttaIndex)));
 
 rmSync(OUT_SUTTAS, { recursive: true, force: true });

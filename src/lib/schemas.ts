@@ -10,6 +10,7 @@ import type {
   InlinePart,
   Nikaya,
   Segment,
+  SuttaExtras,
   SuttaIndexEntry,
   SuttaNissaya,
   SuttaNotes,
@@ -184,3 +185,21 @@ export const plainShardSchema = z.record(z.string(), z.array(z.string()));
 export const searchShardSchema = z.record(z.string(), z.record(z.string(), z.array(z.string())));
 /** 빠알리 기호를 뗀 글자 → 실제 형태들 */
 export const foldShardSchema = z.record(z.string(), z.array(z.string()));
+
+const extraItemSchema = z.object({
+  title: z.string().min(1),
+  note: z.string().nullish(),
+  suttaId: z.string().regex(/^[a-z]+[\d.\-]*$/).nullish(),
+  url: z.url().nullish(),
+  by: z.string().nullish(),
+});
+
+/** 경 번호 → 참고 경전 · 해설 법문 · 기타 자료 (content/extras.json, public/data/extras.json) */
+export const extrasSchema: z.ZodType<Record<string, SuttaExtras>> = z.record(
+  z.string(),
+  z.object({
+    refs: z.array(extraItemSchema).optional(),
+    talks: z.array(extraItemSchema).optional(),
+    others: z.array(extraItemSchema).optional(),
+  }),
+);

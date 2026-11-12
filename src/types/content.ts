@@ -65,3 +65,24 @@ export interface SuttaNotes {
   editionId: string;
   notes: Footnote[];
 }
+
+/**
+ * 경 읽기 오른쪽 칸의 덧붙임 자료 — 참고 경전 · 해설 법문 · 기타 자료.
+ * 원본은 content/extras.json (경 번호 → 자료), `pnpm build:content` 가 검사해 public/data/extras.json 으로 옮긴다.
+ */
+export interface ExtraItem {
+  /** 보이는 제목 */
+  title: string;
+  /** 한두 줄 설명 (누가·어디서·왜 함께 보면 좋은지) */
+  note?: string | null;
+  /** 이 사이트 안의 경 번호 (예: sn22.59) — 있으면 그 경으로 간다 */
+  suttaId?: string | null;
+  /** 밖의 주소 (영상·음성·글) */
+  url?: string | null;
+  /** 법문하신 분·글쓴이 */
+  by?: string | null;
+}
+
+export type ExtraKind = "refs" | "talks" | "others";
+
+export type SuttaExtras = Partial<Record<ExtraKind, ExtraItem[]>>;

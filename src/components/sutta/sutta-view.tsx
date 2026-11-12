@@ -15,7 +15,7 @@ import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-quer
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
-import { ReaderSide } from "@/components/sutta/reader-side";
+import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
 import { NoteBox, SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
 import {
   EditionBadges,
@@ -132,7 +132,7 @@ export function SuttaView({
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
   /** 오른쪽 칸(넓은 화면)에서 고른 탭과, 고를 때 열려 있던 풀이 — 그 뒤 새 문장·단어를 누르면 다시 풀이를 보인다 */
-  const [chosen, setChosen] = useState<{ panel: "toc" | "analysis"; for: WordTarget | null }>({
+  const [chosen, setChosen] = useState<{ panel: SidePanel; for: WordTarget | null }>({
     panel: "toc",
     for: null,
   });

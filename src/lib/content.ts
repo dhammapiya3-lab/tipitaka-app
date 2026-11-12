@@ -25,6 +25,7 @@ import {
   suttaNissayaSchema,
   suttaNotesSchema,
   sealedSuttaTextSchema,
+  extrasSchema,
   suttaIndexSchema,
   suttaTextSchema,
 } from "@/lib/schemas";
@@ -36,6 +37,7 @@ import type {
   PlainDictionaryId,
   PlainEntry,
   AnalysisKind,
+  SuttaExtras,
   SuttaIndexEntry,
   SuttaNissaya,
   SuttaNotes,
@@ -80,6 +82,19 @@ export function fetchSuttaIndex(): Promise<SuttaIndexEntry[]> {
     });
   }
   return suttaIndexPromise;
+}
+
+let extrasPromise: Promise<Record<string, SuttaExtras>> | null = null;
+
+/** 경 읽기 오른쪽 칸의 참고 경전 · 해설 법문 · 기타 자료 — 한 번만 받는다 */
+export function fetchExtras(): Promise<Record<string, SuttaExtras>> {
+  if (!extrasPromise) {
+    extrasPromise = getJson("/data/extras.json").then((data) => extrasSchema.parse(data));
+    extrasPromise.catch(() => {
+      extrasPromise = null;
+    });
+  }
+  return extrasPromise;
 }
 
 const analysisCache = new Map<string, Promise<SuttaNissaya>>();
