@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { toast } from "sonner";
 import {
-  WordDock,
   WordSheet,
   type AnalysisEditions,
   type WordTarget,
@@ -16,6 +15,7 @@ import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-quer
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
+import { ReaderSide } from "@/components/sutta/reader-side";
 import { NoteBox, SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
 import {
   EditionBadges,
@@ -125,6 +125,14 @@ export function SuttaView({
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
+  /** 오른쪽 칸(넓은 화면)에서 고른 탭과, 고를 때 열려 있던 풀이 — 그 뒤 새 문장·단어를 누르면 다시 풀이를 보인다 */
+  const [chosen, setChosen] = useState<{ panel: "toc" | "analysis"; for: WordTarget | null }>({
+    panel: "toc",
+    for: null,
+  });
+  const panel = word && word !== chosen.for ? "analysis" : chosen.panel;
+  /** 지금 화면 맨 위에 있는 문단 (목차에서 호박색) */
+  const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
 
   const bookmarks = useBookmarksStore((s) => s.items);
   const toggleBookmark = useBookmarksStore((s) => s.toggle);
@@ -170,6 +178,29 @@ export function SuttaView({
       window.removeEventListener("scroll", remember);
     };
   }, [rowKeys, suttaId, suttaTitle, saveReading]);
+
+  // 오른쪽 목차에서 지금 읽는 문단을 표시한다 (스크롤이 멈추면 화면 맨 위 문단)
+  const paragraphIds = rowKeys
+    ? [...new Set(rowKeys.split(",").map((k) => paragraphOf(k, suttaId)))].join(",")
+    : "";
+  useEffect(() => {
+    if (!paragraphIds) return;
+    const ids = paragraphIds.split(",");
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const update = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const id = ids.find((p) => (document.getElementById(`section-${p}`)?.getBoundingClientRect().bottom ?? 0) > TOP_OFFSET);
+        setCurrentParagraph(id ?? ids[0]);
+      }, 150);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", update);
+    };
+  }, [paragraphIds, suttaId]);
 
   /** 북마크·메모에 남길 문장: 번역이 있으면 첫 번역, 없으면 원문 (복사를 막아 둔 번역은 쓰지 않는다) */
   function baseOf(row: AlignedRow) {
@@ -325,6 +356,8 @@ export function SuttaView({
   });
 
   const articleStyle: CSSProperties = { fontSize, lineHeight };
+  /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
+  const columns = isDesktop && shown.length > 1;
 
   // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
   const headingOf = new Map<string, string>();
@@ -406,6 +439,18 @@ export function SuttaView({
           </div>
         )}
         <div className={inFocus ? "px-5 py-4" : "px-5 py-3"}>
+          {columns ? (
+            <div
+              className="grid gap-x-6 pb-1 pr-7 font-sans text-xs font-bold"
+              style={{ gridTemplateColumns: `repeat(${shown.length}, minmax(0, 1fr))` }}
+            >
+              {shown.map((e) => (
+                <span key={e.id} className={cn(e.language === "ko" ? "text-primary" : "text-gray-600 dark:text-muted-foreground", !e.allowCopy && "print:invisible")}>
+                  {e.badge}) {e.label}
+                </span>
+              ))}
+            </div>
+          ) : null}
           {keys.map((key) => {
             const row = rowByKey.get(key);
             if (!row) return null;
@@ -430,6 +475,7 @@ export function SuttaView({
                 }
                 onSentence={() => onSentence(row)}
                 unit={unit}
+                columns={columns}
               />
             );
           })}
@@ -489,6 +535,7 @@ export function SuttaView({
   return (
     <div className="flex flex-col">
       <SubBar
+        wide={isDesktop}
         title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : head.title}
         titleLang={focus ? undefined : head.titleLang}
         subtitle={focus ? undefined : firstTranslation?.label}
@@ -517,8 +564,10 @@ export function SuttaView({
         <EditionBadges editions={shown} onInfo={setInfoEdition} />
       </SubBar>
 
-      <div className="mx-auto w-full max-w-[1200px]">
-        <div className="mx-auto flex max-w-3xl gap-2 px-4 py-3 print:hidden" role="tablist" aria-label="본문 종류">
+      {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
+      <div className="mx-auto flex w-full max-w-[1280px] items-start gap-6 lg:px-6">
+      <div className="min-w-0 flex-1">
+        <div className={cn("mx-auto flex gap-2 px-4 py-3 print:hidden", columns ? "max-w-none" : "max-w-3xl")} role="tablist" aria-label="본문 종류">
           {(
             [
               ["sutta", "경"],
@@ -539,7 +588,7 @@ export function SuttaView({
         ) : (
           <>
             {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}
-            <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-2 print:hidden">
+            <div className={cn("mx-auto flex items-center justify-between px-4 py-2 print:hidden", columns ? "max-w-none" : "max-w-3xl")}>
               {focus ? (
                 <>
                   <button type="button" className={navButton} disabled={focusIndex <= 0} onClick={() => openParagraph(paragraphList[focusIndex - 1])}>
@@ -597,8 +646,14 @@ export function SuttaView({
             ) : null}
 
             {/* 넓은 화면에서 사전을 열면 본문 옆에 붙인다 (창을 연 채로 다른 단어를 누를 수 있게) */}
-            <div className="flex items-start gap-6 px-4 pt-2 pb-6">
-              <article className="mx-auto flex w-full max-w-3xl min-w-0 flex-1 flex-col gap-4 print:max-w-none" style={articleStyle}>
+            <div className="px-4 pt-2 pb-6">
+              <article
+                className={cn(
+                  "mx-auto flex w-full min-w-0 flex-col gap-4 print:max-w-none",
+                  columns ? "max-w-none" : "max-w-3xl",
+                )}
+                style={articleStyle}
+              >
                 {waiting
                   ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)
                   : focus
@@ -615,14 +670,25 @@ export function SuttaView({
                         </div>
                       ))}
               </article>
-              {isDesktop && word ? (
-                <div className="contents print:hidden">
-                  <WordDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
-                </div>
-              ) : null}
             </div>
           </>
         )}
+      </div>
+      {isDesktop ? (
+        <div className="hidden pt-3 lg:block">
+          <ReaderSide
+            panel={panel}
+            onPanel={(p) => setChosen({ panel: p, for: word })}
+            toc={toc}
+            current={focus ?? currentParagraph}
+            onPick={(p) => (focus ? openParagraph(p) : document.getElementById(`section-${p}`)?.scrollIntoView({ block: "start" }))}
+            word={word}
+            suttaId={suttaId}
+            analysisEditions={analysisEditions}
+            onCloseWord={() => setWord(null)}
+          />
+        </div>
+      ) : null}
       </div>
 
       {!isDesktop ? (

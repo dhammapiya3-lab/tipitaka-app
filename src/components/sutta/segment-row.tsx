@@ -62,7 +62,10 @@ export function SegmentRow({
   onNote,
   onWord,
   onSentence,
+  columns = false,
 }: {
+  /** 넓은 화면에서 판본을 칸으로 나란히 (배지 대신 카드 위 판본 이름) */
+  columns?: boolean;
   row: AlignedRow;
   heading: boolean;
   /** (쓰지 않음 — 게송 번호는 문단 카드 머리에) */
@@ -91,7 +94,7 @@ export function SegmentRow({
       id={row.key}
       className={cn(
         "group/row relative flex scroll-mt-32 gap-1 break-inside-avoid",
-        compare && "py-1",
+        compare && !columns && "py-1",
         active && "-mx-2 rounded-lg bg-brand-softer px-2 ring-2 ring-primary/30",
       )}
     >
@@ -100,7 +103,7 @@ export function SegmentRow({
         onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
       >
         <div
-          className={cn(compare && "md:grid md:grid-cols-[var(--cols)] md:gap-x-6 print:grid print:grid-cols-[var(--cols)]")}
+          className={cn((columns || compare) && "print:grid print:grid-cols-[var(--cols)]", columns && "grid grid-cols-[var(--cols)] gap-x-6 border-t border-gray-100 dark:border-border")}
           style={{ "--cols": `repeat(${shown.length}, minmax(0, 1fr))` } as CSSProperties}
         >
           {shown.map((edition) => {
@@ -118,7 +121,7 @@ export function SegmentRow({
                 className={cn(
                   // 원래 앱처럼 원문·번역 모두 명조(.pali)로
                   "rounded font-pali whitespace-pre-line wrap-anywhere text-gray-800 transition-colors hover:bg-gray-50 dark:text-foreground dark:hover:bg-muted",
-                  compare ? "py-0.5" : "py-2",
+                  compare && !columns ? "py-0.5" : "py-2",
                   heading && "font-bold",
                   // 원래 앱이 복사를 막은 번역(법현 스님)은 글자 선택을 막는다
                   !edition.allowCopy && "select-none",
@@ -141,7 +144,7 @@ export function SegmentRow({
                 className={cn(!edition.allowCopy && "print:invisible")}
                 onCopy={edition.allowCopy ? undefined : (e) => e.preventDefault()}
               >
-                {compare ? (
+                {compare && !columns ? (
                   <div className="flex items-start gap-2 py-1">
                     <span className="mt-0.5 inline-flex h-7 shrink-0 items-center">
                       <span
@@ -172,7 +175,7 @@ export function SegmentRow({
             {actions.memo}
           </p>
         ) : null}
-        {compare ? <div className="mt-1 border-b border-gray-100 dark:border-border" /> : null}
+        {compare && !columns ? <div className="mt-1 border-b border-gray-100 dark:border-border" /> : null}
       </div>
       {/* 문장 메뉴(북마크·메모·복사) — 새로 더한 기능. 인쇄할 때는 뺀다 */}
       <div className="w-6 shrink-0 pt-2 print:hidden">{actions ? <SentenceMenu actions={actions} /> : null}</div>

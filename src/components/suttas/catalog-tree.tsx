@@ -2,7 +2,7 @@ import { ChevronDown } from "lucide-react";
 import { LazyGroup } from "@/components/suttas/lazy-group";
 import { SuttaRow } from "@/components/suttas/sutta-row";
 import { HIDE_WHEN_ONLY_READABLE } from "@/lib/constants";
-import { collect } from "@/lib/data";
+import { collect, hasKorean } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import type { CatalogNode, CatalogSutta } from "@/types";
 
@@ -75,8 +75,8 @@ function CatalogGroup({
   depth: number;
   lazy: boolean;
 }) {
-  const hasReadable = collect(node).some((s) => s.editions.length > 0);
-  const hide = !hasReadable && HIDE_WHEN_ONLY_READABLE;
+  // "한글 번역이 있는 경만 보기"를 켜면 한글 번역이 하나도 없는 묶음은 가린다
+  const hide = !collect(node).some(hasKorean) && HIDE_WHEN_ONLY_READABLE;
 
   // 경이 많은 니까야의 맨 아래 묶음은 펼칠 때 불러온다
   if (lazy && node.suttas.length > 0 && node.children.length === 0) {

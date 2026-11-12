@@ -95,8 +95,8 @@ export function WordDock({
   );
 }
 
-/** onClose 가 있으면 붙박이 칸(WordDock), 없으면 드로어(Sheet) 안에서 그린다 */
-function WordPanelBody({
+/** onClose 가 있으면 붙박이 칸(WordDock·경 읽기 오른쪽 칸), 없으면 드로어(Sheet) 안에서 그린다 */
+export function WordPanelBody({
   target,
   suttaId,
   analysisEditions,

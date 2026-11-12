@@ -17,7 +17,7 @@ const THERAVADA_LINKS = [
 const CARD = "rounded-2xl border bg-card p-6 shadow-sm";
 
 /**
- * 홈 — 원래 앱과 같은 모양(호박색 띠 · 오늘의 게송 · 시작하기)에
+ * 홈 — 원래 앱과 같은 모양(호박색 띠 · 오늘의 게송)에
  * 새로 더한 이어 읽기 · 지금 읽을 수 있는 경 · 테라와다불교 칸을 같은 카드 모양으로 붙였다.
  */
 export default function HomePage() {
@@ -44,16 +44,6 @@ export default function HomePage() {
           <KoreanNikayaTiles items={getKoreanSummaries()} />
         </section>
 
-        <div className={CARD}>
-          <h2 className="mb-2 text-base font-bold">시작하기</h2>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            하단의{" "}
-            <Link href="/suttas" className="font-bold text-primary">
-              경전
-            </Link>{" "}
-            탭에서 빠알리 삼장을 읽어보세요.
-          </p>
-        </div>
 
         <section className="rounded-2xl border bg-card px-3 pt-5 pb-2 shadow-sm">
           <h2 className="mb-1 px-3 text-base font-bold">테라와다불교</h2>

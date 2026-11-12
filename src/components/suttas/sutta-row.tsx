@@ -44,6 +44,7 @@ export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested
   const [open, setOpen] = useState(false);
   const readable = sutta.editions.length > 0;
   const editions = orderEditions(all.filter((e) => sutta.editions.includes(e.id)));
+  const korean = editions.some((e) => e.language === "ko");
 
   const title = (
     <div className="flex flex-wrap items-baseline gap-x-1.5">
@@ -60,7 +61,8 @@ export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested
       className={cn(
         "rounded-2xl border bg-card shadow-sm transition-shadow hover:shadow-md",
         nested && "ml-4",
-        !readable && HIDE_WHEN_ONLY_READABLE,
+        // "한글 번역이 있는 경만 보기"를 켜면 한글 번역이 없는 경은 가린다
+        !korean && HIDE_WHEN_ONLY_READABLE,
       )}
     >
       <div className="flex items-center gap-3 p-3.5">

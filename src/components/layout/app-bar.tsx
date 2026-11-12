@@ -77,7 +77,7 @@ export function SubBar({
     "-ml-2 flex shrink-0 rounded-full p-2 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50";
   return (
     <div className="bg-background px-6 pt-4 pb-4 print:px-0">
-      <div className={cn("mx-auto", wide ? "max-w-[1200px]" : "max-w-3xl")}>
+      <div className={cn("mx-auto", wide ? "max-w-[1280px] lg:px-4" : "max-w-3xl")}>
         <div className="flex items-center gap-3">
           {onBack ? (
             <button type="button" aria-label="뒤로" className={backClass} onClick={onBack}>

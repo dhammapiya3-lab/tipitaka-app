@@ -100,7 +100,7 @@ export function getAdjacentSuttas(id: string): {
 }
 
 /** 한국어 번역 판본이 있는지 */
-function hasKorean(s: CatalogSutta): boolean {
+export function hasKorean(s: CatalogSutta): boolean {
   return s.editions.some((id) => editionById.get(id)?.language === "ko");
 }
 
