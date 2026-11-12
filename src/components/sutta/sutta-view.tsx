@@ -77,7 +77,10 @@ export function SuttaView({
   head,
   initialEdition,
   commentary = [],
+  paliName,
 }: {
+  /** 목록의 빠알리 경 이름 (빠알리 판본 제목을 아직 못 읽었을 때) */
+  paliName?: string;
   /** 이어 붙인 주석서·복주석서 */
   commentary?: CommentaryLayer[];
   head: SuttaHead;
@@ -179,6 +182,8 @@ export function SuttaView({
     });
   /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
   const [parallelPref, setParallel] = useState(false);
+  /** 나란히 볼 칸 — 경·주석서·복주석서 중 둘 이상 (경+주석, 경+복주석, 주석+복주석, 셋 다) */
+  const [parallelCols, setParallelCols] = useState<("sutta" | CommentaryLayer)[]>(["sutta", "attha", "tika"]);
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
@@ -416,7 +421,16 @@ export function SuttaView({
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
   /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
   const parallel = isDesktop && parallelPref && commentary.length > 0 && layer === "sutta";
-  const parallelLayers = commentary.filter((l) => comm[l]);
+  const parallelLayers = commentary.filter((l) => comm[l] && parallelCols.includes(l));
+  const withSutta = parallelCols.includes("sutta");
+  const parallelGrid = `${withSutta ? "minmax(0,1.15fr) " : ""}repeat(${parallelLayers.length}, minmax(0,1fr))`;
+  /** 나란히 보기에서 칸 하나 켜고 끄기 — 둘보다 적게는 끌 수 없다 */
+  const toggleCol = (c: "sutta" | CommentaryLayer) =>
+    setParallelCols((cur) => {
+      if (!cur.includes(c)) return [...cur, c];
+      const left = cur.filter((x) => x !== c && (x === "sutta" || commentary.includes(x)));
+      return left.length >= 2 ? cur.filter((x) => x !== c) : cur;
+    });
   /** 판본 대조 방식을 고를 수 있는 때 (컴퓨터, 판본 둘 이상, 주석 나란히 보기가 아닐 때) */
   const canCompare = isDesktop && shown.length > 1 && !parallel;
   const columns = canCompare && compareMode === "side";
@@ -503,13 +517,14 @@ export function SuttaView({
       />
     ));
   /** 경 문단 하나와 그 주석을 한 줄에 (나란히 보기) */
-  const parallelRow = (p: string, cells: Partial<Record<CommentaryLayer, number[]>>, card: React.ReactNode) => (
+  const parallelRow = (p: string, cells: Partial<Record<CommentaryLayer, number[]>>, card: React.ReactNode) =>
+    !withSutta && !parallelLayers.some((l) => cells[l]?.length) ? null : (
     <div
       key={p}
       className="grid items-start gap-4"
-      style={{ gridTemplateColumns: `minmax(0,1.15fr) repeat(${parallelLayers.length}, minmax(0,1fr))` }}
+      style={{ gridTemplateColumns: parallelGrid }}
     >
-      <div className="flex min-w-0 flex-col gap-2">{card}</div>
+      {withSutta ? <div className="flex min-w-0 flex-col gap-2">{card}</div> : null}
       {parallelLayers.map((l) => (
         <div key={l} className="flex min-w-0 flex-col gap-3 text-[0.94em]">
           {commentaryCards(l, cells[l])}
@@ -518,12 +533,26 @@ export function SuttaView({
     </div>
   );
 
+  /** 나란히 보기의 "경" 칸 이름 — 가장 먼저 고른 빠알리 판본의 경 제목 (없으면 목록의 빠알리 이름) */
+  const firstPali = picked.map((id) => editions.find((e) => e.id === id)).find((e) => e?.language === "pli");
+  const paliTitle =
+    (firstPali
+      ? texts[firstPali.id]?.segments
+          .filter((seg) => rowKind(seg.key, suttaId) === "hidden")
+          .map((seg) => plainText(seg.parts).trim())
+          .filter(Boolean)
+          .at(-1)
+      : undefined) ?? paliName;
   const parallelHeader = (
     <div
       className="sticky top-0 z-10 -mb-1 grid gap-4 bg-background/95 py-2 text-sm font-bold backdrop-blur"
-      style={{ gridTemplateColumns: `minmax(0,1.15fr) repeat(${parallelLayers.length}, minmax(0,1fr))` }}
+      style={{ gridTemplateColumns: parallelGrid }}
     >
-      <span>경</span>
+      {withSutta ? (
+        <span className="truncate">
+          경 {paliTitle ? <span className="font-pali text-xs font-medium text-faint">{paliTitle}</span> : null}
+        </span>
+      ) : null}
       {parallelLayers.map((l) => (
         <span key={l} className="truncate">
           {LAYER_NAME[l]} <span className="font-pali text-xs font-medium text-faint">{comm[l]!.bookName}</span>
@@ -829,22 +858,41 @@ export function SuttaView({
               ["tika", "복주석서"],
             ] as const
           ).map(([id, label]) => (
-            <button key={id} type="button" role="tab" aria-selected={layer === id} onClick={() => setLayer(id)} className={tabClass(layer === id)}>
-              {label}
-            </button>
+            parallel ? (
+              // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
+              <button
+                key={id}
+                type="button"
+                aria-pressed={parallelCols.includes(id)}
+                disabled={id !== "sutta" && !commentary.includes(id)}
+                title={`${label} 칸 ${parallelCols.includes(id) ? "끄기" : "켜기"}`}
+                onClick={() => toggleCol(id)}
+                className={cn(tabClass(parallelCols.includes(id)), "disabled:opacity-40")}
+              >
+                {parallelCols.includes(id) ? "✓ " : ""}
+                {label}
+              </button>
+            ) : (
+              <button key={id} type="button" role="tab" aria-selected={layer === id} onClick={() => setLayer(id)} className={tabClass(layer === id)}>
+                {label}
+              </button>
+            )
           ))}
-          {isDesktop && commentary.length > 0 && layer === "sutta" ? (
+          {isDesktop && commentary.length > 0 ? (
             <button
               type="button"
-              aria-pressed={parallelPref}
-              onClick={() => setParallel((v) => !v)}
+              aria-pressed={parallel}
+              onClick={() => {
+                setLayer("sutta");
+                setParallel(!parallel);
+              }}
               title="경 · 주석서 · 복주석서를 문단마다 나란히 봅니다"
               className={cn(
                 "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
-                parallelPref ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
+                parallel ? "border-amber-300 bg-amber-50 text-amber-800" : "bg-card text-muted-foreground hover:bg-gray-50",
               )}
             >
-              {parallelPref ? "✓ " : ""}주석 나란히 보기
+              {parallel ? "✓ " : ""}주석 나란히 보기
             </button>
           ) : null}
         </div>

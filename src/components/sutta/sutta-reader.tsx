@@ -131,6 +131,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
       editions={editions.filter((e) => sutta.editions.includes(e.id))}
       noteEditions={sutta.noteEditions}
       commentary={sutta.commentary ?? []}
+      paliName={sutta.name}
       analysisEditions={{
         nissaya: editions.filter((e) => sutta.nissaya.includes(e.id)),
         grammar: editions.filter((e) => sutta.grammar.includes(e.id)),
