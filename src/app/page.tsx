@@ -6,6 +6,13 @@ import { KoreanNikayaTiles } from "@/components/home/korean-nikaya-tiles";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { editions, getDhpVaggas, getKoreanSummaries, getReadableSuttas } from "@/lib/data";
 
+/** 홈 아래 "테라와다불교" 칸 — 지금은 준비 중 페이지로 이어진다 */
+const THERAVADA_LINKS = [
+  { href: "/theravada", label: "테라와다란" },
+  { href: "/centers", label: "전국 수행처" },
+  { href: "/community", label: "커뮤니티" },
+];
+
 export default function HomePage() {
   const dhpVaggas = getDhpVaggas();
   const dhp = getReadableSuttas().find((s) => dhpVaggas.some((v) => v.id === s.id));
@@ -39,15 +46,24 @@ export default function HomePage() {
             <CardTitle className="t-section">테라와다불교</CardTitle>
           </CardHeader>
           <CardContent className="px-2">
-            <Link
-              href="/about"
-              className="flex min-h-13 items-center justify-between rounded-2xl px-3 text-[15px] outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              이 사이트에 대해
-              <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
-            </Link>
+            <ul className="flex flex-col">
+              {THERAVADA_LINKS.map((item, i) => (
+                <li key={item.href} className={i > 0 ? "border-t" : undefined}>
+                  <Link
+                    href={item.href}
+                    className="flex min-h-13 items-center justify-between rounded-2xl px-3 text-[15px] outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
+                  >
+                    {item.label}
+                    <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
+        <Link href="/about" className="t-meta self-center py-2 hover:text-foreground hover:underline lg:self-start lg:px-2">
+          이 사이트에 대해
+        </Link>
       </div>
     </div>
   );
