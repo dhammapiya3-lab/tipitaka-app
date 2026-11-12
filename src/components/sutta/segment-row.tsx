@@ -224,7 +224,7 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
   );
 }
 
-function NoteBox({
+export function NoteBox({
   mark,
   rowKey,
   state,

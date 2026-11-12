@@ -15,7 +15,8 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
-import { SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
+import { InlineText } from "@/components/sutta/inline-text";
+import { NoteBox, SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
 import {
   EditionBadges,
   EditionInfoSheet,
@@ -327,16 +328,18 @@ export function SuttaView({
 
   // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
   const headingOf = new Map<string, string>();
+  /** 제목 줄 자체 (각주 표시를 그대로 보여 주려고) — 문단 → 제목 줄과 그 글을 가진 판본 */
+  const headingRowOf = new Map<string, { row: AlignedRow; edition: Edition }>();
   {
-    let pending: string | null = null;
+    let pending: { row: AlignedRow; edition: Edition } | null = null;
     for (const row of rows) {
       if (rowKind(row.key, suttaId) === "heading") {
-        const cell = [...shown.filter((e) => e.language !== "pli"), ...shown]
-          .map((e) => row.cells[e.id])
-          .find(Boolean);
-        pending = cell ? plainText(cell.parts) : pending;
+        const edition = [...shown.filter((e) => e.language !== "pli"), ...shown].find((e) => row.cells[e.id]);
+        if (edition) pending = { row, edition };
       } else if (pending) {
-        headingOf.set(paragraphOf(row.key, suttaId), pending);
+        const p = paragraphOf(row.key, suttaId);
+        headingRowOf.set(p, pending);
+        headingOf.set(p, plainText(pending.row.cells[pending.edition.id]!.parts));
         pending = null;
       }
     }
@@ -431,6 +434,46 @@ export function SuttaView({
             );
           })}
         </div>
+      </div>
+    );
+  }
+
+  /** 이야기·단락 제목 — 가운데 호박색 글자, 양옆에 옅은 선. 각주 표시를 누르면 아래에 각주가 열린다 */
+  function headingBlock(p: string) {
+    const h = headingRowOf.get(p);
+    if (!h) return null;
+    const { row, edition } = h;
+    const parts = row.cells[edition.id]!.parts;
+    const marks = new Set(
+      parts.flatMap((part) =>
+        part.type === "note" && openNotes.has(`${edition.id} ${row.key} ${part.mark}`) ? [part.mark] : [],
+      ),
+    );
+    return (
+      <div id={row.key} className="scroll-mt-32">
+        <h2 className="flex items-center gap-3 px-2 pt-3 pb-1 font-sans">
+          <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
+          <span
+            lang={edition.language === "pli" ? "pi" : undefined}
+            className={cn(
+              "max-w-[80%] text-center text-[0.9em] font-bold tracking-wide text-balance break-keep text-amber-800 dark:text-amber-300",
+              !edition.allowCopy && "select-none print:invisible",
+            )}
+            onCopy={edition.allowCopy ? undefined : (e) => e.preventDefault()}
+          >
+            <InlineText
+              parts={parts}
+              openMarks={marks}
+              onNote={noteEditions.includes(edition.id) ? (mark) => toggleNote(edition.id, row.key, mark) : undefined}
+            />
+          </span>
+          <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
+        </h2>
+        {[...marks].map((mark) => (
+          <div key={mark} className="px-2">
+            <NoteBox mark={mark} state={notes[edition.id]} rowKey={row.key} />
+          </div>
+        ))}
       </div>
     );
   }
@@ -559,19 +602,15 @@ export function SuttaView({
                 {waiting
                   ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)
                   : focus
-                    ? paragraphCard(focus, true)
+                    ? (
+                        <>
+                          {headingBlock(focus)}
+                          {paragraphCard(focus, true)}
+                        </>
+                      )
                     : paragraphList.map((p) => (
                         <div key={p} className="flex flex-col gap-2">
-                          {headingOf.get(p) ? (
-                            // 이야기·단락 제목 — 가운데 호박색 글자, 양옆에 옅은 선
-                            <h2 className="flex items-center gap-3 px-2 pt-3 pb-1 font-sans">
-                              <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
-                              <span className="max-w-[80%] text-center text-[0.9em] font-bold tracking-wide text-balance break-keep text-amber-800 dark:text-amber-300">
-                                {headingOf.get(p)}
-                              </span>
-                              <span aria-hidden className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900" />
-                            </h2>
-                          ) : null}
+                          {headingBlock(p)}
                           {paragraphCard(p, false)}
                         </div>
                       ))}
