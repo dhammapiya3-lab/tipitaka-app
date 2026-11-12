@@ -25,6 +25,7 @@ import {
   suttaNissayaSchema,
   suttaNotesSchema,
   sealedSuttaTextSchema,
+  suttaIndexSchema,
   suttaTextSchema,
 } from "@/lib/schemas";
 import type {
@@ -35,6 +36,7 @@ import type {
   PlainDictionaryId,
   PlainEntry,
   AnalysisKind,
+  SuttaIndexEntry,
   SuttaNissaya,
   SuttaNotes,
   SuttaText,
@@ -65,6 +67,19 @@ export async function fetchSuttaText(suttaId: string, editionId: string): Promis
 
 export async function fetchSuttaNotes(suttaId: string, editionId: string): Promise<SuttaNotes> {
   return suttaNotesSchema.parse(await getJson(suttaUrl(suttaId, editionId, ".notes.json")));
+}
+
+let suttaIndexPromise: Promise<SuttaIndexEntry[]> | null = null;
+
+/** 경 읽기 화면용 목록 — 한 번만 받는다 */
+export function fetchSuttaIndex(): Promise<SuttaIndexEntry[]> {
+  if (!suttaIndexPromise) {
+    suttaIndexPromise = getJson("/data/sutta-index.json").then((data) => suttaIndexSchema.parse(data));
+    suttaIndexPromise.catch(() => {
+      suttaIndexPromise = null;
+    });
+  }
+  return suttaIndexPromise;
 }
 
 const analysisCache = new Map<string, Promise<SuttaNissaya>>();

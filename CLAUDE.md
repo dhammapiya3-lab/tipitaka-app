@@ -17,7 +17,7 @@
 - **데이터는 한 길로만.** 원본 `content/` → `scripts/build-content.ts`(검사) → `public/data/`·`src/data/` → `src/lib/data.ts`(목록)·`src/lib/content.ts`(본문·사전·검색). 화면에서 다른 곳을 fetch 하지 않는다.
 - **JSON 은 zod 로 검사한다.** 타입 단언(as)으로 넘기지 않는다.
 - **원문·번역은 HTML 로 해석하지 않는다.** `dangerouslySetInnerHTML` 금지 — 굵게·기울임·각주는 `parseInline` 의 글자 조각으로.
-- **경 주소는 `suttaHref()` 로만 만든다** (sn1.1 처럼 점이 든 번호 때문에 끝에 / 가 필요하다).
+- **경 주소는 `suttaHref()` 로만 만든다** — `/sutta/?id=sn56.11#문장번호`. 경 화면은 페이지 하나(`src/app/sutta/page.tsx`)가 ?id= 로 경을 고른다. 경·책마다 페이지를 미리 만들지 않는다(호스팅 파일 수 한도 2만 개 — `MASTER-PLAN.md` 참고).
 - 변환 규칙(`scripts/source-paths.ts` 의 파일 위치 등)은 원래 앱과 같아야 한다.
 - 고친 뒤에는 `pnpm typecheck && pnpm test && pnpm lint` 와 `pnpm build` 를 통과시킨다.
 - **번역문·사전 자료는 저작권자가 따로 있다.** 번역문은 법보시 허락을 받아 공개 저장소에 둔다(2026-11-13).

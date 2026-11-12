@@ -10,6 +10,7 @@ import type {
   InlinePart,
   Nikaya,
   Segment,
+  SuttaIndexEntry,
   SuttaNissaya,
   SuttaNotes,
   SuttaText,
@@ -82,6 +83,20 @@ export const suttaNissayaSchema: z.ZodType<SuttaNissaya> = z.object({
   editionId: z.string().min(1),
   entries: z.record(z.string(), z.string()),
 });
+
+export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
+  z.object({
+    id: z.string().min(1),
+    sourceId: z.string().min(1),
+    name: z.string(),
+    nameKo: z.string().nullable(),
+    editions: z.array(z.string()),
+    noteEditions: z.array(z.string()),
+    nissaya: z.array(z.string()),
+    grammar: z.array(z.string()),
+    nikaya: z.string().min(1),
+  }),
+);
 
 export const catalogNodeSchema: z.ZodType<CatalogNode> = z.lazy(() =>
   z.object({

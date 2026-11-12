@@ -15,6 +15,7 @@ import { z } from "zod";
 import {
   catalogSchema,
   editionsSchema,
+  suttaIndexSchema,
   suttaNissayaSchema,
   suttaNotesSchema,
   suttaTextSchema,
@@ -353,6 +354,17 @@ const editions: Edition[] = [...editionById.values()]
 mkdirSync(OUT_DATA, { recursive: true });
 writeFileSync(path.join(OUT_DATA, "catalog.json"), JSON.stringify(catalogSchema.parse(catalog)));
 writeFileSync(path.join(OUT_DATA, "editions.json"), JSON.stringify(editionsSchema.parse(editions)));
+// 경 읽기 화면용 목록 — 본문이 있는 경만, 목록 순서대로 (SuttaIndexEntry)
+const suttaIndex = catalog.nikayas.flatMap((n) =>
+  n.nodes
+    .flatMap(function collect(node): CatalogSutta[] {
+      return [...node.suttas, ...node.children.flatMap(collect)];
+    })
+    .filter((s) => s.editions.length > 0)
+    .map((s) => ({ ...s, nikaya: n.id })),
+);
+mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
+writeFileSync(path.join(path.dirname(OUT_SUTTAS), "sutta-index.json"), JSON.stringify(suttaIndexSchema.parse(suttaIndex)));
 
 rmSync(OUT_SUTTAS, { recursive: true, force: true });
 for (const text of texts) {

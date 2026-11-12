@@ -21,9 +21,10 @@ export function formatDate(iso: string): string {
 }
 
 /**
- * 경 읽기 주소. 끝에 / 를 꼭 붙인다 — sn1.1 처럼 점이 든 번호를
- * 화면 안 이동(Next 라우터)이 파일 확장자로 착각하지 않게 하기 위해서다.
+ * 경 읽기 주소: /sutta/?id=sn56.11#sn56.11:1.1
+ * 경 화면은 페이지 하나가 ?id= 로 경을 고른다(경마다 페이지를 만들면 파일이 호스팅 한도를 넘는다).
+ * 옛 주소 /sutta/sn56.11/ 은 public/_redirects 가 새 주소로 넘긴다.
  */
 export function suttaHref(suttaId: string, rowKey?: string): string {
-  return `/sutta/${suttaId}/${rowKey ? `#${rowKey}` : ""}`;
+  return `/sutta/?id=${encodeURIComponent(suttaId)}${rowKey ? `#${rowKey}` : ""}`;
 }

@@ -1,0 +1,2 @@
+# 옛 경 주소(/sutta/sn56.11/)를 새 주소(/sutta/?id=sn56.11)로 넘긴다 — Cloudflare Pages 규칙
+/sutta/:id/  /sutta/?id=:id  301
