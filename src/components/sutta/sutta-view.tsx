@@ -37,10 +37,8 @@ import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
   alignEditions,
   paragraphOf,
-  pickEditions,
   plainText,
   rowKind,
-  toggleEdition,
   unitOf,
   type AlignedRow,
 } from "@/lib/segments";
@@ -75,8 +73,11 @@ export function SuttaView({
   prev,
   next,
   head,
+  initialEdition,
 }: {
   head: SuttaHead;
+  /** 경 목록에서 고른 판본 (?ed=) */
+  initialEdition?: string | null;
   suttaId: string;
   suttaTitle: string;
   /** 이 경에 있는 판본 (빠알리 → 한국어 → 영어 순) */
@@ -90,11 +91,16 @@ export function SuttaView({
   const router = useRouter();
   const fontSize = useSettingsStore((s) => s.fontSize);
   const lineHeight = useSettingsStore((s) => s.lineHeight);
-  const preferred = useSettingsStore((s) => s.editions);
-  const setEditions = useSettingsStore((s) => s.setEditions);
 
-  const availableIds = useMemo(() => editions.map((e) => e.id), [editions]);
-  const shownIds = pickEditions(editions, preferred);
+  /**
+   * 보이는 판본 — 경을 그냥 열면 목록 맨 위 번역 하나만 (한국어 → 빠알리 → 영어 순서의 첫째).
+   * 경 목록에서 판본을 골라 들어왔으면(?ed=) 그 판본. 판본 선택 창에서 더하거나 뺄 수 있다(이 경을 보는 동안만).
+   */
+  const [picked, setPicked] = useState<string[]>(() => {
+    const first = orderEditions(editions)[0]?.id;
+    return initialEdition && editions.some((e) => e.id === initialEdition) ? [initialEdition] : first ? [first] : [];
+  });
+  const shownIds = editions.map((e) => e.id).filter((id) => picked.includes(id));
   // 화면에는 원래 앱처럼 한국어 → 빠알리 → 영어 순서로
   const shown = orderEditions(editions.filter((e) => shownIds.includes(e.id)));
 
@@ -721,7 +727,12 @@ export function SuttaView({
         onOpenChange={(o) => setSheet(o ? "editions" : null)}
         editions={editions}
         shownIds={shownIds}
-        onToggle={(id) => setEditions(toggleEdition(availableIds, preferred, shownIds, id))}
+        onToggle={(id) =>
+          setPicked((cur) => {
+            const next = cur.includes(id) ? cur.filter((e) => e !== id) : [...cur, id];
+            return next.length > 0 ? next : cur; // 마지막 하나는 끌 수 없다
+          })
+        }
       />
       <TocSheet
         open={sheet === "toc"}

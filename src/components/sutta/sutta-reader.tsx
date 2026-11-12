@@ -11,7 +11,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchSuttaIndex } from "@/lib/content";
 import { suttaLabel } from "@/lib/format";
-import { useSettingsStore } from "@/store/settings";
 import type { Edition, SuttaIndexEntry } from "@/types";
 
 type State =
@@ -28,7 +27,6 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   /** 경 목록에서 판본 하나를 골라 들어오면 (?ed=) 그 판본으로 연다 */
   const ed = params.get("ed");
   const router = useRouter();
-  const setEditions = useSettingsStore((s) => s.setEditions);
   const [state, setState] = useState<State>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
 
@@ -55,11 +53,10 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   }, [sutta]);
 
   useEffect(() => {
-    if (!sutta || !ed || !sutta.editions.includes(ed)) return;
-    setEditions([ed]);
-    // 주소에서 ?ed= 를 지워, 새로고침이나 공유한 링크가 고른 판본을 계속 덮어쓰지 않게 한다
+    if (!sutta || !ed) return;
+    // 주소에서 ?ed= 를 지운다 (고른 판본은 읽기 화면이 처음 한 번 받아 둔다)
     router.replace(`/sutta/?id=${encodeURIComponent(sutta.id)}${window.location.hash}`);
-  }, [sutta, ed, setEditions, router]);
+  }, [sutta, ed, router]);
 
   if (state.status === "loading") {
     return (
@@ -122,6 +119,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   return (
     <SuttaView
       key={sutta.id}
+      initialEdition={ed}
       head={{
         title: titleOf(sutta),
         titleLang: sutta.nameKo ? undefined : "pi",
