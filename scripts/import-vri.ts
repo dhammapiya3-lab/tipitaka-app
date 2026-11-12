@@ -16,11 +16,19 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { EPITAKA_DB, SOURCE_ROOT } from "./paths";
 
-const ids = process.argv.slice(2);
+const args = process.argv.slice(2);
+/** --all: 사이트 목록(public/data/sutta-index.json)의 모든 경 */
+const ids =
+  args[0] === "--all"
+    ? (JSON.parse(readFileSync(path.join(process.cwd(), "public/data/sutta-index.json"), "utf8")) as { id: string }[]).map(
+        (s) => s.id,
+      )
+    : args;
 if (ids.length === 0) {
-  console.error("경 번호를 적어 주세요. 예: pnpm import:vri sn56.11");
+  console.error("경 번호를 적어 주세요. 예: pnpm import:vri sn56.11 (모두: pnpm import:vri --all)");
   process.exit(1);
 }
+const quiet = ids.length > 20;
 
 const db = new DatabaseSync(EPITAKA_DB, { readOnly: true });
 const OUT = path.join(process.cwd(), "content/vri");
@@ -69,24 +77,26 @@ function linesOf(book: string, from: number, to: number): Line[] {
   ).map((l) => ({ ...l, text: tidy(String(l.text)) }));
 }
 
-function findFile(dir: string, name: string): string | null {
+/** 마하상기띠본 원문 파일: 파일 이름 → 경로 (한 번만 훑는다) */
+const msFiles = new Map<string, string>();
+(function walk(dir: string) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
-    if (entry.isFile() && entry.name === name) return full;
-    if (entry.isDirectory()) {
-      const found = findFile(full, name);
-      if (found) return found;
-    }
+    if (entry.isDirectory()) walk(full);
+    else if (entry.name.endsWith("_root-pli-ms.json")) msFiles.set(entry.name, full);
   }
-  return null;
-}
+})(path.join(SOURCE_ROOT, "sutta_pitaka"));
 
+
+
+const stats = { done: 0, lines: 0, unmatched: 0, missing: [] as string[], withUnmatched: [] as string[] };
 for (const suttaId of ids) {
   const heads = db
     .prepare("select book_id, para_id, chapter_len, title from headings where sc_id = ? order by level, para_id")
     .all(suttaId) as unknown as { book_id: string; para_id: number; chapter_len: number; title: string }[];
   if (heads.length === 0) {
-    console.error(`${suttaId}: E-Piṭaka 에서 경을 찾지 못했습니다 (headings.sc_id)`);
+    if (!quiet) console.error(`${suttaId}: E-Piṭaka 에서 경을 찾지 못했습니다 (headings.sc_id)`);
+    stats.missing.push(suttaId);
     continue;
   }
   const head = heads[0];
@@ -96,44 +106,84 @@ for (const suttaId of ids) {
   const vri = linesOf(book, first, last).filter((l) => l.text);
 
   // 마하상기띠본 문장 (0.x 제목 줄 빼고)
-  const msFile = findFile(path.join(SOURCE_ROOT, "sutta_pitaka"), `${suttaId}_root-pli-ms.json`);
+  const msFile = msFiles.get(`${suttaId}_root-pli-ms.json`) ?? null;
   if (!msFile) {
-    console.error(`${suttaId}: 마하상기띠본 원문 파일을 찾지 못했습니다`);
+    if (!quiet) console.error(`${suttaId}: 마하상기띠본 원문 파일을 찾지 못했습니다`);
+    stats.missing.push(suttaId);
     continue;
   }
   const ms = Object.entries(JSON.parse(readFileSync(msFile, "utf8")) as Record<string, string>).filter(
     ([key]) => !/:0(\.|$)/.test(key),
   );
 
-  // VRI 한 줄이 덮는 빌랄라 문장들을 앞에서부터 먹어 나간다
+  // 글자 단위로 맞춘다: VRI 줄들과 빌랄라 문장들을 각각 한 줄로 이어(맞춰 보기용 글자만) 앞에서부터 같이 읽다가,
+  // 어긋나면(이본·생략 표시) 다음 16글자가 다시 나오는 곳을 찾아 이어 간다.
+  // VRI 줄의 첫 글자가 닿은 빌랄라 문장에 그 줄을 둔다 (줄 나눔이 달라도 같은 문장에 모인다).
   const segments: Record<string, string> = {};
   const vriToKey = new Map<string, string>(); // "para:line" → 빌랄라 문장 번호
-  let pos = 0;
   const unmatched: string[] = [];
-  for (const l of vri) {
-    let rest = norm(l.text);
-    const startKey = ms[Math.min(pos, ms.length - 1)]?.[0];
-    let used = 0;
-    while (pos < ms.length && rest.length > 0) {
-      const m = norm(ms[pos][1]);
-      if (!m) {
-        pos++;
+  const vNorm = vri.map((l) => norm(l.text));
+  const mNorm = ms.map(([, t]) => norm(t));
+  const V = vNorm.join("");
+  const M = mNorm.join("");
+  const vStarts: number[] = [];
+  vNorm.reduce((acc, t) => (vStarts.push(acc), acc + t.length), 0);
+  const mStarts: number[] = [];
+  mNorm.reduce((acc, t) => (mStarts.push(acc), acc + t.length), 0);
+  const map = new Int32Array(V.length).fill(-1);
+  {
+    const W = 16;
+    let i = 0;
+    let j = 0;
+    while (i < V.length && j < M.length) {
+      if (V[i] === M[j]) {
+        map[i++] = j++;
         continue;
       }
-      const probe = m.slice(0, Math.min(12, m.length));
-      if (!rest.startsWith(probe)) break;
-      rest = rest.slice(Math.min(m.length, rest.length));
-      pos++;
-      used++;
+      const k = M.indexOf(V.slice(i, i + W), j);
+      if (k >= 0 && k - j < 4000) {
+        j = k;
+        continue;
+      }
+      // 빌랄라 쪽 글이 VRI 에 없으면(또는 그 반대) VRI 쪽을 한 글자 넘긴다
+      const back = V.indexOf(M.slice(j, j + W), i);
+      if (back >= 0 && back - i < 4000) {
+        i = back;
+        continue;
+      }
+      i++;
     }
-    if (used === 0) {
-      unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
-      if (pos < ms.length) pos++; // 짝을 못 찾으면 한 문장 건너뛰고 그 자리에 둔다
+  }
+  const segOf = (offset: number) => {
+    let lo = 0;
+    let hi = mStarts.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (mStarts[mid] <= offset) lo = mid;
+      else hi = mid - 1;
     }
-    const key = startKey ?? ms.at(-1)![0];
+    return lo;
+  };
+  let prevSeg = 0;
+  vri.forEach((l, n) => {
+    const from = vStarts[n];
+    const to = from + vNorm[n].length;
+    let hit = -1;
+    let matched = 0;
+    for (let x = from; x < to; x++) {
+      if (map[x] >= 0) {
+        if (hit < 0) hit = map[x];
+        matched++;
+      }
+    }
+    let seg = hit >= 0 ? segOf(hit) : prevSeg;
+    if (seg < prevSeg) seg = prevSeg; // 차례를 거꾸로 가지 않는다
+    if (to > from && matched < (to - from) / 2) unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
+    prevSeg = seg;
+    const key = ms[seg]?.[0] ?? ms.at(-1)![0];
     segments[key] = segments[key] ? `${segments[key]} ${l.text}` : l.text;
     vriToKey.set(`${l.para}:${l.line}`, key);
-  }
+  });
   // 경 이름 줄 — 마하상기띠본의 마지막 제목 줄(0.x) 자리에 VRI 경 이름을 둔다
   const msTitleKey = Object.keys(JSON.parse(readFileSync(msFile, "utf8")) as Record<string, string>)
     .filter((k) => /:0\.\d+$/.test(k))
@@ -166,9 +216,24 @@ for (const suttaId of ids) {
       word: string | null;
     }[];
     if (links.length === 0) return null;
-    const from = Math.min(...links.map((l) => l.dst_para));
-    const to = Math.max(...links.map((l) => l.dst_para));
+    // 같은 낱말이 멀리 떨어진 다른 경의 주석에도 걸리는 일이 있어(엉뚱한 링크), 연결된 문단을 가까운 것끼리
+    // 묶어 가장 많이 걸린 묶음(과 그만큼 많이 걸린 묶음)만 쓴다.
+    const linked = [...new Set(links.map((l) => l.dst_para))].sort((a, b) => a - b);
+    const clusters: { from: number; to: number; n: number }[] = [];
+    for (const para of linked) {
+      const last = clusters.at(-1);
+      const n = links.filter((l) => l.dst_para === para).length;
+      if (last && para - last.to <= 60) {
+        last.to = para;
+        last.n += n;
+      } else clusters.push({ from: para, to: para, n });
+    }
+    const best = Math.max(...clusters.map((c) => c.n));
+    const kept = clusters.filter((c) => c.n >= best * 0.25);
+    const from = Math.min(...kept.map((c) => c.from));
+    const to = Math.max(...kept.map((c) => c.to));
     const lines = linesOf(dstBook, from, to);
+    links.splice(0, links.length, ...links.filter((l) => l.dst_para >= from && l.dst_para <= to));
     let cursor = 0;
     const paras = [...new Set(lines.map((l) => l.para))].map((para) => {
       const own = links.filter((l) => l.dst_para === para);
@@ -220,10 +285,24 @@ for (const suttaId of ids) {
     attha: commentary(meta?.attha_ref),
     tika: commentary(meta?.tika_ref),
   };
-  writeFileSync(path.join(OUT, `${suttaId}.json`), `${JSON.stringify(out, null, 2)}\n`);
-  console.log(
+  writeFileSync(path.join(OUT, `${suttaId}.json`), quiet ? `${JSON.stringify(out)}\n` : `${JSON.stringify(out, null, 2)}\n`);
+  stats.done++;
+  stats.unmatched += unmatched.length;
+  stats.lines += vri.length;
+  if (unmatched.length) stats.withUnmatched.push(`${suttaId}(${unmatched.length})`);
+  if (!quiet) console.log(
     `${suttaId}: ${book} ${first}~${last} · VRI ${vri.length}줄 → 빌랄라 ${Object.keys(segments).length}문장 · ` +
       `주석서 ${out.attha?.paras.length ?? 0}문단 · 복주석서 ${out.tika?.paras.length ?? 0}문단` +
       (unmatched.length ? `\n  짝을 못 찾은 VRI 줄 ${unmatched.length}개:\n   - ${unmatched.join("\n   - ")}` : ""),
+  );
+}
+if (quiet) {
+  console.log(
+    `경 ${stats.done}개 · VRI ${stats.lines}줄 · 짝을 못 찾은 줄 ${stats.unmatched}개 (${stats.withUnmatched.length}개 경)\n` +
+      `E-Piṭaka 에 없는 경 ${stats.missing.length}개: ${stats.missing.join(" ")}`,
+  );
+  writeFileSync(
+    path.join(OUT, "_import-report.txt"),
+    `짝을 못 찾은 줄이 있는 경:\n${stats.withUnmatched.join("\n")}\n\nE-Piṭaka 에 없는 경:\n${stats.missing.join("\n")}\n`,
   );
 }

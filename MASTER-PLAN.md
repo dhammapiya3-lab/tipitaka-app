@@ -358,3 +358,11 @@ Firebase·recharts 는 쓰지 않는다.
 
 - 원래 앱의 `translator_info/*.txt` 를 `content/theravada-app/translator_info/` 에 두고, 변환 때 `public/data/edition-info/<판본>.json` 으로 옮긴다.
 - 판본 칩과 대역·문법분석의 저자 이름 단추가 같은 창을 연다(대역·문법분석에서 열면 그 소개가 먼저).
+
+## VRI 5부 니까야 전체 (2026-11-13)
+
+- `pnpm import:vri --all` 로 사이트 목록의 경 전부(5,509개, E-Piṭaka 에 없는 216개 제외)를 가져왔다. 보고: `content/vri/_import-report.txt`.
+- 맞춤: VRI 줄과 마하상기띠 문장을 글자 단위로 이어 읽다가 어긋나면 다음 16글자로 다시 찾는다. 약 98% 줄이 정확히 맞는다.
+- 주석 범위: 연결된 주석 문단을 가까운 것끼리(60문단 이내) 묶어 가장 많이 걸린 묶음만 쓴다 (멀리 떨어진 엉뚱한 연결 제외).
+- 호스팅 파일 수 한도 때문에 VRI 본문·주석은 경마다 파일을 만들지 않고 ~400KB 묶음(`public/data/vri/t-<n>.json`, `c-<n>.json`)에 모은다. 어느 묶음인지는 sutta-index 의 `vri` 칸.
+- VRI 본문은 검색 색인에 넣지 않는다(빠알리 검색은 마하상기띠본으로).

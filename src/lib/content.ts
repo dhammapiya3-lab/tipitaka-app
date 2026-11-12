@@ -61,7 +61,36 @@ const SUTTA_BASE = "/data/suttas";
 const suttaUrl = (suttaId: string, editionId: string, suffix: string) =>
   `${SUTTA_BASE}/${encodeURIComponent(suttaId)}/${encodeURIComponent(editionId)}${suffix}`;
 
+// ── VRI 본문·주석 묶음 (public/data/vri/t-<n>.json · c-<n>.json) ───────────
+const VRI_EDITION_ID = "pli-vri";
+const vriShardCache = new Map<string, Promise<Record<string, unknown>>>();
+
+function vriShard(kind: "t" | "c", n: number): Promise<Record<string, unknown>> {
+  const url = `/data/vri/${kind}-${n}.json`;
+  let promise = vriShardCache.get(url);
+  if (!promise) {
+    promise = getJson(url).then((data) => {
+      if (typeof data !== "object" || data === null) throw new Error("VRI 자료 형식이 맞지 않습니다");
+      return data as Record<string, unknown>;
+    });
+    vriShardCache.set(url, promise);
+    promise.catch(() => vriShardCache.delete(url));
+  }
+  return promise;
+}
+
+async function vriEntry(suttaId: string) {
+  const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
+  if (!entry?.vri) throw new Error("VRI 자료가 없습니다");
+  return entry.vri;
+}
+
 export async function fetchSuttaText(suttaId: string, editionId: string): Promise<SuttaText> {
+  if (editionId === VRI_EDITION_ID) {
+    const { t } = await vriEntry(suttaId);
+    const shard = await vriShard("t", t);
+    return suttaTextSchema.parse({ suttaId, editionId, segments: shard[suttaId] });
+  }
   const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
   // 복사를 막아 둔 번역은 감싸 둔 글을 풀어서 같은 검사를 한다
   const sealed = sealedSuttaTextSchema.safeParse(data);
@@ -120,18 +149,13 @@ export function fetchSuttaAnalysis(
   return promise;
 }
 
-const commentaryCache = new Map<string, Promise<SuttaCommentary>>();
-
-/** 주석서(attha.json)·복주석서(tika.json) — 처음 열 때만 받는다 */
-export function fetchCommentary(suttaId: string, layer: CommentaryLayer): Promise<SuttaCommentary> {
-  const url = `${SUTTA_BASE}/${encodeURIComponent(suttaId)}/${layer}.json`;
-  let promise = commentaryCache.get(url);
-  if (!promise) {
-    promise = getJson(url).then((data) => suttaCommentarySchema.parse(data));
-    commentaryCache.set(url, promise);
-    promise.catch(() => commentaryCache.delete(url));
-  }
-  return promise;
+/** 주석서·복주석서 — 경의 VRI 주석 묶음에서 꺼낸다 */
+export async function fetchCommentary(suttaId: string, layer: CommentaryLayer): Promise<SuttaCommentary> {
+  const { c } = await vriEntry(suttaId);
+  if (c === null) throw new Error("주석 자료가 없습니다");
+  const shard = await vriShard("c", c);
+  const both = shard[suttaId] as Record<string, unknown> | undefined;
+  return suttaCommentarySchema.parse(both?.[layer]);
 }
 
 const editionInfoCache = new Map<string, Promise<EditionInfo | null>>();

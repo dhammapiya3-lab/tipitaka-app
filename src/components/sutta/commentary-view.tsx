@@ -153,7 +153,7 @@ export function CommentaryCard({
             ))
           : null}
       </div>
-      <div className="flex flex-col gap-3 px-5 py-4 font-pali text-gray-800 dark:text-foreground" lang="pi">
+      <div className="flex flex-col gap-3 px-5 py-4 font-pali break-words text-gray-800 dark:text-foreground" lang="pi">
         {(() => {
           const trs = editions.filter((e) => picked.includes(e.id) && para.tr[e.id]);
           // 고른 번역이 이 문단에 없으면 빠알리 원문이라도 보인다

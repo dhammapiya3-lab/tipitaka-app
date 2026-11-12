@@ -248,6 +248,7 @@ const vriSchema = z.object({
   tika: vriCommentarySchema.nullable(),
 });
 const commentaryFiles: SuttaCommentary[] = [];
+const vriTexts: SuttaText[] = [];
 /** 주석 번역 판본 id — 판본 정보 창의 소개 글(translator_info)을 함께 옮긴다 */
 const commentaryEditionIds = new Set<string>();
 const usedEditions = new Set<string>();
@@ -348,7 +349,9 @@ function buildSutta(
     const where = `${id} VRI`;
     const extra = Object.keys(vri.segments).filter((key) => !(key in root));
     if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
-    texts.push({ suttaId: id, editionId: VRI_EDITION.id, segments: toSegments(vri.segments) });
+    // VRI 본문·주석은 경마다 파일을 만들지 않고 묶음 파일(public/data/vri/)에 모은다 — 호스팅 파일 수 한도(2만 개)
+    vriTexts.push({ suttaId: id, editionId: VRI_EDITION.id, segments: toSegments(vri.segments) });
+    const rootParas = new Set(Object.keys(root).map((key) => key.slice(0, key.lastIndexOf("."))));
     sutta.editions.push(VRI_EDITION.id);
     usedEditions.add(VRI_EDITION.id);
     for (const layer of ["attha", "tika"] as const) {
@@ -364,7 +367,7 @@ function buildSutta(
         }
       }
       const paras = c.paras.map((p) => {
-        const bad = p.refs.filter((ref) => !Object.keys(root).some((key) => key.startsWith(`${ref}.`)));
+        const bad = p.refs.filter((ref) => !rootParas.has(ref));
         if (bad.length) errors.push(`${where} ${c.book} ${p.para}: 경에 없는 문단 ${bad.join(", ")}`);
         const tr: Record<string, (ReturnType<typeof parseInline> | null)[]> = {};
         for (const [tid, t] of translators) {
@@ -539,6 +542,55 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
   }
   writeFileSync(path.join(path.dirname(OUT_SUTTAS), "extras.json"), JSON.stringify(extras));
 }
+// VRI 묶음 파일: 목록 차례대로 경을 모아 ~400KB 가 넘으면 다음 묶음. 본문(t-)과 주석(c-)은 따로.
+const OUT_VRI = path.join(ROOT, "public/data/vri");
+rmSync(OUT_VRI, { recursive: true, force: true });
+mkdirSync(OUT_VRI, { recursive: true });
+{
+  const SHARD_BYTES = 400_000;
+  const order = new Map(suttaIndex.map((s, i) => [s.id, i]));
+  const byOrder = <T extends { suttaId: string }>(list: T[]) =>
+    [...list].sort((a, b) => (order.get(a.suttaId) ?? 0) - (order.get(b.suttaId) ?? 0));
+  const shardOf = new Map<string, { t?: number; c?: number }>();
+  const writeShards = (kind: "t" | "c", items: { suttaId: string; body: unknown }[]) => {
+    let shard: Record<string, unknown> = {};
+    let bytes = 0;
+    let n = 0;
+    const flush = () => {
+      if (Object.keys(shard).length === 0) return;
+      writeFileSync(path.join(OUT_VRI, `${kind}-${n}.json`), JSON.stringify(shard));
+      shard = {};
+      bytes = 0;
+      n++;
+    };
+    for (const { suttaId, body } of items) {
+      const json = JSON.stringify(body);
+      if (bytes > 0 && bytes + json.length > SHARD_BYTES) flush();
+      shard[suttaId] = body;
+      bytes += json.length;
+      shardOf.set(suttaId, { ...shardOf.get(suttaId), [kind]: n });
+    }
+    flush();
+    return n;
+  };
+  const tCount = writeShards(
+    "t",
+    byOrder(vriTexts).map((t) => ({ suttaId: t.suttaId, body: suttaTextSchema.parse(t).segments })),
+  );
+  const grouped = new Map<string, Partial<Record<"attha" | "tika", SuttaCommentary>>>();
+  for (const c of commentaryFiles) {
+    grouped.set(c.suttaId, { ...grouped.get(c.suttaId), [c.layer]: suttaCommentarySchema.parse(c) });
+  }
+  const cCount = writeShards(
+    "c",
+    byOrder([...grouped].map(([suttaId, body]) => ({ suttaId, body }))),
+  );
+  for (const entry of suttaIndex) {
+    const at = shardOf.get(entry.id);
+    if (at?.t !== undefined) entry.vri = { t: at.t, c: at.c ?? null };
+  }
+  console.log(`VRI 묶음: 본문 ${tCount}개 · 주석 ${cCount}개 (경 ${vriTexts.length}개)`);
+}
 writeFileSync(path.join(path.dirname(OUT_SUTTAS), "sutta-index.json"), JSON.stringify(suttaIndexSchema.parse(suttaIndex)));
 
 rmSync(OUT_SUTTAS, { recursive: true, force: true });
@@ -605,12 +657,6 @@ for (const { kind, ...file } of analysisFiles) {
     count++;
   }
   console.log(`판본 정보 ${count}개`);
-}
-for (const file of commentaryFiles) {
-  writeFileSync(
-    path.join(OUT_SUTTAS, file.suttaId, `${file.layer}.json`),
-    JSON.stringify(suttaCommentarySchema.parse(file)),
-  );
 }
 for (const kind of ["nissaya", "grammar"] as const) {
   const list = analysisFiles.filter((f) => f.kind === kind);

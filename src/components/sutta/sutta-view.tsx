@@ -841,7 +841,7 @@ export function SuttaView({
       {/* 머리(제목·번역자·위치 줄·판본)는 본문 상자 폭에 맞춰 함께 가운데로 */}
       <SubBar
         widthClass={readWidth}
-        title={focus ? (headingOf.get(focus) ?? paragraphMark(focus)) : (editionTitle ?? head.title)}
+        title={focus ? `${editionTitle ?? head.title} ${paragraphMark(focus)}` : (editionTitle ?? head.title)}
         titleLang={focus || editionTitle ? undefined : head.titleLang}
         subtitle={focus ? undefined : firstTranslation?.label}
         backHref={focus ? undefined : head.backHref}
