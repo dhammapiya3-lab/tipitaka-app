@@ -68,16 +68,26 @@ const vriCommentarySchema = z.object({
     }),
   ),
 });
-/** content/vri/<경>.ko.json — 주석서·복주석서의 한국어 번역 (사람이 쓰는 파일). 문단 번호 → 줄마다 번역 */
-const vriKoLayerSchema = z.object({
-  title: z.string().optional(),
-  nameKo: z.string().optional(),
-  paras: z.record(z.string(), z.array(z.string().nullable())).default({}),
-});
+/**
+ * content/vri/<경>.ko.json — 주석서·복주석서 번역 (사람이 쓰는 파일).
+ * translations: 번역자(판본) id → 이름·배지와 층별 "문단 번호 → 줄마다 번역"
+ */
+const vriKoLines = z.record(z.string(), z.array(z.string().nullable()));
 const vriKoSchema = z.object({
   _설명: z.string().optional(),
-  attha: vriKoLayerSchema.optional(),
-  tika: vriKoLayerSchema.optional(),
+  attha: z.object({ title: z.string().optional(), nameKo: z.string().optional() }).optional(),
+  tika: z.object({ title: z.string().optional(), nameKo: z.string().optional() }).optional(),
+  translations: z
+    .record(
+      z.string(),
+      z.object({
+        label: z.string().min(1),
+        badge: z.string().min(1),
+        attha: vriKoLines.default({}),
+        tika: vriKoLines.default({}),
+      }),
+    )
+    .default({}),
 });
 
 const NIKAYAS = [
@@ -238,6 +248,8 @@ const vriSchema = z.object({
   tika: vriCommentarySchema.nullable(),
 });
 const commentaryFiles: SuttaCommentary[] = [];
+/** 주석 번역 판본 id — 판본 정보 창의 소개 글(translator_info)을 함께 옮긴다 */
+const commentaryEditionIds = new Set<string>();
 const usedEditions = new Set<string>();
 const texts: SuttaText[] = [];
 const notesFiles: SuttaNotes[] = [];
@@ -343,16 +355,26 @@ function buildSutta(
       const c = vri[layer];
       if (!c) continue;
       const koFile = path.join(ROOT, "content", "vri", `${id}.ko.json`);
-      const ko = existsSync(koFile) ? vriKoSchema.parse(readJson(koFile))[layer] : undefined;
-      for (const para of Object.keys(ko?.paras ?? {})) {
-        if (!c.paras.some((p) => String(p.para) === para)) errors.push(`${id}.ko.json ${layer}: ${c.book} 에 문단 ${para} 이 없습니다`);
+      const ko = existsSync(koFile) ? vriKoSchema.parse(readJson(koFile)) : undefined;
+      const translators = Object.entries(ko?.translations ?? {});
+      for (const [tid, t] of translators) {
+        if (!/^kor-[a-z0-9-]+$/.test(tid)) errors.push(`${id}.ko.json: 번역 판본 id "${tid}" 는 kor-영문소문자 형식이어야 합니다`);
+        for (const para of Object.keys(t[layer])) {
+          if (!c.paras.some((p) => String(p.para) === para)) errors.push(`${id}.ko.json ${tid} ${layer}: ${c.book} 에 문단 ${para} 이 없습니다`);
+        }
       }
       const paras = c.paras.map((p) => {
         const bad = p.refs.filter((ref) => !Object.keys(root).some((key) => key.startsWith(`${ref}.`)));
         if (bad.length) errors.push(`${where} ${c.book} ${p.para}: 경에 없는 문단 ${bad.join(", ")}`);
-        const koLines = ko?.paras[String(p.para)] ?? [];
-        if (koLines.length > p.lines.length) {
-          errors.push(`${id}.ko.json ${layer} ${p.para}: 번역 줄(${koLines.length})이 원문 줄(${p.lines.length})보다 많습니다`);
+        const tr: Record<string, (ReturnType<typeof parseInline> | null)[]> = {};
+        for (const [tid, t] of translators) {
+          const koLines = t[layer][String(p.para)] ?? [];
+          if (koLines.length > p.lines.length) {
+            errors.push(`${id}.ko.json ${tid} ${layer} ${p.para}: 번역 줄(${koLines.length})이 원문 줄(${p.lines.length})보다 많습니다`);
+          }
+          if (koLines.some((line) => line?.trim())) {
+            tr[tid] = p.lines.map((_, i) => (koLines[i]?.trim() ? parseInline(koLines[i]!) : null));
+          }
         }
         return {
           para: p.para,
@@ -360,16 +382,29 @@ function buildSutta(
           refs: p.refs,
           lines: p.lines.map((line) => parseInline(line)),
           lineRefs: p.lineRefs,
-          ko: p.lines.map((_, i) => (koLines[i]?.trim() ? parseInline(koLines[i]!) : null)),
+          tr,
         };
       });
+      const layerEditions: Edition[] = translators
+        .filter(([, t]) => Object.keys(t[layer]).length > 0)
+        .map(([tid, t]) => ({
+          id: tid,
+          label: t.label,
+          badge: t.badge,
+          language: "ko",
+          translator: t.label,
+          license: null,
+          allowCopy: true,
+        }));
+      for (const e of layerEditions) commentaryEditionIds.add(e.id);
       commentaryFiles.push({
         suttaId: id,
         layer,
         book: c.book,
         bookName: c.bookName,
-        title: ko?.title ?? null,
-        nameKo: ko?.nameKo ?? null,
+        title: ko?.[layer]?.title ?? null,
+        nameKo: ko?.[layer]?.nameKo ?? null,
+        editions: layerEditions,
         paras,
       });
       (sutta.commentary ??= []).push(layer);
@@ -553,8 +588,8 @@ for (const { kind, ...file } of analysisFiles) {
     return sections;
   };
   let count = 0;
-  for (const edition of editionById.values()) {
-    if (!usedEditions.has(edition.id)) continue;
+  for (const editionId of [...usedEditions, ...commentaryEditionIds]) {
+    const edition = { id: editionId };
     const base = edition.id.replace(/-/g, "_");
     const groups: EditionInfo["groups"] = [];
     for (const [prefix, kind] of [["", "text"], ["nissaya_", "nissaya"], ["paligrammar_", "grammar"]] as const) {

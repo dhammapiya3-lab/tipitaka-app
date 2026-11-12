@@ -13,7 +13,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
-import { CommentaryCard, CommentaryView, LAYER_NAME } from "@/components/sutta/commentary-view";
+import { CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText } from "@/components/sutta/inline-text";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
@@ -164,7 +164,7 @@ export function SuttaView({
         const byRef = new Map<string, number[]>();
         para.lineRefs.forEach((refs, i) => refs.forEach((r) => byRef.set(r, [...(byRef.get(r) ?? []), i])));
         for (const [ref, lines] of byRef) {
-          if (!lines.some((i) => para.ko[i])) continue;
+          if (!lines.some((i) => Object.values(para.tr).some((t) => t[i]))) continue;
           const row = out.get(ref) ?? {};
           (row[l] ??= []).push({ para, lines });
           out.set(ref, row);
@@ -173,6 +173,30 @@ export function SuttaView({
     }
     return out;
   }, [comm]);
+  /** 주석 판본 — VRI 원문과 번역자들 (주석서·복주석서를 합쳐서) */
+  const commEditions = useMemo(() => {
+    const vri = editions.find((e) => e.id === VRI_ID) ?? {
+      id: VRI_ID,
+      label: "VRI 제6차 결집본",
+      badge: "V",
+      language: "pli" as const,
+      translator: null,
+      license: null,
+      allowCopy: true,
+    };
+    const seen = new Map<string, Edition>();
+    for (const l of ["attha", "tika"] as const) comm[l]?.editions.forEach((e) => seen.has(e.id) || seen.set(e.id, e));
+    return [...seen.values(), vri];
+  }, [comm, editions]);
+  /** 고른 주석 판본 — 처음에는 목록 맨 위 하나 (번역이 있으면 번역, 없으면 VRI 원문). 경과 같은 방식 */
+  const [commPickedState, setCommPicked] = useState<string[] | null>(null);
+  const commPicked = commPickedState ?? [commEditions[0].id];
+  const toggleCommPick = (id: string) =>
+    setCommPicked(() => {
+      const cur = commPicked;
+      const next = cur.includes(id) ? cur.filter((e) => e !== id) : [...cur, id];
+      return next.length > 0 ? next : cur;
+    });
   /** 문단 아래에 펼친 주석 번역 (문단 → 펼친 층) */
   const [openKo, setOpenKo] = useState<Record<string, CommentaryLayer[]>>({});
   const toggleKo = (p: string, l: CommentaryLayer) =>
@@ -514,6 +538,8 @@ export function SuttaView({
         para={comm[l]!.paras[i]}
         onWord={onCommentaryWord}
         label={label ? LAYER_NAME[l] : undefined}
+        picked={commPicked}
+        editions={comm[l]!.editions}
       />
     ));
   /** 경 문단 하나와 그 주석을 한 줄에 (나란히 보기) */
@@ -690,6 +716,13 @@ export function SuttaView({
     );
   }
 
+  /** 펼친 주석에 보일 번역자 — 고른 번역자 중 이 문단에 번역이 있는 사람, 없으면 번역이 있는 모든 사람 */
+  function koShown(para: SuttaCommentary["paras"][number]) {
+    const have = commEditions.filter((e) => para.tr[e.id]);
+    const mine = have.filter((e) => commPicked.includes(e.id));
+    return mine.length ? mine : have;
+  }
+
   /** 문단 아래에 펼치는 주석·복주석 번역 — 빠알리 한 줄, 그 아래 한국어 */
   function koBlock(p: string, l: CommentaryLayer) {
     const groups = koCommentary.get(p)?.[l];
@@ -719,11 +752,18 @@ export function SuttaView({
                   {i === 0 && para.vripara ? `${para.vripara}. ` : ""}
                   <InlineText parts={para.lines[i]} onWord={onCommentaryWord} />
                 </p>
-                {para.ko[i] ? (
-                  <p className="text-[0.9em] leading-relaxed text-gray-600 dark:text-muted-foreground">
-                    <InlineText parts={para.ko[i]!} />
-                  </p>
-                ) : null}
+                {koShown(para).map((e) =>
+                  para.tr[e.id]?.[i] ? (
+                    <p key={e.id} className="text-[0.9em] leading-relaxed text-gray-600 dark:text-muted-foreground">
+                      {koShown(para).length > 1 ? (
+                        <span className="mr-1.5 inline-flex rounded bg-primary px-1 align-middle text-[10px] font-bold text-primary-foreground">
+                          {e.badge})
+                        </span>
+                      ) : null}
+                      <InlineText parts={para.tr[e.id]![i]!} />
+                    </p>
+                  ) : null,
+                )}
               </div>
             )),
           )}
@@ -824,7 +864,10 @@ export function SuttaView({
       >
         <Breadcrumb items={head.crumbs} />
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <EditionBadges editions={shown} onInfo={setInfoEdition} />
+          <EditionBadges
+            editions={layer === "sutta" ? shown : commEditions.filter((e) => commPicked.includes(e.id))}
+            onInfo={setInfoEdition}
+          />
           {canCompare ? (
             <div className="ml-auto flex rounded-lg bg-muted p-0.5 print:hidden" role="group" aria-label="판본 대조 방식">
               {(
@@ -904,6 +947,7 @@ export function SuttaView({
                 suttaId={suttaId}
                 layer={layer}
                 available={commentary.includes(layer)}
+                picked={commPicked}
                 fontStyle={articleStyle}
                 onWord={(w) => setWord({ word: w, rowKey: layer, keys: [], tab: "dictionary", title: "", pali: "" })}
                 onGoParagraph={(p) => {
@@ -1067,6 +1111,12 @@ export function SuttaView({
             return next.length > 0 ? next : cur; // 마지막 하나는 끌 수 없다
           })
         }
+        commentary={
+          commentary.length
+            ? { editions: commEditions, shownIds: commPicked, onToggle: toggleCommPick }
+            : undefined
+        }
+        commentaryFirst={layer !== "sutta"}
       />
       <TocSheet
         open={sheet === "toc"}

@@ -101,6 +101,8 @@ export interface SuttaCommentary {
   /** 한국어 번역 파일에 적은 책 제목·한국어 이름 (예: Sāratthappakāsinī · 상윳따 대품 주석서) */
   title: string | null;
   nameKo: string | null;
+  /** 이 주석의 번역 판본들 (번역자) — 빠알리 원문은 VRI 판본(pli-vri) */
+  editions: Edition[];
   paras: {
     /** 책 안의 문단 번호 (예: 882) */
     para: number;
@@ -111,8 +113,8 @@ export interface SuttaCommentary {
     lines: InlinePart[][];
     /** 줄마다 풀이하는 경 문단 */
     lineRefs: string[][];
-    /** 줄마다 한국어 번역 (없으면 null) */
-    ko: (InlinePart[] | null)[];
+    /** 번역 판본 id → 줄마다 번역 (없으면 null) */
+    tr: Record<string, (InlinePart[] | null)[]>;
   }[];
 }
 

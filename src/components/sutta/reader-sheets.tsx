@@ -22,10 +22,22 @@ export function EditionPickerSheet({
   editions,
   shownIds,
   onToggle,
-}: SheetProps & { editions: Edition[]; shownIds: string[]; onToggle: (id: string) => void }) {
-  const groups = (["ko", "pli", "en"] as const)
-    .map((lang) => ({ lang, items: editions.filter((e) => e.language === lang) }))
-    .filter((g) => g.items.length > 0);
+  commentary,
+  commentaryFirst = false,
+}: SheetProps & {
+  editions: Edition[];
+  shownIds: string[];
+  onToggle: (id: string) => void;
+  /** 주석서·복주석서 판본(VRI 원문과 번역자) — 있으면 아래(또는 위)에 따로 고른다 */
+  commentary?: { editions: Edition[]; shownIds: string[]; onToggle: (id: string) => void };
+  /** 주석서·복주석서 탭에서 열면 주석 판본을 먼저 */
+  commentaryFirst?: boolean;
+}) {
+  const sections = [
+    { key: "sutta", title: commentary ? "경" : null, editions, shownIds, onToggle },
+    ...(commentary ? [{ key: "commentary", title: "주석서 · 복주석서", ...commentary }] : []),
+  ];
+  if (commentaryFirst) sections.reverse();
   return (
     <BottomSheet
       open={open}
@@ -33,35 +45,57 @@ export function EditionPickerSheet({
       title="판본 선택"
       subtitle="여러 판본을 선택하면 문장별로 비교할 수 있습니다"
     >
-      <div className="flex flex-col gap-4">
-        {groups.map((g) => (
-          <div key={g.lang}>
-            <h3 className="mb-2 px-2 text-sm font-bold">{LANGUAGE_NAME[g.lang]}</h3>
-            <div className="flex flex-col gap-2">
-              {g.items.map((e) => {
-                const on = shownIds.includes(e.id);
-                return (
-                  <button
-                    key={e.id}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => onToggle(e.id)}
-                    className={cn(
-                      "flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                      on ? "bg-primary text-primary-foreground" : "bg-gray-50 text-secondary-foreground hover:bg-gray-100 dark:bg-muted",
-                    )}
-                  >
-                    <span className="text-left text-sm font-bold">{e.label}</span>
-                    {on ? <Check className="size-4" aria-hidden /> : null}
-                  </button>
-                );
-              })}
-            </div>
+      <div className="flex flex-col gap-6">
+        {sections.map((sec) => (
+          <div key={sec.key} className="flex flex-col gap-4">
+            {sec.title ? (
+              <h2 className="border-b pb-2 text-base font-bold text-primary">{sec.title}</h2>
+            ) : null}
+            <EditionGroups editions={sec.editions} shownIds={sec.shownIds} onToggle={sec.onToggle} />
           </div>
         ))}
       </div>
     </BottomSheet>
   );
+}
+
+function EditionGroups({
+  editions,
+  shownIds,
+  onToggle,
+}: {
+  editions: Edition[];
+  shownIds: string[];
+  onToggle: (id: string) => void;
+}) {
+  const groups = (["ko", "pli", "en"] as const)
+    .map((lang) => ({ lang, items: editions.filter((e) => e.language === lang) }))
+    .filter((g) => g.items.length > 0);
+  return groups.map((g) => (
+    <div key={g.lang}>
+      <h3 className="mb-2 px-2 text-sm font-bold">{LANGUAGE_NAME[g.lang]}</h3>
+      <div className="flex flex-col gap-2">
+        {g.items.map((e) => {
+          const on = shownIds.includes(e.id);
+          return (
+            <button
+              key={e.id}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onToggle(e.id)}
+              className={cn(
+                "flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                on ? "bg-primary text-primary-foreground" : "bg-gray-50 text-secondary-foreground hover:bg-gray-100 dark:bg-muted",
+              )}
+            >
+              <span className="text-left text-sm font-bold">{e.label}</span>
+              {on ? <Check className="size-4" aria-hidden /> : null}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  ));
 }
 
 /** 판본 배지를 누르면 — 판본 정보 */
