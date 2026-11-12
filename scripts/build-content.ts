@@ -91,9 +91,15 @@ const rawNodeSchema: z.ZodType<RawNode> = z.lazy(() =>
       .optional(),
   }),
 );
-const rawEditionListSchema = z.array(
-  z.object({ folder: z.string(), edition: z.string(), footnote: z.string().optional() }),
-);
+const rawEditionEntrySchema = z.object({
+  folder: z.string(),
+  edition: z.string(),
+  footnote: z.string().optional(),
+});
+/** editions.json 은 보통 목록이지만, 책 번호로 묶은 꼴({ "mil": [...] }, 밀린다빤하)도 있다 → 하나로 펼친다 */
+const rawEditionListSchema = z
+  .union([z.array(rawEditionEntrySchema), z.record(z.string(), z.array(rawEditionEntrySchema))])
+  .transform((v) => (Array.isArray(v) ? v : Object.values(v).flat()));
 const rawTextSchema = z.record(z.string(), z.string());
 const registrySchema = z.record(
   z.string(),

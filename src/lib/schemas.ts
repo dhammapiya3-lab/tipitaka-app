@@ -37,7 +37,7 @@ export const inlinePartSchema: z.ZodType<InlinePart> = z.discriminatedUnion("typ
 ]);
 
 export const segmentSchema: z.ZodType<Segment> = z.object({
-  key: z.string().regex(/^[a-z]+[\d.\-]*:[\d.\-]+$/),
+  key: z.string().regex(/^[a-z]+(?:-[a-z]+)*[\d.\-]*:[\d.\-]+$/),
   parts: z.array(inlinePartSchema),
 });
 

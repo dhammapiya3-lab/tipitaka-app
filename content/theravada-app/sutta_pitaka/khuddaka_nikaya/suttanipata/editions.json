@@ -1,0 +1,15 @@
+[
+    { "folder": "suttanipata_kor_koreatheravada", "edition": "kor-koreatheravada" },
+    { "folder": "suttanipata_kor_kavissara", "edition": "kor-kavissara" },
+    { "folder": "suttanipata_kor_dhammagandha", "footnote": "suttanipata_kor_dhammagandha_comment", "edition": "kor-dhammagandha" },
+    { "folder": "suttanipata_kor_sangharakkhita", "edition": "kor-sangharakkhita" },
+    { "folder": "suttanipata_kor_manapika", "edition": "kor-manapika" },
+    { "folder": "suttanipata_kor_seonil",         "edition": "kor-seonil" },
+    { "folder": "suttanipata_kor_kangdaejahaeng_calmvoice", "edition": "kor-kangdaejahaeng-calmvoice" },
+    { "folder": "suttanipata_kor_kimjaeseong", "edition": "kor-kimjaeseong" },
+    { "folder": "suttanipata_kor_myowon", "edition": "kor-myowon" },
+    { "folder": "suttanipata_kor_jeongseungseok_calmvoice", "edition": "kor-jeongseungseok-calmvoice" },
+  
+    { "folder": "suttanipata_pli_ms",             "edition": "pli-ms" }
+]
+

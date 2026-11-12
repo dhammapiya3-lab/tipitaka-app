@@ -1,6 +1,6 @@
 /** 경 번호 표시: dn22 → DN 22, sn1.1 → SN 1.1 */
 export function suttaLabel(id: string): string {
-  return id.replace(/^([a-z]+)/, (letters) => `${letters.toUpperCase()} `);
+  return id.replace(/^([a-z]+(?:-[a-z]+)*)/, (letters) => `${letters.toUpperCase()} `);
 }
 
 export function formatCount(n: number): string {

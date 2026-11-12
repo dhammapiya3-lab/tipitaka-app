@@ -139,6 +139,6 @@ console.log(`글자가 같음: ${report.same}개 / 빈 칸이라 뺀 것: ${repo
 list("글자가 달라진 곳", report.changed);
 list("사이트에 빠진 문장", report.missingSentences);
 list("사이트에만 있는 문장", report.extraSentences);
-list("사이트에 올라가지 않은 원본 파일", report.missingFiles, 60);
-list("폴더와 판본 이름이 맞지 않아 앱이 읽지 않는 파일", report.misplaced);
+list("사이트에 올라가지 않은 원본 파일", report.missingFiles, 200);
+list("폴더와 판본 이름이 맞지 않아 앱이 읽지 않는 파일", report.misplaced, 200);
 process.exit(report.changed.length || report.missingSentences.length || report.extraSentences.length ? 1 : 0);
