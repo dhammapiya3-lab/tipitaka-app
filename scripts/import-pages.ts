@@ -82,6 +82,9 @@ for (const d of docs) {
   const from = cursor.get(d.source.vriCode) ?? 0;
   let k = book.text.indexOf(S.slice(0, 60), from);
   if (k < 0) k = book.text.indexOf(S.slice(0, 30), from);
+  // 앞 경이 엉뚱한 곳(되풀이되는 글)까지 가 버렸으면 책 처음부터 다시 찾는다
+  if (k < 0) k = book.text.indexOf(S.slice(0, 60));
+  if (k < 0) k = book.text.indexOf(S.slice(0, 30));
   if (k < 0) {
     missed++;
     continue;
@@ -112,7 +115,7 @@ for (const d of docs) {
     }
     j++;
   }
-  cursor.set(d.source.vriCode, j);
+  if (j > from) cursor.set(d.source.vriCode, j);
   const segAt = (offset: number) => {
     let lo = 0;
     let hi = starts.length - 1;

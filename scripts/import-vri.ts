@@ -61,6 +61,7 @@ function tidy(text: string): string {
 /** 맞춰 보기용: 소문자, ṁ→ṃ, 이본 [..] ·문장부호·띄어쓰기 없앰 */
 function norm(text: string): string {
   return text
+    .replace(/<[^>]*>/g, "")
     .toLowerCase()
     .replace(/\[[^\]]*\]/g, "")
     .replace(/ṁ/g, "ṃ")
@@ -71,7 +72,7 @@ function norm(text: string): string {
 /** norm() 과 같은 글자를 만들되, 글자마다 원래 글의 몇 번째 글자였는지도 돌려준다 (VRI 줄을 문장 자리에서 자를 때) */
 function normWithIndex(text: string): { s: string; at: number[] } {
   const drop = new Uint8Array(text.length);
-  for (const re of [/\[[^\]]*\]/g, /…\s*pe\s*…|\.\.\.pe\.\.\./gi]) {
+  for (const re of [/<[^>]*>/g, /\[[^\]]*\]/g, /…\s*pe\s*…|\.\.\.pe\.\.\./gi]) {
     for (const m of text.matchAll(re)) drop.fill(1, m.index, m.index + m[0].length);
   }
   let out = "";
@@ -109,20 +110,120 @@ const msFiles = new Map<string, string>();
 
 
 
-const stats = { done: 0, lines: 0, unmatched: 0, unsure: [] as string[], gaps: 0, segs: 0, missing: [] as string[], withUnmatched: [] as string[] };
+/** 경 번호 앞부분 → 찾아볼 E-Piṭaka 책 (목차에 수따센트럴 번호가 없을 때) */
+const BOOKS_BY_PREFIX: Record<string, string[]> = {
+  dn: ["D-i", "D-ii", "D-iii"],
+  mn: ["M-i", "M-ii", "M-iii"],
+  sn: ["S-i", "S-ii", "S-iii", "S-iv", "S-v"],
+  an: ["A-i", "A-ii", "A-iii", "A-iv", "A-v", "A-vi", "A-vii", "A-viii", "A-ix", "A-x", "A-xi"],
+  kp: ["Khp"], dhp: ["Dhp"], ud: ["Ud"], iti: ["It"], snp: ["Sn"], vv: ["Vv"], pv: ["Pv"], thag: ["Th"], thig: ["Thī"],
+  "tha-ap": ["Ap-i", "Ap-ii"], "thi-ap": ["Ap-iii", "Ap-ii"], bv: ["Bv"], cp: ["Cp"], ja: ["Ja-i", "Ja-ii"],
+  mnd: ["Nidd-i"], cnd: ["Nidd-ii"], ps: ["Paṭis"], ne: ["Nett"], pe: ["Pet"], mil: ["Mil"],
+};
+/** 책마다 맞춰 보기용 글 (한 번만 만든다) */
+const bookStreams = new Map<string, { text: string; starts: number[]; lines: Line[] }>();
+function bookStream(book: string) {
+  let s = bookStreams.get(book);
+  if (!s) {
+    const lines = (
+      db.prepare("select para_id as para, line_id as line, vripara, pali as text from sentences where book_id = ? order by para_id, line_id").all(book) as unknown as Line[]
+    ).map((l) => ({ ...l, text: tidy(String(l.text)) }));
+    const starts: number[] = [];
+    let text = "";
+    for (const l of lines) {
+      starts.push(text.length);
+      text += norm(l.text);
+    }
+    s = { text, starts, lines };
+    bookStreams.set(book, s);
+  }
+  return s;
+}
+/** 같은 책에서 앞서 찾은 경 다음부터 찾는다 (같은 글이 되풀이되는 책) */
+const lastFound = new Map<string, number>();
+function locate(suttaId: string) {
+  const prefix = suttaId.replace(/[\d.\-]+$/, "");
+  const file = msFiles.get(`${suttaId}_root-pli-ms.json`);
+  if (!file) return null;
+  const segs = Object.entries(JSON.parse(readFileSync(file, "utf8")) as Record<string, string>)
+    .filter(([key]) => !/:0(\.|$)/.test(key))
+    .map(([, t]) => norm(t))
+    .filter(Boolean);
+  const body = segs.join("");
+  if (body.length < 20) return null;
+  const A = Math.min(40, Math.floor(body.length / 3));
+  // 첫머리·끝머리 글로 찾는다. 맨 앞의 "namo tassa…" 처럼 E-Piṭaka 에서 자리가 다른 줄이 있으면 다음 문장부터 다시 찾는다
+  const heads: { text: string; skip: number }[] = [];
+  const tails: string[] = [];
+  for (let i = 0, off = 0; i < Math.min(4, segs.length); off += segs[i].length, i++) heads.push({ text: body.slice(off, off + A), skip: off });
+  for (let i = segs.length - 1, end = body.length; i >= Math.max(0, segs.length - 4); end -= segs[i].length, i--) tails.push(body.slice(Math.max(0, end - A), end));
+  for (const book of BOOKS_BY_PREFIX[prefix] ?? []) {
+    const s = bookStream(book);
+    if (s.lines.length === 0) continue;
+    const from = lastFound.get(book) ?? 0;
+    let at = -1;
+    for (const h of heads) {
+      if (h.text.length < 12) continue;
+      at = s.text.indexOf(h.text, from);
+      if (at < 0) at = s.text.indexOf(h.text);
+      if (at >= 0) {
+        at = Math.max(0, at - h.skip);
+        break;
+      }
+    }
+    if (at < 0) continue;
+    let endAt = -1;
+    let tailText = "";
+    for (const t of tails) {
+      if (t.length < 12) continue;
+      endAt = s.text.indexOf(t, at);
+      if (endAt >= 0 && endAt - at <= body.length * 3 + 2000) {
+        tailText = t;
+        break;
+      }
+      endAt = -1;
+    }
+    if (endAt < 0) continue;
+    const lineAt = (offset: number) => {
+      let lo = 0;
+      let hi = s.starts.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (s.starts[mid] <= offset) lo = mid;
+        else hi = mid - 1;
+      }
+      return s.lines[lo];
+    };
+    const a = lineAt(at);
+    const b = lineAt(endAt + tailText.length - 1);
+    lastFound.set(book, endAt);
+    // 경 이름: 그 자리 앞의 가장 가까운 E-Piṭaka 목차 제목
+    const title =
+      (db.prepare("select title from headings where book_id = ? and para_id < ? order by para_id desc limit 1").get(book, a.para) as
+        | { title: string }
+        | undefined)?.title ?? "";
+    return { head: { book_id: book, para_id: a.para - 1, chapter_len: 0, title }, first: a.para, last: b.para };
+  }
+  return null;
+}
+
+const stats = { done: 0, lines: 0, unmatched: 0, unsure: [] as string[], gaps: 0, segs: 0, missing: [] as string[], located: [] as string[], withUnmatched: [] as string[] };
 for (const suttaId of ids) {
   const heads = db
     .prepare("select book_id, para_id, chapter_len, title from headings where sc_id = ? order by level, para_id")
     .all(suttaId) as unknown as { book_id: string; para_id: number; chapter_len: number; title: string }[];
-  if (heads.length === 0) {
-    if (!quiet) console.error(`${suttaId}: E-Piṭaka 에서 경을 찾지 못했습니다 (headings.sc_id)`);
+  // E-Piṭaka 목차에 수따센트럴 번호가 없는 경(붓다왐사·닛데사·아빠다나 일부·상윳따 생략 경 등)은 글로 자리를 찾는다
+  const found = heads.length ? null : locate(suttaId);
+  if (heads.length === 0 && !found) {
+    if (!quiet) console.error(`${suttaId}: E-Piṭaka 에서 경을 찾지 못했습니다 (headings.sc_id · 글 찾기)`);
     stats.missing.push(suttaId);
     continue;
   }
-  const head = heads[0];
+  if (found) stats.located.push(suttaId);
+  const head = found ? found.head : heads[0];
   const book = head.book_id;
-  const first = head.para_id + 1;
-  const last = head.para_id + head.chapter_len - 1;
+  const first = found ? found.first : head.para_id + 1;
+  const last = found ? found.last : head.para_id + head.chapter_len - 1;
   const vri = linesOf(book, first, last).filter((l) => l.text);
 
   // 마하상기띠본 문장 (0.x 제목 줄 빼고)
@@ -205,6 +306,8 @@ for (const suttaId of ids) {
     }
     let seg = hit >= 0 ? segOf(hit) : prevSeg;
     if (seg < prevSeg) seg = prevSeg; // 차례를 거꾸로 가지 않는다
+    // 하나도 맞지 않는 짧은 줄은 책·품 제목 줄이다 (글로 자리를 찾은 경에서 경 안에 끼어든다) — 넣지 않는다
+    if (matched === 0 && to - from < 60) return;
     if (to > from && matched < (to - from) / 2) unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
     vriToKey.set(`${l.para}:${l.line}`, ms[seg]?.[0] ?? ms.at(-1)![0]);
 
@@ -245,7 +348,7 @@ for (const suttaId of ids) {
   const msTitleKey = Object.keys(JSON.parse(readFileSync(msFile, "utf8")) as Record<string, string>)
     .filter((k) => /:0\.\d+$/.test(k))
     .at(-1);
-  const titled = msTitleKey ? { [msTitleKey]: tidy(head.title).replace(/^\d+\.\s*/, "") } : {};
+  const titled = msTitleKey && tidy(head.title) ? { [msTitleKey]: tidy(head.title).replace(/^\d+\.\s*/, "") } : {};
 
   /** 경 문단(VRI para) → 빌랄라 문단(sn56.11:2) */
   const paraToMark = (para: number, line?: number) => {
@@ -491,7 +594,8 @@ if (quiet) {
 if (quiet) {
   console.log(
     `경 ${stats.done}개 · VRI ${stats.lines}줄 · 짝을 못 찾은 줄 ${stats.unmatched}개 (${stats.withUnmatched.length}개 경)\n` +
-      `E-Piṭaka 에 없는 경 ${stats.missing.length}개: ${stats.missing.join(" ")}\n` +
+      `목차에 번호가 없어 글로 자리를 찾은 경 ${stats.located.length}개\n` +
+      `E-Piṭaka 에서 못 찾은 경 ${stats.missing.length}개: ${stats.missing.join(" ")}\n` +
       `빌랄라 ${stats.segs}문장 중 VRI 글이 빈 문장 ${stats.gaps}개 · 자를 자리가 애매해 앞 문장에 합친 곳 ${stats.unsure.length}개`,
   );
   writeFileSync(path.join(OUT, "_unsure.txt"), `${stats.unsure.join("\n")}\n`);
