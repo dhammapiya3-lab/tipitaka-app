@@ -92,8 +92,14 @@ type State =
 export function DictionaryPicker() {
   const dictionaries = useSettingsStore((s) => s.dictionaries);
   const toggle = useSettingsStore((s) => s.toggleDictionary);
+  const wordLinks = useSettingsStore((s) => s.dictWordLinks);
+  const setWordLinks = useSettingsStore((s) => s.setDictWordLinks);
   return (
-    <div className="flex flex-wrap gap-1.5" role="group" aria-label="사전 선택">
+    <div
+      className="flex flex-wrap items-center gap-1.5"
+      role="group"
+      aria-label="사전 선택"
+    >
       {DICTIONARY_ORDER.map((id) => {
         const on = dictionaries.includes(id);
         return (
@@ -113,6 +119,31 @@ export function DictionaryPicker() {
           </button>
         );
       })}
+      {/* 영어 풀이(PTS·Cone·PEU) 속 빠알리 낱말을 눌러 다시 찾기 — 기본 켬 */}
+      <button
+        type="button"
+        role="switch"
+        aria-checked={wordLinks}
+        onClick={() => setWordLinks(!wordLinks)}
+        title="사전 풀이 속 빠알리 낱말(점선 밑줄)을 누르면 그 낱말을 다시 찾습니다"
+        className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-muted-foreground hover:bg-hover"
+      >
+        <span
+          aria-hidden
+          className={cn(
+            "relative h-4 w-7 rounded-full transition-colors",
+            wordLinks ? "bg-primary" : "bg-gray-300 dark:bg-muted",
+          )}
+        >
+          <span
+            className={cn(
+              "absolute top-0.5 size-3 rounded-full bg-white transition-all",
+              wordLinks ? "left-3.5" : "left-0.5",
+            )}
+          />
+        </span>
+        풀이 속 낱말 링크
+      </button>
     </div>
   );
 }
@@ -131,6 +162,7 @@ export function WordLookupResult({
   /** 넓은 칸(컴퓨터 아래 칸): 사전들을 옆으로 나란히 */
   columns?: boolean;
 }) {
+  const dictWordLinks = useSettingsStore((s) => s.dictWordLinks);
   const dictionaries = useSettingsStore((s) => s.dictionaries);
   const dictKey = DICTIONARY_ORDER.filter((d) => dictionaries.includes(d)).join(
     ",",
@@ -271,7 +303,9 @@ export function WordLookupResult({
                     key={entry.headword}
                     entry={entry}
                     lang={sec.lang}
-                    onSearch={sec.lang === "en" ? onSearch : undefined}
+                    onSearch={
+                      sec.lang === "en" && dictWordLinks ? onSearch : undefined
+                    }
                   />
                 ))}
                 <p className="t-meta">

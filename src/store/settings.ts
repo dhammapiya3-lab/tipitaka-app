@@ -34,6 +34,9 @@ interface SettingsState {
   wordLinks: boolean;
   /** 빠알리 원문의 이본 표기 [..] 감추기 */
   hideVariants: boolean;
+  /** 사전 풀이 속 빠알리 낱말을 눌러 다시 찾기 (기본 켬) */
+  dictWordLinks: boolean;
+  setDictWordLinks: (on: boolean) => void;
   /** 빠알리 닉가히따 표기: 판본 원본 그대로 / 모두 ṃ / 모두 ṁ */
   niggahita: "source" | "ṃ" | "ṁ";
   setNiggahita: (v: "source" | "ṃ" | "ṁ") => void;
@@ -76,6 +79,8 @@ export const useSettingsStore = create<SettingsState>()(
       compareMode: "side",
       wordLinks: false,
       hideVariants: false,
+      dictWordLinks: true,
+      setDictWordLinks: (on) => set({ dictWordLinks: on }),
       niggahita: "source",
       setNiggahita: (v) => set({ niggahita: v }),
       setHideVariants: (on) => set({ hideVariants: on }),
@@ -136,7 +141,9 @@ export const useSettingsStore = create<SettingsState>()(
         tikaBook,
         hideVariants,
         niggahita,
+        dictWordLinks,
       }) => ({
+        dictWordLinks,
         niggahita,
         tikaBook,
         hideVariants,
