@@ -58,8 +58,8 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       fontSize: DEFAULT_FONT_SIZE,
       lineHeight: DEFAULT_LINE_HEIGHT,
-      noteFontSize: 14,
-      panelFontSize: 16,
+      noteFontSize: 17,
+      panelFontSize: 20,
       setNoteFontSize: (size) => set({ noteFontSize: clampTo(FONT_SIZES, size) }),
       setPanelFontSize: (size) => set({ panelFontSize: clampTo(FONT_SIZES, size) }),
       editions: DEFAULT_EDITIONS,
@@ -89,14 +89,24 @@ export const useSettingsStore = create<SettingsState>()(
         set({
           fontSize: DEFAULT_FONT_SIZE,
           lineHeight: DEFAULT_LINE_HEIGHT,
-          noteFontSize: 14,
-          panelFontSize: 16,
+          noteFontSize: 17,
+          panelFontSize: 20,
           editions: DEFAULT_EDITIONS,
         }),
     }),
     {
       name: "reader-settings",
       storage: createJSONStorage(() => window.localStorage),
+      // 1: 각주 글자 기본 14 → 17, 풀이 창 16 → 20 — 예전 기본값 그대로인 사람만 새 기본값으로
+      version: 1,
+      migrate: (persisted, version) => {
+        const s = (persisted ?? {}) as Record<string, unknown>;
+        if (version < 1) {
+          if (s.noteFontSize === 14 || s.noteFontSize === undefined) s.noteFontSize = 17;
+          if (s.panelFontSize === 16 || s.panelFontSize === undefined) s.panelFontSize = 20;
+        }
+        return s as unknown as SettingsState;
+      },
       skipHydration: true,
       partialize: ({
         fontSize,
