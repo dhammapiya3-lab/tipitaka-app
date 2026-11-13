@@ -2,8 +2,7 @@
 
 import { TtsLockOverlay } from "@/components/sutta/tts-lock";
 import { GlossDialog } from "@/components/dictionary/gloss-dialog";
-import { TopicChips } from "@/components/topics/topic-chips";
-import { RelatedSuttas, SuttaEndNav } from "@/components/sutta/sutta-end";
+import { SuttaEndNav } from "@/components/sutta/sutta-end";
 import {
   BookA,
   BookOpen,
@@ -1145,7 +1144,6 @@ export function SuttaView({
         }
       >
         <Breadcrumb items={head.crumbs} />
-        <TopicChips suttaId={suttaId} />
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <EditionBadges
             editions={layer === "sutta" ? shown : commEditions.filter((e) => commPicked.includes(e.id))}
@@ -1392,11 +1390,10 @@ export function SuttaView({
                         </div>
                       ))}
               </article>
-              {/* 경 맨 아래: 이전·다음 경, 그 아래 관련 경전 (문단 보기에서는 감춘다) */}
+              {/* 경 맨 아래: 이전·다음 경 (문단 보기에서는 감춘다) */}
               {!waiting && !focus ? (
                 <div className={cn("mx-auto mt-8 flex w-full min-w-0 flex-col gap-6", readWidth)}>
                   <SuttaEndNav prev={prev} next={next} />
-                  <RelatedSuttas suttaId={suttaId} exclude={[prev?.id, next?.id].filter((x): x is string => !!x)} />
                 </div>
               ) : null}
             </div>

@@ -34,7 +34,6 @@ import {
   extrasSchema,
   suttaIndexSchema,
   suttaTextSchema,
-  topicsSchema,
 } from "@/lib/schemas";
 import type {
   DictionaryId,
@@ -75,12 +74,16 @@ const suttaUrl = (suttaId: string, editionId: string, suffix: string) =>
 const VRI_EDITION_ID = "pli-vri";
 const vriShardCache = new Map<string, Promise<Record<string, unknown>>>();
 
-function vriShard(kind: "t" | "c", n: number): Promise<Record<string, unknown>> {
+function vriShard(
+  kind: "t" | "c",
+  n: number,
+): Promise<Record<string, unknown>> {
   const url = `/data/vri/${kind}-${n}.json`;
   let promise = vriShardCache.get(url);
   if (!promise) {
     promise = getJson(url).then((data) => {
-      if (typeof data !== "object" || data === null) throw new Error("VRI 자료 형식이 맞지 않습니다");
+      if (typeof data !== "object" || data === null)
+        throw new Error("VRI 자료 형식이 맞지 않습니다");
       return data as Record<string, unknown>;
     });
     vriShardCache.set(url, promise);
@@ -99,7 +102,9 @@ const vriTextBodySchema = z.object({
 });
 
 /** 책 쪽 번호: [문장 번호, 판(P·M·T·V), 권.쪽] — 쪽이 바뀌는 문장마다 */
-export async function fetchPageMarks(suttaId: string): Promise<[string, string, string][]> {
+export async function fetchPageMarks(
+  suttaId: string,
+): Promise<[string, string, string][]> {
   const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
   if (!entry?.vri) return [];
   const shard = await vriShard("t", entry.vri.t);
@@ -112,15 +117,28 @@ async function vriEntry(suttaId: string) {
   return entry.vri;
 }
 
-export async function fetchSuttaText(suttaId: string, editionId: string): Promise<SuttaText> {
+export async function fetchSuttaText(
+  suttaId: string,
+  editionId: string,
+): Promise<SuttaText> {
   if (editionId === VRI_EDITION_ID) {
     const { t } = await vriEntry(suttaId);
     const shard = await vriShard("t", t);
     const body = vriTextBodySchema.parse(shard[suttaId]);
-    const text = suttaTextSchema.parse({ suttaId, editionId, segments: body.s, ...(body.h.length ? { preface: body.h } : {}) });
+    const text = suttaTextSchema.parse({
+      suttaId,
+      editionId,
+      segments: body.s,
+      ...(body.h.length ? { preface: body.h } : {}),
+    });
     const unsure = new Set(body.u);
     return unsure.size
-      ? { ...text, segments: text.segments.map((s) => (unsure.has(s.key) ? { ...s, unsure: true } : s)) }
+      ? {
+          ...text,
+          segments: text.segments.map((s) =>
+            unsure.has(s.key) ? { ...s, unsure: true } : s,
+          ),
+        }
       : text;
   }
   const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
@@ -128,34 +146,32 @@ export async function fetchSuttaText(suttaId: string, editionId: string): Promis
   const sealed = sealedSuttaTextSchema.safeParse(data);
   if (sealed.success) {
     const { sealed: body, ...ids } = sealed.data;
-    return suttaTextSchema.parse({ ...ids, segments: unseal(body, ids.suttaId, ids.editionId) });
+    return suttaTextSchema.parse({
+      ...ids,
+      segments: unseal(body, ids.suttaId, ids.editionId),
+    });
   }
   return suttaTextSchema.parse(data);
 }
 
-export async function fetchSuttaNotes(suttaId: string, editionId: string): Promise<SuttaNotes> {
-  return suttaNotesSchema.parse(await getJson(suttaUrl(suttaId, editionId, ".notes.json")));
+export async function fetchSuttaNotes(
+  suttaId: string,
+  editionId: string,
+): Promise<SuttaNotes> {
+  return suttaNotesSchema.parse(
+    await getJson(suttaUrl(suttaId, editionId, ".notes.json")),
+  );
 }
 
 let suttaIndexPromise: Promise<SuttaIndexEntry[]> | null = null;
 
 /** 경 읽기 화면용 목록 — 한 번만 받는다 */
-export type Topics = z.infer<typeof topicsSchema>;
-let topicsPromise: Promise<Topics> | null = null;
-/** 주제 해시태그 — 경마다 주제, 주제마다 이름 (한 번만 받는다) */
-export function fetchTopics(): Promise<Topics> {
-  if (!topicsPromise) {
-    topicsPromise = getJson("/data/topics.json").then((d) => topicsSchema.parse(d));
-    topicsPromise.catch(() => {
-      topicsPromise = null;
-    });
-  }
-  return topicsPromise;
-}
 
 export function fetchSuttaIndex(): Promise<SuttaIndexEntry[]> {
   if (!suttaIndexPromise) {
-    suttaIndexPromise = getJson("/data/sutta-index.json").then((data) => suttaIndexSchema.parse(data));
+    suttaIndexPromise = getJson("/data/sutta-index.json").then((data) =>
+      suttaIndexSchema.parse(data),
+    );
     suttaIndexPromise.catch(() => {
       suttaIndexPromise = null;
     });
@@ -168,7 +184,9 @@ let extrasPromise: Promise<Record<string, SuttaExtras>> | null = null;
 /** 경 읽기 오른쪽 칸의 참고 경전 · 해설 법문 · 기타 자료 — 한 번만 받는다 */
 export function fetchExtras(): Promise<Record<string, SuttaExtras>> {
   if (!extrasPromise) {
-    extrasPromise = getJson("/data/extras.json").then((data) => extrasSchema.parse(data));
+    extrasPromise = getJson("/data/extras.json").then((data) =>
+      extrasSchema.parse(data),
+    );
     extrasPromise.catch(() => {
       extrasPromise = null;
     });
@@ -195,7 +213,10 @@ export function fetchSuttaAnalysis(
 }
 
 /** 주석서·복주석서 — 경의 VRI 주석 묶음에서 꺼낸다 */
-export async function fetchCommentary(suttaId: string, layer: CommentaryLayer): Promise<SuttaCommentary> {
+export async function fetchCommentary(
+  suttaId: string,
+  layer: CommentaryLayer,
+): Promise<SuttaCommentary> {
   const { c } = await vriEntry(suttaId);
   if (c === null) throw new Error("주석 자료가 없습니다");
   const shard = await vriShard("c", c);
@@ -206,10 +227,14 @@ export async function fetchCommentary(suttaId: string, layer: CommentaryLayer): 
 const editionInfoCache = new Map<string, Promise<EditionInfo | null>>();
 
 /** 판본 정보 창의 소개 글 — 없으면 null */
-export function fetchEditionInfo(editionId: string): Promise<EditionInfo | null> {
+export function fetchEditionInfo(
+  editionId: string,
+): Promise<EditionInfo | null> {
   let promise = editionInfoCache.get(editionId);
   if (!promise) {
-    promise = fetch(`/data/edition-info/${encodeURIComponent(editionId)}.json`).then(async (res) => {
+    promise = fetch(
+      `/data/edition-info/${encodeURIComponent(editionId)}.json`,
+    ).then(async (res) => {
       if (res.status === 404) return null;
       if (!res.ok) throw new Error(`자료를 받지 못했습니다 (${res.status})`);
       return editionInfoSchema.parse(await res.json());
@@ -226,7 +251,10 @@ const DICT_BASE = "/data/dict";
 const dictCache = new Map<string, Promise<unknown>>();
 
 /** 조각 하나를 받는다. 조각 파일이 없으면(그 앞글자로 시작하는 단어가 없음) 빈 객체. */
-function getShard<T extends z.ZodType>(url: string, schema: T): Promise<z.infer<T>> {
+function getShard<T extends z.ZodType>(
+  url: string,
+  schema: T,
+): Promise<z.infer<T>> {
   let promise = dictCache.get(url);
   if (!promise) {
     promise = fetch(url).then(async (res) => {
@@ -254,13 +282,19 @@ export function fetchDictionaryIndex(): Promise<DictionaryIndex> {
   return indexPromise;
 }
 
-async function fetchDpdEntries(index: DictionaryIndex, ids: number[]): Promise<DpdEntry[]> {
-  const shards = [...new Set(ids.map((id) => Math.floor(id / index.dpdShardSize)))];
+async function fetchDpdEntries(
+  index: DictionaryIndex,
+  ids: number[],
+): Promise<DpdEntry[]> {
+  const shards = [
+    ...new Set(ids.map((id) => Math.floor(id / index.dpdShardSize))),
+  ];
   const loaded = await Promise.all(
     shards.map((n) => getShard(`${DICT_BASE}/dpd/${n}.json`, dpdShardSchema)),
   );
   const byId = new Map<number, DpdEntry>();
-  for (const shard of loaded) for (const entry of Object.values(shard)) byId.set(entry.id, entry);
+  for (const shard of loaded)
+    for (const entry of Object.values(shard)) byId.set(entry.id, entry);
   return ids.flatMap((id) => {
     const entry = byId.get(id);
     return entry ? [entry] : [];
@@ -281,7 +315,9 @@ async function fetchPlain(
 ): Promise<PlainEntry[]> {
   const split = new Set(index.split[dict]);
   // "#256" 처럼 적혀 있으면 앞글자 대신 해시로 나눈 조각 (큰 사전 — 호스팅 파일 수 한도 때문)
-  const hashed = index.split[dict]?.[0]?.startsWith("#") ? Number(index.split[dict][0].slice(1)) : 0;
+  const hashed = index.split[dict]?.[0]?.startsWith("#")
+    ? Number(index.split[dict][0].slice(1))
+    : 0;
   const found = await Promise.all(
     candidates.map(async (headword) => {
       const shard = await getShard(
@@ -318,12 +354,21 @@ async function fetchSplit(word: string): Promise<SplitWays> {
   let h = 0;
   for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
   try {
-    const shard = await getShard(`${DICT_BASE}/splitter/${h % SPLITTER_SHARDS}.json`, z.record(z.string(), z.string()));
+    const shard = await getShard(
+      `${DICT_BASE}/splitter/${h % SPLITTER_SHARDS}.json`,
+      z.record(z.string(), z.string()),
+    );
     const raw = shard[word];
     if (!raw) return { ways: [], byDpd: false };
     // "앞 + 뒤|다른 + 나눔", 맨 앞 * 는 이 사이트 프로그램이 나눈 것
     const byDpd = !raw.startsWith("*");
-    return { ways: raw.replace(/^\*/, "").split("|").map((w) => w.split(" + ")), byDpd };
+    return {
+      ways: raw
+        .replace(/^\*/, "")
+        .split("|")
+        .map((w) => w.split(" + ")),
+      byDpd,
+    };
   } catch {
     return { ways: [], byDpd: false };
   }
@@ -338,7 +383,9 @@ export interface PartAnalysis {
 /** DPR Analysis 처럼 조각마다 짧은 뜻과 어미 문법을 찾는다 (DPD 찾아보기 · 어형 변화표로) */
 export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
   const index = await fetchDictionaryIndex();
-  const templates = await fetchDpdTemplates().catch(() => ({}) as Record<string, DpdTemplate>);
+  const templates = await fetchDpdTemplates().catch(
+    () => ({}) as Record<string, DpdTemplate>,
+  );
   return Promise.all(
     parts.map(async (part) => {
       const p = normalizeWord(part);
@@ -349,7 +396,11 @@ export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
         if (t && entry.stem !== undefined) {
           for (const row of t.rows.slice(1)) {
             for (let c = 1; c < row.length; c += 2) {
-              if ((row[c] ?? []).some((ending) => normalizeWord(`${entry.stem}${ending}`) === p)) {
+              if (
+                (row[c] ?? []).some(
+                  (ending) => normalizeWord(`${entry.stem}${ending}`) === p,
+                )
+              ) {
                 grammar.push((row[c + 1] ?? []).join(" "));
               }
             }
@@ -359,16 +410,26 @@ export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
       });
       // 이 조각이 바로 그 표제어의 어형인 것(어미 문법이 맞는 것·불변화사)만 — 없으면 찾은 것 앞의 몇 개
       const exact = found.filter(
-        ({ entry, grammar }) => grammar.length > 0 || normalizeWord(cleanLemma(entry.lemma)) === p,
+        ({ entry, grammar }) =>
+          grammar.length > 0 || normalizeWord(cleanLemma(entry.lemma)) === p,
       );
       return { part, entries: (exact.length ? exact : found).slice(0, 4) };
     }),
   );
 }
 
-const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "cone", "pts", "peu", "mm"];
+const PLAIN_DICTIONARIES: PlainDictionaryId[] = [
+  "kpts",
+  "cone",
+  "pts",
+  "peu",
+  "mm",
+];
 
-async function lookupIds(index: DictionaryIndex, form: string): Promise<number[]> {
+async function lookupIds(
+  index: DictionaryIndex,
+  form: string,
+): Promise<number[]> {
   const shard = await getShard(
     `${DICT_BASE}/lookup/${shardOf(form, new Set(index.split.lookup))}.json`,
     lookupShardSchema,
@@ -390,9 +451,15 @@ async function resolveForm(index: DictionaryIndex, normalized: string) {
   );
   const forms = (shard[key] ?? []).filter((f) => f !== normalized);
   if (forms.length === 0) return { form: normalized, ids, alternatives: [] };
-  const withIds = await Promise.all(forms.map(async (f) => ({ f, ids: await lookupIds(index, f) })));
+  const withIds = await Promise.all(
+    forms.map(async (f) => ({ f, ids: await lookupIds(index, f) })),
+  );
   const best = withIds.find((x) => x.ids.length > 0) ?? withIds[0];
-  return { form: best.f, ids: best.ids, alternatives: forms.filter((f) => f !== best.f) };
+  return {
+    form: best.f,
+    ids: best.ids,
+    alternatives: forms.filter((f) => f !== best.f),
+  };
 }
 
 /**
@@ -400,7 +467,10 @@ async function resolveForm(index: DictionaryIndex, normalized: string) {
  * 1) DPD 의 "변화형 → 표제어" 표로 표제어를 찾고 (못 찾으면 빠알리 기호 없이 다시)
  * 2) 그 표제어의 기본형(번호 뗀 lemma)과 단어 자체로 K-PTS·PTS·미얀마 사전을 찾는다.
  */
-export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<WordLookup> {
+export async function lookupWord(
+  query: string,
+  dicts: DictionaryId[],
+): Promise<WordLookup> {
   const typed = normalizeWord(query);
   const empty: WordLookup = {
     query,
@@ -417,14 +487,22 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
   if (!typed) return empty;
 
   const index = await fetchDictionaryIndex();
-  const [{ form: normalized, ids, alternatives }, split] = await Promise.all([resolveForm(index, typed), fetchSplit(typed)]);
+  const [{ form: normalized, ids, alternatives }, split] = await Promise.all([
+    resolveForm(index, typed),
+    fetchSplit(typed),
+  ]);
   const dpd = await fetchDpdEntries(index, ids);
   const candidates = [
-    ...new Set([normalized, ...dpd.map((e) => normalizeWord(cleanLemma(e.lemma)))]),
+    ...new Set([
+      normalized,
+      ...dpd.map((e) => normalizeWord(cleanLemma(e.lemma))),
+    ]),
   ].filter(Boolean);
 
   const plain = await Promise.all(
-    PLAIN_DICTIONARIES.map((id) => (dicts.includes(id) ? fetchPlain(index, id, candidates) : [])),
+    PLAIN_DICTIONARIES.map((id) =>
+      dicts.includes(id) ? fetchPlain(index, id, candidates) : [],
+    ),
   );
   return {
     ...empty,
@@ -445,14 +523,25 @@ function dpdFamilyShard(key: string): number {
 }
 
 /** DPD 가족(어근·낱말·합성어·숙어·같은 묶음) — 단추를 누를 때만 받는다 */
-export async function fetchDpdFamily(kind: DpdFamilyKind, key: string): Promise<DpdFamily | null> {
-  const shard = await getShard(`${DICT_BASE}/dpd-family/${kind}-${dpdFamilyShard(key)}.json`, dpdFamilyShardSchema);
+export async function fetchDpdFamily(
+  kind: DpdFamilyKind,
+  key: string,
+): Promise<DpdFamily | null> {
+  const shard = await getShard(
+    `${DICT_BASE}/dpd-family/${kind}-${dpdFamilyShard(key)}.json`,
+    dpdFamilyShardSchema,
+  );
   return shard[key] ?? null;
 }
 
 /** DPD 빈도 (판본·책별 출현 횟수) */
-export async function fetchDpdFrequency(id: number): Promise<DpdFrequency | null> {
-  const shard = await getShard(`${DICT_BASE}/dpd-freq/${Math.floor(id / 1000)}.json`, dpdFreqShardSchema);
+export async function fetchDpdFrequency(
+  id: number,
+): Promise<DpdFrequency | null> {
+  const shard = await getShard(
+    `${DICT_BASE}/dpd-freq/${Math.floor(id / 1000)}.json`,
+    dpdFreqShardSchema,
+  );
   return shard[String(id)] ?? null;
 }
 
@@ -460,7 +549,9 @@ let freqLayoutPromise: Promise<DpdFreqRow[]> | null = null;
 /** DPD 빈도표 모양 — 한 번만 받는다 */
 export function fetchDpdFreqLayout(): Promise<DpdFreqRow[]> {
   if (!freqLayoutPromise) {
-    freqLayoutPromise = getJson(`${DICT_BASE}/dpd-freq-layout.json`).then((d) => dpdFreqLayoutSchema.parse(d));
+    freqLayoutPromise = getJson(`${DICT_BASE}/dpd-freq-layout.json`).then((d) =>
+      dpdFreqLayoutSchema.parse(d),
+    );
     freqLayoutPromise.catch(() => {
       freqLayoutPromise = null;
     });
@@ -474,7 +565,9 @@ let templatesPromise: Promise<Record<string, DpdTemplate>> | null = null;
 /** DPD 어형 변화표 틀 — 한 번만 받는다 */
 export function fetchDpdTemplates(): Promise<Record<string, DpdTemplate>> {
   if (!templatesPromise) {
-    templatesPromise = getJson(`${DICT_BASE}/dpd-templates.json`).then((d) => dpdTemplatesSchema.parse(d));
+    templatesPromise = getJson(`${DICT_BASE}/dpd-templates.json`).then((d) =>
+      dpdTemplatesSchema.parse(d),
+    );
     templatesPromise.catch(() => {
       templatesPromise = null;
     });
@@ -501,10 +594,15 @@ export type SearchHits = Map<string, Set<string>>;
  * 경 본문에서 찾는다. 언어마다 색인이 따로 있고, 단어는 앞부분 일치,
  * 여러 단어는 같은 문장에 모두 있어야 한다. 너무 짧은 단어는 뺀다.
  */
-export async function searchText(query: string, languages: Language[]): Promise<SearchHits> {
+export async function searchText(
+  query: string,
+  languages: Language[],
+): Promise<SearchHits> {
   const all: SearchHits = new Map();
   for (const language of languages) {
-    const tokens = tokenize(query, language).filter((t) => [...t].length >= minQueryLength(t));
+    const tokens = tokenize(query, language).filter(
+      (t) => [...t].length >= minQueryLength(t),
+    );
     if (tokens.length === 0) continue;
     const perToken = await Promise.all(
       tokens.map(async (token) => {

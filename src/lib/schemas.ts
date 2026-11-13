@@ -33,12 +33,15 @@ export const editionSchema: z.ZodType<Edition> = z.object({
 
 export const editionsSchema = z.array(editionSchema);
 
-export const inlinePartSchema: z.ZodType<InlinePart> = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("text"), text: z.string() }),
-  z.object({ type: z.literal("bold"), text: z.string() }),
-  z.object({ type: z.literal("em"), text: z.string() }),
-  z.object({ type: z.literal("note"), mark: z.string().min(1) }),
-]);
+export const inlinePartSchema: z.ZodType<InlinePart> = z.discriminatedUnion(
+  "type",
+  [
+    z.object({ type: z.literal("text"), text: z.string() }),
+    z.object({ type: z.literal("bold"), text: z.string() }),
+    z.object({ type: z.literal("em"), text: z.string() }),
+    z.object({ type: z.literal("note"), mark: z.string().min(1) }),
+  ],
+);
 
 export const segmentSchema: z.ZodType<Segment> = z.object({
   key: z.string().regex(/^[a-z]+(?:-[a-z]+)*[\d.\-]*:[\d.\-]+$/),
@@ -105,17 +108,13 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
     nikaya: z.string().min(1),
     trail: z.object({
       nikayaName: z.string().min(1),
-      groups: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) })),
+      groups: z.array(
+        z.object({ id: z.string().min(1), label: z.string().min(1) }),
+      ),
       groupPages: z.boolean(),
     }),
   }),
 );
-
-/** 주제 해시태그 (scripts/build-topics.ts) */
-export const topicsSchema = z.object({
-  topics: z.array(z.object({ id: z.string(), ko: z.string(), pali: z.string(), count: z.number() })),
-  suttas: z.record(z.string(), z.array(z.string())),
-});
 
 export const catalogNodeSchema: z.ZodType<CatalogNode> = z.lazy(() =>
   z.object({
@@ -143,7 +142,14 @@ export const catalogSchema: z.ZodType<Catalog> = z.object({
 });
 
 // ── 사전 ────────────────────────────────────────────────────
-export const dictionaryIdSchema = z.enum(["dpd", "kpts", "pts", "mm", "peu", "cone"]);
+export const dictionaryIdSchema = z.enum([
+  "dpd",
+  "kpts",
+  "pts",
+  "mm",
+  "peu",
+  "cone",
+]);
 
 export const dictionaryIndexSchema: z.ZodType<DictionaryIndex> = z.object({
   version: z.string(),
@@ -228,7 +234,11 @@ export const dpdFreqLayoutSchema = z.array(
     label: z.string().optional(),
     cells: z.array(
       z.union([
-        z.object({ src: z.enum(["c", "b", "s", "m"]), i: z.number(), rs: z.number() }),
+        z.object({
+          src: z.enum(["c", "b", "s", "m"]),
+          i: z.number(),
+          rs: z.number(),
+        }),
         z.object({ gap: z.literal(true) }),
         z.object({ void: z.literal(true) }),
       ]),
@@ -242,19 +252,28 @@ export const dpdTemplatesSchema = z.record(
 );
 
 /** 조각 파일들 */
-export const lookupShardSchema = z.record(z.string(), z.array(z.number().int()));
+export const lookupShardSchema = z.record(
+  z.string(),
+  z.array(z.number().int()),
+);
 export const dpdShardSchema = z.record(z.string(), dpdEntrySchema);
 export const inflectionShardSchema = z.record(z.string(), z.string());
 export const plainShardSchema = z.record(z.string(), z.array(z.string()));
 /** 검색 색인 조각: 단어 → { "경|판본" → 문장 번호들 } */
-export const searchShardSchema = z.record(z.string(), z.record(z.string(), z.array(z.string())));
+export const searchShardSchema = z.record(
+  z.string(),
+  z.record(z.string(), z.array(z.string())),
+);
 /** 빠알리 기호를 뗀 글자 → 실제 형태들 */
 export const foldShardSchema = z.record(z.string(), z.array(z.string()));
 
 const extraItemSchema = z.object({
   title: z.string().min(1),
   note: z.string().nullish(),
-  suttaId: z.string().regex(/^[a-z]+[\d.\-]*$/).nullish(),
+  suttaId: z
+    .string()
+    .regex(/^[a-z]+[\d.\-]*$/)
+    .nullish(),
   url: z.url().nullish(),
   by: z.string().nullish(),
 });
@@ -296,7 +315,14 @@ export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
       }),
     )
     .default([]),
-  links: z.array(z.object({ key: z.string(), word: z.string(), para: z.number(), line: z.number() })),
+  links: z.array(
+    z.object({
+      key: z.string(),
+      word: z.string(),
+      para: z.number(),
+      line: z.number(),
+    }),
+  ),
   paras: z.array(
     z.object({
       para: z.number(),
@@ -315,7 +341,12 @@ export const editionInfoSchema: z.ZodType<EditionInfo> = z.object({
   groups: z.array(
     z.object({
       kind: z.enum(["text", "nissaya", "grammar"]),
-      sections: z.array(z.object({ title: z.string(), paragraphs: z.array(z.array(inlinePartSchema)) })),
+      sections: z.array(
+        z.object({
+          title: z.string(),
+          paragraphs: z.array(z.array(inlinePartSchema)),
+        }),
+      ),
     }),
   ),
 });

@@ -31,14 +31,6 @@ export default function SuttasPage() {
         <PitakaTabs>
           <h2 className="px-2 pt-2 pb-3 text-sm font-bold">5부 니까야</h2>
           <NikayaCards items={getNikayaSummaries()} />
-          <h2 className="px-2 pt-6 pb-3 text-sm font-bold">주제로 찾기</h2>
-          <ListCard
-            badge={<span className="text-base">#</span>}
-            title="주제별 경전"
-            pali="자애 · 선정 · 연기 · 무상 …"
-            description="경마다 단 주제 해시태그로 같은 주제의 경을 모아 봅니다"
-            href="/topics/"
-          />
           <h2 className="px-2 pt-6 pb-3 text-sm font-bold">주석 문헌</h2>
           <div className="flex flex-col gap-3">
             {COMMENTARIES.map((c) => (
