@@ -1,3 +1,4 @@
+import { useSettingsStore } from "@/store/settings";
 import { splitWords } from "@/lib/pali";
 import { cn } from "@/lib/utils";
 import { HIGHLIGHT_CLASS, type HighlightColor } from "@/store/highlights";
@@ -17,18 +18,7 @@ export interface InlineHighlight {
  * onWord 가 있으면 단어마다 누를 수 있게 된다(빠알리 원문의 사전 찾기).
  * activeWord 가 있으면 그 순번의 단어를 표시한다(키보드로 단어 고르기).
  */
-export function InlineText({
-  parts,
-  onNote,
-  openMarks,
-  onWord,
-  activeWord,
-  linked,
-  onLinked,
-  highlights,
-  onHighlight,
-  variants = false,
-}: {
+type InlineTextProps = {
   /** 빠알리 원문: 이본 표기 [..] 를 따로 감싸 둔다 (설정에서 "이본 표기 감추기"를 켜면 CSS 로 감춘다) */
   variants?: boolean;
   /** 밑줄·형광펜 (누르면 onHighlight) */
@@ -42,7 +32,28 @@ export function InlineText({
   openMarks?: ReadonlySet<string>;
   onWord?: (word: string) => void;
   activeWord?: number | null;
-}) {
+};
+
+export function InlineText(props: InlineTextProps) {
+  const niggahita = useSettingsStore((s) => s.niggahita);
+  return renderInline(props, niggahita);
+}
+
+function renderInline(
+  {
+    parts,
+    onNote,
+    openMarks,
+    onWord,
+    activeWord,
+    linked,
+    onLinked,
+    highlights,
+    onHighlight,
+    variants = false,
+  }: InlineTextProps,
+  niggahita: "source" | "ṃ" | "ṁ",
+) {
   // 단어 순번은 조각을 넘어 이어진다 (reader.ts 의 wordsOf 와 같은 순서)
   let wordIndex = 0;
   let charIndex = 0;
@@ -101,9 +112,17 @@ export function InlineText({
     });
   };
 
+  // 닉가히따 표기 바꾸기 (설정) — ṃ·ṁ 은 한 글자씩이라 글자 위치(밑줄·낱말 순번)가 그대로다
+  const nig = (value: string) =>
+    !variants || niggahita === "source"
+      ? value
+      : niggahita === "ṁ"
+        ? value.replace(/ṃ/g, "ṁ").replace(/Ṃ/g, "Ṁ")
+        : value.replace(/ṁ/g, "ṃ").replace(/Ṁ/g, "Ṃ");
   // 이본 표기는 글자를 지우지 않고 감싸기만 한다 — 단어 순번·밑줄 위치가 그대로 맞도록
-  const body = (value: string) =>
-    variants && value.includes("[")
+  const body = (raw: string) => {
+    const value = nig(raw);
+    return variants && value.includes("[")
       ? value.split(VARIANT).map((piece, k) =>
           VARIANT_ONLY.test(piece) ? (
             <span key={k} data-variant>
@@ -114,6 +133,7 @@ export function InlineText({
           ),
         )
       : text(value);
+  };
 
   return parts.map((part, i) => {
     switch (part.type) {

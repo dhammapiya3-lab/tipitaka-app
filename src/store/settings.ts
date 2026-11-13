@@ -34,6 +34,9 @@ interface SettingsState {
   wordLinks: boolean;
   /** 빠알리 원문의 이본 표기 [..] 감추기 */
   hideVariants: boolean;
+  /** 빠알리 닉가히따 표기: 판본 원본 그대로 / 모두 ṃ / 모두 ṁ */
+  niggahita: "source" | "ṃ" | "ṁ";
+  setNiggahita: (v: "source" | "ṃ" | "ṁ") => void;
   setHideVariants: (on: boolean) => void;
   setWordLinks: (on: boolean) => void;
   /** 복주석서가 여럿인 경(디가: 옛·새 복주석서)에서 볼 책 — null 이면 모두, 아니면 책 차례(0: 옛, 1: 새) */
@@ -73,6 +76,8 @@ export const useSettingsStore = create<SettingsState>()(
       compareMode: "side",
       wordLinks: false,
       hideVariants: false,
+      niggahita: "source",
+      setNiggahita: (v) => set({ niggahita: v }),
       setHideVariants: (on) => set({ hideVariants: on }),
       tikaBook: null,
       setTikaBook: (book) => set({ tikaBook: book }),
@@ -130,7 +135,9 @@ export const useSettingsStore = create<SettingsState>()(
         pageEditions,
         tikaBook,
         hideVariants,
+        niggahita,
       }) => ({
+        niggahita,
         tikaBook,
         hideVariants,
         pageEditions,

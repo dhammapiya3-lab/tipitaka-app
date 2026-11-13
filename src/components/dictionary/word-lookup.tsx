@@ -45,21 +45,26 @@ const PLAIN_SECTIONS: {
   id: PlainDictionaryId;
   lang: string;
   credit: string | null;
+  /** 출처 줄에 이용 조건이 이미 들어 있거나 허락을 받은 사전 */
+  licensed?: boolean;
 }[] = [
   {
     id: "kpts",
+    licensed: true,
     lang: "ko",
     credit:
       "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙 · 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우 · 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받음",
   },
   {
     id: "cone",
+    licensed: true,
     lang: "en",
     credit:
       "Margaret Cone, A Dictionary of Pāli I–III (a–bh) · © Pali Text Society · PTS 가 gandhari.org/dop 에서 무료로 공개",
   },
   {
     id: "pts",
+    licensed: true,
     lang: "en",
     credit:
       "Pāḷi Text Society's Pāḷi-English Dictionary (PTS PED) — Digitized PTS dictionary data adapted from Buddhadust, based on the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).",
@@ -264,11 +269,14 @@ export function WordLookupResult({
                     key={entry.headword}
                     entry={entry}
                     lang={sec.lang}
+                    onSearch={sec.lang === "en" ? onSearch : undefined}
                   />
                 ))}
                 <p className="t-meta">
-                  {sec.credit ? `${sec.credit} · ` : ""}이용 조건{" "}
-                  {LICENSE_UNKNOWN}
+                  {sec.credit ?? ""}
+                  {sec.licensed
+                    ? ""
+                    : `${sec.credit ? " · " : ""}이용 조건 ${LICENSE_UNKNOWN}`}
                 </p>
               </section>
             );
@@ -664,7 +672,59 @@ function InflectionList({ id }: { id: number }) {
   );
 }
 
-function PlainCard({ entry, lang }: { entry: PlainEntry; lang: string }) {
+/**
+ * 영어 풀이 속 빠알리 낱말 — 빠알리 글자(ā ṃ ñ …)가 든 낱말과 어원 괄호 [abhi + joteti] 안의 낱말.
+ * 누르면 그 낱말을 사전에서 다시 찾는다 (Digital Pāḷi Reader 의 "Add Word Links to PED Entries")
+ */
+const PALI_IN_EN =
+  /([A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṀṄÑṬḌṆḶ]*[āīūṃṁṅñṭḍṇḷĀĪŪṂṀṄÑṬḌṆḶ][A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṀṄÑṬḌṆḶ]*)/;
+
+function LinkedDefinition({
+  text,
+  onSearch,
+}: {
+  text: string;
+  onSearch: (word: string) => void;
+}) {
+  // 어원 괄호 안([…])은 글자 표시가 없어도 빠알리 낱말이다
+  const pieces = text.split(/(\[[^\]]*\])/);
+  const link = (word: string, key: string) => (
+    <button
+      key={key}
+      type="button"
+      lang="pi"
+      onClick={() => onSearch(word.toLowerCase())}
+      className="rounded-sm text-primary underline decoration-dotted underline-offset-2 hover:bg-brand-soft"
+    >
+      {word}
+    </button>
+  );
+  return pieces.map((piece, i) => {
+    const inBrackets = piece.startsWith("[") && piece.endsWith("]");
+    return piece.split(/([A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṀṄÑṬḌṆḶ]+)/).map((w, j) => {
+      const key = `${i}-${j}`;
+      if (!w || !/^[A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṀṄÑṬḌṆḶ]+$/.test(w)) return w;
+      const pali =
+        PALI_IN_EN.test(w) ||
+        (inBrackets &&
+          w.length > 1 &&
+          /^[a-zāīūṃṁṅñṭḍṇḷ]+$/.test(w) &&
+          !/^(cp|q|v|see|or|and|of|the|to|in)$/.test(w));
+      return pali ? link(w, key) : w;
+    });
+  });
+}
+
+function PlainCard({
+  entry,
+  lang,
+  onSearch,
+}: {
+  entry: PlainEntry;
+  lang: string;
+  /** 영어 풀이 속 빠알리 낱말을 누르면 다시 찾기 */
+  onSearch?: (word: string) => void;
+}) {
   return (
     <article className="rounded-xl border bg-card p-4">
       <p lang="pi" className="mb-2 font-bold">
@@ -677,7 +737,11 @@ function PlainCard({ entry, lang }: { entry: PlainEntry; lang: string }) {
             lang={lang}
             className="t-sub whitespace-pre-line wrap-anywhere"
           >
-            {text}
+            {onSearch ? (
+              <LinkedDefinition text={text} onSearch={onSearch} />
+            ) : (
+              text
+            )}
           </p>
         ))}
       </div>

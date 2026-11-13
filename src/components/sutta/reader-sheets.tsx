@@ -334,12 +334,15 @@ export function TextSettingsSheet({
   const setWordLinks = useSettingsStore((s) => s.setWordLinks);
   const hideVariants = useSettingsStore((s) => s.hideVariants);
   const setHideVariants = useSettingsStore((s) => s.setHideVariants);
+  const niggahita = useSettingsStore((s) => s.niggahita);
+  const setNiggahita = useSettingsStore((s) => s.setNiggahita);
   const style = { fontSize, lineHeight };
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="텍스트 설정">
       <div className="flex flex-col gap-6">
         <PageEditionsPicker />
         <VariantsSwitch on={hideVariants} onChange={setHideVariants} />
+        <NiggahitaPicker value={niggahita} onChange={setNiggahita} />
         <WordLinksSwitch
           on={wordLinks}
           onChange={(on) => {
@@ -492,6 +495,54 @@ export function WordLinksSwitch({
         />
       </span>
     </button>
+  );
+}
+
+/** 닉가히따(ṃ/ṁ) 표기 고르기 — 판본마다 원본 표기가 다르다 (마하상기띠본 ṁ, VRI·PTS ṃ) */
+function NiggahitaPicker({
+  value,
+  onChange,
+}: {
+  value: "source" | "ṃ" | "ṁ";
+  onChange: (v: "source" | "ṃ" | "ṁ") => void;
+}) {
+  const options = [
+    ["source", "원본 그대로"],
+    ["ṃ", "모두 ṃ"],
+    ["ṁ", "모두 ṁ"],
+  ] as const;
+  return (
+    <div className="rounded-xl border px-4 py-3">
+      <span className="block text-sm font-bold">빠알리 ṃ / ṁ 표기</span>
+      <span className="mt-0.5 block text-xs text-muted-foreground">
+        원본 그대로: 마하상기띠본은 <span className="font-pali">ṁ</span>,
+        VRI·PTS 본은 <span className="font-pali">ṃ</span>. 한 가지로 맞춰 볼
+        수도 있어요.
+      </span>
+      <div
+        className="mt-2 flex gap-2"
+        role="radiogroup"
+        aria-label="빠알리 ṃ / ṁ 표기"
+      >
+        {options.map(([v, label]) => (
+          <button
+            key={v}
+            type="button"
+            role="radio"
+            aria-checked={value === v}
+            onClick={() => onChange(v)}
+            className={cn(
+              "flex-1 rounded-lg border px-2 py-1.5 text-sm font-semibold transition-colors",
+              value === v
+                ? "border-transparent bg-primary text-primary-foreground"
+                : "hover:bg-hover",
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
