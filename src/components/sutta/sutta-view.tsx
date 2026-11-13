@@ -1427,8 +1427,20 @@ export function SuttaView({
         onShare={(text) => {
           const url = `${window.location.origin}${suttaHref(suttaId)}`;
           const body = `${text}\n\n— ${head.title} (${suttaLabel(suttaId)})`;
-          if (navigator.share) void navigator.share({ title: head.title, text: body, url }).catch(() => {});
-          else void copy(`${body}\n${url}`, "공유할 글을 복사했습니다. 원하는 곳에 붙여 넣으세요.");
+          // 휴대폰만 기기 공유 창을 쓴다 — 컴퓨터(특히 윈도우) 공유 창은 멈추거나 실패하는 일이 잦아 복사로 대신한다
+          const data = { title: head.title, text: `${body}\n${url}` };
+          const mobile = window.matchMedia("(pointer: coarse)").matches;
+          const canShare = mobile && typeof navigator.share === "function" && (!navigator.canShare || navigator.canShare(data));
+          const fallback = () => void copy(`${body}\n${url}`, "공유할 글을 복사했습니다. 카카오톡·메일 등에 붙여 넣으세요.");
+          if (!canShare) return fallback();
+          try {
+            navigator.share(data).catch((e: unknown) => {
+              // 사용자가 공유 창을 닫은 것(AbortError)은 그냥 둔다
+              if (!(e instanceof DOMException && e.name === "AbortError")) fallback();
+            });
+          } catch {
+            fallback();
+          }
         }}
         onHighlight={(range, color) =>
           addHighlight({ suttaId, suttaTitle, editionId: range.editionId, key: range.key, start: range.start, end: range.end, color, text: range.text })
