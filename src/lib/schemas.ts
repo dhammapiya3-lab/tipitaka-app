@@ -111,6 +111,12 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
   }),
 );
 
+/** 주제 해시태그 (scripts/build-topics.ts) */
+export const topicsSchema = z.object({
+  topics: z.array(z.object({ id: z.string(), ko: z.string(), pali: z.string(), count: z.number() })),
+  suttas: z.record(z.string(), z.array(z.string())),
+});
+
 export const catalogNodeSchema: z.ZodType<CatalogNode> = z.lazy(() =>
   z.object({
     id: z.string().min(1),
