@@ -24,7 +24,7 @@ import {
   suttaTextSchema,
 } from "../src/lib/schemas";
 import { searchShardName, tokenize, type SearchShard } from "../src/lib/search";
-import { noteMarks, parseInline, plainText, rowKind, splitNotes, toSuttaId } from "../src/lib/segments";
+import { noteMarks, paragraphOf, parseInline, plainText, rowKind, splitNotes, toSuttaId } from "../src/lib/segments";
 import { INLINE_SUTTA_LIMIT } from "../src/lib/constants";
 import { seal } from "../src/lib/seal";
 import { SOURCE_ROOT } from "./paths";
@@ -68,6 +68,10 @@ const vriCommentarySchema = z.object({
     }),
   ),
   wordLinks: z.array(z.tuple([z.string(), z.string(), z.number(), z.number()])).default([]),
+  /** 이 경 앞의, 어느 경에도 붙지 않은 주석(책·품 머리말, 이야기 등) */
+  before: z
+    .array(z.object({ para: z.number(), vripara: z.coerce.string().nullable(), lines: z.array(z.string()) }))
+    .optional(),
 });
 /**
  * content/vri/<경>.ko.json — 주석서·복주석서 번역 (사람이 쓰는 파일).
@@ -353,14 +357,36 @@ function buildSutta(
     if (extra.length) errors.push(`${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`);
     // VRI 본문·주석은 경마다 파일을 만들지 않고 묶음 파일(public/data/vri/)에 모은다 — 호스팅 파일 수 한도(2만 개)
     vriTexts.push({ suttaId: id, editionId: VRI_EDITION.id, segments: toSegments(vri.segments) });
-    const rootParas = new Set(Object.keys(root).map((key) => key.slice(0, key.lastIndexOf("."))));
+    const rootParas = new Set(Object.keys(root).map((key) => paragraphOf(key, id)));
     sutta.editions.push(VRI_EDITION.id);
     usedEditions.add(VRI_EDITION.id);
     // 복주석서가 두 종류면(디가 옛·새 복주석서) 한 층에 이어 붙이고, 문단마다 어느 책인지 적는다
     const tikaBoth = (() => {
       const [a, b] = [vri.tika, vri.tika2 ?? null];
       const tag = (c: NonNullable<typeof a>) => c.paras.map((p) => ({ ...p, book: c.book }));
-      if (a && b) return { ...a, paras: [...tag(a), ...tag(b)], books: [a, b] };
+      if (a && b) {
+        // 두 복주석서를 경 문단 차례대로 섞는다 — 같은 경 문단의 옛·새 복주석서 풀이가 나란히 오게
+        const order = new Map<string, number>();
+        Object.keys(root).forEach((key) => {
+          const p = paragraphOf(key, id);
+          if (!order.has(p)) order.set(p, order.size);
+        });
+        const keyed = (list: ReturnType<typeof tag>, book: number) => {
+          let at = -1;
+          return list.map((p, i) => {
+            const k = Math.min(...p.refs.map((r) => order.get(r) ?? Infinity));
+            if (Number.isFinite(k)) at = k;
+            return { p, k: at, book, i };
+          });
+        };
+        const sorted = [...keyed(tag(a), 0), ...keyed(tag(b), 1)].sort(
+          (x, y) => x.k - y.k || x.book - y.book || x.i - y.i,
+        );
+        // 낱말 연결은 문단 순번을 쓰므로 옛 복주석서 쪽 순번을 새 차례로 옮긴다
+        const moved = new Map(sorted.flatMap((x, n) => (x.book === 0 ? [[x.i, n] as const] : [])));
+        const wordLinks = a.wordLinks.map(([k, w, pi, li]) => [k, w, moved.get(pi) ?? pi, li] as typeof a.wordLinks[number]);
+        return { ...a, paras: sorted.map((x) => x.p), books: [a, b], wordLinks };
+      }
       if (b) return { ...b, paras: tag(b), books: [b] };
       if (a) return { ...a, paras: tag(a), books: [a] };
       return null;
@@ -421,6 +447,11 @@ function buildSutta(
         nameKo: ko?.[layer]?.nameKo ?? null,
         editions: layerEditions,
         books: c.books.map((b) => ({ id: b.book, name: b.bookName })),
+        before: (("before" in c ? c.before : undefined) ?? []).map((p) => ({
+          para: p.para,
+          vripara: p.vripara,
+          lines: p.lines.map((line) => parseInline(line)),
+        })),
         links: c.wordLinks
           .filter(([key]) => key in root)
           .map(([key, word, para, line]) => ({ key, word, para, line })),

@@ -15,6 +15,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { EPITAKA_DB, SOURCE_ROOT } from "./paths";
+import { paragraphOf } from "../src/lib/segments";
 
 const args = process.argv.slice(2);
 /** --all: 사이트 목록(public/data/sutta-index.json)의 모든 경 */
@@ -195,7 +196,7 @@ for (const suttaId of ids) {
     const key =
       (line !== undefined ? vriToKey.get(`${para}:${line}`) : undefined) ??
       vri.filter((l) => l.para === para).map((l) => vriToKey.get(`${l.para}:${l.line}`))[0];
-    return key ? key.slice(0, key.lastIndexOf(".")) : null;
+    return key ? paragraphOf(key, suttaId) : null;
   };
 
   const meta = db.prepare("select attha_ref, tika_ref from books where book_id = ?").get(book) as
@@ -278,13 +279,14 @@ for (const suttaId of ids) {
     const lines = linesOf(dstBook, from, to);
     links.splice(0, links.length, ...links.filter((l) => l.dst_para >= from && l.dst_para <= to));
     let cursor = 0;
+    // 연결이 없는 줄은 바로 앞 줄의 문단을 따른다 — 문단을 넘어서도 이어진다 (이야기 문단 등)
+    let last: string[] | null = null;
     const paras = [...new Set(lines.map((l) => l.para))].map((para) => {
       const own = links.filter((l) => l.dst_para === para);
       const refs = ([...new Set(own.map((l) => paraToMark(l.src_para, l.src_line)).filter(Boolean))] as string[]).sort(
         (a, b) => Number(a.split(":")[1]) - Number(b.split(":")[1]),
       );
       const mine = lines.filter((l) => l.para === para && l.text);
-      let last: string[] | null = null;
       return {
         para,
         vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
@@ -313,7 +315,7 @@ for (const suttaId of ids) {
     };
     // 주석 문단 머리의 "경 문단" 번호는 줄마다 정한 문단에서 모은다 — 같은 낱말이 경의 다른 문단에도
     // 나와 걸린 엉뚱한 연결(예: 1번 문단 풀이에 12번이 붙는 것)을 빼기 위해서다
-    const num = (r: string) => Number(r.slice(r.indexOf(":") + 1));
+    const num = (r: string) => Number(r.match(/(\d+)(?:\.\d+)*$/)?.[1] ?? 0);
     for (const p of paras) p.refs = [...new Set(p.lineRefs.flat())].sort((a, b) => num(a) - num(b));
     // 낱말 연결: [경 문장 번호, 낱말, 주석 문단 순번, 그 문단 안 줄 순번] — 경의 낱말을 누르면 그 주석 줄로 간다
     const paraIndex = new Map(paras.map((p, i) => [p.para, i]));
@@ -330,7 +332,7 @@ for (const suttaId of ids) {
       const word = (l.word ?? "").toLowerCase().replace(/ṁ/g, "ṃ").replace(/\s+/g, " ").trim();
       if (!key || pi === undefined || li === undefined || !word) continue;
       // 같은 낱말이 경의 여러 곳에 나와 걸린 엉뚱한 연결은 뺀다 (그 주석 줄이 풀이하는 문단만)
-      if (!paras[pi].lineRefs[li].includes(key.slice(0, key.lastIndexOf(".")))) continue;
+      if (!paras[pi].lineRefs[li].includes(paragraphOf(key, suttaId))) continue;
       const id = `${key}|${word}|${pi}|${li}`;
       if (seenLink.has(id)) continue;
       seenLink.add(id);
@@ -374,6 +376,57 @@ for (const suttaId of ids) {
       (unmatched.length ? `\n  짝을 못 찾은 VRI 줄 ${unmatched.length}개:\n   - ${unmatched.join("\n   - ")}` : ""),
   );
 }
+// ── 주석 사이의 빈 곳: 어느 경에도 붙지 않은 주석 문단(책 머리말·품 머리말·이야기 등)을 바로 뒤 경의 "앞 부분"으로 ──
+// Digital Pāḷi Reader 처럼 주석에서 앞으로 넘기면 보이게 한다 (--all 일 때만: 책 전체의 빈 곳을 알아야 한다)
+if (quiet) {
+  const files = readdirSync(OUT).filter((f) => f.endsWith(".json") && !f.endsWith(".ko.json") && !f.startsWith("_"));
+  type Span = { file: string; layer: "attha" | "tika"; min: number; max: number };
+  const byBook = new Map<string, Span[]>();
+  const docs = new Map<string, Record<string, unknown>>();
+  for (const file of files) {
+    const d = JSON.parse(readFileSync(path.join(OUT, file), "utf8")) as Record<string, unknown>;
+    docs.set(file, d);
+    for (const layer of ["attha", "tika"] as const) {
+      const c = d[layer] as { book: string; paras: { para: number }[] } | null;
+      if (!c?.paras.length) continue;
+      const ps = c.paras.map((p) => p.para);
+      const list = byBook.get(c.book) ?? [];
+      list.push({ file, layer, min: Math.min(...ps), max: Math.max(...ps) });
+      byBook.set(c.book, list);
+    }
+  }
+  let filled = 0;
+  const touched = new Set<string>();
+  for (const [book, spans] of byBook) {
+    spans.sort((a, b) => a.min - b.min);
+    const firstPara = (db.prepare("select min(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
+    let covered = firstPara - 1;
+    for (const span of spans) {
+      const from = covered + 1;
+      const to = span.min - 1;
+      if (to >= from && to - from < 600) {
+        const lines = linesOf(book, from, to).filter((l) => l.text);
+        const before = [...new Set(lines.map((l) => l.para))].map((para) => ({
+          para,
+          vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
+          refs: [] as string[],
+          lines: lines.filter((l) => l.para === para).map((l) => l.text),
+          lineRefs: lines.filter((l) => l.para === para).map(() => [] as string[]),
+        }));
+        if (before.length) {
+          const d = docs.get(span.file)!;
+          (d[span.layer] as Record<string, unknown>).before = before;
+          touched.add(span.file);
+          filled += before.length;
+        }
+      }
+      covered = Math.max(covered, span.max);
+    }
+  }
+  for (const file of touched) writeFileSync(path.join(OUT, file), `${JSON.stringify(docs.get(file))}\n`);
+  console.log(`주석 앞 부분(머리말 등): 문단 ${filled}개를 경 ${touched.size}개 앞에 붙였습니다`);
+}
+
 if (quiet) {
   console.log(
     `경 ${stats.done}개 · VRI ${stats.lines}줄 · 짝을 못 찾은 줄 ${stats.unmatched}개 (${stats.withUnmatched.length}개 경)\n` +

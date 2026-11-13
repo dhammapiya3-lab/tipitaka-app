@@ -1,6 +1,7 @@
 "use client";
 
-import { CloudOff } from "lucide-react";
+import { ChevronLeft, ChevronRight, CloudOff } from "lucide-react";
+import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
@@ -38,7 +39,12 @@ export function CommentaryView({
   picked,
   paragraph,
   paragraphLabel,
+  prev,
+  next,
 }: {
+  /** 앞뒤 경 — 주석에서 앞뒤로 넘겨 읽는다 (Digital Pāḷi Reader 처럼) */
+  prev?: { id: string; title: string } | null;
+  next?: { id: string; title: string } | null;
   /** 문단별로 보기 중이면 그 경 문단 (예: sn56.11:2) — 그 문단을 풀이한 줄만 보인다 */
   paragraph?: string | null;
   paragraphLabel?: string;
@@ -53,6 +59,7 @@ export function CommentaryView({
 }) {
   const [state, setState] = useState<{ key: string; data?: SuttaCommentary; error?: string } | null>(null);
   const [attempt, setAttempt] = useState(0);
+  const [showBefore, setShowBefore] = useState(false);
   const key = `${suttaId}/${layer}/${attempt}`;
   useEffect(() => {
     if (!available) return;
@@ -102,8 +109,56 @@ export function CommentaryView({
       })
     : null;
 
+  const navLink = (to: { id: string; title: string }, dir: "prev" | "next") => (
+    <Link
+      href={`/sutta/?id=${encodeURIComponent(to.id)}&layer=${layer}`}
+      className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
+    >
+      {dir === "prev" ? <ChevronLeft className="size-4" aria-hidden /> : null}
+      {dir === "prev" ? "앞 경의 " : "다음 경의 "}
+      {LAYER_NAME[layer]}
+      <span className="max-w-[12rem] truncate font-normal text-faint">· {to.title}</span>
+      {dir === "next" ? <ChevronRight className="size-4" aria-hidden /> : null}
+    </Link>
+  );
+
   return (
     <div className="flex flex-col gap-4" style={fontStyle}>
+      {/* 앞으로 넘기기: 이 경 앞에 있는, 어느 경에도 붙지 않은 주석(책·품 머리말, 이야기)이 먼저, 없으면 앞 경 */}
+      {only ? null : data.before.length ? (
+        <button
+          type="button"
+          aria-expanded={showBefore}
+          onClick={() => setShowBefore((v) => !v)}
+          className="inline-flex w-fit items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
+        >
+          <ChevronLeft className={cn("size-4 transition-transform", showBefore && "-rotate-90")} aria-hidden />
+          {showBefore ? "앞 부분 접기" : "앞 부분 보기"}
+          <span className="font-normal text-faint">· 책·품 머리말, 이야기 등 {data.before.length}문단</span>
+        </button>
+      ) : prev ? (
+        navLink(prev, "prev")
+      ) : null}
+      {!only && showBefore
+        ? data.before.map((para, i) => (
+            <section key={`before-${i}`} className="overflow-hidden rounded-2xl border border-dashed bg-card/70 shadow-sm">
+              <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-2.5 dark:border-border">
+                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600 dark:bg-muted">앞 부분</span>
+                <span className="text-xs text-faint">
+                  {data.book} {para.para}
+                  {para.vripara ? ` · VRI ${para.vripara}` : ""}
+                </span>
+              </div>
+              <div className="flex flex-col gap-3 px-5 py-4 font-pali break-words text-gray-800 dark:text-foreground" lang="pi">
+                {para.lines.map((parts, j) => (
+                  <p key={j}>
+                    <InlineText parts={parts} onWord={onWord} />
+                  </p>
+                ))}
+              </div>
+            </section>
+          ))
+        : null}
       <p className="px-1 text-xs leading-relaxed text-faint">
         <span className="font-pali text-secondary-foreground">{data.bookName}</span> · VRI 제6차 결집본 —{" "}
         {only ? `${paragraphLabel ?? "이"} 문단을 풀이한 곳 ${only.length}개` : `이 경을 풀이한 문단 ${data.paras.length}개`}
@@ -113,19 +168,22 @@ export function CommentaryView({
           이 문단을 풀이한 {LAYER_NAME[layer]} 내용이 없습니다.
         </p>
       ) : null}
-      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }, n, list) => (
+      {data.books.length > 1 ? (
+        // 옛·새 복주석서가 경 문단 차례대로 섞여 있다 — 카드 머리의 색 표시로 구분
+        <p className="flex flex-wrap items-center gap-2 px-1 text-xs text-faint">
+          {data.books.map((b, k) => (
+            <span key={b.id} className="inline-flex items-center gap-1">
+              <span className={cn("rounded px-1.5 py-0.5 font-bold", k ? "bg-violet-50 text-violet-700" : "bg-amber-50 text-amber-800")}>
+                {bookLabel(data, k ? b.id : undefined)?.replace(/\s*\(.*\)$/, "")}
+              </span>
+              <span className="font-pali">{b.name}</span>
+            </span>
+          ))}
+          <span>— 같은 경 문단의 풀이끼리 나란히</span>
+        </p>
+      ) : null}
+      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }) => (
         <Fragment key={i}>
-          {/* 책이 바뀌는 곳에 책 이름 (디가 옛·새 복주석서) */}
-          {bookLabel(data, para.book) && (n === 0 || list[n - 1].para.book !== para.book) ? (
-            <h3 className="mt-2 flex items-center gap-2 px-1 text-sm font-bold text-primary">
-              <span className={cn("rounded-md px-2 py-0.5 text-xs", para.book ? "bg-violet-50 text-violet-700" : "bg-amber-50 text-amber-800")}>
-                {bookLabel(data, para.book)}
-              </span>
-              <span className="font-pali text-xs font-medium text-faint">
-                {data.books.find((b) => b.id === (para.book ?? data.book))?.name}
-              </span>
-            </h3>
-          ) : null}
         <CommentaryCard
           bookBadge={bookLabel(data, para.book)}
           key={i}
@@ -140,6 +198,7 @@ export function CommentaryView({
         />
         </Fragment>
       ))}
+      {!only && next ? <div className="flex justify-end">{navLink(next, "next")}</div> : null}
       <p className="px-1 text-xs leading-relaxed text-faint">
         출처: VRI Chaṭṭha Saṅgāyana Tipiṭaka · 문단 연결 E-Piṭaka (CC BY-NC 4.0)
       </p>

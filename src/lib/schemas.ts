@@ -225,6 +225,7 @@ export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
   nameKo: z.string().nullable(),
   editions: z.array(editionSchema),
   books: z.array(z.object({ id: z.string(), name: z.string() })),
+  before: z.array(z.object({ para: z.number(), vripara: z.string().nullable(), lines: z.array(z.array(inlinePartSchema)) })),
   links: z.array(z.object({ key: z.string(), word: z.string(), para: z.number(), line: z.number() })),
   paras: z.array(
     z.object({

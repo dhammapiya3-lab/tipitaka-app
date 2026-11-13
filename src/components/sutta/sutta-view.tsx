@@ -99,7 +99,10 @@ export function SuttaView({
   initialEdition,
   commentary = [],
   paliName,
+  initialLayer,
 }: {
+  /** 주석에서 앞뒤 경으로 넘어왔으면 그 층 (?layer=) */
+  initialLayer?: "attha" | "tika" | null;
   /** 목록의 빠알리 경 이름 (빠알리 판본 제목을 아직 못 읽었을 때) */
   paliName?: string;
   /** 이어 붙인 주석서·복주석서 */
@@ -158,7 +161,7 @@ export function SuttaView({
   /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
-  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">("sutta");
+  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">(initialLayer ?? "sutta");
   /** 이어 붙인 주석서·복주석서 (작은 파일이라 경을 열 때 함께 받는다) */
   const [comm, setComm] = useState<Partial<Record<CommentaryLayer, SuttaCommentary>>>({});
   useEffect(() => {
@@ -1184,6 +1187,8 @@ export function SuttaView({
                 available={commentary.includes(layer)}
                 picked={commPicked}
                 paragraph={focus}
+                prev={prev}
+                next={next}
                 paragraphLabel={focus ? `${editionTitle ?? head.title} ${paragraphMark(focus)}` : undefined}
                 fontStyle={articleStyle}
                 onWord={(w) => setWord({ word: w, rowKey: layer, keys: [], tab: "dictionary", title: "", pali: "" })}
