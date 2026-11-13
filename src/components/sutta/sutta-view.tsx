@@ -1470,7 +1470,7 @@ export function SuttaView({
               }}
               className="ml-1 rounded-lg border bg-card px-1.5 py-1 text-xs"
             >
-              {[0.75, 1, 1.25, 1.5].map((r) => (
+              {[0.75, 1, 1.25, 1.5, 1.75, 2].map((r) => (
                 <option key={r} value={r}>
                   {r}배
                 </option>

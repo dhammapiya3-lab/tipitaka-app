@@ -90,14 +90,149 @@ function normWithIndex(text: string): { s: string; at: number[] } {
   return { s: out, at };
 }
 
+// ── VRI 공식 원문(XML)으로 E-Piṭaka 글을 바로잡기 ─────────────────────────
+// E-Piṭaka 의 글에는 옮기며 생긴 오류가 있다(예: "labhantntti" ← 공식 "labhanti"). 줄 나눔·문단 번호·낱말 연결은
+// E-Piṭaka 것을 쓰되, 줄마다 글은 공식 원문(github.com/VipassanaTech/tipitaka-xml)에서 그 자리의 글로 바꾼다.
+// 책 전체를 글자 단위로 맞춰, 각 줄이 공식 원문의 어디서 시작하는지 찾고 다음 줄 시작 전까지를 그 줄의 글로 삼는다
+// (그래서 공식 원문의 글은 빠짐없이 들어가고, E-Piṭaka 에만 있는 글은 빠진다).
+const XML_DIR = process.env.VRI_XML ?? path.join(process.cwd(), "content", "tipitaka-xml", "romn");
+const xmlStats = { books: 0, lines: 0, changed: 0, epitakaOnly: 0, missingXml: [] as string[] };
+const corrected = new Map<string, Map<string, string> | null>();
+
+/** XML 파일 → 읽는 글 (이본 <note> 는 [ ] 로, 문단 끝은 줄바꿈) */
+function xmlText(code: string): string | null {
+  let raw: string;
+  try {
+    const buf = readFileSync(path.join(XML_DIR, `${code}.xml`));
+    raw = buf[0] === 0xff && buf[1] === 0xfe ? buf.toString("utf16le") : buf.toString("utf8");
+  } catch {
+    return null;
+  }
+  return raw
+    .replace(/<pb [^>]*\/>/g, "")
+    .replace(/\s*<note>([\s\S]*?)<\/note>/g, " [$1]")
+    .replace(/<hi rend="paranum">([^<]*)<\/hi><hi rend="dot">([^<]*)<\/hi>/g, "$1$2 ")
+    .replace(/<\/(p|head|trailer)>/g, "\n")
+    // 굵게(낱말 풀이의 표제 낱말)는 E-Piṭaka 처럼 <b> 로 남긴다
+    .replace(/<hi rend="bold">([\s\S]*?)<\/hi>/g, "<b>$1</b>")
+    .replace(/<(?!\/?b>)[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/[ \t]+/g, " ");
+}
+
+function correctedBook(book: string): Map<string, string> | null {
+  if (corrected.has(book)) return corrected.get(book)!;
+  const code = (db.prepare("select vri_id from books where book_id = ?").get(book) as { vri_id: string } | undefined)?.vri_id;
+  const R = code ? xmlText(code) : null;
+  if (!R) {
+    if (code) xmlStats.missingXml.push(`${book}(${code})`);
+    corrected.set(book, null);
+    return null;
+  }
+  const rows = db
+    .prepare("select para_id as para, line_id as line, pali as text from sentences where book_id = ? order by para_id, line_id")
+    .all(book) as unknown as { para: number; line: number; text: string }[];
+  const X = normWithIndex(R);
+  // E-Piṭaka 책 글자 줄 세우기
+  let E = "";
+  const eStart: number[] = [];
+  for (const r of rows) {
+    eStart.push(E.length);
+    E += norm(tidy(String(r.text)));
+  }
+  // 글자 맞추기 (어긋나면 16글자 앞을 다시 찾아 잇는다)
+  const map = new Int32Array(E.length).fill(-1);
+  {
+    const W = 16;
+    let i = 0;
+    // 책이 시작하는 자리: 한 XML 파일에 책이 둘 든 경우(아빠다나 2·3권)가 있어, 한 번만 나오는 긴 글 조각으로 찾는다
+    let j = 0;
+    for (const off of [0, 300, 2000, 10000]) {
+      const chunk = E.slice(off, off + 80);
+      const k = X.s.indexOf(chunk);
+      if (chunk.length === 80 && k >= 0 && X.s.indexOf(chunk, k + 1) < 0) {
+        j = Math.max(0, k - off);
+        break;
+      }
+    }
+    while (i < E.length && j < X.s.length) {
+      if (E[i] === X.s[j]) {
+        map[i++] = j++;
+        continue;
+      }
+      const k = X.s.indexOf(E.slice(i, i + W), j);
+      const back = E.indexOf(X.s.slice(j, j + W), i);
+      if (k >= 0 && k - j < 6000 && (back < 0 || k - j <= back - i)) {
+        j = k;
+        continue;
+      }
+      if (back >= 0 && back - i < 6000) {
+        i = back;
+        continue;
+      }
+      i++;
+      j++;
+    }
+  }
+  // 줄마다 공식 원문에서의 시작 자리 (맞은 첫 글자)
+  const startRaw: (number | null)[] = rows.map((r, n) => {
+    const from = eStart[n];
+    const to = n + 1 < rows.length ? eStart[n + 1] : E.length;
+    for (let x = from; x < to; x++) if (map[x] >= 0) return X.at[map[x]];
+    return null;
+  });
+  const out = new Map<string, string>();
+  const OPEN = /[‘“'"(\[\s]/;
+  for (let n = 0; n < rows.length; n++) {
+    xmlStats.lines++;
+    const key = `${rows[n].para}:${rows[n].line}`;
+    const a0 = startRaw[n];
+    if (a0 === null) {
+      // 공식 원문에 없는 줄 (E-Piṭaka 에만 있음 — 제목 줄의 꾸밈 등)
+      if (norm(String(rows[n].text))) xmlStats.epitakaOnly++;
+      out.set(key, "");
+      continue;
+    }
+    const back = (x: number, floor: number) => {
+      for (;;) {
+        if (x > floor && OPEN.test(R[x - 1]) && R[x - 1] !== "\n") x--;
+        else if (x - 3 >= floor && R.slice(x - 3, x) === "<b>") x -= 3;
+        else return x;
+      }
+    };
+    const a = back(a0, 0);
+    let nextStart = R.length;
+    for (let m = n + 1; m < rows.length; m++) {
+      if (startRaw[m] !== null) {
+        nextStart = back(startRaw[m]!, a);
+        break;
+      }
+    }
+    // 책 끝 줄: 다음 문단 끝까지만
+    const end = nextStart === R.length ? (R.indexOf("\n", a) < 0 ? R.length : R.indexOf("\n", a)) : nextStart;
+    // 줄 끝에 걸친 굵게 표시는 줄 안에서 닫는다
+    let text = tidy(R.slice(a, end).replace(/\n+/g, " "));
+    const opens = (text.match(/<b>/g) ?? []).length - (text.match(/<\/b>/g) ?? []).length;
+    if (opens > 0) text += "</b>".repeat(opens);
+    else if (opens < 0) text = "<b>".repeat(-opens) + text;
+    const before = tidy(String(rows[n].text));
+    if (norm(text) !== norm(before) || text !== before) xmlStats.changed++;
+    out.set(key, text);
+  }
+  xmlStats.books++;
+  corrected.set(book, out);
+  return out;
+}
+
 function linesOf(book: string, from: number, to: number): Line[] {
+  const fix = correctedBook(book);
   return (
     db
       .prepare(
         "select para_id as para, line_id as line, vripara, pali as text from sentences where book_id = ? and para_id between ? and ? order by para_id, line_id",
       )
       .all(book, from, to) as unknown as Line[]
-  ).map((l) => ({ ...l, text: tidy(String(l.text)) }));
+  ).map((l) => ({ ...l, text: fix?.get(`${l.para}:${l.line}`) ?? tidy(String(l.text)) }));
 }
 
 /** 마하상기띠본 원문 파일: 파일 이름 → 경로 (한 번만 훑는다) */
@@ -722,6 +857,11 @@ if (quiet) {
       `빌랄라 ${stats.segs}문장 중 VRI 글이 빈 문장 ${stats.gaps}개 · 자를 자리가 애매해 앞 문장에 합친 곳 ${stats.unsure.length}개`,
   );
   writeFileSync(path.join(OUT, "_unsure.txt"), `${stats.unsure.join("\n")}\n`);
+  console.log(
+    `VRI 공식 원문으로 바로잡기: 책 ${xmlStats.books}권 · 줄 ${xmlStats.lines.toLocaleString()}개 중 글이 달라진 줄 ${xmlStats.changed.toLocaleString()}개 · ` +
+      `공식 원문에 없는 E-Piṭaka 줄 ${xmlStats.epitakaOnly}개` +
+      (xmlStats.missingXml.length ? ` · 공식 원문 파일이 없는 책: ${xmlStats.missingXml.join(" ")}` : ""),
+  );
   writeFileSync(
     path.join(OUT, "_import-report.txt"),
     `짝을 못 찾은 줄이 있는 경:\n${stats.withUnmatched.join("\n")}\n\nE-Piṭaka 에 없는 경:\n${stats.missing.join("\n")}\n`,
