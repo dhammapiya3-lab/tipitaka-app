@@ -1,6 +1,5 @@
 [
     
-    { "folder": "jataka_pli_ms",             "edition": "pli-ms" }
-    
+    { "folder": "jataka_pli_ms",             "edition": "pli-ms" },
+    { "folder": "jataka_en_sujato", "edition": "en-sujato" }
 ]
-

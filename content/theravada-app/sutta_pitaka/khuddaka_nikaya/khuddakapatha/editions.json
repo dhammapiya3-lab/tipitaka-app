@@ -9,5 +9,6 @@
     { "folder": "khuddakapatha_kor_kimjaeseong_calmvoice", "edition": "kor-kimjaeseong-calmvoice" },
     { "folder": "khuddakapatha_kor_myowon", "edition": "kor-myowon" },
 
-    { "folder": "khuddakapatha_pli_ms",             "edition": "pli-ms" }
+    { "folder": "khuddakapatha_pli_ms",             "edition": "pli-ms" },
+    { "folder": "khuddakapatha_en_sujato", "edition": "en-sujato" }
 ]

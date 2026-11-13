@@ -1,6 +1,5 @@
 [
     
-    { "folder": "therigatha_pli_ms",             "edition": "pli-ms" }
-    
+    { "folder": "therigatha_pli_ms",             "edition": "pli-ms" },
+    { "folder": "therigatha_en_sujato", "edition": "en-sujato" }
 ]
-
