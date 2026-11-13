@@ -60,26 +60,26 @@ const PLAIN_SECTIONS: {
     licensed: true,
     lang: "en",
     credit:
-      "Margaret Cone, A Dictionary of Pāli I–III (a–bh) · © Pali Text Society · PTS 가 gandhari.org/dop 에서 무료로 공개",
+      "A Dictionary of Pāli I–III (a–bh) — Margaret Cone 지음. © Pali Text Society. Pali Text Society가 gandhari.org/dop에서 무료로 공개한 자료입니다. Digital Pāḷi Dictionary 사이트에서 자료를 가져왔습니다.",
   },
   {
     id: "pts",
     licensed: true,
     lang: "en",
     credit:
-      "Pāḷi Text Society's Pāḷi-English Dictionary (PTS PED) — Digitized PTS dictionary data adapted from Buddhadust, based on the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).",
+      "Pāḷi Text Society’s Pāḷi-English Dictionary (PTS PED) — K.R. Norman, William Pruitt, Peter Jackson이 교정하여 The Pāḷi Text Society에서 펴낸 2015년 수정 재판을 바탕으로, Buddhadust가 디지털로 옮긴 PTS 사전 자료를 가져와 다듬었습니다. (CC BY-NC 3.0)",
   },
   {
     id: "peu",
     lang: "en",
     credit:
-      "Pāḷi Myanmar Abhidhān 영어 번역 (사람 번역 약 80%, 나머지는 기계 번역이라 어색한 문장이 섞여 있어요) · pm12e.pali.tools",
+      "Pali English Ultimate (PEU) — Pāḷi Myanmar Abhidhān을 영어로 옮기는 pm12e 프로젝트(pm12e.pali.tools)의 자료입니다. 약 80%는 사람이, 나머지는 기계가 번역해서 어색한 문장이 섞여 있습니다.",
   },
   {
     id: "mm",
     lang: "my",
     credit:
-      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data — Adapted from Tipiṭaka App & Tipiṭaka Abidan developed by Ven. Pn Daza.",
+      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Ven. Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
   },
 ];
 
@@ -251,9 +251,9 @@ export function WordLookupResult({
                 ))}
               </div>
               <p className="t-meta mt-2">
-                Digital Pāḷi Dictionary (DPD) — DPD dictionary data, grammatical
-                modules, and styles obtained from Digital Pāḷi Dictionary by
-                Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0.
+                Digital Pāḷi Dictionary (DPD) — 사전 자료, 문법 모듈, 화면
+                양식은 Ven. Bodhirasa 스님과 기여자들이 만든 Digital Pāḷi
+                Dictionary에서 가져왔습니다. 이용 조건은 CC BY-NC-SA 4.0입니다.
               </p>
             </section>
           ) : null

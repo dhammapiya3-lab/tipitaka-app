@@ -93,9 +93,9 @@ Next.js 16 (정적 내보내기) · TypeScript · Tailwind CSS v4 · shadcn/ui �
 
 - 번역문의 저작권은 각 번역자에게 있습니다. **이용 허락을 확인하기 전에는 인터넷에 공개하지 마세요.**
   원래 앱이 복사를 막은 판본(법현 스님)은 이 앱에서도 글자 선택·복사를 막았습니다.
-- Digital Pāḷi Dictionary (DPD) — DPD dictionary data, grammatical modules, and styles obtained from Digital Pāḷi Dictionary by Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0. 광고나 유료 기능을 넣지 않습니다.
-- Pāḷi Text Society's Pāḷi-English Dictionary (PTS PED) — Digitized PTS dictionary data adapted from Buddhadust, based on the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).
-- Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data — Adapted from Tipiṭaka App & Tipiṭaka Abidan developed by Ven. Pn Daza.
+- Digital Pāḷi Dictionary (DPD) — 사전 자료, 문법 모듈, 화면 양식은 Ven. Bodhirasa 스님과 기여자들이 만든 Digital Pāḷi Dictionary에서 가져왔습니다. 이용 조건은 CC BY-NC-SA 4.0입니다. 광고나 유료 기능을 넣지 않습니다.
+- Pāḷi Text Society’s Pāḷi-English Dictionary (PTS PED) — K.R. Norman, William Pruitt, Peter Jackson이 교정하여 The Pāḷi Text Society에서 펴낸 2015년 수정 재판을 바탕으로, Buddhadust가 디지털로 옮긴 PTS 사전 자료를 가져와 다듬었습니다. (CC BY-NC 3.0)
+- Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Ven. Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.
 - Bhikkhu Sujato 영어 번역: SuttaCentral bilara-data, CC0 (퍼블릭 도메인). 쿳다까(소송경·우다나·이띠웃따까·숫따니빠따·테라/테리가타·짜리야삐따까·자따까 83개)는 2026-11-13 bilara-data 에서 추가. 각주(디가·맛지마·상윳따·쿳다까)도 bilara-data 에서 (CC0).
 - K-PTS 빠알리–한국어 사전 (K-PTSdic. 한글빠알리사전) — 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우. 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받았습니다.
 - K-PTS·PTS·미얀마 사전: 사용·공개 허락 확인 (2026-11-13).

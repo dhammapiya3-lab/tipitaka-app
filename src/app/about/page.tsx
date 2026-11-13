@@ -91,7 +91,8 @@ export default function AboutPage() {
             <span lang="pi" className="font-semibold text-foreground">
               Digital Pāḷi Dictionary (DPD)
             </span>{" "}
-            — DPD dictionary data, grammatical modules, and styles obtained from{" "}
+            — 사전 자료, 문법 모듈, 화면 양식은 Ven. Bodhirasa 스님과 기여자들이
+            만든{" "}
             <a
               href="https://www.dpdict.net/"
               className="font-semibold text-primary underline-offset-4 hover:underline"
@@ -99,9 +100,9 @@ export default function AboutPage() {
               rel="noreferrer"
             >
               Digital Pāḷi Dictionary
-            </a>{" "}
-            by Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0.
-            (사용한 판: v0.4.20261026)
+            </a>
+            에서 가져왔습니다. 이용 조건은 CC BY-NC-SA 4.0입니다. (사용한 판:
+            v0.4.20261026)
           </p>
           <p>
             <span className="font-semibold text-foreground">
@@ -114,18 +115,18 @@ export default function AboutPage() {
           </p>
           <p>
             <span className="font-semibold text-foreground">
-              Pāḷi Text Society&apos;s Pāḷi-English Dictionary (PTS PED)
+              Pāḷi Text Society’s Pāḷi-English Dictionary (PTS PED)
             </span>{" "}
-            — Digitized PTS dictionary data adapted from Buddhadust, based on
-            the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter
-            Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).
+            — K.R. Norman, William Pruitt, Peter Jackson이 교정하여 The Pāḷi
+            Text Society에서 펴낸 2015년 수정 재판을 바탕으로, Buddhadust가
+            디지털로 옮긴 PTS 사전 자료를 가져와 다듬었습니다. (CC BY-NC 3.0)
           </p>
           <p>
             <span className="font-semibold text-foreground">
-              Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data
+              Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료
             </span>{" "}
-            — Adapted from Tipiṭaka App &amp; Tipiṭaka Abidan developed by Ven.
-            Pn Daza.
+            — Ven. Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를
+            가져와 다듬었습니다.
           </p>
         </CardContent>
       </Card>
