@@ -8,7 +8,7 @@ export interface DictionaryInfo {
 }
 
 /** 표제어 → 뜻풀이 글만 있는 사전 (K-PTS 한국어 · PTS 영어 · 미얀마) */
-export type PlainDictionaryId = "kpts" | "pts" | "mm" | "peu";
+export type PlainDictionaryId = "kpts" | "pts" | "mm" | "peu" | "cone";
 export type DictionaryId = "dpd" | PlainDictionaryId;
 
 /** 조각 사전 안내 파일(index.json) — 어떤 앞부분 조각을 더 잘게 나눴는지 */

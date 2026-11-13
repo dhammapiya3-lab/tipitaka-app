@@ -253,16 +253,25 @@ async function fetchDpdEntries(index: DictionaryIndex, ids: number[]): Promise<D
   });
 }
 
+/** 해시로 나눈 사전 조각 번호 — scripts/build-peu.ts 와 같은 계산 */
+function hashShard(word: string, count: number): number {
+  let h = 0;
+  for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
+  return h % count;
+}
+
 async function fetchPlain(
   index: DictionaryIndex,
   dict: PlainDictionaryId,
   candidates: string[],
 ): Promise<PlainEntry[]> {
   const split = new Set(index.split[dict]);
+  // "#256" 처럼 적혀 있으면 앞글자 대신 해시로 나눈 조각 (큰 사전 — 호스팅 파일 수 한도 때문)
+  const hashed = index.split[dict]?.[0]?.startsWith("#") ? Number(index.split[dict][0].slice(1)) : 0;
   const found = await Promise.all(
     candidates.map(async (headword) => {
       const shard = await getShard(
-        `${DICT_BASE}/${dict}/${shardOf(headword, split)}.json`,
+        `${DICT_BASE}/${dict}/${hashed ? `h${hashShard(headword, hashed)}` : shardOf(headword, split)}.json`,
         plainShardSchema,
       );
       const definitions = shard[headword];
@@ -343,7 +352,7 @@ export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
   );
 }
 
-const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "pts", "peu", "mm"];
+const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "cone", "pts", "peu", "mm"];
 
 async function lookupIds(index: DictionaryIndex, form: string): Promise<number[]> {
   const shard = await getShard(
@@ -389,6 +398,7 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
     pts: [],
     mm: [],
     peu: [],
+    cone: [],
   };
   if (!typed) return empty;
 

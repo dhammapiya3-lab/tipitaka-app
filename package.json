@@ -18,7 +18,8 @@
     "import:pages": "tsx scripts/import-pages.ts",
     "build:dpd-extras": "tsx scripts/build-dpd-extras.ts",
     "build:splitter": "tsx scripts/build-splitter.ts",
-    "build:peu": "tsx scripts/build-peu.ts"
+    "build:peu": "tsx scripts/build-peu.ts",
+    "rehash:dict": "tsx scripts/rehash-dict.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

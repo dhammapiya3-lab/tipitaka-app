@@ -39,6 +39,11 @@ import type {
 /** 뜻풀이 글만 있는 사전들 — 표시 순서, 글 언어, 출처 */
 const PLAIN_SECTIONS: { id: PlainDictionaryId; lang: string; credit: string | null }[] = [
   { id: "kpts", lang: "ko", credit: "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙" },
+  {
+    id: "cone",
+    lang: "en",
+    credit: "Margaret Cone, A Dictionary of Pāli I–III (a–bh) · © Pali Text Society · PTS 가 gandhari.org/dop 에서 무료로 공개",
+  },
   { id: "pts", lang: "en", credit: null },
   {
     id: "peu",
