@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Eraser, Highlighter, Share2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, Copy, Eraser, Highlighter, NotebookPen, Share2, Volume2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { HIGHLIGHT_CLASS, type HighlightColor } from "@/store/highlights";
@@ -61,6 +61,14 @@ export function editionsIn(root: Element, range: Range): string[] {
   return ids;
 }
 
+/** 고른 범위가 걸친 첫 문장 칸의 문장 번호 */
+function firstKeyIn(root: Element, range: Range): string | null {
+  for (const cell of root.querySelectorAll("[data-cell]")) {
+    if (range.intersectsNode(cell)) return (cell.getAttribute("data-cell") ?? "").split("|")[1] || null;
+  }
+  return null;
+}
+
 /**
  * 본문에서 글을 고르면 그 위(휴대폰은 아래)에 뜨는 막대 — 복사 · 공유 · 밑줄(형광펜).
  * 여러 문장·문단을 한꺼번에 골라 복사·공유할 수 있다. 밑줄은 한 문장 안에서 긋는다.
@@ -70,6 +78,10 @@ export function SelectionToolbar({
   onCopy,
   onShare,
   onHighlight,
+  isSaved,
+  onBookmark,
+  onMemo,
+  onListen,
 }: {
   /** 이 안에서 고른 글만 (본문 article) */
   container: () => HTMLElement | null;
@@ -77,6 +89,12 @@ export function SelectionToolbar({
   onCopy: (text: string, editionIds: string[]) => void;
   onShare: (text: string, editionIds: string[]) => void;
   onHighlight: (range: CellRange, color: HighlightColor) => void;
+  /** key: 고른 글이 시작하는 문장 */
+  isSaved: (key: string) => boolean;
+  onBookmark: (key: string) => void;
+  onMemo: (key: string) => void;
+  /** 소리로 읽기를 못 쓰는 브라우저면 없음 */
+  onListen?: (key: string) => void;
 }) {
   const [sel, setSel] = useState<{
     x: number;
@@ -85,6 +103,7 @@ export function SelectionToolbar({
     text: string;
     cell: CellRange | null;
     editions: string[];
+    key: string | null;
   } | null>(null);
 
   useEffect(() => {
@@ -120,6 +139,7 @@ export function SelectionToolbar({
           text,
           cell,
           editions: editionsIn(root, range),
+          key: firstKeyIn(root, range),
         });
       }, 120);
     };
@@ -141,9 +161,9 @@ export function SelectionToolbar({
       role="toolbar"
       aria-label="고른 글"
       onMouseDown={(e) => e.preventDefault()}
-      className="fixed z-50 flex -translate-x-1/2 items-center gap-0.5 rounded-xl border bg-card p-1 shadow-lg print:hidden"
+      className="fixed z-50 flex max-w-[calc(100vw-12px)] -translate-x-1/2 flex-wrap items-center justify-center gap-0.5 rounded-xl border bg-card p-1 shadow-lg print:hidden"
       style={{
-        left: Math.min(Math.max(sel.x, 170), window.innerWidth - 170),
+        left: Math.min(Math.max(sel.x, Math.min(300, window.innerWidth / 2)), window.innerWidth - Math.min(300, window.innerWidth / 2)),
         top: sel.y,
         transform: `translate(-50%, ${sel.below ? "0" : "-100%"})`,
       }}
@@ -156,6 +176,29 @@ export function SelectionToolbar({
         <Share2 className="size-3.5" aria-hidden />
         공유
       </button>
+      {sel.key ? (
+        <>
+          <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />
+          <button type="button" className={button} onClick={() => (onBookmark(sel.key!), done())}>
+            {isSaved(sel.key) ? (
+              <BookmarkCheck className="size-3.5 text-primary" aria-hidden />
+            ) : (
+              <Bookmark className="size-3.5" aria-hidden />
+            )}
+            {isSaved(sel.key) ? "책갈피 지우기" : "책갈피"}
+          </button>
+          <button type="button" className={button} onClick={() => (onMemo(sel.key!), done())}>
+            <NotebookPen className="size-3.5" aria-hidden />
+            메모
+          </button>
+          {onListen ? (
+            <button type="button" className={button} onClick={() => (onListen(sel.key!), done())}>
+              <Volume2 className="size-3.5" aria-hidden />
+              여기서부터 듣기
+            </button>
+          ) : null}
+        </>
+      ) : null}
       {sel.cell ? (
         <>
           <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />

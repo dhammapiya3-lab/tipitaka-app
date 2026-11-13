@@ -1488,6 +1488,19 @@ export function SuttaView({
         onHighlight={(range, color) =>
           addHighlight({ suttaId, suttaTitle, editionId: range.editionId, key: range.key, start: range.start, end: range.end, color, text: range.text })
         }
+        isSaved={(key) => mine.has(key)}
+        onBookmark={(key) => {
+          const row = rows.find((r) => r.key === key);
+          if (!row) return;
+          const saved = mine.has(key);
+          toggleBookmark(baseOf(row));
+          toast.success(saved ? "책갈피를 지웠습니다." : "책갈피에 넣었습니다.");
+        }}
+        onMemo={(key) => {
+          const row = rows.find((r) => r.key === key);
+          if (row) setMemoRow(row);
+        }}
+        onListen={tts.supported ? (key) => listenFrom(key) : undefined}
       />
       {hlMenu ? (
         <HighlightMenu
