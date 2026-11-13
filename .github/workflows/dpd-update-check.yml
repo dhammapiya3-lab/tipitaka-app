@@ -1,0 +1,44 @@
+# DPD(Digital Pāḷi Dictionary) 새 판 확인 — 한 달에 한 번
+# 새 판이 나왔으면 저장소에 "알림(Issue)"을 연다. 사이트는 바로 바뀌지 않는다.
+# 사전을 다시 만드는 데에는 공개 저장소에 없는 원본(epitaka.db 등)도 필요해서, 알림을 보고 Claude 에게 "DPD 새 판으로 바꿔줘"라고 하면 된다.
+name: DPD 새 판 확인
+
+on:
+  schedule:
+    - cron: "17 2 3 * *" # 매달 3일 02:17 (UTC) = 한국 시각 11:17
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 지금 쓰는 판과 DPD 최신 판 비교
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current="$(tr -d '[:space:]' < content/dpd-version.txt)"
+          latest="$(gh api repos/digitalpalidictionary/dpd-db/releases/latest --jq .tag_name)"
+          echo "지금 쓰는 판: $current / 최신 판: $latest"
+          if [ -z "$latest" ] || [ "$latest" = "$current" ]; then
+            echo "새 판이 없습니다."
+            exit 0
+          fi
+          title="DPD 새 판이 나왔어요: $latest"
+          if gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' | grep -q .; then
+            echo "이미 알림이 열려 있습니다."
+            exit 0
+          fi
+          gh issue create --title "$title" --body "$(cat <<BODY
+          Digital Pāḷi Dictionary 의 새 판 **$latest** 이 나왔습니다. (지금 사이트: $current)
+
+          - 새 판 안내: https://github.com/digitalpalidictionary/dpd-db/releases/tag/$latest
+          - 바꾸려면 Claude 에게 "DPD 새 판($latest)으로 사전을 다시 만들어줘"라고 하세요.
+            사전을 다시 만들고 검사한 뒤 사이트에 올리고, \`content/dpd-version.txt\` 와 사이트의 판 번호도 함께 바꿉니다.
+          - 바꾼 뒤 이 알림을 닫아 주세요.
+          BODY
+          )"
