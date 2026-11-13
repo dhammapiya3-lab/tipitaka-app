@@ -211,7 +211,7 @@ function collectPlain(rows: Iterable<Record<string, unknown>>): Map<string, stri
 // ── PTS · 미얀마 (epitaka.db) ────────────────────────────────
 console.log("PTS·미얀마 사전 변환 중…");
 const epitaka = new DatabaseSync(EPITAKA_DB, { readOnly: true });
-const plainSplit: Record<PlainDictionaryId, string[]> = { kpts: [], pts: [], mm: [] };
+const plainSplit: Record<PlainDictionaryId, string[]> = { kpts: [], pts: [], mm: [], peu: [] };
 for (const [dict, bookId] of Object.entries(EPITAKA_BOOKS) as ["pts" | "mm", number][]) {
   plainSplit[dict] = writeShards(
     dict,

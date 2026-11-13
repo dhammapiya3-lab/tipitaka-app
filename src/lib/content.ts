@@ -343,7 +343,7 @@ export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
   );
 }
 
-const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "pts", "mm"];
+const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "pts", "peu", "mm"];
 
 async function lookupIds(index: DictionaryIndex, form: string): Promise<number[]> {
   const shard = await getShard(
@@ -388,6 +388,7 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
     kpts: [],
     pts: [],
     mm: [],
+    peu: [],
   };
   if (!typed) return empty;
 

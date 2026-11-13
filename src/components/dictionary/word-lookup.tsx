@@ -40,6 +40,11 @@ import type {
 const PLAIN_SECTIONS: { id: PlainDictionaryId; lang: string; credit: string | null }[] = [
   { id: "kpts", lang: "ko", credit: "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙" },
   { id: "pts", lang: "en", credit: null },
+  {
+    id: "peu",
+    lang: "en",
+    credit: "Pāḷi Myanmar Abhidhān 영어 번역 (사람 번역 약 80%, 나머지는 기계 번역이라 어색한 문장이 섞여 있어요) · pm12e.pali.tools",
+  },
   { id: "mm", lang: "my", credit: null },
 ];
 

@@ -17,7 +17,8 @@
     "build:dpd-tables": "tsx scripts/build-dpd-tables.ts",
     "import:pages": "tsx scripts/import-pages.ts",
     "build:dpd-extras": "tsx scripts/build-dpd-extras.ts",
-    "build:splitter": "tsx scripts/build-splitter.ts"
+    "build:splitter": "tsx scripts/build-splitter.ts",
+    "build:peu": "tsx scripts/build-peu.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

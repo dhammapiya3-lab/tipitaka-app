@@ -12,12 +12,13 @@ export const DEFAULT_EDITIONS = [PALI_EDITION, "kor-kimjaeseong-calmvoice"];
 
 /** 처음 쓸 사전: DPD + K-PTS 한국어 (PTS·미얀마 사전은 사전 선택에서 켠다) */
 export const DEFAULT_DICTIONARIES: DictionaryId[] = ["dpd", "kpts"];
-export const DICTIONARY_ORDER: DictionaryId[] = ["dpd", "kpts", "pts", "mm"];
+export const DICTIONARY_ORDER: DictionaryId[] = ["dpd", "kpts", "pts", "peu", "mm"];
 export const DICTIONARY_LABELS: Record<DictionaryId, string> = {
   dpd: "Digital Pāḷi Dictionary",
   kpts: "K-PTS 빠알리–한국어",
   pts: "PTS Pali–English",
   mm: "Tipiṭaka Pāḷi–Myanmar",
+  peu: "Pali English Ultimate",
 };
 
 /** 본문 글자 크기(px) — 원래 앱과 같이 12~24, 처음 16 */

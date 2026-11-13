@@ -137,7 +137,7 @@ export const catalogSchema: z.ZodType<Catalog> = z.object({
 });
 
 // ── 사전 ────────────────────────────────────────────────────
-export const dictionaryIdSchema = z.enum(["dpd", "kpts", "pts", "mm"]);
+export const dictionaryIdSchema = z.enum(["dpd", "kpts", "pts", "mm", "peu"]);
 
 export const dictionaryIndexSchema: z.ZodType<DictionaryIndex> = z.object({
   version: z.string(),
@@ -155,6 +155,8 @@ export const dictionaryIndexSchema: z.ZodType<DictionaryIndex> = z.object({
     kpts: z.array(z.string()),
     pts: z.array(z.string()),
     mm: z.array(z.string()),
+    /** Pali English Ultimate — 따로 만든다 (scripts/build-peu.ts). 없으면 빈 목록 */
+    peu: z.array(z.string()).default([]),
   }),
   dpdShardSize: z.number().int().positive(),
 });
