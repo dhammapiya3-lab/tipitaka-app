@@ -17,7 +17,9 @@ function summarize(ids: string[], prefix = ""): string {
   }
   const text = [...byBook]
     .map(([book, list]) =>
-      list.length > 2 ? `${book.toUpperCase()} ${list.length}개` : list.map(suttaLabel).join(", "),
+      list.length > 2
+        ? `${book.toUpperCase()} ${list.length}개`
+        : list.map(suttaLabel).join(", "),
     )
     .join(", ");
   return prefix ? `${prefix} ${text}` : text;
@@ -26,7 +28,6 @@ function summarize(ids: string[], prefix = ""): string {
 export default function AboutPage() {
   return (
     <TopLevelPage title="정보">
-
       <Card id="editions" className="scroll-mt-20">
         <CardHeader>
           <CardTitle>판본 정보</CardTitle>
@@ -45,14 +46,30 @@ export default function AboutPage() {
             <tbody className="t-sub">
               {editions.map((e) => (
                 <tr key={e.id} className="border-t">
-                  <td className="px-5 py-3 font-semibold text-foreground">{e.label}</td>
+                  <td className="px-5 py-3 font-semibold text-foreground">
+                    {e.label}
+                  </td>
                   <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
                   <td className="px-3 py-3">{e.translator ?? "—"}</td>
                   <td className="px-3 py-3">
                     {[
-                      summarize(allSuttas.filter((s) => s.editions.includes(e.id)).map((s) => s.id)),
-                      summarize(allSuttas.filter((s) => s.nissaya.includes(e.id)).map((s) => s.id), "대역"),
-                      summarize(allSuttas.filter((s) => s.grammar.includes(e.id)).map((s) => s.id), "문법분석"),
+                      summarize(
+                        allSuttas
+                          .filter((s) => s.editions.includes(e.id))
+                          .map((s) => s.id),
+                      ),
+                      summarize(
+                        allSuttas
+                          .filter((s) => s.nissaya.includes(e.id))
+                          .map((s) => s.id),
+                        "대역",
+                      ),
+                      summarize(
+                        allSuttas
+                          .filter((s) => s.grammar.includes(e.id))
+                          .map((s) => s.id),
+                        "문법분석",
+                      ),
                     ]
                       .filter(Boolean)
                       .join(" · ")}
@@ -72,27 +89,41 @@ export default function AboutPage() {
         <CardContent className="t-sub flex flex-col gap-2">
           <p>
             <span lang="pi" className="font-semibold text-foreground">
-              Digital Pāḷi Dictionary
+              Digital Pāḷi Dictionary (DPD)
             </span>{" "}
-            — Bodhirasa Bhikkhu, v0.4.20261026,{" "}
+            — DPD dictionary data, grammatical modules, and styles obtained from{" "}
             <a
               href="https://www.dpdict.net/"
               className="font-semibold text-primary underline-offset-4 hover:underline"
               target="_blank"
               rel="noreferrer"
             >
-              dpdict.net
-            </a>
-            . 이용 조건 CC BY-NC-SA 4.0 (비상업·출처 표시·같은 조건 공유).
+              Digital Pāḷi Dictionary
+            </a>{" "}
+            by Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0.
+            (사용한 판: v0.4.20261026)
           </p>
           <p>
-            <span className="font-semibold text-foreground">K-PTS 빠알리–한국어 사전</span> —
-            K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙 (원래 앱의 자료). 이용 조건{" "}
-            {LICENSE_UNKNOWN}.
+            <span className="font-semibold text-foreground">
+              K-PTS 빠알리–한국어 사전
+            </span>{" "}
+            — K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙
+            (원래 앱의 자료). 이용 조건 {LICENSE_UNKNOWN}.
           </p>
           <p>
-            <span className="font-semibold text-foreground">PTS Pali–English 사전 · Tipiṭaka Pāḷi–Myanmar 사전</span>{" "}
-            — E-Piṭaka(epitaka.db)에 담긴 자료. 이용 조건 {LICENSE_UNKNOWN}.
+            <span className="font-semibold text-foreground">
+              Pāḷi Text Society&apos;s Pāḷi-English Dictionary (PTS PED)
+            </span>{" "}
+            — Digitized PTS dictionary data adapted from Buddhadust, based on
+            the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter
+            Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">
+              Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data
+            </span>{" "}
+            — Adapted from Tipiṭaka App &amp; Tipiṭaka Abidan developed by Ven.
+            Pn Daza.
           </p>
         </CardContent>
       </Card>
@@ -114,8 +145,14 @@ export default function AboutPage() {
             </a>
             의 자료를 바탕으로 합니다.
           </p>
-          <p>각 번역의 저작권은 번역자에게 있습니다. 이용 조건은 확인되는 대로 위 표에 적습니다.</p>
-          <p>원래 앱에서 복사를 막은 번역(법현 스님)은 이 앱에서도 글자를 선택할 수 없게 했습니다.</p>
+          <p>
+            각 번역의 저작권은 번역자에게 있습니다. 이용 조건은 확인되는 대로 위
+            표에 적습니다.
+          </p>
+          <p>
+            원래 앱에서 복사를 막은 번역(법현 스님)은 이 앱에서도 글자를 선택할
+            수 없게 했습니다.
+          </p>
         </CardContent>
       </Card>
 
@@ -124,8 +161,8 @@ export default function AboutPage() {
           <CardTitle>읽기 설정</CardTitle>
         </CardHeader>
         <CardContent className="t-sub">
-          고른 판본과 글자 크기·줄 간격은 이 기기의 브라우저에만 저장됩니다. 다른 기기와는
-          공유되지 않습니다.
+          고른 판본과 글자 크기·줄 간격은 이 기기의 브라우저에만 저장됩니다.
+          다른 기기와는 공유되지 않습니다.
         </CardContent>
       </Card>
     </TopLevelPage>

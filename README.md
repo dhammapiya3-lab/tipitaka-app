@@ -93,5 +93,7 @@ Next.js 16 (정적 내보내기) · TypeScript · Tailwind CSS v4 · shadcn/ui �
 
 - 번역문의 저작권은 각 번역자에게 있습니다. **이용 허락을 확인하기 전에는 인터넷에 공개하지 마세요.**
   원래 앱이 복사를 막은 판본(법현 스님)은 이 앱에서도 글자 선택·복사를 막았습니다.
-- Digital Pāḷi Dictionary: CC BY-NC-SA 4.0 (비상업·출처 표시·같은 조건 공유) — 광고나 유료 기능을 넣지 않습니다.
+- Digital Pāḷi Dictionary (DPD) — DPD dictionary data, grammatical modules, and styles obtained from Digital Pāḷi Dictionary by Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0. 광고나 유료 기능을 넣지 않습니다.
+- Pāḷi Text Society's Pāḷi-English Dictionary (PTS PED) — Digitized PTS dictionary data adapted from Buddhadust, based on the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).
+- Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data — Adapted from Tipiṭaka App & Tipiṭaka Abidan developed by Ven. Pn Daza.
 - K-PTS·PTS·미얀마 사전: 사용·공개 허락 확인 (2026-11-13).

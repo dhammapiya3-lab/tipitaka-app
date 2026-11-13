@@ -19,7 +19,11 @@ import {
   type WordLookup,
 } from "@/lib/content";
 import { normalizeWord } from "@/lib/pali";
-import { DICTIONARY_LABELS, DICTIONARY_ORDER, LICENSE_UNKNOWN } from "@/lib/constants";
+import {
+  DICTIONARY_LABELS,
+  DICTIONARY_ORDER,
+  LICENSE_UNKNOWN,
+} from "@/lib/constants";
 import { parseInline } from "@/lib/segments";
 import { cn } from "@/lib/utils";
 import { useRecentStore } from "@/store/recent";
@@ -37,20 +41,40 @@ import type {
 } from "@/types";
 
 /** 뜻풀이 글만 있는 사전들 — 표시 순서, 글 언어, 출처 */
-const PLAIN_SECTIONS: { id: PlainDictionaryId; lang: string; credit: string | null }[] = [
-  { id: "kpts", lang: "ko", credit: "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙" },
+const PLAIN_SECTIONS: {
+  id: PlainDictionaryId;
+  lang: string;
+  credit: string | null;
+}[] = [
+  {
+    id: "kpts",
+    lang: "ko",
+    credit: "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙",
+  },
   {
     id: "cone",
     lang: "en",
-    credit: "Margaret Cone, A Dictionary of Pāli I–III (a–bh) · © Pali Text Society · PTS 가 gandhari.org/dop 에서 무료로 공개",
+    credit:
+      "Margaret Cone, A Dictionary of Pāli I–III (a–bh) · © Pali Text Society · PTS 가 gandhari.org/dop 에서 무료로 공개",
   },
-  { id: "pts", lang: "en", credit: null },
+  {
+    id: "pts",
+    lang: "en",
+    credit:
+      "Pāḷi Text Society's Pāḷi-English Dictionary (PTS PED) — Digitized PTS dictionary data adapted from Buddhadust, based on the corrected 2015 reprint by K.R. Norman, William Pruitt, and Peter Jackson, published by The Pāḷi Text Society (CC BY-NC 3.0).",
+  },
   {
     id: "peu",
     lang: "en",
-    credit: "Pāḷi Myanmar Abhidhān 영어 번역 (사람 번역 약 80%, 나머지는 기계 번역이라 어색한 문장이 섞여 있어요) · pm12e.pali.tools",
+    credit:
+      "Pāḷi Myanmar Abhidhān 영어 번역 (사람 번역 약 80%, 나머지는 기계 번역이라 어색한 문장이 섞여 있어요) · pm12e.pali.tools",
   },
-  { id: "mm", lang: "my", credit: null },
+  {
+    id: "mm",
+    lang: "my",
+    credit:
+      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) Data — Adapted from Tipiṭaka App & Tipiṭaka Abidan developed by Ven. Pn Daza.",
+  },
 ];
 
 type State =
@@ -102,14 +126,21 @@ export function WordLookupResult({
   columns?: boolean;
 }) {
   const dictionaries = useSettingsStore((s) => s.dictionaries);
-  const dictKey = DICTIONARY_ORDER.filter((d) => dictionaries.includes(d)).join(",");
-  const [state, setState] = useState<State & { key: string }>({ status: "loading", key: "" });
+  const dictKey = DICTIONARY_ORDER.filter((d) => dictionaries.includes(d)).join(
+    ",",
+  );
+  const [state, setState] = useState<State & { key: string }>({
+    status: "loading",
+    key: "",
+  });
   const [attempt, setAttempt] = useState(0);
   const key = `${word}|${dictKey}|${attempt}`;
 
   useEffect(() => {
     let cancelled = false;
-    const dicts = DICTIONARY_ORDER.filter((d) => dictKey.split(",").includes(d));
+    const dicts = DICTIONARY_ORDER.filter((d) =>
+      dictKey.split(",").includes(d),
+    );
     lookupWord(word, dicts)
       .then((result) => {
         if (cancelled) return;
@@ -146,51 +177,78 @@ export function WordLookupResult({
         icon={CloudOff}
         title="사전 검색에 실패했습니다"
         description={state.message}
-        action={<Button onClick={() => setAttempt((n) => n + 1)}>다시 시도</Button>}
+        action={
+          <Button onClick={() => setAttempt((n) => n + 1)}>다시 시도</Button>
+        }
       />
     );
   }
 
   const { result } = state;
-  const count = (id: DictionaryId) => (id === "dpd" ? result.dpd : result[id]).length;
+  const count = (id: DictionaryId) =>
+    (id === "dpd" ? result.dpd : result[id]).length;
   const resolved = (
     <>
       <ResolvedNote word={word} result={result} onSearch={onSearch} />
-      {result.split.ways.length ? <AnalysisCard key={result.normalized || word} word={result.normalized || word} split={result.split} onSearch={onSearch} /> : null}
+      {result.split.ways.length ? (
+        <AnalysisCard
+          key={result.normalized || word}
+          word={result.normalized || word}
+          split={result.split}
+          onSearch={onSearch}
+        />
+      ) : null}
     </>
   );
   if (dictionaries.every((id) => count(id) === 0)) {
     if (result.split.ways.length) return resolved;
     return (
       <>
-      {resolved}
-      <EmptyState
-        icon={SearchX}
-        title={`“${word}”의 사전 검색 결과가 없습니다`}
-        description="다른 사전을 켜거나 기본형으로 찾아 보세요."
-      />
+        {resolved}
+        <EmptyState
+          icon={SearchX}
+          title={`“${word}”의 사전 검색 결과가 없습니다`}
+          description="다른 사전을 켜거나 기본형으로 찾아 보세요."
+        />
       </>
     );
   }
 
   return (
-    <div className={columns ? "grid items-start gap-4 xl:grid-cols-2 [&>*:first-child:not(section)]:col-span-full" : "flex flex-col gap-6"}>
+    <div
+      className={
+        columns
+          ? "grid items-start gap-4 xl:grid-cols-2 [&>*:first-child:not(section)]:col-span-full"
+          : "flex flex-col gap-6"
+      }
+    >
       {resolved}
       {/* 사전은 고른 차례대로 (먼저 켠 사전이 앞) */}
       {dictionaries.map((id) =>
         id === "dpd" ? (
           result.dpd.length > 0 ? (
-            <section key="dpd" className="rounded-2xl border bg-card px-5 pt-4 pb-3 shadow-sm">
+            <section
+              key="dpd"
+              className="rounded-2xl border bg-card px-5 pt-4 pb-3 shadow-sm"
+            >
               <div className="mb-1 flex items-center justify-between gap-2">
-                <h3 className="font-pali text-base font-bold">{DICTIONARY_LABELS.dpd}</h3>
-                <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-semibold text-muted-foreground">English</span>
+                <h3 className="font-pali text-base font-bold">
+                  {DICTIONARY_LABELS.dpd}
+                </h3>
+                <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-semibold text-muted-foreground">
+                  English
+                </span>
               </div>
               <div className="flex flex-col divide-y">
                 {result.dpd.map((entry) => (
                   <DpdCard key={entry.id} entry={entry} onSearch={onSearch} />
                 ))}
               </div>
-              <p className="t-meta mt-2">Digital Pāḷi Dictionary 제공 · CC BY-NC-SA 4.0</p>
+              <p className="t-meta mt-2">
+                Digital Pāḷi Dictionary (DPD) — DPD dictionary data, grammatical
+                modules, and styles obtained from Digital Pāḷi Dictionary by
+                Ven. Bodhirasa and contributors, licensed under CC BY-NC-SA 4.0.
+              </p>
             </section>
           ) : null
         ) : (
@@ -201,10 +259,15 @@ export function WordLookupResult({
               <section key={id} className="flex flex-col gap-3">
                 <SectionTitle id={id} />
                 {result[id].map((entry) => (
-                  <PlainCard key={entry.headword} entry={entry} lang={sec.lang} />
+                  <PlainCard
+                    key={entry.headword}
+                    entry={entry}
+                    lang={sec.lang}
+                  />
                 ))}
                 <p className="t-meta">
-                  {sec.credit ? `${sec.credit} · ` : ""}이용 조건 {LICENSE_UNKNOWN}
+                  {sec.credit ? `${sec.credit} · ` : ""}이용 조건{" "}
+                  {LICENSE_UNKNOWN}
                 </p>
               </section>
             );
@@ -225,12 +288,19 @@ function ResolvedNote({
   result: WordLookup;
   onSearch?: (word: string) => void;
 }) {
-  if (result.normalized === normalizeWord(word) && result.alternatives.length === 0) return null;
+  if (
+    result.normalized === normalizeWord(word) &&
+    result.alternatives.length === 0
+  )
+    return null;
   return (
     <div className="t-sub flex flex-wrap items-center gap-1.5 rounded-lg bg-surface-2 px-3 py-2">
       <span>
-        “{word}” → <strong lang="pi" className="font-bold text-foreground">{result.normalized}</strong> 로
-        찾았습니다.
+        “{word}” →{" "}
+        <strong lang="pi" className="font-bold text-foreground">
+          {result.normalized}
+        </strong>{" "}
+        로 찾았습니다.
       </span>
       {result.alternatives.length > 0 && onSearch ? (
         <>
@@ -261,7 +331,8 @@ function Rich({ text }: { text: string }) {
   return <InlineText parts={parseInline(text)} />;
 }
 
-type DpdTab = "grammar" | "examples" | "declension" | DpdFamilyKind | "frequency";
+type DpdTab =
+  "grammar" | "examples" | "declension" | DpdFamilyKind | "frequency";
 
 /** DPD 의견 보내기 (DPD 가 쓰는 구글 설문 — 낱말 번호·표제어를 미리 채운다) */
 function dpdFeedbackUrl(entry: DpdEntry): string {
@@ -280,7 +351,13 @@ const FAMILY_LABEL: Record<DpdFamilyKind, string> = {
 };
 
 /** 원래 앱과 같은 DPD 표제어 — 호박색 표제어, 품사 + 굵은 뜻; lit. [구성] ✓, 아래에 동그란 단추들 */
-function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: string) => void }) {
+function DpdCard({
+  entry,
+  onSearch,
+}: {
+  entry: DpdEntry;
+  onSearch?: (word: string) => void;
+}) {
   const [tab, setTab] = useState<DpdTab | null>(null);
   const rows: [string, string][] = [
     ["Grammar", entry.grammar],
@@ -322,7 +399,10 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
 
   return (
     <article className="flex flex-col gap-2 py-3 first:pt-1">
-      <h4 lang="pi" className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300">
+      <h4
+        lang="pi"
+        className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300"
+      >
         {entry.lemma}
       </h4>
       <p className="font-pali leading-relaxed">
@@ -334,7 +414,9 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
         ) : (
           <Rich text={meaning} />
         )}
-        {entry.meaningLit && !entry.meaning2.includes("; lit.") ? <span>; lit. {entry.meaningLit}</span> : null}
+        {entry.meaningLit && !entry.meaning2.includes("; lit.") ? (
+          <span>; lit. {entry.meaningLit}</span>
+        ) : null}
         {entry.constructionSummary ? (
           <span lang="pi"> [{entry.constructionSummary}]</span>
         ) : null}
@@ -347,8 +429,15 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
 
       <div className="flex flex-wrap gap-2">
         {pill("grammar", "grammar")}
-        {entry.examples.length > 0 ? pill("examples", entry.examples.length === 1 ? "example" : "examples") : null}
-        {entry.hasInflections ? pill("declension", verb ? "conjugation" : "declension") : null}
+        {entry.examples.length > 0
+          ? pill(
+              "examples",
+              entry.examples.length === 1 ? "example" : "examples",
+            )
+          : null}
+        {entry.hasInflections
+          ? pill("declension", verb ? "conjugation" : "declension")
+          : null}
         {(["root", "word", "compound", "idiom", "set"] as const).map((kind) =>
           familyKeys(kind).length ? pill(kind, FAMILY_LABEL[kind]) : null,
         )}
@@ -370,9 +459,17 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
             {rows
               .filter(([, value]) => value)
               .map(([label, value]) => (
-                <tr key={label} className="border-t border-gray-200 align-top first:border-t-0 dark:border-border">
-                  <th className="w-28 px-3 py-1.5 text-left font-semibold whitespace-nowrap text-muted-foreground">{label}</th>
-                  <td lang={label === "Grammar" ? undefined : "pi"} className="py-1.5 pr-3 font-pali whitespace-pre-line">
+                <tr
+                  key={label}
+                  className="border-t border-gray-200 align-top first:border-t-0 dark:border-border"
+                >
+                  <th className="w-28 px-3 py-1.5 text-left font-semibold whitespace-nowrap text-muted-foreground">
+                    {label}
+                  </th>
+                  <td
+                    lang={label === "Grammar" ? undefined : "pi"}
+                    className="py-1.5 pr-3 font-pali whitespace-pre-line"
+                  >
                     <Rich text={value} />
                   </td>
                 </tr>
@@ -397,10 +494,20 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
           <Inflections entry={entry} verb={verb} />
         </div>
       ) : null}
-      {tab === "root" || tab === "word" || tab === "compound" || tab === "idiom" || tab === "set" ? (
+      {tab === "root" ||
+      tab === "word" ||
+      tab === "compound" ||
+      tab === "idiom" ||
+      tab === "set" ? (
         <div className="mt-1 flex flex-col gap-4 rounded-xl bg-gray-50 p-3 dark:bg-muted">
           {familyKeys(tab).map((key) => (
-            <FamilyList key={`${tab}-${key}`} kind={tab} familyKey={key} self={entry.id} onSearch={onSearch} />
+            <FamilyList
+              key={`${tab}-${key}`}
+              kind={tab}
+              familyKey={key}
+              self={entry.id}
+              onSearch={onSearch}
+            />
           ))}
         </div>
       ) : null}
@@ -414,7 +521,9 @@ function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: strin
 }
 
 function Inflections({ entry, verb }: { entry: DpdEntry; verb: boolean }) {
-  const [templates, setTemplates] = useState<Record<string, DpdTemplate> | "error" | null>(null);
+  const [templates, setTemplates] = useState<
+    Record<string, DpdTemplate> | "error" | null
+  >(null);
   useEffect(() => {
     if (!entry.pattern) return;
     let cancelled = false;
@@ -426,14 +535,26 @@ function Inflections({ entry, verb }: { entry: DpdEntry; verb: boolean }) {
       cancelled = true;
     };
   }, [entry.pattern]);
-  const template = entry.pattern && templates && templates !== "error" ? templates[entry.pattern] : undefined;
-  if (!entry.pattern || templates === "error" || (templates && !template)) return <InflectionList id={entry.id} />;
+  const template =
+    entry.pattern && templates && templates !== "error"
+      ? templates[entry.pattern]
+      : undefined;
+  if (!entry.pattern || templates === "error" || (templates && !template))
+    return <InflectionList id={entry.id} />;
   if (!template) return <Skeleton className="h-24 w-full" />;
   return <InflectionTable entry={entry} template={template} verb={verb} />;
 }
 
 /** DPD 와 같은 어형 변화표 — 어간 + 어미(굵게). 이 낱말 자신은 강조 */
-function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template: DpdTemplate; verb: boolean }) {
+function InflectionTable({
+  entry,
+  template,
+  verb,
+}: {
+  entry: DpdEntry;
+  template: DpdTemplate;
+  verb: boolean;
+}) {
   const stem = entry.stem ?? "";
   const lemma = entry.lemma.replace(/\s+\d.*$/, "");
   const num = entry.lemma.match(/\s+(\d.*)$/)?.[1];
@@ -443,7 +564,8 @@ function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template:
     <div className="flex flex-col gap-3">
       <p lang="pi" className="font-pali text-[15px]">
         <b>{lemma}</b>
-        {num ? <sup>{num}</sup> : null} is <b>{entry.pattern}</b> {verb ? "conjugation" : "declension"}
+        {num ? <sup>{num}</sup> : null} is <b>{entry.pattern}</b>{" "}
+        {verb ? "conjugation" : "declension"}
         {template.like && template.like !== "irreg" ? (
           <>
             {" "}
@@ -454,12 +576,18 @@ function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template:
         ) : null}
       </p>
       <div className="overflow-x-auto rounded-xl border bg-card">
-        <table lang="pi" className="w-full border-collapse text-center font-pali text-sm">
+        <table
+          lang="pi"
+          className="w-full border-collapse text-center font-pali text-sm"
+        >
           <thead>
             <tr className="bg-amber-50/70 dark:bg-muted">
               <th className="border-b px-3 py-2" />
               {cols.map((c) => (
-                <th key={c} className="border-b border-l px-3 py-2 font-sans text-xs font-bold whitespace-nowrap">
+                <th
+                  key={c}
+                  className="border-b border-l px-3 py-2 font-sans text-xs font-bold whitespace-nowrap"
+                >
                   {head[c].join(", ")}
                 </th>
               ))}
@@ -468,9 +596,15 @@ function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template:
           <tbody>
             {body.map((row, r) => (
               <tr key={r} className="even:bg-gray-50/60 dark:even:bg-muted/40">
-                <th className="border-t px-3 py-2 font-sans text-xs font-bold whitespace-nowrap">{row[0]?.join(", ")}</th>
+                <th className="border-t px-3 py-2 font-sans text-xs font-bold whitespace-nowrap">
+                  {row[0]?.join(", ")}
+                </th>
                 {cols.map((c) => (
-                  <td key={c} title={row[c + 1]?.join(", ")} className="border-t border-l px-3 py-1.5 align-middle">
+                  <td
+                    key={c}
+                    title={row[c + 1]?.join(", ")}
+                    className="border-t border-l px-3 py-1.5 align-middle"
+                  >
                     {(row[c] ?? []).map((ending, k) => {
                       const word = `${stem}${ending}`;
                       const self = word === lemma;
@@ -479,7 +613,8 @@ function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template:
                           key={k}
                           className={cn(
                             "block whitespace-nowrap",
-                            self && "mx-auto w-fit rounded-md bg-amber-100 px-1.5 text-amber-900 ring-1 ring-amber-300",
+                            self &&
+                              "mx-auto w-fit rounded-md bg-amber-100 px-1.5 text-amber-900 ring-1 ring-amber-300",
                           )}
                         >
                           {stem}
@@ -494,7 +629,9 @@ function InflectionTable({ entry, template, verb }: { entry: DpdEntry; template:
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-muted-foreground">Digital Pāḷi Dictionary 어형 변화표</p>
+      <p className="text-xs text-muted-foreground">
+        Digital Pāḷi Dictionary 어형 변화표
+      </p>
     </div>
   );
 }
@@ -512,17 +649,19 @@ function InflectionList({ id }: { id: number }) {
     };
   }, [id]);
   if (forms === null) return <Skeleton className="h-10 w-full" />;
-  if (forms === "error") return <p className="t-sub">어형 변화를 불러오지 못했습니다.</p>;
+  if (forms === "error")
+    return <p className="t-sub">어형 변화를 불러오지 못했습니다.</p>;
   return (
     <div>
-      <h4 className="mb-1 text-sm font-semibold text-muted-foreground">어형 {forms.length}개</h4>
+      <h4 className="mb-1 text-sm font-semibold text-muted-foreground">
+        어형 {forms.length}개
+      </h4>
       <p lang="pi" className="font-pali text-sm leading-relaxed">
         {forms.join(", ")}
       </p>
     </div>
   );
 }
-
 
 function PlainCard({ entry, lang }: { entry: PlainEntry; lang: string }) {
   return (
@@ -532,7 +671,11 @@ function PlainCard({ entry, lang }: { entry: PlainEntry; lang: string }) {
       </p>
       <div className="flex flex-col gap-3">
         {entry.definitions.map((text, i) => (
-          <p key={i} lang={lang} className="t-sub whitespace-pre-line wrap-anywhere">
+          <p
+            key={i}
+            lang={lang}
+            className="t-sub whitespace-pre-line wrap-anywhere"
+          >
             {text}
           </p>
         ))}
@@ -553,7 +696,9 @@ function FamilyList({
   self: number;
   onSearch?: (word: string) => void;
 }) {
-  const [family, setFamily] = useState<DpdFamily | null | "error" | undefined>(undefined);
+  const [family, setFamily] = useState<DpdFamily | null | "error" | undefined>(
+    undefined,
+  );
   useEffect(() => {
     let cancelled = false;
     fetchDpdFamily(kind, familyKey).then(
@@ -565,7 +710,8 @@ function FamilyList({
     };
   }, [kind, familyKey]);
   if (family === undefined) return <Skeleton className="h-24 w-full" />;
-  if (family === "error" || family === null) return <p className="text-sm text-faint">가족 자료를 받지 못했습니다.</p>;
+  if (family === "error" || family === null)
+    return <p className="text-sm text-faint">가족 자료를 받지 못했습니다.</p>;
   const title = kind === "root" ? familyKey.split("|")[1] : familyKey;
   const what =
     kind === "root"
@@ -580,7 +726,10 @@ function FamilyList({
   return (
     <section>
       <p lang="pi" className="mb-2 font-pali text-[15px]">
-        <b>{title}</b> {family.head ? <span className="text-muted-foreground">{family.head}</span> : null}{" "}
+        <b>{title}</b>{" "}
+        {family.head ? (
+          <span className="text-muted-foreground">{family.head}</span>
+        ) : null}{" "}
         <span className="font-sans text-xs text-faint">
           · {what} 가족 {family.words.length}개
         </span>
@@ -589,12 +738,23 @@ function FamilyList({
         <table className="w-full border-collapse text-sm">
           <tbody>
             {family.words.map(([id, lemma, pos, meaning]) => (
-              <tr key={id} className={cn("border-t first:border-t-0 align-top", id === self && "bg-brand-soft")}>
-                <td lang="pi" className="px-3 py-1.5 font-pali font-semibold whitespace-nowrap">
+              <tr
+                key={id}
+                className={cn(
+                  "border-t first:border-t-0 align-top",
+                  id === self && "bg-brand-soft",
+                )}
+              >
+                <td
+                  lang="pi"
+                  className="px-3 py-1.5 font-pali font-semibold whitespace-nowrap"
+                >
                   {onSearch && id !== self ? (
                     <button
                       type="button"
-                      onClick={() => onSearch(lemma.replace(/\s+\d+(\.\d+)?$/, ""))}
+                      onClick={() =>
+                        onSearch(lemma.replace(/\s+\d+(\.\d+)?$/, ""))
+                      }
                       className="text-left text-primary hover:underline"
                     >
                       {lemma}
@@ -603,7 +763,9 @@ function FamilyList({
                     lemma
                   )}
                 </td>
-                <td className="px-2 py-1.5 text-xs whitespace-nowrap text-muted-foreground">{pos}</td>
+                <td className="px-2 py-1.5 text-xs whitespace-nowrap text-muted-foreground">
+                  {pos}
+                </td>
                 <td className="py-1.5 pr-3">{meaning}</td>
               </tr>
             ))}
@@ -615,15 +777,37 @@ function FamilyList({
 }
 
 const FREQ_EDITIONS = [
-  { src: "c", name: "CST", title: "Chaṭṭha Saṅgāyana Tipiṭaka (미얀마 6차 결집본)", cols: ["M", "A", "Ṭ"] },
-  { src: "b", name: "BJT", title: "Buddha Jayanti Tipiṭaka (스리랑카)", cols: ["M", "A"] },
-  { src: "s", name: "SYA", title: "Syāmaraṭṭha 1927 (태국 왕실본)", cols: ["M", "A"] },
-  { src: "m", name: "MST", title: "Mahāsaṅgīti Tipiṭaka (수따센트럴)", cols: ["M"] },
+  {
+    src: "c",
+    name: "CST",
+    title: "Chaṭṭha Saṅgāyana Tipiṭaka (미얀마 6차 결집본)",
+    cols: ["M", "A", "Ṭ"],
+  },
+  {
+    src: "b",
+    name: "BJT",
+    title: "Buddha Jayanti Tipiṭaka (스리랑카)",
+    cols: ["M", "A"],
+  },
+  {
+    src: "s",
+    name: "SYA",
+    title: "Syāmaraṭṭha 1927 (태국 왕실본)",
+    cols: ["M", "A"],
+  },
+  {
+    src: "m",
+    name: "MST",
+    title: "Mahāsaṅgīti Tipiṭaka (수따센트럴)",
+    cols: ["M"],
+  },
 ] as const;
 
 /** DPD 와 같은 빈도표 — 판본(CST·BJT·SYA·MST) × 경·주석·복주석, 책 묶음별 출현 횟수. 많을수록 진한 색 */
 function FrequencyTable({ id }: { id: number }) {
-  const [data, setData] = useState<{ freq: DpdFrequency | null; layout: DpdFreqRow[] } | "error" | null>(null);
+  const [data, setData] = useState<
+    { freq: DpdFrequency | null; layout: DpdFreqRow[] } | "error" | null
+  >(null);
   useEffect(() => {
     let cancelled = false;
     Promise.all([fetchDpdFrequency(id), fetchDpdFreqLayout()]).then(
@@ -635,12 +819,26 @@ function FrequencyTable({ id }: { id: number }) {
     };
   }, [id]);
   if (data === null) return <Skeleton className="h-40 w-full" />;
-  if (data === "error") return <p className="text-sm text-faint">빈도 자료를 받지 못했습니다.</p>;
+  if (data === "error")
+    return <p className="text-sm text-faint">빈도 자료를 받지 못했습니다.</p>;
   const { freq, layout } = data;
-  if (!freq) return <p className="text-sm text-faint">이 낱말은 합성어 안에서만 나오거나 빈도 자료가 없습니다.</p>;
-  const all = [...freq.c, ...(freq.b ?? []), ...(freq.s ?? []), ...(freq.m ?? [])];
+  if (!freq)
+    return (
+      <p className="text-sm text-faint">
+        이 낱말은 합성어 안에서만 나오거나 빈도 자료가 없습니다.
+      </p>
+    );
+  const all = [
+    ...freq.c,
+    ...(freq.b ?? []),
+    ...(freq.s ?? []),
+    ...(freq.m ?? []),
+  ];
   const max = Math.max(1, ...all);
-  const shade = (n: number) => (n === 0 ? 0 : Math.max(1, Math.ceil((Math.log(n + 1) / Math.log(max + 1)) * 10)));
+  const shade = (n: number) =>
+    n === 0
+      ? 0
+      : Math.max(1, Math.ceil((Math.log(n + 1) / Math.log(max + 1)) * 10));
   return (
     <div className="flex flex-col gap-2">
       <p lang="pi" className="font-pali text-[15px]">
@@ -654,7 +852,11 @@ function FrequencyTable({ id }: { id: number }) {
               {FREQ_EDITIONS.map((e, k) => (
                 <Fragment key={e.src}>
                   {k ? <th className="w-2" /> : null}
-                  <th colSpan={e.cols.length} title={e.title} className="px-1 pt-2 text-center font-bold">
+                  <th
+                    colSpan={e.cols.length}
+                    title={e.title}
+                    className="px-1 pt-2 text-center font-bold"
+                  >
                     {e.name}
                   </th>
                 </Fragment>
@@ -666,7 +868,17 @@ function FrequencyTable({ id }: { id: number }) {
                 <Fragment key={e.src}>
                   {k ? <th /> : null}
                   {e.cols.map((c) => (
-                    <th key={c} title={{ M: "경 (mūla)", A: "주석서 (aṭṭhakathā)", Ṭ: "복주석서 (ṭīkā)" }[c]} className="px-1.5 pb-1 font-semibold text-muted-foreground">
+                    <th
+                      key={c}
+                      title={
+                        {
+                          M: "경 (mūla)",
+                          A: "주석서 (aṭṭhakathā)",
+                          Ṭ: "복주석서 (ṭīkā)",
+                        }[c]
+                      }
+                      className="px-1.5 pb-1 font-semibold text-muted-foreground"
+                    >
                       {c}
                     </th>
                   ))}
@@ -687,7 +899,10 @@ function FrequencyTable({ id }: { id: number }) {
                 </tr>
               ) : (
                 <tr key={r}>
-                  <th lang="pi" className="border-t px-2 py-0.5 text-left font-pali font-semibold whitespace-nowrap">
+                  <th
+                    lang="pi"
+                    className="border-t px-2 py-0.5 text-left font-pali font-semibold whitespace-nowrap"
+                  >
                     {row.label}
                   </th>
                   {row.cells.map((cell, k) => {
@@ -701,8 +916,13 @@ function FrequencyTable({ id }: { id: number }) {
                         rowSpan={cell.rs}
                         className="border border-background px-1.5 py-0.5"
                         style={{
-                          backgroundColor: g ? `color-mix(in oklab, var(--color-primary) ${g * 8}%, transparent)` : undefined,
-                          color: g >= 7 ? "var(--color-primary-foreground)" : undefined,
+                          backgroundColor: g
+                            ? `color-mix(in oklab, var(--color-primary) ${g * 8}%, transparent)`
+                            : undefined,
+                          color:
+                            g >= 7
+                              ? "var(--color-primary-foreground)"
+                              : undefined,
                         }}
                       >
                         {n || "-"}
@@ -716,8 +936,14 @@ function FrequencyTable({ id }: { id: number }) {
         </table>
       </div>
       <p className="text-xs text-faint">
-        낱말과 그 모든 어형이 각 책 묶음에 나온 횟수예요 (합성어·연음 속에 든 것은 세지 않음). 출처: Digital Pāḷi Dictionary ·{" "}
-        <a href="https://digitalpalidictionary.github.io/features/frequency/" target="_blank" rel="noopener noreferrer" className="underline">
+        낱말과 그 모든 어형이 각 책 묶음에 나온 횟수예요 (합성어·연음 속에 든
+        것은 세지 않음). 출처: Digital Pāḷi Dictionary ·{" "}
+        <a
+          href="https://digitalpalidictionary.github.io/features/frequency/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
           계산 방법
         </a>
       </p>
@@ -729,10 +955,20 @@ function FrequencyTable({ id }: { id: number }) {
  * 낱말 분석 (Digital Pāḷi Reader 의 Analysis 처럼) — 연음·합성으로 붙은 낱말을 나누는 방법들과, 조각마다 DPD 의 짧은 뜻·어미 문법.
  * 나누기는 DPD Splitter 결과(없으면 이 사이트 프로그램), 뜻·문법은 DPD 사전과 어형 변화표.
  */
-function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWays; onSearch?: (word: string) => void }) {
+function AnalysisCard({
+  word,
+  split,
+  onSearch,
+}: {
+  word: string;
+  split: SplitWays;
+  onSearch?: (word: string) => void;
+}) {
   const [way, setWay] = useState(0);
   const parts = split.ways[Math.min(way, split.ways.length - 1)];
-  const [analysis, setAnalysis] = useState<{ key: string; parts: PartAnalysis[] } | "error" | null>(null);
+  const [analysis, setAnalysis] = useState<
+    { key: string; parts: PartAnalysis[] } | "error" | null
+  >(null);
   const key = parts.join("+");
   useEffect(() => {
     let cancelled = false;
@@ -746,15 +982,25 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
     // parts 는 key 로 비교한다
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
-  const ready = analysis && analysis !== "error" && analysis.key === key ? analysis.parts : null;
+  const ready =
+    analysis && analysis !== "error" && analysis.key === key
+      ? analysis.parts
+      : null;
   return (
     <section className="rounded-2xl border bg-card px-5 py-4 shadow-sm">
       <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-base font-bold">
-          낱말 분석 <span className="font-pali text-sm font-normal text-faint">Analysis · Splitter</span>
+          낱말 분석{" "}
+          <span className="font-pali text-sm font-normal text-faint">
+            Analysis · Splitter
+          </span>
         </h3>
         {split.ways.length > 1 ? (
-          <div role="group" aria-label="나누는 방법" className="flex flex-wrap gap-1">
+          <div
+            role="group"
+            aria-label="나누는 방법"
+            className="flex flex-wrap gap-1"
+          >
             {split.ways.map((w, i) => (
               <button
                 key={i}
@@ -764,7 +1010,9 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
                 onClick={() => setWay(i)}
                 className={cn(
                   "rounded-md border px-2 py-0.5 text-xs font-bold",
-                  i === way ? "border-transparent bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-hover",
+                  i === way
+                    ? "border-transparent bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-hover",
                 )}
               >
                 {`나눔 ${i + 1}`}
@@ -773,10 +1021,16 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
           </div>
         ) : null}
       </div>
-      <p lang="pi" className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300">
+      <p
+        lang="pi"
+        className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300"
+      >
         {word}
       </p>
-      <p lang="pi" className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-pali text-lg">
+      <p
+        lang="pi"
+        className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-pali text-lg"
+      >
         {parts.map((p, i) => (
           <Fragment key={i}>
             {i ? <span className="text-faint">+</span> : null}
@@ -790,7 +1044,10 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
             <tbody>
               {ready.map(({ part, entries }, i) => (
                 <tr key={i} className="border-t align-top first:border-t-0">
-                  <th lang="pi" className="w-28 bg-gray-50 px-3 py-2 text-left font-pali font-bold whitespace-nowrap dark:bg-muted">
+                  <th
+                    lang="pi"
+                    className="w-28 bg-gray-50 px-3 py-2 text-left font-pali font-bold whitespace-nowrap dark:bg-muted"
+                  >
                     {part}
                   </th>
                   <td className="px-3 py-2">
@@ -803,16 +1060,29 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
                             {onSearch ? (
                               <button
                                 type="button"
-                                onClick={() => onSearch(entry.lemma.replace(/\s+\d+(\.\d+)?$/, ""))}
+                                onClick={() =>
+                                  onSearch(
+                                    entry.lemma.replace(/\s+\d+(\.\d+)?$/, ""),
+                                  )
+                                }
                                 className="font-pali font-semibold text-primary hover:underline"
                               >
                                 {entry.lemma}
                               </button>
                             ) : (
-                              <span className="font-pali font-semibold">{entry.lemma}</span>
+                              <span className="font-pali font-semibold">
+                                {entry.lemma}
+                              </span>
                             )}{" "}
-                            <span className="text-xs text-muted-foreground">{entry.pos}.</span>{" "}
-                            <span>{(entry.meaning1 || entry.meaning2).replace(/<[^>]+>/g, "")}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {entry.pos}.
+                            </span>{" "}
+                            <span>
+                              {(entry.meaning1 || entry.meaning2).replace(
+                                /<[^>]+>/g,
+                                "",
+                              )}
+                            </span>
                             {grammar.length ? (
                               <span className="ml-1 rounded bg-brand-soft px-1.5 py-0.5 text-xs font-semibold text-primary">
                                 {[...new Set(grammar)].join(" · ")}
@@ -829,7 +1099,9 @@ function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWay
           </table>
         </div>
       ) : analysis === "error" ? (
-        <p className="mt-2 text-sm text-faint">조각의 뜻을 불러오지 못했습니다.</p>
+        <p className="mt-2 text-sm text-faint">
+          조각의 뜻을 불러오지 못했습니다.
+        </p>
       ) : (
         <Skeleton className="mt-3 h-20 w-full" />
       )}
