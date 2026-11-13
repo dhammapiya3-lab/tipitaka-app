@@ -36,6 +36,35 @@ function offsetIn(cell: Element, node: Node, offset: number): number {
   return count;
 }
 
+/** 칸 안 글자 수 (각주 번호는 세지 않는다) */
+function lengthOf(cell: Element): number {
+  const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT, {
+    acceptNode: (n) => (n.parentElement?.closest("[data-note]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+  });
+  let count = 0;
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) count += n.textContent?.length ?? 0;
+  return count;
+}
+
+/** 고른 범위가 걸친 문장 칸마다 글자 범위 — 여러 문장에 걸쳐 골라도 칸마다 나눠 긋는다 */
+function cellRangesIn(root: Element, range: Range): CellRange[] {
+  const out: CellRange[] = [];
+  for (const cell of root.querySelectorAll("[data-cell]")) {
+    if (!range.intersectsNode(cell)) continue;
+    const [editionId, key] = (cell.getAttribute("data-cell") ?? "").split("|");
+    if (!editionId || !key) continue;
+    const start = cell.contains(range.startContainer) ? offsetIn(cell, range.startContainer, range.startOffset) : 0;
+    const end = cell.contains(range.endContainer) ? offsetIn(cell, range.endContainer, range.endOffset) : lengthOf(cell);
+    if (end <= start) continue;
+    const r = range.cloneRange();
+    if (!cell.contains(range.startContainer)) r.setStart(cell, 0);
+    if (!cell.contains(range.endContainer)) r.setEnd(cell, cell.childNodes.length);
+    const text = r.toString().trim();
+    if (text) out.push({ editionId, key, start, end, text });
+  }
+  return out;
+}
+
 /** 고른 글 중 본문 문장 칸의 글만 (문단 번호·배지 같은 화면 글자는 뺀다). 칸마다 줄을 나눈다 */
 export function selectedCellText(root: Element, range: Range): string {
   const out: string[] = [];
@@ -71,7 +100,7 @@ function firstKeyIn(root: Element, range: Range): string | null {
 
 /**
  * 본문에서 글을 고르면 그 위(휴대폰은 아래)에 뜨는 막대 — 복사 · 공유 · 밑줄(형광펜).
- * 여러 문장·문단을 한꺼번에 골라 복사·공유할 수 있다. 밑줄은 한 문장 안에서 긋는다.
+ * 여러 문장·문단을 한꺼번에 골라 복사·공유할 수 있다. 여러 문장에 걸쳐 고르면 형광펜·밑줄도 문장마다 나눠 긋는다.
  */
 export function SelectionToolbar({
   container,
@@ -88,7 +117,7 @@ export function SelectionToolbar({
   /** editionIds: 고른 글이 걸친 판본들 (번역자 표시용) */
   onCopy: (text: string, editionIds: string[]) => void;
   onShare: (text: string, editionIds: string[]) => void;
-  onHighlight: (range: CellRange, color: HighlightColor) => void;
+  onHighlight: (ranges: CellRange[], color: HighlightColor) => void;
   /** key: 고른 글이 시작하는 문장 */
   isSaved: (key: string) => boolean;
   onBookmark: (key: string) => void;
@@ -101,7 +130,7 @@ export function SelectionToolbar({
     y: number;
     below: boolean;
     text: string;
-    cell: CellRange | null;
+    cells: CellRange[];
     editions: string[];
     key: string | null;
   } | null>(null);
@@ -115,20 +144,12 @@ export function SelectionToolbar({
         const root = container();
         if (!s || s.isCollapsed || s.rangeCount === 0 || !root) return setSel(null);
         const range = s.getRangeAt(0);
-        if (!root.contains(range.commonAncestorContainer)) return setSel(null);
+        // 본문 밖까지 끌어도 본문 문장이 걸려 있으면 막대를 띄운다
+        if (!range.intersectsNode(root)) return setSel(null);
         const text = selectedCellText(root, range);
         if (!text) return setSel(null);
         const rect = range.getBoundingClientRect();
-        const el = (n: Node | null) => (n instanceof Element ? n : n?.parentElement ?? null);
-        const a = el(range.startContainer)?.closest("[data-cell]");
-        const b = el(range.endContainer)?.closest("[data-cell]");
-        let cell: CellRange | null = null;
-        if (a && a === b) {
-          const [editionId, key] = (a.getAttribute("data-cell") ?? "").split("|");
-          const start = offsetIn(a, range.startContainer, range.startOffset);
-          const end = offsetIn(a, range.endContainer, range.endOffset);
-          if (end > start) cell = { editionId, key, start, end, text: s.toString() };
-        }
+        const cells = cellRangesIn(root, range);
         // 휴대폰은 브라우저 자체 메뉴가 위에 떠서 아래에 둔다
         const touch = window.matchMedia("(pointer: coarse)").matches;
         const below = touch || rect.top < 90;
@@ -137,7 +158,7 @@ export function SelectionToolbar({
           y: below ? rect.bottom + 10 : rect.top - 10,
           below,
           text,
-          cell,
+          cells,
           editions: editionsIn(root, range),
           key: firstKeyIn(root, range),
         });
@@ -199,7 +220,7 @@ export function SelectionToolbar({
           ) : null}
         </>
       ) : null}
-      {sel.cell ? (
+      {sel.cells.length ? (
         <>
           <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />
           <Highlighter className="ml-1 size-3.5 text-muted-foreground" aria-hidden />
@@ -209,7 +230,7 @@ export function SelectionToolbar({
               type="button"
               title={`${c.label} 형광펜`}
               aria-label={`${c.label} 형광펜`}
-              onClick={() => (onHighlight(sel.cell!, c.color), done())}
+              onClick={() => (onHighlight(sel.cells, c.color), done())}
               className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-muted"
             >
               <span className={cn("block size-4 rounded-full ring-1 ring-black/10", c.dot)} />
@@ -218,7 +239,7 @@ export function SelectionToolbar({
           <button
             type="button"
             title="밑줄"
-            onClick={() => (onHighlight(sel.cell!, "underline"), done())}
+            onClick={() => (onHighlight(sel.cells, "underline"), done())}
             className={cn(button, "px-2")}
           >
             <span className={HIGHLIGHT_CLASS.underline}>밑줄</span>
