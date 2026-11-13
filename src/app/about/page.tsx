@@ -109,7 +109,8 @@ export default function AboutPage() {
             </span>{" "}
             — K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙,
             편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적,
-            무진, 원우 (원래 앱의 자료). 이용 조건 {LICENSE_UNKNOWN}.
+            무진, 원우. 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의
+            법보시 공유 허락을 받았습니다.
           </p>
           <p>
             <span className="font-semibold text-foreground">
