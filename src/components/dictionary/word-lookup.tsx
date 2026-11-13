@@ -251,9 +251,11 @@ export function WordLookupResult({
                 ))}
               </div>
               <p className="t-meta mt-2">
-                Digital Pāḷi Dictionary (DPD) — 사전 자료, 문법 모듈, 화면
-                양식은 Ven. Bodhirasa 스님과 기여자들이 만든 Digital Pāḷi
-                Dictionary에서 가져왔습니다. 이용 조건은 CC BY-NC-SA 4.0입니다.
+                Digital Pāḷi Dictionary (DPD) — 보디라사(Bodhirasa) 스님과
+                기여자들이 만드는 빠알리-영어 사전입니다. 사전 자료, 문법 모듈,
+                화면 양식을 DPD에서 가져왔습니다. 매달 고쳐지는 진행 중인
+                작업입니다. (사용한 판: v0.4.20261026, 이용 조건 CC BY-NC-SA
+                4.0)
               </p>
             </section>
           ) : null
