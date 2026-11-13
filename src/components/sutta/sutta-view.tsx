@@ -1034,19 +1034,21 @@ export function SuttaView({
     const kinds = kindsFor(keys);
     const header = (
       <>
-        <h3 className="text-sm font-bold transition-colors group-hover/head:text-primary">
-          {paragraphMark(p)}
-        </h3>
-        {/* VRI 문단·게송 번호 — 본문에서 뗀 번호를 여기에 (VRI 원문을 볼 때만) */}
-        {picked.includes(VRI_ID) && texts[VRI_ID]?.vriNumbers?.[p] ? (
-          <span
-            className="rounded bg-brand-soft px-1.5 py-0.5 text-[11px] font-semibold text-brand-ink"
-            title="VRI 제6차 결집본의 번호 — 주석서·다른 책에서 이 번호로 인용합니다"
-          >
-            VRI {VERSE_BOOKS.test(suttaId) ? "게송" : "문단"}{" "}
-            {texts[VRI_ID]!.vriNumbers![p]}
-          </span>
-        ) : null}
+        {/* 문단 번호 바로 옆에 VRI 문단·게송 번호 — 본문에서 뗀 번호를 여기에 (VRI 원문을 볼 때만) */}
+        <span className="flex items-center gap-2">
+          <h3 className="text-sm font-bold transition-colors group-hover/head:text-primary">
+            {paragraphMark(p)}
+          </h3>
+          {picked.includes(VRI_ID) && texts[VRI_ID]?.vriNumbers?.[p] ? (
+            <span
+              className="rounded bg-brand-soft px-1.5 py-0.5 text-[11px] font-semibold text-brand-ink"
+              title="VRI 제6차 결집본의 번호 — 주석서·다른 책에서 이 번호로 인용합니다"
+            >
+              VRI {VERSE_BOOKS.test(suttaId) ? "게송" : "문단"}{" "}
+              {texts[VRI_ID]!.vriNumbers![p]}
+            </span>
+          ) : null}
+        </span>
         {inFocus ? null : (
           // 마우스를 올리면 누를 수 있다는 것을 알린다
           <span className="mr-auto hidden items-center gap-0.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover/head:opacity-100 group-focus-visible/head:opacity-100 sm:inline-flex print:hidden">
@@ -1496,7 +1498,7 @@ export function SuttaView({
             }
           >
             <Breadcrumb items={head.crumbs} />
-        <TopicChips suttaId={suttaId} />
+            <TopicChips suttaId={suttaId} />
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <EditionBadges
                 editions={
