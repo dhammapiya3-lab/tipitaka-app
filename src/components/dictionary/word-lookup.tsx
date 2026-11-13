@@ -60,7 +60,7 @@ const PLAIN_SECTIONS: {
     licensed: true,
     lang: "en",
     credit:
-      "A Dictionary of Pāli I–III (a–bh) — Margaret Cone 지음. © Pali Text Society. Pali Text Society가 gandhari.org/dop에서 무료로 공개한 자료입니다. Digital Pāḷi Dictionary 사이트에서 자료를 가져왔습니다.",
+      "A Dictionary of Pāli I–III (a–bh) — Margaret Cone 지음. © Pali Text Society. Pali Text Society가 gandhari.org/dop에서 무료로 공개한 자료입니다. Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
   },
   {
     id: "pts",
@@ -73,7 +73,7 @@ const PLAIN_SECTIONS: {
     id: "peu",
     lang: "en",
     credit:
-      "Pali English Ultimate (PEU) — Pāḷi Myanmar Abhidhān을 영어로 옮기는 pm12e 프로젝트(pm12e.pali.tools)의 자료입니다. 약 80%는 사람이, 나머지는 기계가 번역해서 어색한 문장이 섞여 있습니다.",
+      "Pali English Ultimate (PEU) — Pāḷi Myanmar Abhidhān을 영어로 옮기는 pm12e 프로젝트(pm12e.pali.tools)의 자료입니다. 약 80%는 사람이, 나머지는 기계가 번역해서 어색한 문장이 섞여 있습니다. Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
   },
   {
     id: "mm",
