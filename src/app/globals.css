@@ -306,3 +306,8 @@
 [data-slot="dialog-overlay"] {
   background: var(--overlay);
 }
+
+/* 설정 "이본 표기 감추기": 빠알리 원문의 다른 판본 글자 차이 [..] 를 감춘다 (inline-text.tsx 의 data-variant) */
+.hide-variants [data-variant] {
+  display: none;
+}

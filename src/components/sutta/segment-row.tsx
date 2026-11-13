@@ -164,6 +164,7 @@ export function SegmentRow({
               >
                 <InlineText
                   parts={segment.parts}
+                  variants={isPali}
                   openMarks={marks}
                   onWord={isPali ? onWord : undefined}
                   highlights={highlightsFor?.(edition.id)}

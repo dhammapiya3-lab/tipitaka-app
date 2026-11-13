@@ -32,6 +32,9 @@ interface SettingsState {
   setPageEditions: (eds: string[]) => void;
   /** 주석과 이어진 낱말에 밑줄 (누르면 그 주석 줄) */
   wordLinks: boolean;
+  /** 빠알리 원문의 이본 표기 [..] 감추기 */
+  hideVariants: boolean;
+  setHideVariants: (on: boolean) => void;
   setWordLinks: (on: boolean) => void;
   /** 복주석서가 여럿인 경(디가: 옛·새 복주석서)에서 볼 책 — null 이면 모두, 아니면 책 차례(0: 옛, 1: 새) */
   tikaBook: number | null;
@@ -60,13 +63,17 @@ export const useSettingsStore = create<SettingsState>()(
       lineHeight: DEFAULT_LINE_HEIGHT,
       noteFontSize: 17,
       panelFontSize: 20,
-      setNoteFontSize: (size) => set({ noteFontSize: clampTo(FONT_SIZES, size) }),
-      setPanelFontSize: (size) => set({ panelFontSize: clampTo(FONT_SIZES, size) }),
+      setNoteFontSize: (size) =>
+        set({ noteFontSize: clampTo(FONT_SIZES, size) }),
+      setPanelFontSize: (size) =>
+        set({ panelFontSize: clampTo(FONT_SIZES, size) }),
       editions: DEFAULT_EDITIONS,
       dictionaries: DEFAULT_DICTIONARIES,
       onlyReadable: false,
       compareMode: "side",
       wordLinks: false,
+      hideVariants: false,
+      setHideVariants: (on) => set({ hideVariants: on }),
       tikaBook: null,
       setTikaBook: (book) => set({ tikaBook: book }),
       pageEditions: [],
@@ -75,7 +82,8 @@ export const useSettingsStore = create<SettingsState>()(
       setCompareMode: (mode) => set({ compareMode: mode }),
       setOnlyReadable: (on) => set({ onlyReadable: on }),
       setFontSize: (size) => set({ fontSize: clampTo(FONT_SIZES, size) }),
-      setLineHeight: (height) => set({ lineHeight: clampTo(LINE_HEIGHTS, height) }),
+      setLineHeight: (height) =>
+        set({ lineHeight: clampTo(LINE_HEIGHTS, height) }),
       setEditions: (ids) => set({ editions: ids }),
       // 마지막 사전 하나는 끌 수 없다
       toggleDictionary: (id) =>
@@ -102,8 +110,10 @@ export const useSettingsStore = create<SettingsState>()(
       migrate: (persisted, version) => {
         const s = (persisted ?? {}) as Record<string, unknown>;
         if (version < 1) {
-          if (s.noteFontSize === 14 || s.noteFontSize === undefined) s.noteFontSize = 17;
-          if (s.panelFontSize === 16 || s.panelFontSize === undefined) s.panelFontSize = 20;
+          if (s.noteFontSize === 14 || s.noteFontSize === undefined)
+            s.noteFontSize = 17;
+          if (s.panelFontSize === 16 || s.panelFontSize === undefined)
+            s.panelFontSize = 20;
         }
         return s as unknown as SettingsState;
       },
@@ -119,8 +129,10 @@ export const useSettingsStore = create<SettingsState>()(
         compareMode,
         pageEditions,
         tikaBook,
+        hideVariants,
       }) => ({
         tikaBook,
+        hideVariants,
         pageEditions,
         noteFontSize,
         panelFontSize,

@@ -16,5 +16,10 @@ export function SettingsHydrator() {
     void useReadingStore.persist.rehydrate();
     void useRecentStore.persist.rehydrate();
   }, []);
+  // 이본 표기 감추기 — 화면 전체(경·주석)에 걸리도록 <html> 에 표시 (globals.css 의 .hide-variants)
+  const hideVariants = useSettingsStore((s) => s.hideVariants);
+  useEffect(() => {
+    document.documentElement.classList.toggle("hide-variants", hideVariants);
+  }, [hideVariants]);
   return null;
 }

@@ -393,6 +393,12 @@ function cleanBilaraComment(text: string): string {
     .replace(/<a\b[^>]*>/g, "")
     .replace(/<\/a>/g, "")
     .replace(/<\/?span\b[^>]*>/g, "")
+    // <i lang='pi' translate='no'> 처럼 속성이 붙은 서식 태그는 속성을 뗀다 (parseInline 은 <i>·<em>·<b> 만 안다)
+    .replace(/<(i|em|b)\s[^>]*>/g, "<$1>")
+    // 그 밖의 태그는 지운다
+    .replace(/<(?!\/?(?:i|em|b)>)[^>]*>/g, "")
+    // 수자또 스님이 각주 여러 개를 " | " 로 이어 둔 것 → 줄을 바꿔 보인다
+    .replace(/\s+\|\s+/g, "\n\n")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "‹")
     .replace(/&gt;/g, "›")

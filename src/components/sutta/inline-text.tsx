@@ -27,7 +27,10 @@ export function InlineText({
   onLinked,
   highlights,
   onHighlight,
+  variants = false,
 }: {
+  /** 빠알리 원문: 이본 표기 [..] 를 따로 감싸 둔다 (설정에서 "이본 표기 감추기"를 켜면 CSS 로 감춘다) */
+  variants?: boolean;
   /** 밑줄·형광펜 (누르면 onHighlight) */
   highlights?: InlineHighlight[];
   onHighlight?: (id: string, target: HTMLElement) => void;
@@ -62,7 +65,9 @@ export function InlineText({
   const text = (value: string) => {
     const from = charIndex;
     charIndex += value.length;
-    const hits = (highlights ?? []).filter((h) => h.start < from + value.length && h.end > from);
+    const hits = (highlights ?? []).filter(
+      (h) => h.start < from + value.length && h.end > from,
+    );
     if (hits.length === 0) return plain(value);
     const cuts = new Set([0, value.length]);
     for (const h of hits) {
@@ -80,10 +85,15 @@ export function InlineText({
           key={k}
           data-highlight={h.id}
           onClick={(e) => {
-            if (!onHighlight || (e.target as Element).closest("[data-word]")) return;
+            if (!onHighlight || (e.target as Element).closest("[data-word]"))
+              return;
             onHighlight(h.id, e.currentTarget);
           }}
-          className={cn("rounded-sm bg-transparent text-inherit", HIGHLIGHT_CLASS[h.color], onHighlight && "cursor-pointer")}
+          className={cn(
+            "rounded-sm bg-transparent text-inherit",
+            HIGHLIGHT_CLASS[h.color],
+            onHighlight && "cursor-pointer",
+          )}
         >
           {plain(piece)}
         </mark>
@@ -91,16 +101,30 @@ export function InlineText({
     });
   };
 
+  // 이본 표기는 글자를 지우지 않고 감싸기만 한다 — 단어 순번·밑줄 위치가 그대로 맞도록
+  const body = (value: string) =>
+    variants && value.includes("[")
+      ? value.split(VARIANT).map((piece, k) =>
+          VARIANT_ONLY.test(piece) ? (
+            <span key={k} data-variant>
+              {text(piece)}
+            </span>
+          ) : (
+            <span key={k}>{text(piece)}</span>
+          ),
+        )
+      : text(value);
+
   return parts.map((part, i) => {
     switch (part.type) {
       case "bold":
         return (
           <strong key={i} className="font-bold">
-            {text(part.text)}
+            {body(part.text)}
           </strong>
         );
       case "em":
-        return <em key={i}>{text(part.text)}</em>;
+        return <em key={i}>{body(part.text)}</em>;
       case "note":
         return onNote ? (
           <button
@@ -115,15 +139,23 @@ export function InlineText({
             {part.mark}
           </button>
         ) : (
-          <sup key={i} data-note className="mx-0.5 text-[0.7em] text-muted-foreground">
+          <sup
+            key={i}
+            data-note
+            className="mx-0.5 text-[0.7em] text-muted-foreground"
+          >
             {part.mark}
           </sup>
         );
       default:
-        return <span key={i}>{text(part.text)}</span>;
+        return <span key={i}>{body(part.text)}</span>;
     }
   });
 }
+
+/** 이본 표기: 앞 공백까지 함께 "[…]" */
+const VARIANT = /(\s*\[[^\]]*\])/;
+const VARIANT_ONLY = /^\s*\[[^\]]*\]$/;
 
 /** 단어마다 누를 수 있는 글자. 키보드로는 문장을 고른 뒤 ← → 로 단어를 옮긴다. */
 function Words({
@@ -154,8 +186,10 @@ function Words({
         onClick={() => (isLinked ? onLinked!(piece.text) : onWord(piece.text))}
         className={cn(
           "cursor-pointer rounded-sm hover:bg-brand-soft hover:text-brand-ink",
-          isLinked && "text-amber-800 underline decoration-amber-500 decoration-dotted decoration-2 underline-offset-4 dark:text-amber-300",
-          index === activeWord && "bg-brand-soft text-brand-ink ring-2 ring-primary/40",
+          isLinked &&
+            "text-amber-800 underline decoration-amber-500 decoration-dotted decoration-2 underline-offset-4 dark:text-amber-300",
+          index === activeWord &&
+            "bg-brand-soft text-brand-ink ring-2 ring-primary/40",
         )}
       >
         {piece.text}

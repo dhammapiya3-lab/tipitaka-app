@@ -4,14 +4,27 @@ import { Check, Printer } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BottomSheet } from "@/components/shared/bottom-sheet";
-import { editionBadgeClass, orderEditions } from "@/components/suttas/sutta-row";
+import {
+  editionBadgeClass,
+  orderEditions,
+} from "@/components/suttas/sutta-row";
 import { FONT_SIZES, LINE_HEIGHTS } from "@/lib/constants";
 import { fetchEditionInfo } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/store/settings";
-import type { AnalysisKind, Edition, EditionInfo, InlinePart, Language } from "@/types";
+import type {
+  AnalysisKind,
+  Edition,
+  EditionInfo,
+  InlinePart,
+  Language,
+} from "@/types";
 
-const LANGUAGE_NAME: Record<Language, string> = { ko: "한국어", pli: "빠알리어", en: "영어" };
+const LANGUAGE_NAME: Record<Language, string> = {
+  ko: "한국어",
+  pli: "빠알리어",
+  en: "영어",
+};
 
 type SheetProps = { open: boolean; onOpenChange: (open: boolean) => void };
 
@@ -29,13 +42,25 @@ export function EditionPickerSheet({
   shownIds: string[];
   onToggle: (id: string) => void;
   /** 주석서·복주석서 판본(VRI 원문과 번역자) — 있으면 아래(또는 위)에 따로 고른다 */
-  commentary?: { editions: Edition[]; shownIds: string[]; onToggle: (id: string) => void };
+  commentary?: {
+    editions: Edition[];
+    shownIds: string[];
+    onToggle: (id: string) => void;
+  };
   /** 주석서·복주석서 탭에서 열면 주석 판본을 먼저 */
   commentaryFirst?: boolean;
 }) {
   const sections = [
-    { key: "sutta", title: commentary ? "경" : null, editions, shownIds, onToggle },
-    ...(commentary ? [{ key: "commentary", title: "주석서 · 복주석서", ...commentary }] : []),
+    {
+      key: "sutta",
+      title: commentary ? "경" : null,
+      editions,
+      shownIds,
+      onToggle,
+    },
+    ...(commentary
+      ? [{ key: "commentary", title: "주석서 · 복주석서", ...commentary }]
+      : []),
   ];
   if (commentaryFirst) sections.reverse();
   return (
@@ -49,9 +74,15 @@ export function EditionPickerSheet({
         {sections.map((sec) => (
           <div key={sec.key} className="flex flex-col gap-4">
             {sec.title ? (
-              <h2 className="border-b pb-2 text-base font-bold text-primary">{sec.title}</h2>
+              <h2 className="border-b pb-2 text-base font-bold text-primary">
+                {sec.title}
+              </h2>
             ) : null}
-            <EditionGroups editions={sec.editions} shownIds={sec.shownIds} onToggle={sec.onToggle} />
+            <EditionGroups
+              editions={sec.editions}
+              shownIds={sec.shownIds}
+              onToggle={sec.onToggle}
+            />
           </div>
         ))}
       </div>
@@ -69,7 +100,10 @@ function EditionGroups({
   onToggle: (id: string) => void;
 }) {
   const groups = (["ko", "pli", "en"] as const)
-    .map((lang) => ({ lang, items: editions.filter((e) => e.language === lang) }))
+    .map((lang) => ({
+      lang,
+      items: editions.filter((e) => e.language === lang),
+    }))
     .filter((g) => g.items.length > 0);
   return groups.map((g) => (
     <div key={g.lang}>
@@ -85,7 +119,9 @@ function EditionGroups({
               onClick={() => onToggle(e.id)}
               className={cn(
                 "flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                on ? "bg-primary text-primary-foreground" : "bg-gray-50 text-secondary-foreground hover:bg-gray-100 dark:bg-muted",
+                on
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-gray-50 text-secondary-foreground hover:bg-gray-100 dark:bg-muted",
               )}
             >
               <span className="text-left text-sm font-bold">{e.label}</span>
@@ -124,7 +160,9 @@ export function EditionInfoSheet({
             </span>
             <div>
               <p className="text-base font-semibold">{edition.label}</p>
-              <p className="mt-0.5 text-xs text-faint">{LANGUAGE_NAME[edition.language]}</p>
+              <p className="mt-0.5 text-xs text-faint">
+                {LANGUAGE_NAME[edition.language]}
+              </p>
             </div>
           </div>
           <div className="border-t" />
@@ -134,7 +172,10 @@ export function EditionInfoSheet({
               이 번역은 저작권자의 뜻에 따라 복사·인쇄할 수 없습니다.
             </p>
           )}
-          <Link href="/about#editions" className="text-sm font-bold text-primary hover:underline">
+          <Link
+            href="/about#editions"
+            className="text-sm font-bold text-primary hover:underline"
+          >
             모든 판본의 출처와 저작권 보기 →
           </Link>
         </div>
@@ -144,10 +185,23 @@ export function EditionInfoSheet({
 }
 
 /** 판본 소개 글 (번역자 소개 · 번역본 출처 · 저작권 안내 …) — 창을 열 때 받는다 */
-const GROUP_LABEL = { text: "번역", nissaya: "대역", grammar: "문법분석" } as const;
+const GROUP_LABEL = {
+  text: "번역",
+  nissaya: "대역",
+  grammar: "문법분석",
+} as const;
 
-function EditionInfoBody({ editionId, kind }: { editionId: string; kind: "text" | AnalysisKind }) {
-  const [state, setState] = useState<{ id: string; info: EditionInfo | null } | null>(null);
+function EditionInfoBody({
+  editionId,
+  kind,
+}: {
+  editionId: string;
+  kind: "text" | AnalysisKind;
+}) {
+  const [state, setState] = useState<{
+    id: string;
+    info: EditionInfo | null;
+  } | null>(null);
   useEffect(() => {
     let alive = true;
     fetchEditionInfo(editionId)
@@ -157,24 +211,37 @@ function EditionInfoBody({ editionId, kind }: { editionId: string; kind: "text" 
       alive = false;
     };
   }, [editionId]);
-  if (!state || state.id !== editionId) return <p className="text-sm text-faint">불러오는 중…</p>;
+  if (!state || state.id !== editionId)
+    return <p className="text-sm text-faint">불러오는 중…</p>;
   if (!state.info) return null;
   // 고른 쪽(본문·대역·문법분석) 소개를 맨 앞에. 소개가 여러 묶음이면 묶음 이름을 단다.
-  const groups = [...state.info.groups].sort((a, b) => Number(b.kind === kind) - Number(a.kind === kind));
+  const groups = [...state.info.groups].sort(
+    (a, b) => Number(b.kind === kind) - Number(a.kind === kind),
+  );
   return (
     <div className="flex flex-col gap-8">
       {groups.map((group, g) => (
         <div key={group.kind} className="flex flex-col gap-8">
           {groups.length > 1 ? (
-            <p className={cn("-mb-3 text-xs font-bold tracking-wide text-primary", g > 0 && "border-t pt-6")}>
+            <p
+              className={cn(
+                "-mb-3 text-xs font-bold tracking-wide text-primary",
+                g > 0 && "border-t pt-6",
+              )}
+            >
               {GROUP_LABEL[group.kind]}
             </p>
           ) : null}
           {group.sections.map((section, i) => (
             <section key={i} className="flex flex-col gap-4">
-              <h3 className="font-pali text-lg font-semibold text-gray-900 dark:text-foreground">{section.title}</h3>
+              <h3 className="font-pali text-lg font-semibold text-gray-900 dark:text-foreground">
+                {section.title}
+              </h3>
               {section.paragraphs.map((parts, j) => (
-                <p key={j} className="text-[15px] leading-7 whitespace-pre-line text-gray-600 dark:text-muted-foreground">
+                <p
+                  key={j}
+                  className="text-[15px] leading-7 whitespace-pre-line text-gray-600 dark:text-muted-foreground"
+                >
                   <InfoText parts={parts} />
                 </p>
               ))}
@@ -189,7 +256,10 @@ function EditionInfoBody({ editionId, kind }: { editionId: string; kind: "text" 
 function InfoText({ parts }: { parts: InlinePart[] }) {
   return parts.map((part, i) =>
     part.type === "bold" ? (
-      <strong key={i} className="font-pali font-bold text-gray-900 dark:text-foreground">
+      <strong
+        key={i}
+        className="font-pali font-bold text-gray-900 dark:text-foreground"
+      >
         {part.text}
       </strong>
     ) : part.type === "note" ? null : part.type === "em" ? (
@@ -213,9 +283,18 @@ export function TocSheet({
   title,
   items,
   onPick,
-}: SheetProps & { title: string; items: TocEntry[]; onPick: (paragraph: string) => void }) {
+}: SheetProps & {
+  title: string;
+  items: TocEntry[];
+  onPick: (paragraph: string) => void;
+}) {
   return (
-    <BottomSheet open={open} onOpenChange={onOpenChange} title="목차" subtitle={title}>
+    <BottomSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title="목차"
+      subtitle={title}
+    >
       <div className="flex flex-col gap-1">
         {items.map((item) => (
           <button
@@ -226,7 +305,9 @@ export function TocSheet({
           >
             <span className="text-sm text-secondary-foreground">
               {item.label}
-              {item.title ? <span className="ml-2 font-medium">{item.title}</span> : null}
+              {item.title ? (
+                <span className="ml-2 font-medium">{item.title}</span>
+              ) : null}
             </span>
           </button>
         ))}
@@ -251,11 +332,14 @@ export function TextSettingsSheet({
   const setNoteFontSize = useSettingsStore((s) => s.setNoteFontSize);
   const setPanelFontSize = useSettingsStore((s) => s.setPanelFontSize);
   const setWordLinks = useSettingsStore((s) => s.setWordLinks);
+  const hideVariants = useSettingsStore((s) => s.hideVariants);
+  const setHideVariants = useSettingsStore((s) => s.setHideVariants);
   const style = { fontSize, lineHeight };
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="텍스트 설정">
       <div className="flex flex-col gap-6">
         <PageEditionsPicker />
+        <VariantsSwitch on={hideVariants} onChange={setHideVariants} />
         <WordLinksSwitch
           on={wordLinks}
           onChange={(on) => {
@@ -301,7 +385,12 @@ export function TextSettingsSheet({
             <span>넓게</span>
           </div>
         </div>
-        <SizeSlider id="note-size" label="각주 글자 크기" value={noteFontSize} onChange={setNoteFontSize} />
+        <SizeSlider
+          id="note-size"
+          label="각주 글자 크기"
+          value={noteFontSize}
+          onChange={setNoteFontSize}
+        />
         <SizeSlider
           id="panel-size"
           label="풀이 창 글자 크기 (문법분석·대역·사전)"
@@ -315,8 +404,12 @@ export function TextSettingsSheet({
           <p className="mt-2 font-pali text-muted-foreground" style={style}>
             마음이 모든 법의 선두이며, 마음이 으뜸이고, 마음으로 이루어진다.
           </p>
-          <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-muted-foreground" style={{ fontSize: noteFontSize }}>
-            <span className="mr-1 font-semibold text-primary">1)</span>각주는 이 크기로 보입니다.
+          <p
+            className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-muted-foreground"
+            style={{ fontSize: noteFontSize }}
+          >
+            <span className="mr-1 font-semibold text-primary">1)</span>각주는 이
+            크기로 보입니다.
           </p>
         </div>
         <button
@@ -332,7 +425,13 @@ export function TextSettingsSheet({
 }
 
 /** 머리 아래 판본 배지 줄 (누르면 판본 정보) */
-export function EditionBadges({ editions, onInfo }: { editions: Edition[]; onInfo: (e: Edition) => void }) {
+export function EditionBadges({
+  editions,
+  onInfo,
+}: {
+  editions: Edition[];
+  onInfo: (e: Edition) => void;
+}) {
   return (
     <div className="mt-2 flex flex-wrap gap-1.5 print:hidden">
       {orderEditions(editions).map((e) => (
@@ -353,7 +452,13 @@ export function EditionBadges({ editions, onInfo }: { editions: Edition[]; onInf
 }
 
 /** 주석 연결 낱말 켜기·끄기 — 빠알리 원문에서 주석이 풀이한 낱말에 점선 밑줄, 누르면 그 주석 줄 */
-export function WordLinksSwitch({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {
+export function WordLinksSwitch({
+  on,
+  onChange,
+}: {
+  on: boolean;
+  onChange: (on: boolean) => void;
+}) {
   return (
     <button
       type="button"
@@ -370,6 +475,48 @@ export function WordLinksSwitch({ on, onChange }: { on: boolean; onChange: (on: 
             점선 밑줄
           </span>
           을 긋고, 누르면 그 풀이를 보여 줍니다.
+        </span>
+      </span>
+      <span
+        aria-hidden
+        className={cn(
+          "relative h-6 w-11 shrink-0 rounded-full transition-colors",
+          on ? "bg-primary" : "bg-gray-300 dark:bg-muted",
+        )}
+      >
+        <span
+          className={cn(
+            "absolute top-0.5 size-5 rounded-full bg-white shadow transition-all",
+            on ? "left-[22px]" : "left-0.5",
+          )}
+        />
+      </span>
+    </button>
+  );
+}
+
+/** 이본 표기 감추기 — VRI 원문·주석의 [다른 판본 글자] */
+function VariantsSwitch({
+  on,
+  onChange,
+}: {
+  on: boolean;
+  onChange: (on: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      onClick={() => onChange(!on)}
+      className="flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-muted"
+    >
+      <span>
+        <span className="block text-sm font-bold">이본(異本) 표기 감추기</span>
+        <span className="mt-0.5 block text-xs text-muted-foreground">
+          VRI 빠알리 원문과 주석서에서 다른 판본의 글자 차이를 적은{" "}
+          <span className="font-pali">[…]</span> 를 감춥니다. 읽기만 할 때
+          깔끔해집니다.
         </span>
       </span>
       <span
@@ -436,7 +583,11 @@ function PageEditionsPicker() {
     <div className="rounded-xl border px-4 py-3">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-bold">책 쪽 번호</p>
-        <div className="flex rounded-lg border p-0.5 text-xs font-bold" role="group" aria-label="책 쪽 번호">
+        <div
+          className="flex rounded-lg border p-0.5 text-xs font-bold"
+          role="group"
+          aria-label="책 쪽 번호"
+        >
           {[
             { on: true, label: "보기" },
             { on: false, label: "안 보기" },
@@ -448,7 +599,9 @@ function PageEditionsPicker() {
               onClick={() => setEds(o.on ? (shown ? eds : ["P"]) : [])}
               className={cn(
                 "rounded-md px-2.5 py-1 transition-colors",
-                shown === o.on ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-gray-50",
+                shown === o.on
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-gray-50",
               )}
             >
               {o.label}
@@ -457,7 +610,8 @@ function PageEditionsPicker() {
         </div>
       </div>
       <p className="mt-0.5 text-xs text-muted-foreground">
-        인쇄본의 쪽이 바뀌는 문장 옆에 쪽 번호를 작게 보입니다 (VRI 원문이 있는 경). 인용할 때 쓰세요.
+        인쇄본의 쪽이 바뀌는 문장 옆에 쪽 번호를 작게 보입니다 (VRI 원문이 있는
+        경). 인용할 때 쓰세요.
         {shown && " 아래에서 어느 인쇄본의 쪽 번호를 볼지 고르세요."}
       </p>
       <div className={cn("mt-2 flex flex-wrap gap-1.5", !shown && "hidden")}>
@@ -468,10 +622,14 @@ function PageEditionsPicker() {
               key={ed}
               type="button"
               aria-pressed={on}
-              onClick={() => setEds(on ? eds.filter((x) => x !== ed) : [...eds, ed])}
+              onClick={() =>
+                setEds(on ? eds.filter((x) => x !== ed) : [...eds, ed])
+              }
               className={cn(
                 "rounded-lg border px-2.5 py-1 text-xs font-bold transition-colors",
-                on ? "border-transparent bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-gray-50",
+                on
+                  ? "border-transparent bg-primary text-primary-foreground"
+                  : "bg-card text-muted-foreground hover:bg-gray-50",
               )}
             >
               {label}

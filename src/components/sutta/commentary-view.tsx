@@ -233,7 +233,7 @@ export function CommentaryView({
       >
         {para.lines.map((parts, j) => (
           <p key={j}>
-            <InlineText parts={parts} onWord={onWord} />
+            <InlineText parts={parts} onWord={onWord} variants />
           </p>
         ))}
       </div>
@@ -470,7 +470,7 @@ export function CommentaryCard({
               <div key={j}>
                 {showPali ? (
                   <p>
-                    <InlineText parts={parts} onWord={onWord} />
+                    <InlineText parts={parts} onWord={onWord} variants />
                   </p>
                 ) : null}
                 {trs.map((e) =>
