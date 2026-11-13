@@ -288,6 +288,22 @@ function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
 }
 
 /** sub: 판본 폴더 안의 경 경로 (suttaFilePath — 예: sn1/sn1.1) */
+/**
+ * VRI 원문 줄에 붙어 있는 VRI 문단 번호("… bhikkhusaṅghañca. 2.", "Paribbājakakathā 1.")를 뗀다.
+ * VRI 줄을 빌랄라 문장에 나눠 담으면서 다음 문단의 번호가 앞 문장 끝에 붙은 것이라 잘못된 자리에 보이고,
+ * 문단 번호는 화면의 문단 머리에 이미 있다. (VRI 문단 번호는 주석 연결용으로 따로 남아 있다)
+ */
+function withoutParaNumbers(segments: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(segments).map(([key, text]) => [
+      key,
+      text
+        .replace(/([.?!;:’”–—\])])\s+\d+(?:-\d+)?\.(?=\s+\S)/g, "$1")
+        .replace(/(\S)\s+\d+(?:-\d+)?\.\s*$/, "$1"),
+    ]),
+  );
+}
+
 function readText(dir: string, folder: string, sub: string, edition: string) {
   for (const kind of ["root", "translation"]) {
     const file = path.join(dir, folder, `${sub}_${kind}-${edition}.json`);
@@ -563,7 +579,7 @@ function buildSutta(
     vriTexts.push({
       suttaId: id,
       editionId: VRI_EDITION.id,
-      segments: toSegments(vri.segments),
+      segments: toSegments(withoutParaNumbers(vri.segments)),
     });
     if (vri.unsure.length) vriUnsure.set(id, vri.unsure);
     if (vri.preface.length) vriPreface.set(id, vri.preface);
