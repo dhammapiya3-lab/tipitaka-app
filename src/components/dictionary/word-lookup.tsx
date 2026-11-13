@@ -49,7 +49,8 @@ const PLAIN_SECTIONS: {
   {
     id: "kpts",
     lang: "ko",
-    credit: "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙",
+    credit:
+      "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙 · 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우",
   },
   {
     id: "cone",

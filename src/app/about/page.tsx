@@ -107,8 +107,9 @@ export default function AboutPage() {
             <span className="font-semibold text-foreground">
               K-PTS 빠알리–한국어 사전
             </span>{" "}
-            — K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙
-            (원래 앱의 자료). 이용 조건 {LICENSE_UNKNOWN}.
+            — K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙,
+            편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적,
+            무진, 원우 (원래 앱의 자료). 이용 조건 {LICENSE_UNKNOWN}.
           </p>
           <p>
             <span className="font-semibold text-foreground">
