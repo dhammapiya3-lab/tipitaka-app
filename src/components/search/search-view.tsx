@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TopicMatches } from "@/components/search/topic-matches";
 import { fetchSuttaText, searchText, type SearchHits } from "@/lib/content";
 import { formatCount, suttaHref } from "@/lib/format";
 import { highlightParts, minQueryLength, tokenize } from "@/lib/search";
@@ -57,14 +58,24 @@ function cachedText(suttaId: string, editionId: string) {
  * 경 본문 검색 — 찾은 단어와 범위는 주소(?q=&lang=)에 남아 그대로 공유할 수 있다.
  * 띄어쓴 단어는 모두 같은 문장에 있어야 하고, 각 단어는 앞부분 일치다.
  */
-export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; editions: Edition[] }) {
+export function SearchView({
+  suttas,
+  editions,
+}: {
+  suttas: SearchableSutta[];
+  editions: Edition[];
+}) {
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const q = params.get("q")?.trim() ?? "";
-  const scope = (SCOPES.find((s) => s.id === params.get("lang"))?.id ?? "all") satisfies Scope;
+  const scope = (SCOPES.find((s) => s.id === params.get("lang"))?.id ??
+    "all") satisfies Scope;
   const [input, setInput] = useState(q);
-  const [state, setState] = useState<State & { key: string }>({ status: "idle", key: "" });
+  const [state, setState] = useState<State & { key: string }>({
+    status: "idle",
+    key: "",
+  });
   const [shown, setShown] = useState(PAGE);
   const searchKey = `${q}|${scope}`;
 
@@ -79,7 +90,8 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
   useEffect(() => {
     if (!q) return;
     let cancelled = false;
-    const languages: Language[] = scope === "all" ? ["ko", "pli", "en"] : [scope];
+    const languages: Language[] =
+      scope === "all" ? ["ko", "pli", "en"] : [scope];
     searchText(q, languages)
       .then((hits) => {
         if (!cancelled) setState({ status: "ready", hits, key: searchKey });
@@ -93,7 +105,10 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
   }, [q, scope, searchKey]);
 
   // 경별로 묶고 목록 순서대로: 경 → [문장 번호, 판본]
-  const order = useMemo(() => new Map(suttas.map((s, i) => [s.id, i])), [suttas]);
+  const order = useMemo(
+    () => new Map(suttas.map((s, i) => [s.id, i])),
+    [suttas],
+  );
   const grouped = useMemo(() => {
     if (state.status !== "ready") return [];
     const bySutta = new Map<string, Map<string, string>>();
@@ -112,8 +127,10 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
       }));
   }, [state, order, suttas]);
 
-  const tooShort = q && tokenize(q, "ko").every((t) => [...t].length < minQueryLength(t));
-  const loading = q && !tooShort && (state.key !== searchKey || state.status === "loading");
+  const tooShort =
+    q && tokenize(q, "ko").every((t) => [...t].length < minQueryLength(t));
+  const loading =
+    q && !tooShort && (state.key !== searchKey || state.status === "loading");
   const sentenceCount = grouped.reduce((n, g) => n + g.rows.length, 0);
 
   return (
@@ -145,7 +162,11 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
         </Button>
       </form>
 
-      <div className="flex rounded-lg bg-muted p-0.5 sm:w-fit" role="group" aria-label="찾을 언어">
+      <div
+        className="flex rounded-lg bg-muted p-0.5 sm:w-fit"
+        role="group"
+        aria-label="찾을 언어"
+      >
         {SCOPES.map((s) => (
           <button
             key={s.id}
@@ -164,6 +185,9 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
         ))}
       </div>
 
+      {/* ATI 주제 이름에 찾을 말이 들어 있으면 그 주제의 경들도 함께 */}
+      {q && !tooShort ? <TopicMatches query={q} suttas={suttas} /> : null}
+
       {!q ? (
         <EmptyState
           icon={Search}
@@ -171,7 +195,11 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
           description="띄어 쓴 말은 모두 한 문장에 있는 것만 찾습니다. 빠알리는 ā·ṭ 없이 쳐도 됩니다."
         />
       ) : tooShort ? (
-        <EmptyState icon={Search} title="조금 더 길게 넣어 주세요" description="로마자는 두 글자 이상이어야 찾습니다." />
+        <EmptyState
+          icon={Search}
+          title="조금 더 길게 넣어 주세요"
+          description="로마자는 두 글자 이상이어야 찾습니다."
+        />
       ) : loading ? (
         <div className="flex flex-col gap-3" aria-busy>
           <Skeleton className="h-28 w-full" />
@@ -185,11 +213,16 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
           action={<Button onClick={() => go(q, scope)}>다시 시도</Button>}
         />
       ) : grouped.length === 0 ? (
-        <EmptyState icon={SearchX} title={`“${q}”을(를) 찾지 못했습니다`} description="다른 말이나 다른 언어로 찾아 보세요." />
+        <EmptyState
+          icon={SearchX}
+          title={`“${q}”을(를) 찾지 못했습니다`}
+          description="다른 말이나 다른 언어로 찾아 보세요."
+        />
       ) : (
         <>
           <p className="t-sub">
-            경 {formatCount(grouped.length)}개 · 문장 {formatCount(sentenceCount)}개
+            경 {formatCount(grouped.length)}개 · 문장{" "}
+            {formatCount(sentenceCount)}개
           </p>
           {grouped.slice(0, shown).map(({ sutta, rows }) => (
             <Card key={sutta.id} className="gap-0 p-0">
@@ -203,7 +236,10 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
                     {sutta.label} · 문장 {formatCount(rows.length)}개
                   </span>
                 </span>
-                <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                <ChevronRight
+                  className="size-4 shrink-0 text-muted-foreground"
+                  aria-hidden
+                />
               </Link>
               <ul className="flex flex-col">
                 {rows.slice(0, SNIPPETS).map(([key, editionId]) => (
@@ -218,7 +254,9 @@ export function SearchView({ suttas, editions }: { suttas: SearchableSutta[]; ed
                 ))}
               </ul>
               {rows.length > SNIPPETS ? (
-                <p className="t-meta px-5 pb-3">그 밖에 {formatCount(rows.length - SNIPPETS)}문장</p>
+                <p className="t-meta px-5 pb-3">
+                  그 밖에 {formatCount(rows.length - SNIPPETS)}문장
+                </p>
               ) : null}
             </Card>
           ))}
@@ -273,10 +311,16 @@ function Snippet({
       {text === null ? (
         <Skeleton className="h-5 w-3/4" />
       ) : (
-        <span lang={language === "pli" ? "pi" : language} className="line-clamp-3">
+        <span
+          lang={language === "pli" ? "pi" : language}
+          className="line-clamp-3"
+        >
           {highlightParts(text, tokens, language).map((p, i) =>
             p.hit ? (
-              <mark key={i} className="rounded-sm bg-brand-soft px-0.5 font-semibold text-brand-ink">
+              <mark
+                key={i}
+                className="rounded-sm bg-brand-soft px-0.5 font-semibold text-brand-ink"
+              >
                 {p.text}
               </mark>
             ) : (
