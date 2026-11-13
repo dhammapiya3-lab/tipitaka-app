@@ -2,7 +2,7 @@
 
 import { Bookmark, Copy, Headphones, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { InlineText } from "@/components/sutta/inline-text";
+import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,7 +67,15 @@ export function SegmentRow({
   columns = false,
   linked,
   onLinked,
+  highlightsFor,
+  onHighlight,
+  bookmarked = false,
 }: {
+  /** 판본별 밑줄 */
+  highlightsFor?: (editionId: string) => InlineHighlight[];
+  onHighlight?: (id: string, target: HTMLElement) => void;
+  /** 책갈피(북마크)한 문장이면 왼쪽에 표시 */
+  bookmarked?: boolean;
   /** 이 문장에서 주석과 이어진 낱말인지 / 누를 때 */
   linked?: (word: string) => boolean;
   onLinked?: (word: string) => void;
@@ -105,6 +113,13 @@ export function SegmentRow({
         active && "-mx-2 rounded-lg bg-brand-softer px-2 ring-2 ring-primary/30",
       )}
     >
+      {bookmarked ? (
+        // 책갈피한 문장 — 왼쪽 여백에 작은 리본
+        <Bookmark
+          className="absolute top-2.5 -left-4 size-3.5 fill-amber-500 text-amber-500 print:hidden"
+          aria-label="책갈피"
+        />
+      ) : null}
       <div
         className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}
         onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
@@ -125,6 +140,7 @@ export function SegmentRow({
             );
             const text = (
               <p
+                data-cell={`${edition.id}|${row.key}`}
                 className={cn(
                   // 원래 앱처럼 원문·번역 모두 명조(.pali)로
                   "rounded font-pali whitespace-pre-line wrap-anywhere text-gray-800 transition-colors hover:bg-gray-50 dark:text-foreground dark:hover:bg-muted",
@@ -138,6 +154,8 @@ export function SegmentRow({
                   parts={segment.parts}
                   openMarks={marks}
                   onWord={isPali ? onWord : undefined}
+                  highlights={highlightsFor?.(edition.id)}
+                  onHighlight={onHighlight}
                   linked={isPali ? linked : undefined}
                   onLinked={isPali ? onLinked : undefined}
                   activeWord={isPali && active ? activeWord : null}

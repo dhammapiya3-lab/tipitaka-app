@@ -1,6 +1,15 @@
 import { splitWords } from "@/lib/pali";
 import { cn } from "@/lib/utils";
+import { HIGHLIGHT_CLASS, type HighlightColor } from "@/store/highlights";
 import type { InlinePart } from "@/types";
+
+/** 밑줄 범위 — 각주 번호를 뺀 글자들의 순번 [start, end) */
+export interface InlineHighlight {
+  id: string;
+  start: number;
+  end: number;
+  color: HighlightColor;
+}
 
 /**
  * 글자 조각을 그린다. 원문을 HTML 로 해석하지 않는다(굵게·기울임·각주만 정해진 모양으로).
@@ -16,7 +25,12 @@ export function InlineText({
   activeWord,
   linked,
   onLinked,
+  highlights,
+  onHighlight,
 }: {
+  /** 밑줄·형광펜 (누르면 onHighlight) */
+  highlights?: InlineHighlight[];
+  onHighlight?: (id: string, target: HTMLElement) => void;
   /** 주석과 이어진 낱말인지 (켜 두면 밑줄, 누르면 onLinked) */
   linked?: (word: string) => boolean;
   onLinked?: (word: string) => void;
@@ -28,7 +42,8 @@ export function InlineText({
 }) {
   // 단어 순번은 조각을 넘어 이어진다 (reader.ts 의 wordsOf 와 같은 순서)
   let wordIndex = 0;
-  const text = (value: string) => {
+  let charIndex = 0;
+  const plain = (value: string) => {
     if (!onWord) return value;
     const start = wordIndex;
     wordIndex += splitWords(value).filter((w) => w.word).length;
@@ -42,6 +57,38 @@ export function InlineText({
         onLinked={onLinked}
       />
     );
+  };
+  // 밑줄 범위에 걸치는 곳은 잘라서 <mark> 로 감싼다
+  const text = (value: string) => {
+    const from = charIndex;
+    charIndex += value.length;
+    const hits = (highlights ?? []).filter((h) => h.start < from + value.length && h.end > from);
+    if (hits.length === 0) return plain(value);
+    const cuts = new Set([0, value.length]);
+    for (const h of hits) {
+      cuts.add(Math.max(0, h.start - from));
+      cuts.add(Math.min(value.length, h.end - from));
+    }
+    const points = [...cuts].sort((a, b) => a - b);
+    return points.slice(0, -1).map((a, k) => {
+      const b = points[k + 1];
+      const piece = value.slice(a, b);
+      const h = hits.find((x) => x.start <= from + a && x.end >= from + b);
+      if (!h) return <span key={k}>{plain(piece)}</span>;
+      return (
+        <mark
+          key={k}
+          data-highlight={h.id}
+          onClick={(e) => {
+            if (!onHighlight || (e.target as Element).closest("[data-word]")) return;
+            onHighlight(h.id, e.currentTarget);
+          }}
+          className={cn("rounded-sm bg-transparent text-inherit", HIGHLIGHT_CLASS[h.color], onHighlight && "cursor-pointer")}
+        >
+          {plain(piece)}
+        </mark>
+      );
+    });
   };
 
   return parts.map((part, i) => {
@@ -59,6 +106,7 @@ export function InlineText({
           <button
             key={i}
             type="button"
+            data-note
             onClick={() => onNote(part.mark)}
             aria-expanded={openMarks?.has(part.mark) ?? false}
             aria-label={`각주 ${part.mark}`}
@@ -67,7 +115,7 @@ export function InlineText({
             {part.mark}
           </button>
         ) : (
-          <sup key={i} className="mx-0.5 text-[0.7em] text-muted-foreground">
+          <sup key={i} data-note className="mx-0.5 text-[0.7em] text-muted-foreground">
             {part.mark}
           </sup>
         );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useHighlightsStore } from "@/store/highlights";
 import { useEffect } from "react";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
@@ -11,6 +12,7 @@ export function SettingsHydrator() {
   useEffect(() => {
     void useSettingsStore.persist.rehydrate();
     void useBookmarksStore.persist.rehydrate();
+    void useHighlightsStore.persist.rehydrate();
     void useReadingStore.persist.rehydrate();
     void useRecentStore.persist.rehydrate();
   }, []);

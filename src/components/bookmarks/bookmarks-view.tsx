@@ -12,6 +12,7 @@ import { bookmarkFileName, makeBookmarkFile, parseBookmarkFile } from "@/lib/boo
 import { formatCount, formatDate, suttaHref, suttaLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
+import { HIGHLIGHT_CLASS, useHighlightsStore } from "@/store/highlights";
 
 type Filter = "all" | "memo";
 
@@ -171,6 +172,42 @@ export function BookmarksView() {
           </ul>
         </Card>
       )}
+      <HighlightList />
     </div>
+  );
+}
+
+/** 밑줄·형광펜을 그은 글 — 누르면 그 문장으로 */
+function HighlightList() {
+  const items = useHighlightsStore((s) => s.items);
+  const remove = useHighlightsStore((s) => s.remove);
+  if (items.length === 0) return null;
+  return (
+    <section className="flex flex-col gap-2">
+      <h2 className="px-1 text-sm font-bold">밑줄 친 글 {items.length}</h2>
+      <Card className="gap-0 p-0">
+        <ul className="flex flex-col">
+          {items.map((h) => (
+            <li key={h.id} className="flex items-start gap-2 border-t first:border-t-0">
+              <Link
+                href={suttaHref(h.suttaId, h.key)}
+                className="flex min-w-0 flex-1 flex-col gap-1 px-5 py-4 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <span className="line-clamp-3">
+                  <mark className={cn("rounded-sm bg-transparent text-inherit", HIGHLIGHT_CLASS[h.color])}>{h.text}</mark>
+                </span>
+                <span className="t-meta">
+                  {h.suttaTitle} · {suttaLabel(h.key.slice(0, h.key.indexOf(":")))}:{h.key.slice(h.key.indexOf(":") + 1)} ·{" "}
+                  {formatDate(h.savedAt)}
+                </span>
+              </Link>
+              <Button variant="ghost" size="icon" className="mt-3 mr-3" aria-label="밑줄 지우기" onClick={() => remove(h.id)}>
+                <Trash2 aria-hidden />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </Card>
+    </section>
   );
 }

@@ -3,6 +3,7 @@
 import {
   BookA,
   BookOpen,
+  Bookmark as BookmarkIcon,
   ChevronLeft,
   ChevronRight,
   CloudOff,
@@ -17,7 +18,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { toast } from "sonner";
 import {
   WordSheet,
@@ -30,7 +31,8 @@ import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
 import { CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
 import { WordBottomDock } from "@/components/dictionary/word-dock-bottom";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
-import { InlineText } from "@/components/sutta/inline-text";
+import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
+import { HighlightMenu, SelectionToolbar } from "@/components/sutta/selection-toolbar";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
 import { NoteBox, SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
 import {
@@ -64,6 +66,7 @@ import {
 } from "@/lib/segments";
 import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
+import { useHighlightsStore } from "@/store/highlights";
 import { useReadingStore } from "@/store/reading";
 import { useSettingsStore } from "@/store/settings";
 import type { AnalysisKind, CommentaryLayer, Edition, SuttaCommentary } from "@/types";
@@ -270,6 +273,23 @@ export function SuttaView({
   const toggleBookmark = useBookmarksStore((s) => s.toggle);
   const setMemo = useBookmarksStore((s) => s.setMemo);
   const mine = new Map(bookmarks.filter((b) => b.suttaId === suttaId).map((b) => [b.key, b]));
+  // ── 밑줄·형광펜 ──
+  const allHighlights = useHighlightsStore((s) => s.items);
+  const addHighlight = useHighlightsStore((s) => s.add);
+  const removeHighlight = useHighlightsStore((s) => s.remove);
+  const recolorHighlight = useHighlightsStore((s) => s.recolor);
+  const highlightsByCell = useMemo(() => {
+    const map = new Map<string, InlineHighlight[]>();
+    for (const h of allHighlights) {
+      if (h.suttaId !== suttaId) continue;
+      const k = `${h.editionId}|${h.key}`;
+      map.set(k, [...(map.get(k) ?? []), { id: h.id, start: h.start, end: h.end, color: h.color }]);
+    }
+    return map;
+  }, [allHighlights, suttaId]);
+  const [hlMenu, setHlMenu] = useState<{ id: string; x: number; y: number } | null>(null);
+  const articleRef = useRef<HTMLElement | null>(null);
+  const getArticle = useCallback(() => articleRef.current, []);
   const saveReading = useReadingStore((s) => s.save);
 
   const loaded = shown.flatMap((e) => (texts[e.id] ? [texts[e.id]] : []));
@@ -522,6 +542,10 @@ export function SuttaView({
   });
 
   const noteFontSize = useSettingsStore((s) => s.noteFontSize);
+  /** 책갈피 단추가 꽂을 문장 — 지금 읽는 문단(문단별로 보기면 그 문단)의 첫 문장 */
+  const bookmarkHereKey = paragraphs.get(focus ?? currentParagraph ?? paragraphList[0] ?? "")?.[0];
+  const bookmarkHere = bookmarkHereKey ? rows.find((r) => r.key === bookmarkHereKey) : undefined;
+
   const articleStyle = { fontSize, lineHeight, "--note-fs": `${noteFontSize}px` } as CSSProperties;
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
   /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
@@ -806,6 +830,12 @@ export function SuttaView({
                 unit={unit}
                 columns={columns}
                 linked={wordLinksOn && linkIndex.has(row.key) ? (w) => linkHits(row.key, w).length > 0 : undefined}
+                bookmarked={mine.has(row.key)}
+                highlightsFor={(editionId) => highlightsByCell.get(`${editionId}|${row.key}`) ?? []}
+                onHighlight={(id, target) => {
+                  const r = target.getBoundingClientRect();
+                  setHlMenu({ id, x: r.left + r.width / 2, y: r.bottom });
+                }}
                 onLinked={(w) =>
                   setLinkView((cur) =>
                     cur?.key === row.key && cur.word === w ? null : { key: row.key, word: w, hits: linkHits(row.key, w) },
@@ -1007,6 +1037,20 @@ export function SuttaView({
                 <List aria-hidden />
               </BarButton>
             )}
+            <BarButton
+              label={bookmarkHere && mine.has(bookmarkHere.key) ? "책갈피 빼기" : "여기에 책갈피"}
+              onClick={() => {
+                if (!bookmarkHere) return;
+                const had = mine.has(bookmarkHere.key);
+                toggleBookmark(baseOf(bookmarkHere));
+                toast.success(had ? "책갈피를 뺐습니다." : "읽는 자리에 책갈피를 꽂았습니다. 내 서재에서 볼 수 있어요.");
+              }}
+            >
+              <BookmarkIcon
+                aria-hidden
+                className={cn(bookmarkHere && mine.has(bookmarkHere.key) && "fill-amber-500 text-amber-500")}
+              />
+            </BarButton>
             {tts.supported ? (
               <BarButton
                 label={tts.current ? "듣기 멈추기" : "소리로 듣기"}
@@ -1218,6 +1262,7 @@ export function SuttaView({
             {/* 넓은 화면에서 사전을 열면 본문 옆에 붙인다 (창을 연 채로 다른 단어를 누를 수 있게) */}
             <div className="px-4 pt-2 pb-6">
               <article
+                ref={articleRef}
                 className={cn(
                   "mx-auto flex w-full min-w-0 flex-col gap-4 print:max-w-none",
                   readWidth,
@@ -1365,6 +1410,37 @@ export function SuttaView({
             </select>
           </div>
         </div>
+      ) : null}
+
+      <SelectionToolbar
+        container={getArticle}
+        onCopy={(text) => {
+          const url = `${window.location.origin}${suttaHref(suttaId)}`;
+          void copy(`${text}\n\n— ${head.title} (${suttaLabel(suttaId)})\n${url}`, "고른 글을 복사했습니다.");
+        }}
+        onShare={(text) => {
+          const url = `${window.location.origin}${suttaHref(suttaId)}`;
+          const body = `${text}\n\n— ${head.title} (${suttaLabel(suttaId)})`;
+          if (navigator.share) void navigator.share({ title: head.title, text: body, url }).catch(() => {});
+          else void copy(`${body}\n${url}`, "공유할 글을 복사했습니다. 원하는 곳에 붙여 넣으세요.");
+        }}
+        onHighlight={(range, color) =>
+          addHighlight({ suttaId, suttaTitle, editionId: range.editionId, key: range.key, start: range.start, end: range.end, color, text: range.text })
+        }
+      />
+      {hlMenu ? (
+        <HighlightMenu
+          at={hlMenu}
+          onColor={(c) => {
+            recolorHighlight(hlMenu.id, c);
+            setHlMenu(null);
+          }}
+          onRemove={() => {
+            removeHighlight(hlMenu.id);
+            setHlMenu(null);
+          }}
+          onClose={() => setHlMenu(null)}
+        />
       ) : null}
 
       <MemoDialog
