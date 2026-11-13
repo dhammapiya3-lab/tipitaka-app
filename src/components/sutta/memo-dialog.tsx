@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-/** 문장 메모 쓰기 — 저장하면 북마크도 함께 남는다. 비우고 저장하면 메모만 지운다. */
+/** 문장 메모 쓰기 — 저장하면 책갈피도 함께 남는다. 비우고 저장하면 메모만 지운다. */
 export function MemoDialog({
   open,
   label,
@@ -59,7 +59,7 @@ function MemoForm({
     >
       <DialogHeader>
         <DialogTitle>메모 — {label}</DialogTitle>
-        <DialogDescription>이 기기에만 저장되고, 북마크 화면에서 함께 볼 수 있습니다.</DialogDescription>
+        <DialogDescription>이 기기에만 저장되고, 책갈피 화면에서 함께 볼 수 있습니다.</DialogDescription>
       </DialogHeader>
       <Textarea
         autoFocus

@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Download, Highlighter, NotebookPen, Trash2, Upload } from "lucide-react";
+import { Bookmark, Download, Highlighter, History, NotebookPen, Trash2, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
@@ -12,12 +12,13 @@ import { bookmarkFileName, makeBookmarkFile, parseBookmarkFile } from "@/lib/boo
 import { formatCount, formatDate, suttaHref, suttaLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
+import { useReadingStore } from "@/store/reading";
 import { HIGHLIGHT_CLASS, useHighlightsStore } from "@/store/highlights";
 
 type Filter = "all" | "highlight" | "memo";
 
 /**
- * 북마크·메모 목록 — 저장한 순서(최근 먼저). 누르면 그 문장으로 간다.
+ * 책갈피·메모 목록 — 저장한 순서(최근 먼저). 누르면 그 문장으로 간다.
  * 이 기기에만 저장되므로 파일로 내보내고 가져와 다른 기기로 옮긴다.
  */
 export function BookmarksView() {
@@ -42,7 +43,7 @@ export function BookmarksView() {
     a.download = bookmarkFileName();
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`북마크 ${formatCount(items.length)}개를 파일로 내보냈습니다.`);
+    toast.success(`책갈피 ${formatCount(items.length)}개를 파일로 내보냈습니다.`);
   }
 
   async function importFile(file: File) {
@@ -53,7 +54,7 @@ export function BookmarksView() {
     }
     const added = importItems(parsed.items);
     toast.success(
-      `가져왔습니다. 새 북마크 ${formatCount(added)}개, 이미 있던 ${formatCount(parsed.items.length - added)}개는 가져온 내용으로 바꿨습니다.`,
+      `가져왔습니다. 새 책갈피 ${formatCount(added)}개, 이미 있던 ${formatCount(parsed.items.length - added)}개는 가져온 내용으로 바꿨습니다.`,
     );
   }
 
@@ -122,6 +123,7 @@ export function BookmarksView() {
 
   return (
     <div className="flex flex-col gap-4">
+      <RecentReading />
       {toolbar}
       {filter === "highlight" ? (
         <HighlightList />
@@ -130,7 +132,7 @@ export function BookmarksView() {
           <EmptyState
             icon={filter === "memo" ? NotebookPen : Bookmark}
             title={filter === "memo" ? "메모를 남긴 문장이 없습니다" : "저장한 문장이 없습니다"}
-            description="경을 읽다가 문장 옆 메뉴(⋯)에서 북마크나 메모를 남기면 여기에 모입니다. 다른 기기에서 내보낸 파일이 있으면 가져오기를 누르세요."
+            description="경을 읽다가 문장 옆 메뉴(⋯)에서 책갈피나 메모를 남기면 여기에 모입니다. 다른 기기에서 내보낸 파일이 있으면 가져오기를 누르세요."
             action={
               <Button nativeButton={false} render={<Link href="/suttas" />}>
                 경전 목록으로
@@ -166,7 +168,7 @@ export function BookmarksView() {
                   variant="ghost"
                   size="icon"
                   className="mt-3 mr-3"
-                  aria-label="북마크와 메모 지우기"
+                  aria-label="책갈피와 메모 지우기"
                   onClick={() => remove(b.suttaId, b.key)}
                 >
                   <Trash2 aria-hidden />
@@ -214,6 +216,45 @@ function HighlightList() {
                 </span>
               </Link>
               <Button variant="ghost" size="icon" className="mt-3 mr-3" aria-label="밑줄 지우기" onClick={() => remove(h.id)}>
+                <Trash2 aria-hidden />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </Card>
+    </section>
+  );
+}
+
+/** 이어 읽기 — 책갈피를 하지 않아도 최근에 읽던 경 다섯 개의 마지막 자리 */
+function RecentReading() {
+  const history = useReadingStore((s) => s.history ?? []);
+  const remove = useReadingStore((s) => s.remove);
+  if (history.length === 0) return null;
+  return (
+    <section className="flex flex-col gap-2">
+      <h2 className="flex items-center gap-1.5 px-1 text-sm font-bold">
+        <History className="size-4 text-primary" aria-hidden />
+        이어 읽기
+        <span className="font-normal text-muted-foreground">— 최근에 읽던 경 {history.length}개</span>
+      </h2>
+      <Card className="gap-0 p-0">
+        <ul className="flex flex-col">
+          {history.map((h) => (
+            <li key={h.suttaId} className="flex items-center gap-2 border-t first:border-t-0">
+              <Link
+                href={suttaHref(h.suttaId, h.key)}
+                className="flex min-w-0 flex-1 items-center gap-3 px-5 py-3 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-medium">{h.suttaTitle}</span>
+                  <span className="t-meta">
+                    {suttaLabel(h.suttaId)} · {h.key.slice(h.key.indexOf(":") + 1)} 부터 · {formatDate(h.at)}
+                  </span>
+                </span>
+                <span className="shrink-0 text-sm font-bold text-primary">이어 읽기 ›</span>
+              </Link>
+              <Button variant="ghost" size="icon" className="mr-3" aria-label="이어 읽기에서 빼기" onClick={() => remove(h.suttaId)}>
                 <Trash2 aria-hidden />
               </Button>
             </li>

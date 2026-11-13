@@ -74,7 +74,7 @@ export function parseInline(raw: string): InlinePart[] {
   return parts.filter((p) => p.type === "note" || p.text.length > 0);
 }
 
-/** 글자 조각을 서식 없는 글자로 (북마크 미리보기 등) */
+/** 글자 조각을 서식 없는 글자로 (책갈피 미리보기 등) */
 export function plainText(parts: InlinePart[]): string {
   return parts
     .map((p) => (p.type === "note" ? "" : p.text))

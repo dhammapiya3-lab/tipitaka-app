@@ -431,13 +431,36 @@ const PAGE_EDITIONS = [
 function PageEditionsPicker() {
   const eds = useSettingsStore((s) => s.pageEditions);
   const setEds = useSettingsStore((s) => s.setPageEditions);
+  const shown = eds.length > 0;
   return (
     <div className="rounded-xl border px-4 py-3">
-      <p className="text-sm font-bold">책 쪽 번호</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-bold">책 쪽 번호</p>
+        <div className="flex rounded-lg border p-0.5 text-xs font-bold" role="group" aria-label="책 쪽 번호">
+          {[
+            { on: true, label: "보기" },
+            { on: false, label: "안 보기" },
+          ].map((o) => (
+            <button
+              key={o.label}
+              type="button"
+              aria-pressed={shown === o.on}
+              onClick={() => setEds(o.on ? (shown ? eds : ["P"]) : [])}
+              className={cn(
+                "rounded-md px-2.5 py-1 transition-colors",
+                shown === o.on ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-gray-50",
+              )}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <p className="mt-0.5 text-xs text-muted-foreground">
         인쇄본의 쪽이 바뀌는 문장 옆에 쪽 번호를 작게 보입니다 (VRI 원문이 있는 경). 인용할 때 쓰세요.
+        {shown && " 아래에서 어느 인쇄본의 쪽 번호를 볼지 고르세요."}
       </p>
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className={cn("mt-2 flex flex-wrap gap-1.5", !shown && "hidden")}>
         {PAGE_EDITIONS.map(({ ed, label }) => {
           const on = eds.includes(ed);
           return (

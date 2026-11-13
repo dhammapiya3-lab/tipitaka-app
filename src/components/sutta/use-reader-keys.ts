@@ -24,7 +24,7 @@ export function isTypingOrDialog(target: EventTarget | null): boolean {
 }
 
 /**
- * j/k 문장, ←/→ 단어(문장을 골랐을 때) 또는 앞뒤 경, Enter 사전, b 북마크, c 복사, Esc 그만.
+ * j/k 문장, ←/→ 단어(문장을 골랐을 때) 또는 앞뒤 경, Enter 사전, b 책갈피, c 복사, Esc 그만.
  */
 export function useReaderKeys(handlers: ReaderKeyHandlers) {
   const ref = useRef(handlers);

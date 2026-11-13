@@ -20,7 +20,7 @@ interface BookmarksState {
   items: Bookmark[];
   toggle: (bookmark: BookmarkBase) => void;
   remove: (suttaId: string, key: string) => void;
-  /** 메모 남기기 — 북마크가 없던 문장이면 북마크도 함께 만든다. 빈 메모는 메모만 지운다. */
+  /** 메모 남기기 — 책갈피가 없던 문장이면 책갈피도 함께 만든다. 빈 메모는 메모만 지운다. */
   setMemo: (bookmark: BookmarkBase, memo: string) => void;
   /** 내보낸 파일에서 가져오기 — 같은 문장은 가져온 쪽으로 바꾸고, 없던 것은 더한다. 더한 수를 돌려준다. */
   importItems: (items: Bookmark[]) => number;
@@ -30,7 +30,7 @@ const same = (a: { suttaId: string; key: string }, b: { suttaId: string; key: st
   a.suttaId === b.suttaId && a.key === b.key;
 
 /**
- * 북마크·메모 — 이 기기에만 저장한다(localStorage). 다른 기기로는 북마크 화면에서
+ * 책갈피·메모 — 이 기기에만 저장한다(localStorage). 다른 기기로는 책갈피 화면에서
  * 파일로 내보내고 가져와 옮긴다. 저장값은 화면이 뜬 뒤 불러온다(SettingsHydrator).
  */
 export const useBookmarksStore = create<BookmarksState>()(

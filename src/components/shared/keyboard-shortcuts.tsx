@@ -19,7 +19,7 @@ const SHORTCUTS: { keys: string[]; label: string; where?: string }[] = [
   { keys: ["j", "k"], label: "다음 · 이전 문장 고르기", where: "경 읽기" },
   { keys: ["←", "→"], label: "고른 문장 안에서 단어 옮기기 (문장을 안 골랐으면 이전 · 다음 경)", where: "경 읽기" },
   { keys: ["Enter"], label: "고른 단어를 사전에서 찾기", where: "경 읽기" },
-  { keys: ["b"], label: "고른 문장 북마크", where: "경 읽기" },
+  { keys: ["b"], label: "고른 문장 책갈피", where: "경 읽기" },
   { keys: ["c"], label: "고른 문장 원문+번역 복사", where: "경 읽기" },
   { keys: ["Esc"], label: "사전 닫기 · 문장 고르기 그만", where: "경 읽기" },
 ];

@@ -10,7 +10,7 @@ const item = {
   memo: "메모",
 };
 
-describe("북마크 파일", () => {
+describe("책갈피 파일", () => {
   it("내보낸 파일을 다시 읽으면 그대로", () => {
     expect(parseBookmarkFile(makeBookmarkFile([item]))).toEqual({ items: [item] });
   });
@@ -18,11 +18,11 @@ describe("북마크 파일", () => {
   it("다른 파일은 이유와 함께 거절", () => {
     expect(parseBookmarkFile("not json")).toEqual({ error: "JSON 파일이 아닙니다." });
     expect(parseBookmarkFile('{"items":[]}')).toEqual({
-      error: "이 앱에서 내보낸 북마크 파일이 아닙니다.",
+      error: "이 앱에서 내보낸 책갈피 파일이 아닙니다.",
     });
   });
 
   it("파일 이름에 날짜", () => {
-    expect(bookmarkFileName(new Date(2026, 10, 4))).toBe("초기불교경전-북마크-2026-11-04.json");
+    expect(bookmarkFileName(new Date(2026, 10, 4))).toBe("초기불교경전-책갈피-2026-11-04.json");
   });
 });

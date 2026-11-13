@@ -368,7 +368,7 @@ export function SuttaView({
   }
   const waiting = loaded.length === 0 && !error;
 
-  // 본문이 늦게 그려지므로, 주소의 #문장번호(북마크·목차·검색 링크)로 한 번만 이동한다.
+  // 본문이 늦게 그려지므로, 주소의 #문장번호(책갈피·목차·검색 링크)로 한 번만 이동한다.
   const scrolled = useRef(false);
   useEffect(() => {
     if (waiting || scrolled.current) return;
@@ -423,7 +423,7 @@ export function SuttaView({
     };
   }, [paragraphIds, suttaId]);
 
-  /** 북마크·메모에 남길 문장: 번역이 있으면 첫 번역, 없으면 원문 (복사를 막아 둔 번역은 쓰지 않는다) */
+  /** 책갈피·메모에 남길 문장: 번역이 있으면 첫 번역, 없으면 원문 (복사를 막아 둔 번역은 쓰지 않는다) */
   function baseOf(row: AlignedRow) {
     const usable = shown.filter((e) => e.allowCopy);
     const order = [...usable.filter((e) => e.language !== "pli"), ...usable];
@@ -561,7 +561,7 @@ export function SuttaView({
       if (activeRow) {
         const saved = mine.has(activeRow.key);
         toggleBookmark(baseOf(activeRow));
-        toast.success(saved ? "북마크를 지웠습니다." : "북마크했습니다.");
+        toast.success(saved ? "책갈피를 지웠습니다." : "책갈피에 넣었습니다.");
       }
     },
     copy: () => {

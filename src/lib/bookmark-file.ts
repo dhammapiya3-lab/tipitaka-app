@@ -1,5 +1,5 @@
 /**
- * 북마크 내보내기·가져오기 파일 — 다른 기기·브라우저로 북마크와 메모를 옮길 때 쓴다.
+ * 책갈피 내보내기·가져오기 파일 — 다른 기기·브라우저로 책갈피와 메모를 옮길 때 쓴다.
  */
 import { z } from "zod";
 import type { Bookmark } from "@/store/bookmarks";
@@ -40,11 +40,11 @@ export function parseBookmarkFile(text: string): { items: Bookmark[] } | { error
   const result = fileSchema.safeParse(json);
   return result.success
     ? { items: result.data.items }
-    : { error: "이 앱에서 내보낸 북마크 파일이 아닙니다." };
+    : { error: "이 앱에서 내보낸 책갈피 파일이 아닙니다." };
 }
 
-/** 내보낼 파일 이름: 초기불교경전-북마크-2026-11-04.json */
+/** 내보낼 파일 이름: 초기불교경전-책갈피-2026-11-04.json */
 export function bookmarkFileName(now = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `초기불교경전-북마크-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
+  return `초기불교경전-책갈피-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
 }

@@ -77,7 +77,7 @@ export function SegmentRow({
   /** 판본별 밑줄 */
   highlightsFor?: (editionId: string) => InlineHighlight[];
   onHighlight?: (id: string, target: HTMLElement) => void;
-  /** 책갈피(북마크)한 문장이면 왼쪽에 표시 */
+  /** 책갈피한 문장이면 왼쪽에 표시 */
   bookmarked?: boolean;
   /** 이 문장에서 주석과 이어진 낱말인지 / 누를 때 */
   linked?: (word: string) => boolean;
@@ -217,13 +217,13 @@ export function SegmentRow({
         ) : null}
         {compare && !columns ? <div className="mt-1 border-b border-gray-100 dark:border-border" /> : null}
       </div>
-      {/* 문장 메뉴(북마크·메모·복사) — 새로 더한 기능. 인쇄할 때는 뺀다 */}
+      {/* 문장 메뉴(책갈피·메모·복사) — 새로 더한 기능. 인쇄할 때는 뺀다 */}
       <div className="w-6 shrink-0 pt-2 print:hidden">{actions ? <SentenceMenu actions={actions} /> : null}</div>
     </div>
   );
 }
 
-/** 문장 왼쪽 칸의 메뉴. 북마크한 문장은 채운 책갈피로 보인다. */
+/** 문장 왼쪽 칸의 메뉴. 책갈피한 문장은 채운 책갈피로 보인다. */
 function SentenceMenu({ actions }: { actions: SentenceActions }) {
   const { saved } = actions;
   const item = (icon: ReactNode, label: string, onClick: () => void) => (
@@ -239,7 +239,7 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
           <Button
             variant="ghost"
             size="icon-xs"
-            aria-label={saved ? "문장 메뉴 (북마크함)" : "문장 메뉴"}
+            aria-label={saved ? "문장 메뉴 (책갈피 있음)" : "문장 메뉴"}
             className={cn(
               saved ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground",
             )}
@@ -256,7 +256,7 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
         {actions.onListen ? item(<Headphones aria-hidden />, "여기서부터 듣기", actions.onListen) : null}
         {item(
           <Bookmark className={cn(saved && "fill-current")} aria-hidden />,
-          saved ? "북마크 지우기" : "북마크",
+          saved ? "책갈피 지우기" : "책갈피",
           actions.onBookmark,
         )}
         {item(<NotebookPen aria-hidden />, actions.memo ? "메모 고치기" : "메모 남기기", actions.onMemo)}
