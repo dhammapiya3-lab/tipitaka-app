@@ -1331,6 +1331,12 @@ export function SuttaView({
                 )}
                 style={articleStyle}
               >
+                {/* 책 첫머리 줄 (VRI 의 "Namo tassa bhagavato…") — 책의 첫 경에만, 경 문장과 따로 */}
+                {!waiting && !focus && picked.includes(VRI_ID) && texts[VRI_ID]?.preface?.length ? (
+                  <p lang="pi" className="py-2 text-center font-pali text-sm text-secondary-foreground">
+                    {texts[VRI_ID]!.preface!.join(" ")}
+                  </p>
+                ) : null}
                 {waiting
                   ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-32 w-full rounded-2xl" />)
                   : focus

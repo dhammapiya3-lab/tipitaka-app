@@ -30,6 +30,8 @@ if (ids.length === 0) {
   process.exit(1);
 }
 const quiet = ids.length > 20;
+/** 사이트 목록의 경 차례 — 글로 자리를 찾을 때 앞 경이 끝난 곳부터 찾는다 */
+const ORDER = (JSON.parse(readFileSync(path.join(process.cwd(), "public/data/sutta-index.json"), "utf8")) as { id: string }[]).map((s) => s.id);
 
 const db = new DatabaseSync(EPITAKA_DB, { readOnly: true });
 const OUT = path.join(process.cwd(), "content/vri");
@@ -155,33 +157,59 @@ function locate(suttaId: string) {
   // 첫머리·끝머리 글로 찾는다. 맨 앞의 "namo tassa…" 처럼 E-Piṭaka 에서 자리가 다른 줄이 있으면 다음 문장부터 다시 찾는다
   const heads: { text: string; skip: number }[] = [];
   const tails: string[] = [];
-  for (let i = 0, off = 0; i < Math.min(4, segs.length); off += segs[i].length, i++) heads.push({ text: body.slice(off, off + A), skip: off });
-  for (let i = segs.length - 1, end = body.length; i >= Math.max(0, segs.length - 4); end -= segs[i].length, i--) tails.push(body.slice(Math.max(0, end - A), end));
-  for (const book of BOOKS_BY_PREFIX[prefix] ?? []) {
+  for (let i = 0, off = 0; i < Math.min(8, segs.length); off += segs[i].length, i++) heads.push({ text: body.slice(off, off + A), skip: off });
+  for (let i = segs.length - 1, end = body.length; i >= Math.max(0, segs.length - 8); end -= segs[i].length, i--) tails.push(body.slice(Math.max(0, end - A), end));
+  // 앞 경이 있던 책부터 본다
+  let prevBook: string | null = null;
+  try {
+    prevBook = (JSON.parse(readFileSync(path.join(OUT, `${ORDER[ORDER.indexOf(suttaId) - 1]}.json`), "utf8")) as { source: { book: string } }).source.book;
+  } catch {
+    // 없으면 차례대로
+  }
+  const candidates = BOOKS_BY_PREFIX[prefix] ?? [];
+  for (const book of prevBook && candidates.includes(prevBook) ? [prevBook, ...candidates.filter((b) => b !== prevBook)] : candidates) {
     const s = bookStream(book);
     if (s.lines.length === 0) continue;
-    const from = lastFound.get(book) ?? 0;
-    let at = -1;
-    for (const h of heads) {
-      if (h.text.length < 12) continue;
-      at = s.text.indexOf(h.text, from);
-      if (at < 0) at = s.text.indexOf(h.text);
-      if (at >= 0) {
-        at = Math.max(0, at - h.skip);
-        break;
+    // 앞 경(목록 차례)이 끝난 자리부터 찾는다 — 같은 글이 되풀이되는 책(생략 경·아빠다나 정형구)이 많아서
+    const prevId = ORDER[ORDER.indexOf(suttaId) - 1];
+    let from = lastFound.get(book) ?? 0;
+    try {
+      const prev = JSON.parse(readFileSync(path.join(OUT, `${prevId}.json`), "utf8")) as { source: { book: string; paras: [number, number] } };
+      if (prev.source.book === book) {
+        const k = s.lines.findIndex((l) => l.para > prev.source.paras[1]);
+        if (k >= 0) from = Math.max(from, s.starts[k]);
       }
+    } catch {
+      // 앞 경 파일이 없으면 그대로
     }
-    if (at < 0) continue;
+    // 첫머리가 나오는 자리마다 끝머리가 뒤따르는지 보고, 가장 짧게 이어지는 쌍을 고른다
+    // (수따센트럴 쪽이 줄여 쓴 경은 VRI 가 훨씬 길 수 있어 넉넉히 본다)
+    const window = Math.max(body.length * 3 + 2000, 25000);
+    let at = -1;
     let endAt = -1;
     let tailText = "";
-    for (const t of tails) {
-      if (t.length < 12) continue;
-      endAt = s.text.indexOf(t, at);
-      if (endAt >= 0 && endAt - at <= body.length * 3 + 2000) {
-        tailText = t;
-        break;
+    for (const start of [from, 0]) {
+      for (const h of heads) {
+        if (h.text.length < 16) continue;
+        for (let k = s.text.indexOf(h.text, start), tries = 0; k >= 0 && tries < 60; k = s.text.indexOf(h.text, k + 1), tries++) {
+          const a0 = Math.max(0, k - h.skip);
+          // 끝머리는 맨 끝 문장부터 (찾으면 그것을 쓴다)
+          for (const t of tails) {
+            if (t.length < 16) continue;
+            const e = s.text.indexOf(t, a0);
+            if (e < 0 || e - a0 > window) continue;
+            at = a0;
+            endAt = e;
+            tailText = t;
+            break;
+          }
+          // 앞에서부터 처음 맞는 자리를 쓴다 (경 안에서 첫머리 글이 되풀이되면 뒤쪽 자리는 경 앞부분이 잘린다)
+          if (at >= 0) break;
+        }
+        // 앞 문장의 첫머리로 찾았으면 그것을 쓴다 (뒤 문장으로 찾으면 경 앞부분이 잘릴 수 있다)
+        if (at >= 0) break;
       }
-      endAt = -1;
+      if (at >= 0) break;
     }
     if (endAt < 0) continue;
     const lineAt = (offset: number) => {
@@ -239,7 +267,14 @@ for (const suttaId of ids) {
   ).n;
   const bookEnd = (db.prepare("select max(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
   // 다음 경까지 몇 문단 안 될 때만(끝맺음 줄·요약 게송·다음 품 제목 정도) — 목차 번호 없이 글로 찾은 경은 늘리지 않는다
-  const gapEnd = (nextStart ?? bookEnd + 1) - 1;
+  // 번호가 붙은 다음 제목(다음 품·다음 경: "2. Nandanavaggo") 앞까지만 — 끝맺음 줄("Sagāthāvaggo paṭhamo.")은 번호가 없다
+  const nextTitle =
+    (
+      db
+        .prepare("select para_id, level, title from headings where book_id = ? and level < 10 and para_id > ? and para_id <= ? order by para_id")
+        .all(book, ownLast, ownLast + 15) as unknown as { para_id: number; level: number; title: string }[]
+    ).find((h) => h.level <= 3 && /^\s*\(?\d/.test(String(h.title)))?.para_id ?? null;
+  const gapEnd = Math.min(nextStart ?? bookEnd + 1, nextTitle ?? bookEnd + 1) - 1;
   const last = !found && gapEnd > ownLast && gapEnd - ownLast <= 15 ? gapEnd : ownLast;
   /** 책·품 제목 줄 (목차에 있는 문단) — 경 안에 넣지 않는다 */
   const titleParas = new Set(
@@ -250,6 +285,23 @@ for (const suttaId of ids) {
     ).map((h) => h.para_id),
   );
   const vri = linesOf(book, first, last).filter((l) => l.text);
+  // 책의 첫 경이면 그 앞의 "Namo tassa bhagavato…" 같은 줄 (제목 줄은 빼고) — 경 문장과 섞지 않고 맨 위에 따로 보인다
+  const bookStart = (db.prepare("select min(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
+  const isFirstOfBook =
+    !found &&
+    !(db.prepare("select 1 from headings where book_id = ? and sc_id is not null and para_id < ? limit 1").get(book, head.para_id));
+  const preface = isFirstOfBook
+    ? (() => {
+        const titles = new Set(
+          (db.prepare("select para_id from headings where book_id = ? and level < 10 and para_id < ?").all(book, first) as unknown as { para_id: number }[]).map(
+            (h) => h.para_id,
+          ),
+        );
+        return linesOf(book, bookStart, first - 1)
+          .filter((l) => l.text && !titles.has(l.para) && /namo\s+tassa/i.test(l.text))
+          .map((l) => l.text);
+      })()
+    : [];
 
   // 마하상기띠본 문장 (0.x 제목 줄 빼고)
   const msFile = msFiles.get(`${suttaId}_root-pli-ms.json`) ?? null;
@@ -333,6 +385,8 @@ for (const suttaId of ids) {
     if (seg < prevSeg) seg = prevSeg; // 차례를 거꾸로 가지 않는다
     // 책·품 제목 줄(목차에 있는 문단)은 빌랄라 쪽에 짝이 없으면 넣지 않는다 — 끝맺음 줄은 마지막 문장에 남는다
     if (titleParas.has(l.para) && matched < (to - from) / 2) return;
+    // 경 뒤로 늘린 자리(끝맺음 줄)에서는 이 경 원문과 맞는 줄만 — 맞지 않는 줄은 다음 경(목차 번호가 없는 경)의 글이다
+    if (l.para > ownLast && matched < (to - from) / 2) return;
     if (to > from && matched < (to - from) / 2) unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
     vriToKey.set(`${l.para}:${l.line}`, ms[seg]?.[0] ?? ms.at(-1)![0]);
 
@@ -537,6 +591,8 @@ for (const suttaId of ids) {
     segments: { ...titled, ...segments },
     /** VRI 한 줄에 다음 문장까지 들어 있을 수 있는 문장 (두 판본 글이 달라 자를 자리가 확실하지 않음) */
     unsure: [...unsure],
+    /** 책 첫머리 줄 (Namo tassa…) — 책의 첫 경에만 */
+    preface,
     attha: commentaryFor(meta?.attha_ref),
     tika: commentaryFor(meta?.tika_ref),
     // 복주석서가 두 종류인 책(디가니까야: 옛 복주석서 Sv-pt 와 새 복주석서 Abhinavaṭīkā Sv-nt)
@@ -590,44 +646,69 @@ if (quiet) {
   for (const [book, spans] of byBook) {
     spans.sort((a, b) => a.min - b.min);
     const firstPara = (db.prepare("select min(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
+    // 주석서 책의 목차 (Digital Pāḷi Reader 처럼 책의 제목 구조를 따른다)
+    // 큰 제목 = 번호가 붙은 제목("1. Brahmajālasuttavaṇṇanā")이나 책 단계 제목("Ganthārambhakathā")
+    const heads = (
+      db.prepare("select para_id, level, title from headings where book_id = ? and level < 10 order by para_id").all(book) as unknown as {
+        para_id: number;
+        level: number;
+        title: string;
+      }[]
+    ).map((h) => ({ ...h, major: /^\s*\(?\d/.test(String(h.title)) || h.level <= 3 }));
+    const lastHead = (p: number, majorOnly: boolean) => {
+      let found: (typeof heads)[number] | null = null;
+      for (const h of heads) {
+        if (h.para_id > p) break;
+        if (!majorOnly || h.major) found = h;
+      }
+      return found;
+    };
+    const titleOf = (p: number) => {
+      const h = lastHead(p, false);
+      if (!h || /^\(?empty\)?$/i.test(String(h.title).trim())) return null;
+      return tidy(String(h.title)).replace(/^\(?[\d\-–]+[.)]?\s*/, "") || String(h.title);
+    };
+    const parasOf = (from: number, to: number) => {
+      const lines = linesOf(book, from, to).filter((l) => l.text);
+      return [...new Set(lines.map((l) => l.para))].map((para) => ({
+        para,
+        vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
+        title: titleOf(para),
+        lines: lines.filter((l) => l.para === para).map((l) => l.text),
+      }));
+    };
+    const addTo = (span: Span, key: "before" | "after", items: ReturnType<typeof parasOf>) => {
+      if (!items.length) return;
+      const layer = docs.get(span.file)![span.layer] as Record<string, unknown>;
+      const list = [...((layer[key] as typeof items | undefined) ?? []), ...items].sort((a, b) => a.para - b.para);
+      layer[key] = list;
+      touched.add(span.file);
+      if (key === "before") filled += items.length;
+      else tailFilled += items.length;
+    };
     let covered = firstPara - 1;
+    let prev: Span | null = null;
     for (const span of spans) {
       const from = covered + 1;
       const to = span.min - 1;
       if (to >= from && to - from < 2000) {
-        const lines = linesOf(book, from, to).filter((l) => l.text);
-        const before = [...new Set(lines.map((l) => l.para))].map((para) => ({
-          para,
-          vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
-          refs: [] as string[],
-          lines: lines.filter((l) => l.para === para).map((l) => l.text),
-          lineRefs: lines.filter((l) => l.para === para).map(() => [] as string[]),
-        }));
-        if (before.length) {
-          const d = docs.get(span.file)!;
-          (d[span.layer] as Record<string, unknown>).before = before;
-          touched.add(span.file);
-          filled += before.length;
+        // 경과 경 사이에 낀 주석: 앞 경 주석과 같은 큰 제목 안이면 앞 경의 "끝 부분", 새 큰 제목부터는 뒤 경의 "앞 부분"
+        let split = from;
+        if (prev) {
+          const prevMajor = lastHead(covered, true);
+          while (split <= to && lastHead(split, true) === prevMajor) split++;
+          if (split > from) addTo(prev, "after", parasOf(from, split - 1));
         }
+        if (split <= to) addTo(span, "before", parasOf(split, to));
       }
-      covered = Math.max(covered, span.max);
+      if (span.max >= covered) {
+        covered = span.max;
+        prev = span;
+      }
     }
-    // 책 맨 끝의 남은 주석(맺음말·회향 게송 등)은 마지막 경의 "끝 부분"으로
+    // 책 맨 끝의 남은 주석(맺음말·총론 등)은 마지막 경의 "끝 부분"으로
     const lastPara = (db.prepare("select max(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
-    const lastSpan = spans.reduce((a, b) => (b.max > a.max ? b : a));
-    if (lastPara > covered && lastPara - covered < 2000) {
-      const lines = linesOf(book, covered + 1, lastPara).filter((l) => l.text);
-      const after = [...new Set(lines.map((l) => l.para))].map((para) => ({
-        para,
-        vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
-        lines: lines.filter((l) => l.para === para).map((l) => l.text),
-      }));
-      if (after.length) {
-        (docs.get(lastSpan.file)![lastSpan.layer] as Record<string, unknown>).after = after;
-        touched.add(lastSpan.file);
-        tailFilled += after.length;
-      }
-    }
+    if (prev && lastPara > covered && lastPara - covered < 2000) addTo(prev, "after", parasOf(covered + 1, lastPara));
   }
   for (const file of touched) writeFileSync(path.join(OUT, file), `${JSON.stringify(docs.get(file))}\n`);
   console.log(`주석 앞 부분(머리말 등): 문단 ${filled}개를 경 ${touched.size}개 앞에 붙였습니다 · 끝 부분(맺음말 등): 문단 ${tailFilled}개`);

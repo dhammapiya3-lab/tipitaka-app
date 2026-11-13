@@ -70,11 +70,25 @@ const vriCommentarySchema = z.object({
   wordLinks: z.array(z.tuple([z.string(), z.string(), z.number(), z.number()])).default([]),
   /** 이 경 앞의, 어느 경에도 붙지 않은 주석(책·품 머리말, 이야기 등) */
   before: z
-    .array(z.object({ para: z.number(), vripara: z.coerce.string().nullable(), lines: z.array(z.string()) }))
+    .array(
+      z.object({
+        para: z.number(),
+        vripara: z.coerce.string().nullable(),
+        title: z.string().nullable().optional(),
+        lines: z.array(z.string()),
+      }),
+    )
     .optional(),
   /** 책 맨 끝(마지막 경 뒤)의, 어느 경에도 붙지 않은 주석(맺음말 등) */
   after: z
-    .array(z.object({ para: z.number(), vripara: z.coerce.string().nullable(), lines: z.array(z.string()) }))
+    .array(
+      z.object({
+        para: z.number(),
+        vripara: z.coerce.string().nullable(),
+        title: z.string().nullable().optional(),
+        lines: z.array(z.string()),
+      }),
+    )
     .optional(),
 });
 /**
@@ -257,10 +271,12 @@ const vriSchema = z.object({
   tika: vriCommentarySchema.nullable(),
   tika2: vriCommentarySchema.nullable().optional(),
   unsure: z.array(z.string()).default([]),
+  preface: z.array(z.string()).default([]),
 });
 const commentaryFiles: SuttaCommentary[] = [];
 const vriTexts: SuttaText[] = [];
 const vriUnsure = new Map<string, string[]>();
+const vriPreface = new Map<string, string[]>();
 /** 주석 번역 판본 id — 판본 정보 창의 소개 글(translator_info)을 함께 옮긴다 */
 const commentaryEditionIds = new Set<string>();
 const usedEditions = new Set<string>();
@@ -364,6 +380,7 @@ function buildSutta(
     // VRI 본문·주석은 경마다 파일을 만들지 않고 묶음 파일(public/data/vri/)에 모은다 — 호스팅 파일 수 한도(2만 개)
     vriTexts.push({ suttaId: id, editionId: VRI_EDITION.id, segments: toSegments(vri.segments) });
     if (vri.unsure.length) vriUnsure.set(id, vri.unsure);
+    if (vri.preface.length) vriPreface.set(id, vri.preface);
     const rootParas = new Set(Object.keys(root).map((key) => paragraphOf(key, id)));
     sutta.editions.push(VRI_EDITION.id);
     usedEditions.add(VRI_EDITION.id);
@@ -460,11 +477,13 @@ function buildSutta(
         before: (("before" in c ? c.before : undefined) ?? []).map((p) => ({
           para: p.para,
           vripara: p.vripara,
+          title: p.title ?? null,
           lines: p.lines.map((line) => parseInline(line)),
         })),
         after: (("after" in c ? c.after : undefined) ?? []).map((p) => ({
           para: p.para,
           vripara: p.vripara,
+          title: p.title ?? null,
           lines: p.lines.map((line) => parseInline(line)),
         })),
         links: c.wordLinks
@@ -648,6 +667,7 @@ mkdirSync(OUT_VRI, { recursive: true });
         s: suttaTextSchema.parse(t).segments,
         p: pages[t.suttaId] ?? [],
         ...(vriUnsure.has(t.suttaId) ? { u: vriUnsure.get(t.suttaId) } : {}),
+        ...(vriPreface.has(t.suttaId) ? { h: vriPreface.get(t.suttaId) } : {}),
       },
     })),
   );

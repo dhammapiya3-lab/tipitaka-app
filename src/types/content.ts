@@ -37,6 +37,8 @@ export interface SuttaText {
   suttaId: string;
   editionId: string;
   segments: Segment[];
+  /** 책 첫머리 줄 (VRI 의 "Namo tassa…") — 경 문장과 따로 맨 위에 */
+  preface?: string[];
 }
 
 /** 번역자 각주 하나. mark 는 본문의 각주 번호(예: "42") */
@@ -108,9 +110,9 @@ export interface SuttaCommentary {
   /** 이 층에 든 책들 (디가 복주석서는 옛·새 두 권). 첫째가 book */
   books: { id: string; name: string }[];
   /** 이 경 앞의, 어느 경에도 붙지 않은 주석 문단들 (책·품 머리말, 이야기 등) — "앞 부분"으로 본다 */
-  before: { para: number; vripara: string | null; lines: InlinePart[][] }[];
+  before: { para: number; vripara: string | null; title?: string | null; lines: InlinePart[][] }[];
   /** 책 맨 끝의 맺음말 등 (마지막 경에만) */
-  after: { para: number; vripara: string | null; lines: InlinePart[][] }[];
+  after: { para: number; vripara: string | null; title?: string | null; lines: InlinePart[][] }[];
   /** 낱말 연결: 경 문장(key)의 낱말(word) → 이 주석의 문단 순번(para)·줄 순번(line) */
   links: { key: string; word: string; para: number; line: number }[];
   paras: {

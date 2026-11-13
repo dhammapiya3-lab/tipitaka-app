@@ -86,6 +86,8 @@ const vriTextBodySchema = z.object({
   p: z.array(z.tuple([z.string(), z.string(), z.string()])).default([]),
   /** 다음 문장 내용까지 함께 들어 있을 수 있는 문장 번호 */
   u: z.array(z.string()).default([]),
+  /** 책 첫머리 줄 */
+  h: z.array(z.string()).default([]),
 });
 
 /** 책 쪽 번호: [문장 번호, 판(P·M·T·V), 권.쪽] — 쪽이 바뀌는 문장마다 */
@@ -107,7 +109,7 @@ export async function fetchSuttaText(suttaId: string, editionId: string): Promis
     const { t } = await vriEntry(suttaId);
     const shard = await vriShard("t", t);
     const body = vriTextBodySchema.parse(shard[suttaId]);
-    const text = suttaTextSchema.parse({ suttaId, editionId, segments: body.s });
+    const text = suttaTextSchema.parse({ suttaId, editionId, segments: body.s, ...(body.h.length ? { preface: body.h } : {}) });
     const unsure = new Set(body.u);
     return unsure.size
       ? { ...text, segments: text.segments.map((s) => (unsure.has(s.key) ? { ...s, unsure: true } : s)) }

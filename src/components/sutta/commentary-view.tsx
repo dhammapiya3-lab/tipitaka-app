@@ -162,8 +162,14 @@ export function CommentaryView({
     : null;
 
   /** 어느 경 문단에도 붙지 않은 주석 — 앞 부분(머리말 등) · 끝 부분(맺음말 등) */
-  const extraCard = (para: SuttaCommentary["before"][number], i: number, label: string) => (
+  // 주석서 책의 원래 제목(Ganthārambhakathā, Pakiṇṇakakathā 등)은 바뀌는 곳에서만 크게 보인다
+  const extraCard = (para: SuttaCommentary["before"][number], i: number, label: string, list: SuttaCommentary["before"]) => (
     <section key={`${label}-${i}`} className="overflow-hidden rounded-2xl border border-dashed bg-card/70 shadow-sm">
+      {para.title && para.title !== list[i - 1]?.title ? (
+        <p lang="pi" className="border-b border-gray-100 bg-gray-50 px-5 py-2 font-pali text-sm font-bold text-secondary-foreground dark:border-border dark:bg-muted">
+          {para.title}
+        </p>
+      ) : null}
       <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-2.5 dark:border-border">
         <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600 dark:bg-muted">{label}</span>
         <span className="text-xs text-faint">
@@ -206,12 +212,14 @@ export function CommentaryView({
         >
           <ChevronLeft className={cn("size-4 transition-transform", showBefore && "-rotate-90")} aria-hidden />
           {showBefore ? "앞 부분 접기" : "앞 부분 보기"}
-          <span className="font-normal text-faint">· 책·품 머리말, 이야기 등 {data.before.length}문단</span>
+          <span className="font-normal text-faint">
+            · {[...new Set(data.before.map((p) => p.title).filter(Boolean))].slice(0, 3).join(" · ") || "책·품 머리말, 이야기 등"} ({data.before.length}문단)
+          </span>
         </button>
       ) : prev ? (
         navLink(prev, "prev")
       ) : null}
-      {!only && showBefore ? data.before.map((para, i) => extraCard(para, i, "앞 부분")) : null}
+      {!only && showBefore ? data.before.map((para, i, list) => extraCard(para, i, "앞 부분", list)) : null}
       <p className="px-1 text-xs leading-relaxed text-faint">
         <span className="font-pali text-secondary-foreground">{data.bookName}</span> · VRI 제6차 결집본 —{" "}
         {only ? `${paragraphLabel ?? "이"} 문단을 풀이한 곳 ${only.length}개` : `이 경을 풀이한 문단 ${data.paras.length}개`}
@@ -257,7 +265,7 @@ export function CommentaryView({
       {/* 책 맨 끝(마지막 경 뒤)의 맺음말 등 */}
       {!only && data.after.length ? (
         <>
-          {data.after.map((para, i) => extraCard(para, i, "끝 부분"))}
+          {data.after.map((para, i, list) => extraCard(para, i, "끝 부분", list))}
         </>
       ) : null}
       {!only && next ? <div className="flex justify-end">{navLink(next, "next")}</div> : null}

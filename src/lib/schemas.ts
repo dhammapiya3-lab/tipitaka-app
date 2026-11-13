@@ -50,6 +50,7 @@ export const suttaTextSchema: z.ZodType<SuttaText> = z.object({
   suttaId: z.string().min(1),
   editionId: z.string().min(1),
   segments: z.array(segmentSchema),
+  preface: z.array(z.string()).optional(),
 });
 
 /** 복사를 막아 둔 번역의 본문 파일 — segments 를 lib/seal 로 감싼 것 */
@@ -226,9 +227,23 @@ export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
   nameKo: z.string().nullable(),
   editions: z.array(editionSchema),
   books: z.array(z.object({ id: z.string(), name: z.string() })),
-  before: z.array(z.object({ para: z.number(), vripara: z.string().nullable(), lines: z.array(z.array(inlinePartSchema)) })),
+  before: z.array(
+    z.object({
+      para: z.number(),
+      vripara: z.string().nullable(),
+      title: z.string().nullable().optional(),
+      lines: z.array(z.array(inlinePartSchema)),
+    }),
+  ),
   after: z
-    .array(z.object({ para: z.number(), vripara: z.string().nullable(), lines: z.array(z.array(inlinePartSchema)) }))
+    .array(
+      z.object({
+        para: z.number(),
+        vripara: z.string().nullable(),
+        title: z.string().nullable().optional(),
+        lines: z.array(z.array(inlinePartSchema)),
+      }),
+    )
     .default([]),
   links: z.array(z.object({ key: z.string(), word: z.string(), para: z.number(), line: z.number() })),
   paras: z.array(
