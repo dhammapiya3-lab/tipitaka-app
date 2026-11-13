@@ -7,12 +7,15 @@ import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  analyzeParts,
   fetchDpdFamily,
   fetchDpdFreqLayout,
   fetchDpdFrequency,
   fetchDpdTemplates,
   fetchInflections,
   lookupWord,
+  type PartAnalysis,
+  type SplitWays,
   type WordLookup,
 } from "@/lib/content";
 import { normalizeWord } from "@/lib/pali";
@@ -143,11 +146,11 @@ export function WordLookupResult({
   const resolved = (
     <>
       <ResolvedNote word={word} result={result} onSearch={onSearch} />
-      {result.split.length > 1 ? <SplitterCard word={result.normalized || word} parts={result.split} onSearch={onSearch} /> : null}
+      {result.split.ways.length ? <AnalysisCard key={result.normalized || word} word={result.normalized || word} split={result.split} onSearch={onSearch} /> : null}
     </>
   );
   if (dictionaries.every((id) => count(id) === 0)) {
-    if (result.split.length > 1) return resolved;
+    if (result.split.ways.length) return resolved;
     return (
       <>
       {resolved}
@@ -712,12 +715,53 @@ function FrequencyTable({ id }: { id: number }) {
   );
 }
 
-/** 낱말 나누기(Splitter) — DPD 의 Splitter 처럼 연음으로 붙은 낱말을 사전 낱말로 나눠 보인다. 조각을 누르면 그 낱말을 찾는다 */
-function SplitterCard({ word, parts, onSearch }: { word: string; parts: string[]; onSearch?: (word: string) => void }) {
+/**
+ * 낱말 분석 (Digital Pāḷi Reader 의 Analysis 처럼) — 연음·합성으로 붙은 낱말을 나누는 방법들과, 조각마다 DPD 의 짧은 뜻·어미 문법.
+ * 나누기는 DPD Splitter 결과(없으면 이 사이트 프로그램), 뜻·문법은 DPD 사전과 어형 변화표.
+ */
+function AnalysisCard({ word, split, onSearch }: { word: string; split: SplitWays; onSearch?: (word: string) => void }) {
+  const [way, setWay] = useState(0);
+  const parts = split.ways[Math.min(way, split.ways.length - 1)];
+  const [analysis, setAnalysis] = useState<{ key: string; parts: PartAnalysis[] } | "error" | null>(null);
+  const key = parts.join("+");
+  useEffect(() => {
+    let cancelled = false;
+    analyzeParts(parts).then(
+      (a) => !cancelled && setAnalysis({ key, parts: a }),
+      () => !cancelled && setAnalysis("error"),
+    );
+    return () => {
+      cancelled = true;
+    };
+    // parts 는 key 로 비교한다
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  const ready = analysis && analysis !== "error" && analysis.key === key ? analysis.parts : null;
   return (
     <section className="rounded-2xl border bg-card px-5 py-4 shadow-sm">
-      <div className="mb-1 flex items-center justify-between gap-2">
-        <h3 className="text-base font-bold">낱말 나누기 <span className="font-pali text-sm font-normal text-faint">Splitter</span></h3>
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-base font-bold">
+          낱말 분석 <span className="font-pali text-sm font-normal text-faint">Analysis · Splitter</span>
+        </h3>
+        {split.ways.length > 1 ? (
+          <div role="group" aria-label="나누는 방법" className="flex flex-wrap gap-1">
+            {split.ways.map((w, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-pressed={i === way}
+                title={w.join(" + ")}
+                onClick={() => setWay(i)}
+                className={cn(
+                  "rounded-md border px-2 py-0.5 text-xs font-bold",
+                  i === way ? "border-transparent bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-hover",
+                )}
+              >
+                {`나눔 ${i + 1}`}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
       <p lang="pi" className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300">
         {word}
@@ -726,18 +770,64 @@ function SplitterCard({ word, parts, onSearch }: { word: string; parts: string[]
         {parts.map((p, i) => (
           <Fragment key={i}>
             {i ? <span className="text-faint">+</span> : null}
-            {onSearch ? (
-              <button type="button" onClick={() => onSearch(p)} className="text-primary hover:underline" title={`“${p}” 찾기`}>
-                {p}
-              </button>
-            ) : (
-              <span>{p}</span>
-            )}
+            <span>{p}</span>
           </Fragment>
         ))}
       </p>
+      {ready ? (
+        <div className="mt-3 overflow-x-auto rounded-xl border">
+          <table className="w-full border-collapse text-sm">
+            <tbody>
+              {ready.map(({ part, entries }, i) => (
+                <tr key={i} className="border-t align-top first:border-t-0">
+                  <th lang="pi" className="w-28 bg-gray-50 px-3 py-2 text-left font-pali font-bold whitespace-nowrap dark:bg-muted">
+                    {part}
+                  </th>
+                  <td className="px-3 py-2">
+                    {entries.length === 0 ? (
+                      <span className="text-faint">DPD 에 없는 조각</span>
+                    ) : (
+                      <ul className="flex flex-col gap-1">
+                        {entries.map(({ entry, grammar }) => (
+                          <li key={entry.id}>
+                            {onSearch ? (
+                              <button
+                                type="button"
+                                onClick={() => onSearch(entry.lemma.replace(/\s+\d+(\.\d+)?$/, ""))}
+                                className="font-pali font-semibold text-primary hover:underline"
+                              >
+                                {entry.lemma}
+                              </button>
+                            ) : (
+                              <span className="font-pali font-semibold">{entry.lemma}</span>
+                            )}{" "}
+                            <span className="text-xs text-muted-foreground">{entry.pos}.</span>{" "}
+                            <span>{(entry.meaning1 || entry.meaning2).replace(/<[^>]+>/g, "")}</span>
+                            {grammar.length ? (
+                              <span className="ml-1 rounded bg-brand-soft px-1.5 py-0.5 text-xs font-semibold text-primary">
+                                {[...new Set(grammar)].join(" · ")}
+                              </span>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : analysis === "error" ? (
+        <p className="mt-2 text-sm text-faint">조각의 뜻을 불러오지 못했습니다.</p>
+      ) : (
+        <Skeleton className="mt-3 h-20 w-full" />
+      )}
       <p className="t-meta mt-2 border-t pt-2">
-        연음(sandhi)으로 붙은 낱말을 프로그램이 자동으로 나눈 것이라 틀릴 수 있어요. 나눈 조각을 누르면 그 낱말을 찾아요.
+        {split.byDpd
+          ? "나누기: DPD Splitter (프로그램이 만든 결과라 틀릴 수 있어요) · 뜻·문법: DPD"
+          : "나누기: 이 사이트 프로그램이 연음 규칙으로 자동으로 나눈 것이라 틀릴 수 있어요 · 뜻·문법: DPD"}
+        . 표제어를 누르면 그 낱말을 찾아요.
       </p>
     </section>
   );

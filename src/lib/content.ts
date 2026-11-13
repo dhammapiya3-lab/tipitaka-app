@@ -279,21 +279,68 @@ export interface WordLookup extends Record<PlainDictionaryId, PlainEntry[]> {
   /** 자판 글자로 찾았을 때 그 글자에 해당하는 다른 형태들 (고를 수 있게 보여 준다) */
   alternatives: string[];
   dpd: DpdEntry[];
-  /** 낱말 나누기(Splitter) — 연음으로 붙은 낱말을 사전 낱말들로 나눈 것 (자동, 없으면 빈 목록) */
-  split: string[];
+  /** 낱말 나누기(Splitter) — 연음으로 붙은 낱말을 나누는 방법들 (좋은 차례, 없으면 빈 목록) */
+  split: SplitWays;
+}
+
+/** 나누는 방법들. byDpd: DPD Splitter 결과면 true, 이 사이트 프로그램이 나눈 것이면 false */
+export interface SplitWays {
+  ways: string[][];
+  byDpd: boolean;
 }
 
 /** 낱말 나누기 조각 — scripts/build-splitter.ts 의 shardNo 와 같은 계산 */
 const SPLITTER_SHARDS = 128;
-async function fetchSplit(word: string): Promise<string[]> {
+async function fetchSplit(word: string): Promise<SplitWays> {
   let h = 0;
   for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
   try {
     const shard = await getShard(`${DICT_BASE}/splitter/${h % SPLITTER_SHARDS}.json`, z.record(z.string(), z.string()));
-    return shard[word]?.split(" + ") ?? [];
+    const raw = shard[word];
+    if (!raw) return { ways: [], byDpd: false };
+    // "앞 + 뒤|다른 + 나눔", 맨 앞 * 는 이 사이트 프로그램이 나눈 것
+    const byDpd = !raw.startsWith("*");
+    return { ways: raw.replace(/^\*/, "").split("|").map((w) => w.split(" + ")), byDpd };
   } catch {
-    return [];
+    return { ways: [], byDpd: false };
   }
+}
+
+/** 나눈 조각 하나의 분석 — DPD 표제어(뜻)와 이 조각이 그 표제어의 어떤 어형인지(어미 문법) */
+export interface PartAnalysis {
+  part: string;
+  entries: { entry: DpdEntry; grammar: string[] }[];
+}
+
+/** DPR Analysis 처럼 조각마다 짧은 뜻과 어미 문법을 찾는다 (DPD 찾아보기 · 어형 변화표로) */
+export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
+  const index = await fetchDictionaryIndex();
+  const templates = await fetchDpdTemplates().catch(() => ({}) as Record<string, DpdTemplate>);
+  return Promise.all(
+    parts.map(async (part) => {
+      const p = normalizeWord(part);
+      const entries = await fetchDpdEntries(index, await lookupIds(index, p));
+      const found = entries.map((entry) => {
+        const grammar: string[] = [];
+        const t = entry.pattern ? templates[entry.pattern] : undefined;
+        if (t && entry.stem !== undefined) {
+          for (const row of t.rows.slice(1)) {
+            for (let c = 1; c < row.length; c += 2) {
+              if ((row[c] ?? []).some((ending) => normalizeWord(`${entry.stem}${ending}`) === p)) {
+                grammar.push((row[c + 1] ?? []).join(" "));
+              }
+            }
+          }
+        }
+        return { entry, grammar };
+      });
+      // 이 조각이 바로 그 표제어의 어형인 것(어미 문법이 맞는 것·불변화사)만 — 없으면 찾은 것 앞의 몇 개
+      const exact = found.filter(
+        ({ entry, grammar }) => grammar.length > 0 || normalizeWord(cleanLemma(entry.lemma)) === p,
+      );
+      return { part, entries: (exact.length ? exact : found).slice(0, 4) };
+    }),
+  );
 }
 
 const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "pts", "mm"];
@@ -337,7 +384,7 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
     normalized: typed,
     alternatives: [],
     dpd: [],
-    split: [],
+    split: { ways: [], byDpd: false },
     kpts: [],
     pts: [],
     mm: [],

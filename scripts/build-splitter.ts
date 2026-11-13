@@ -9,7 +9,7 @@
  * - 연음(sandhi) 규칙: 모음 생략(…ṃ + iva → …ṃva), ṃ → m(모음 앞)·n/ñ/ṇ/m(자음 앞), 끝 모음 생략,
  *   모음 합침(a + i → e, a + u → o, a + a → ā 등), iti 줄임(…ṃ + iti → …nti, …a + iti → …āti).
  * - 조각이 적을수록, 조각이 길수록 좋은 나눔으로 본다. 자동으로 나눈 것이라 틀릴 수 있다(화면에 알린다).
- * - 결과: public/data/dict/splitter/<n>.json  { 낱말: "앞 + 뒤" }  (호스팅 파일 수 한도 때문에 조각 128개)
+ * - 결과: public/data/dict/splitter/<n>.json  { 낱말: "앞 + 뒤|다른 + 나눔" } (좋은 차례로 많아야 3가지)  (호스팅 파일 수 한도 때문에 조각 128개)
  */
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -85,9 +85,12 @@ interface Best {
   parts: string[];
   score: number;
 }
-function split(word: string): string[] | null {
+/** 나누는 방법 여러 개 (좋은 차례로, 많아야 3개) — DPR Analysis 처럼 다른 나눔도 보인다 */
+function split(word: string): string[][] {
   const n = word.length;
   const memo = new Map<string, Best | null>();
+  /** 맨 앞 조각마다의 가장 좋은 나눔 — 다른 나눔 후보 */
+  const firsts: Best[] = [];
   // state: 위치 pos 부터, 다음 조각 앞에 붙일 글자 pre (생략된 첫 모음 등)
   const go = (pos: number, pre: string, depth: number): Best | null => {
     if (pos === n) return pre ? null : { parts: [], score: 0 };
@@ -107,7 +110,9 @@ function split(word: string): string[] | null {
       // 짧은 조각(4글자 미만, 흔한 짧은 낱말 빼고)은 억지로 나눈 경우가 많아 덜 좋게 본다
       const shortPenalty = part.length < 4 && !SHORT.has(part) && !ELIDED.has(part) ? 400 : 0;
       const score = rest.score + 1000 - part.length * part.length + penalty + shortPenalty;
-      if (!best || score < best.score) best = { parts: [part, ...rest.parts], score };
+      const cand = { parts: [part, ...rest.parts], score };
+      if (pos === 0 && !pre) firsts.push(cand);
+      if (!best || score < best.score) best = cand;
     };
     for (let end = pos + 1; end <= n; end++) {
       const core = pre.replace("~", "") + word.slice(pos, end);
@@ -139,20 +144,56 @@ function split(word: string): string[] | null {
     memo.set(key, best);
     return best;
   };
-  return go(0, "", 0)?.parts ?? null;
+  const top = go(0, "", 0);
+  if (!top) return [];
+  const seen = new Set<string>();
+  const out: string[][] = [];
+  for (const c of [top, ...firsts.sort((a, b) => a.score - b.score)]) {
+    const k = c.parts.join("+");
+    if (seen.has(k)) continue;
+    // 가장 좋은 나눔보다 많이 나쁜 것은 버린다
+    if (c.score > top.score + 600) continue;
+    seen.add(k);
+    out.push(c.parts);
+    if (out.length === 3) break;
+  }
+  return out;
+}
+
+// DPD 의 Splitter 결과 (github.com/digitalpalidictionary/deconstructor_output) 가 있으면 그것을 먼저 쓴다
+const DECON = process.env.DECONSTRUCTOR ?? path.join(process.cwd(), "content", "deconstructor_output.json");
+const dpdSplits = new Map<string, string[]>();
+try {
+  for (const [w, ways] of Object.entries(JSON.parse(readFileSync(DECON, "utf8")) as Record<string, string[]>)) {
+    dpdSplits.set(normalizeWord(w), ways);
+  }
+  console.log(`DPD Splitter 결과 ${dpdSplits.size.toLocaleString()}개를 씁니다`);
+} catch {
+  console.log("DPD Splitter 결과 파일이 없어 이 프로그램이 나눈 것만 씁니다");
 }
 
 const out: Record<string, string>[] = Array.from({ length: SPLITTER_SHARDS }, () => ({}));
 let done = 0;
+let fromDpd = 0;
 const started = Date.now();
 for (const w of unknown) {
   if (w.length > 40) continue;
-  const parts = split(w);
-  if (parts && parts.length >= 2) {
-    out[shardNo(w)][w] = parts.join(" + ");
+  const dpdWays = dpdSplits.get(w)?.filter((x) => x.includes(" + "));
+  if (dpdWays?.length) {
+    // "앞 + 뒤|다른 + 나눔" — 나누는 방법들을 | 로 잇는다 (DPD 차례 그대로, 많아야 5가지)
+    out[shardNo(w)][w] = dpdWays.slice(0, 5).join("|");
+    done++;
+    fromDpd++;
+    continue;
+  }
+  const ways = split(w).filter((p) => p.length >= 2);
+  if (ways.length) {
+    // 이 프로그램이 나눈 것은 맨 앞에 * 를 붙여 구분한다 (화면에 "자동으로 나눔" 안내)
+    out[shardNo(w)][w] = `*${ways.map((p) => p.join(" + ")).join("|")}`;
     done++;
   }
 }
+console.log(`  DPD Splitter 로 ${fromDpd.toLocaleString()}개 · 이 프로그램으로 ${(done - fromDpd).toLocaleString()}개`);
 const dir = path.join(DICT, "splitter");
 rmSync(dir, { recursive: true, force: true });
 mkdirSync(dir, { recursive: true });
@@ -161,5 +202,5 @@ console.log(
   `나눈 낱말 ${done.toLocaleString()}개 / ${unknown.length.toLocaleString()}개 (${Math.round((Date.now() - started) / 1000)}초) → 조각 ${SPLITTER_SHARDS}개`,
 );
 for (const w of ["cakkaṃva", "evamāha", "tañca", "seyyathidaṃ", "bhagavantaṃyeva", "tenupasaṅkami", "dhammanti"]) {
-  console.log(`  ${w}: ${known.has(w) ? "(사전에 있음)" : (split(w) ?? ["(못 나눔)"]).join(" + ")}`);
+  console.log(`  ${w}: ${known.has(w) ? "(사전에 있음)" : (split(w).map((p) => p.join(" + ")).join("  |  ") || "(못 나눔)")}`);
 }

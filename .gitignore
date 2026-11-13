@@ -58,3 +58,4 @@ firebase-debug*.log
 /content/epitaka.db
 # 받아 온 비공개 자료
 /.private/
+content/deconstructor_output.json
