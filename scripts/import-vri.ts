@@ -224,7 +224,31 @@ for (const suttaId of ids) {
   const book = head.book_id;
   const first = found ? found.first : head.para_id + 1;
   // 한 경이 목차 여러 칸(자따까 546·547 의 품들)으로 나뉘어 있으면 모두 합친 범위
-  const last = found ? found.last : Math.max(...heads.map((h) => h.para_id + h.chapter_len - 1));
+  // 한 경이 목차 여러 칸(자따까 546·547 의 품들)으로 나뉘어 있으면 이어진 칸끼리 합친다
+  // (같은 번호가 멀리 떨어진 다른 곳에도 붙어 있는 경우가 있어 — 아빠다나 — 이어진 것만)
+  const ownLast = found
+    ? found.last
+    : [...heads]
+        .sort((x, y) => x.para_id - y.para_id)
+        .reduce((end, h) => (h.para_id <= end + 2 ? Math.max(end, h.para_id + h.chapter_len - 1) : end), head.para_id + head.chapter_len - 1);
+  // 경 뒤의 끝맺음 줄(품·책을 마치는 줄, 요약 게송 uddāna, 책 맺음말)도 이 경 끝에 둔다 — 다음 경이 시작하기 전까지
+  const nextStart = (
+    db
+      .prepare("select min(para_id) n from headings where book_id = ? and para_id > ? and sc_id is not null and sc_id != ?")
+      .get(book, ownLast, suttaId) as { n: number | null }
+  ).n;
+  const bookEnd = (db.prepare("select max(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
+  // 다음 경까지 몇 문단 안 될 때만(끝맺음 줄·요약 게송·다음 품 제목 정도) — 목차 번호 없이 글로 찾은 경은 늘리지 않는다
+  const gapEnd = (nextStart ?? bookEnd + 1) - 1;
+  const last = !found && gapEnd > ownLast && gapEnd - ownLast <= 15 ? gapEnd : ownLast;
+  /** 책·품 제목 줄 (목차에 있는 문단) — 경 안에 넣지 않는다 */
+  const titleParas = new Set(
+    (
+      db.prepare("select para_id from headings where book_id = ? and level < 10 and para_id between ? and ?").all(book, first, last) as unknown as {
+        para_id: number;
+      }[]
+    ).map((h) => h.para_id),
+  );
   const vri = linesOf(book, first, last).filter((l) => l.text);
 
   // 마하상기띠본 문장 (0.x 제목 줄 빼고)
@@ -307,8 +331,8 @@ for (const suttaId of ids) {
     }
     let seg = hit >= 0 ? segOf(hit) : prevSeg;
     if (seg < prevSeg) seg = prevSeg; // 차례를 거꾸로 가지 않는다
-    // 하나도 맞지 않는 짧은 줄은 책·품 제목 줄이다 (글로 자리를 찾은 경에서 경 안에 끼어든다) — 넣지 않는다
-    if (matched === 0 && to - from < 60) return;
+    // 책·품 제목 줄(목차에 있는 문단)은 빌랄라 쪽에 짝이 없으면 넣지 않는다 — 끝맺음 줄은 마지막 문장에 남는다
+    if (titleParas.has(l.para) && matched < (to - from) / 2) return;
     if (to > from && matched < (to - from) / 2) unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
     vriToKey.set(`${l.para}:${l.line}`, ms[seg]?.[0] ?? ms.at(-1)![0]);
 
@@ -561,6 +585,7 @@ if (quiet) {
     }
   }
   let filled = 0;
+  let tailFilled = 0;
   const touched = new Set<string>();
   for (const [book, spans] of byBook) {
     spans.sort((a, b) => a.min - b.min);
@@ -587,9 +612,25 @@ if (quiet) {
       }
       covered = Math.max(covered, span.max);
     }
+    // 책 맨 끝의 남은 주석(맺음말·회향 게송 등)은 마지막 경의 "끝 부분"으로
+    const lastPara = (db.prepare("select max(para_id) n from sentences where book_id = ?").get(book) as { n: number }).n;
+    const lastSpan = spans.reduce((a, b) => (b.max > a.max ? b : a));
+    if (lastPara > covered && lastPara - covered < 2000) {
+      const lines = linesOf(book, covered + 1, lastPara).filter((l) => l.text);
+      const after = [...new Set(lines.map((l) => l.para))].map((para) => ({
+        para,
+        vripara: lines.find((l) => l.para === para && l.vripara)?.vripara ?? null,
+        lines: lines.filter((l) => l.para === para).map((l) => l.text),
+      }));
+      if (after.length) {
+        (docs.get(lastSpan.file)![lastSpan.layer] as Record<string, unknown>).after = after;
+        touched.add(lastSpan.file);
+        tailFilled += after.length;
+      }
+    }
   }
   for (const file of touched) writeFileSync(path.join(OUT, file), `${JSON.stringify(docs.get(file))}\n`);
-  console.log(`주석 앞 부분(머리말 등): 문단 ${filled}개를 경 ${touched.size}개 앞에 붙였습니다`);
+  console.log(`주석 앞 부분(머리말 등): 문단 ${filled}개를 경 ${touched.size}개 앞에 붙였습니다 · 끝 부분(맺음말 등): 문단 ${tailFilled}개`);
 }
 
 if (quiet) {

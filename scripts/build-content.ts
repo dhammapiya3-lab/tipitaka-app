@@ -72,6 +72,10 @@ const vriCommentarySchema = z.object({
   before: z
     .array(z.object({ para: z.number(), vripara: z.coerce.string().nullable(), lines: z.array(z.string()) }))
     .optional(),
+  /** 책 맨 끝(마지막 경 뒤)의, 어느 경에도 붙지 않은 주석(맺음말 등) */
+  after: z
+    .array(z.object({ para: z.number(), vripara: z.coerce.string().nullable(), lines: z.array(z.string()) }))
+    .optional(),
 });
 /**
  * content/vri/<경>.ko.json — 주석서·복주석서 번역 (사람이 쓰는 파일).
@@ -390,7 +394,8 @@ function buildSutta(
         const wordLinks = a.wordLinks.map(([k, w, pi, li]) => [k, w, moved.get(pi) ?? pi, li] as typeof a.wordLinks[number]);
         // 앞 부분(머리말 등)도 두 책 것을 이어 붙인다
         const before = [...(a.before ?? []), ...(b.before ?? [])];
-        return { ...a, paras: sorted.map((x) => x.p), books: [a, b], wordLinks, before };
+        const after = [...(a.after ?? []), ...(b.after ?? [])];
+        return { ...a, paras: sorted.map((x) => x.p), books: [a, b], wordLinks, before, after };
       }
       if (b) return { ...b, paras: tag(b), books: [b] };
       if (a) return { ...a, paras: tag(a), books: [a] };
@@ -453,6 +458,11 @@ function buildSutta(
         editions: layerEditions,
         books: c.books.map((b) => ({ id: b.book, name: b.bookName })),
         before: (("before" in c ? c.before : undefined) ?? []).map((p) => ({
+          para: p.para,
+          vripara: p.vripara,
+          lines: p.lines.map((line) => parseInline(line)),
+        })),
+        after: (("after" in c ? c.after : undefined) ?? []).map((p) => ({
           para: p.para,
           vripara: p.vripara,
           lines: p.lines.map((line) => parseInline(line)),

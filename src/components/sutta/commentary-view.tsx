@@ -161,6 +161,26 @@ export function CommentaryView({
       })
     : null;
 
+  /** 어느 경 문단에도 붙지 않은 주석 — 앞 부분(머리말 등) · 끝 부분(맺음말 등) */
+  const extraCard = (para: SuttaCommentary["before"][number], i: number, label: string) => (
+    <section key={`${label}-${i}`} className="overflow-hidden rounded-2xl border border-dashed bg-card/70 shadow-sm">
+      <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-2.5 dark:border-border">
+        <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600 dark:bg-muted">{label}</span>
+        <span className="text-xs text-faint">
+          {data.book} {para.para}
+          {para.vripara ? ` · VRI ${para.vripara}` : ""}
+        </span>
+      </div>
+      <div className="flex flex-col gap-3 px-5 py-4 font-pali break-words text-gray-800 dark:text-foreground" lang="pi">
+        {para.lines.map((parts, j) => (
+          <p key={j}>
+            <InlineText parts={parts} onWord={onWord} />
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+
   const navLink = (to: { id: string; title: string }, dir: "prev" | "next") => (
     <Link
       href={`/sutta/?id=${encodeURIComponent(to.id)}&layer=${layer}`}
@@ -191,26 +211,7 @@ export function CommentaryView({
       ) : prev ? (
         navLink(prev, "prev")
       ) : null}
-      {!only && showBefore
-        ? data.before.map((para, i) => (
-            <section key={`before-${i}`} className="overflow-hidden rounded-2xl border border-dashed bg-card/70 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-2.5 dark:border-border">
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600 dark:bg-muted">앞 부분</span>
-                <span className="text-xs text-faint">
-                  {data.book} {para.para}
-                  {para.vripara ? ` · VRI ${para.vripara}` : ""}
-                </span>
-              </div>
-              <div className="flex flex-col gap-3 px-5 py-4 font-pali break-words text-gray-800 dark:text-foreground" lang="pi">
-                {para.lines.map((parts, j) => (
-                  <p key={j}>
-                    <InlineText parts={parts} onWord={onWord} />
-                  </p>
-                ))}
-              </div>
-            </section>
-          ))
-        : null}
+      {!only && showBefore ? data.before.map((para, i) => extraCard(para, i, "앞 부분")) : null}
       <p className="px-1 text-xs leading-relaxed text-faint">
         <span className="font-pali text-secondary-foreground">{data.bookName}</span> · VRI 제6차 결집본 —{" "}
         {only ? `${paragraphLabel ?? "이"} 문단을 풀이한 곳 ${only.length}개` : `이 경을 풀이한 문단 ${data.paras.length}개`}
@@ -253,6 +254,12 @@ export function CommentaryView({
         />
         </Fragment>
       ))}
+      {/* 책 맨 끝(마지막 경 뒤)의 맺음말 등 */}
+      {!only && data.after.length ? (
+        <>
+          {data.after.map((para, i) => extraCard(para, i, "끝 부분"))}
+        </>
+      ) : null}
       {!only && next ? <div className="flex justify-end">{navLink(next, "next")}</div> : null}
       <p className="px-1 text-xs leading-relaxed text-faint">
         출처: VRI Chaṭṭha Saṅgāyana Tipiṭaka · 문단 연결 E-Piṭaka (CC BY-NC 4.0)

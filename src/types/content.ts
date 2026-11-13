@@ -109,6 +109,8 @@ export interface SuttaCommentary {
   books: { id: string; name: string }[];
   /** 이 경 앞의, 어느 경에도 붙지 않은 주석 문단들 (책·품 머리말, 이야기 등) — "앞 부분"으로 본다 */
   before: { para: number; vripara: string | null; lines: InlinePart[][] }[];
+  /** 책 맨 끝의 맺음말 등 (마지막 경에만) */
+  after: { para: number; vripara: string | null; lines: InlinePart[][] }[];
   /** 낱말 연결: 경 문장(key)의 낱말(word) → 이 주석의 문단 순번(para)·줄 순번(line) */
   links: { key: string; word: string; para: number; line: number }[];
   paras: {
