@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Copy, Headphones, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
+import { Bookmark, Headphones, MoreHorizontal, NotebookPen } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -260,9 +259,6 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
           actions.onBookmark,
         )}
         {item(<NotebookPen aria-hidden />, actions.memo ? "메모 고치기" : "메모 남기기", actions.onMemo)}
-        <DropdownMenuSeparator />
-        {item(<Link2 aria-hidden />, "문장 링크 복사", actions.onCopyLink)}
-        {item(<Copy aria-hidden />, "원문+번역 복사", actions.onCopyText)}
       </DropdownMenuContent>
     </DropdownMenu>
   );
