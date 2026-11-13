@@ -202,19 +202,62 @@ for (const suttaId of ids) {
     | { attha_ref: string | null; tika_ref: string | null }
     | undefined;
 
-  function commentary(dstBook: string | null | undefined) {
-    if (!dstBook) return null;
-    const links = db
-      .prepare(
-        "select src_para, src_line, dst_para, dst_line, word from book_links where src_book = ? and src_para between ? and ? and dst_book = ? order by dst_para, dst_line",
-      )
-      .all(book, first, last, dstBook) as unknown as {
-      src_para: number;
-      src_line: number;
-      dst_para: number;
-      dst_line: number;
-      word: string | null;
-    }[];
+  type Link = { src_para: number; src_line: number; dst_para: number; dst_line: number; word: string | null };
+
+  /** VRI 문단 번호 → 그 번호의 숫자들 ("1081" · "23-25" → 23,24,25) */
+  const vriNumbers = (v: unknown) => {
+    const m = String(v ?? "").match(/^(\d+)(?:-(\d+))?/);
+    if (!m) return [];
+    const a = Number(m[1]);
+    const b = m[2] ? Number(m[2]) : a;
+    return b - a > 50 ? [a] : Array.from({ length: b - a + 1 }, (_, i) => a + i);
+  };
+
+  /**
+   * 주석서 책이 여럿으로 나뉜 경우("Th-a-i Th-a-ii")가 있어 하나씩 본다.
+   * 낱말 연결(book_links)이 없으면 VRI 문단 번호로 잇는다 — 주석 문단은 풀이하는 경 문단의 번호로 시작한다(예: "1081.").
+   */
+  function commentaryFor(ref: string | null | undefined) {
+    for (const dstBook of (ref ?? "").split(/\s+/).filter(Boolean)) {
+      const links = db
+        .prepare(
+          "select src_para, src_line, dst_para, dst_line, word from book_links where src_book = ? and src_para between ? and ? and dst_book = ? order by dst_para, dst_line",
+        )
+        .all(book, first, last, dstBook) as unknown as Link[];
+      const result = commentary(dstBook, links);
+      if (result) return result;
+    }
+    for (const dstBook of (ref ?? "").split(/\s+/).filter(Boolean)) {
+      const mulaByNumber = new Map<number, Line>();
+      for (const l of vri) for (const n of vriNumbers(l.vripara)) if (!mulaByNumber.has(n)) mulaByNumber.set(n, l);
+      if (mulaByNumber.size === 0) continue;
+      const rows = db
+        .prepare("select para_id as para, line_id as line, vripara from sentences where book_id = ? and vripara is not null")
+        .all(dstBook) as unknown as { para: number; line: number; vripara: unknown }[];
+      const links: Link[] = [];
+      for (const r of rows) {
+        for (const n of vriNumbers(r.vripara)) {
+          const m = mulaByNumber.get(n);
+          if (m) links.push({ src_para: m.para, src_line: m.line, dst_para: r.para, dst_line: r.line, word: null });
+        }
+      }
+      // 번호가 붙은 주석 문단 다음의 번호 없는 문단들도 그 풀이에 이어지므로, 다음 번호 문단 앞까지 포함한다
+      if (links.length) {
+        const lastDst = Math.max(...links.map((l) => l.dst_para));
+        const nextNumbered = rows.map((r) => r.para).filter((p) => p > lastDst).sort((a, b) => a - b)[0];
+        if (nextNumbered && nextNumbered - 1 > lastDst) {
+          const tail = links.find((l) => l.dst_para === lastDst)!;
+          links.push({ ...tail, dst_para: Math.min(nextNumbered - 1, lastDst + 60), dst_line: 1 });
+        }
+      }
+      const result = commentary(dstBook, links);
+      // 번호가 책 안에서 되풀이되면(아빠다나 등) 엉뚱하게 넓게 잡히므로, 너무 길면 쓰지 않는다
+      if (result && result.paras.length <= 120) return result;
+    }
+    return null;
+  }
+
+  function commentary(dstBook: string, links: Link[]) {
     if (links.length === 0) return null;
     // 같은 낱말이 멀리 떨어진 다른 경의 주석에도 걸리는 일이 있어(엉뚱한 링크), 연결된 문단을 가까운 것끼리
     // 묶어 가장 많이 걸린 묶음(과 그만큼 많이 걸린 묶음)만 쓴다.
@@ -268,6 +311,10 @@ for (const suttaId of ids) {
       book_name: string;
       vri_id: string;
     };
+    // 주석 문단 머리의 "경 문단" 번호는 줄마다 정한 문단에서 모은다 — 같은 낱말이 경의 다른 문단에도
+    // 나와 걸린 엉뚱한 연결(예: 1번 문단 풀이에 12번이 붙는 것)을 빼기 위해서다
+    const num = (r: string) => Number(r.slice(r.indexOf(":") + 1));
+    for (const p of paras) p.refs = [...new Set(p.lineRefs.flat())].sort((a, b) => num(a) - num(b));
     // 낱말 연결: [경 문장 번호, 낱말, 주석 문단 순번, 그 문단 안 줄 순번] — 경의 낱말을 누르면 그 주석 줄로 간다
     const paraIndex = new Map(paras.map((p, i) => [p.para, i]));
     const lineIndex = new Map<string, number>();
@@ -302,8 +349,8 @@ for (const suttaId of ids) {
       vripara: vri.find((l) => l.vripara)?.vripara ?? null,
     },
     segments: { ...titled, ...segments },
-    attha: commentary(meta?.attha_ref),
-    tika: commentary(meta?.tika_ref),
+    attha: commentaryFor(meta?.attha_ref),
+    tika: commentaryFor(meta?.tika_ref),
   };
   writeFileSync(path.join(OUT, `${suttaId}.json`), quiet ? `${JSON.stringify(out)}\n` : `${JSON.stringify(out, null, 2)}\n`);
   stats.done++;
