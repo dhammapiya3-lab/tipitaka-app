@@ -1,6 +1,7 @@
 "use client";
 
 import { TtsLockOverlay } from "@/components/sutta/tts-lock";
+import { GlossDialog } from "@/components/dictionary/gloss-dialog";
 import {
   BookA,
   BookOpen,
@@ -348,6 +349,8 @@ export function SuttaView({
   const [ttsLangPick, setTtsLang] = useState<TtsLang>("ko");
   const ttsLang: TtsLang = ttsLangs.includes(ttsLangPick) ? ttsLangPick : (ttsLangs[0] ?? "ko");
   const ttsEdition = shown.find((e) => (ttsLang === "pli" ? e.language === "pli" : e.language !== "pli"));
+  /** 단어장(Gloss) — 문단의 빠알리 낱말 목록 */
+  const [glossFor, setGlossFor] = useState<{ title: string; pali: string; keys: string[] } | null>(null);
   /** 듣기 잠금 (화면 덮개 + 화면 꺼짐 막기) */
   const [ttsLocked, setTtsLocked] = useState(false);
   const ttsItems = textRows.flatMap((row) => {
@@ -811,6 +814,17 @@ export function SuttaView({
               </button>
             ) : null,
           )}
+          <button
+            type="button"
+            title="이 문단의 빠알리 낱말을 모두 뽑아 뜻을 붙인 단어장 (복사·Anki 파일)"
+            onClick={(e) => {
+              e.stopPropagation();
+              setGlossFor({ title: paragraphTitle(p), pali: paliOf(keys), keys });
+            }}
+            className="inline-flex items-center justify-center rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-600 transition-colors hover:bg-gray-200 dark:bg-muted dark:text-muted-foreground"
+          >
+            단어장
+          </button>
           {kinds.map((k) => (
             <button
               key={k}
@@ -1403,6 +1417,16 @@ export function SuttaView({
         <WordBottomDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
       ) : null}
 
+      {glossFor ? (
+        <GlossDialog
+          open
+          title={glossFor.title}
+          pali={glossFor.pali}
+          suttaId={suttaId}
+          keys={glossFor.keys}
+          onClose={() => setGlossFor(null)}
+        />
+      ) : null}
       {tts.current && ttsLocked ? (
         <TtsLockOverlay
           sentence={ttsItems.find((x) => x.key === tts.current)?.text ?? ""}
