@@ -3,7 +3,6 @@
 import {
   BookA,
   BookOpen,
-  Bookmark as BookmarkIcon,
   ChevronLeft,
   ChevronRight,
   CloudOff,
@@ -32,7 +31,12 @@ import { bookLabel, CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@
 import { WordBottomDock } from "@/components/dictionary/word-dock-bottom";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
-import { HighlightMenu, SelectionToolbar } from "@/components/sutta/selection-toolbar";
+import {
+  editionsIn,
+  HighlightMenu,
+  SelectionToolbar,
+  selectedCellText,
+} from "@/components/sutta/selection-toolbar";
 import { ReaderSide, type SidePanel } from "@/components/sutta/reader-side";
 import { NoteBox, SegmentRow, type SentenceActions } from "@/components/sutta/segment-row";
 import {
@@ -576,9 +580,20 @@ export function SuttaView({
   });
 
   const noteFontSize = useSettingsStore((s) => s.noteFontSize);
-  /** 책갈피 단추가 꽂을 문장 — 지금 읽는 문단(문단별로 보기면 그 문단)의 첫 문장 */
-  const bookmarkHereKey = paragraphs.get(focus ?? currentParagraph ?? paragraphList[0] ?? "")?.[0];
-  const bookmarkHere = bookmarkHereKey ? rows.find((r) => r.key === bookmarkHereKey) : undefined;
+  /** 복사·공유할 때 끝에 붙이는 출처 — 경 이름, 번역자(원문 판본), 주소 */
+  function attribution(editionIds: string[]): string {
+    const eds = editionIds
+      .map((id) => editions.find((e) => e.id === id))
+      .filter((e): e is Edition => Boolean(e));
+    const tr = eds.filter((e) => e.language !== "pli").map((e) => e.label);
+    const pli = eds.filter((e) => e.language === "pli").map((e) => e.label);
+    const who = [tr.length ? `번역: ${tr.join(", ")}` : "", pli.length ? `원문: ${pli.join(", ")}` : ""]
+      .filter(Boolean)
+      .join(" · ");
+    const url = `${window.location.origin}${suttaHref(suttaId)}`;
+    return `— ${editionTitle ?? head.title} (${suttaLabel(suttaId)})${who ? ` · ${who}` : ""}\n${url}`;
+  }
+
 
   const articleStyle = { fontSize, lineHeight, "--note-fs": `${noteFontSize}px` } as CSSProperties;
   /** 넓은 화면에서 판본을 여럿 고르면 칸으로 나란히 (폰은 문장마다 번갈아) */
@@ -1073,20 +1088,6 @@ export function SuttaView({
                 <List aria-hidden />
               </BarButton>
             )}
-            <BarButton
-              label={bookmarkHere && mine.has(bookmarkHere.key) ? "책갈피 빼기" : "여기에 책갈피"}
-              onClick={() => {
-                if (!bookmarkHere) return;
-                const had = mine.has(bookmarkHere.key);
-                toggleBookmark(baseOf(bookmarkHere));
-                toast.success(had ? "책갈피를 뺐습니다." : "읽는 자리에 책갈피를 꽂았습니다. 내 서재에서 볼 수 있어요.");
-              }}
-            >
-              <BookmarkIcon
-                aria-hidden
-                className={cn(bookmarkHere && mine.has(bookmarkHere.key) && "fill-amber-500 text-amber-500")}
-              />
-            </BarButton>
             {tts.supported ? (
               <BarButton
                 label={tts.current ? "듣기 멈추기" : "소리로 듣기"}
@@ -1301,6 +1302,19 @@ export function SuttaView({
             <div className="px-4 pt-2 pb-6">
               <article
                 ref={articleRef}
+                onCopy={(e) => {
+                  // 복사를 막아 둔 번역에서 이미 막았으면 그대로 둔다
+                  if (e.defaultPrevented) return;
+                  const sel = window.getSelection();
+                  if (!sel || sel.isCollapsed || !articleRef.current) return;
+                  const text = selectedCellText(articleRef.current, sel.getRangeAt(0));
+                  if (!text) return;
+                  e.preventDefault();
+                  e.clipboardData.setData(
+                    "text/plain",
+                    `${text}\n\n${attribution(editionsIn(articleRef.current, sel.getRangeAt(0)))}`,
+                  );
+                }}
                 className={cn(
                   "mx-auto flex w-full min-w-0 flex-col gap-4 print:max-w-none",
                   readWidth,
@@ -1452,13 +1466,10 @@ export function SuttaView({
 
       <SelectionToolbar
         container={getArticle}
-        onCopy={(text) => {
+        onCopy={(text, eds) => void copy(`${text}\n\n${attribution(eds)}`, "고른 글을 복사했습니다.")}
+        onShare={(text, eds) => {
           const url = `${window.location.origin}${suttaHref(suttaId)}`;
-          void copy(`${text}\n\n— ${head.title} (${suttaLabel(suttaId)})\n${url}`, "고른 글을 복사했습니다.");
-        }}
-        onShare={(text) => {
-          const url = `${window.location.origin}${suttaHref(suttaId)}`;
-          const body = `${text}\n\n— ${head.title} (${suttaLabel(suttaId)})`;
+          const body = `${text}\n\n${attribution(eds).replace(/\n[^\n]*$/, "")}`;
           // 휴대폰만 기기 공유 창을 쓴다 — 컴퓨터(특히 윈도우) 공유 창은 멈추거나 실패하는 일이 잦아 복사로 대신한다
           const data = { title: head.title, text: `${body}\n${url}` };
           const mobile = window.matchMedia("(pointer: coarse)").matches;

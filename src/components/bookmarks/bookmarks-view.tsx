@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Download, NotebookPen, Trash2, Upload } from "lucide-react";
+import { Bookmark, Download, Highlighter, NotebookPen, Trash2, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { HIGHLIGHT_CLASS, useHighlightsStore } from "@/store/highlights";
 
-type Filter = "all" | "memo";
+type Filter = "all" | "highlight" | "memo";
 
 /**
  * 북마크·메모 목록 — 저장한 순서(최근 먼저). 누르면 그 문장으로 간다.
@@ -58,6 +58,7 @@ export function BookmarksView() {
   }
 
   const memoCount = items.filter((b) => b.memo).length;
+  const highlightCount = useHighlightsStore((s) => s.items.length);
   const shown = filter === "memo" ? items.filter((b) => b.memo) : items;
 
   const toolbar = (
@@ -65,7 +66,8 @@ export function BookmarksView() {
       <div className="flex rounded-lg bg-muted p-0.5" role="group" aria-label="보기">
         {(
           [
-            ["all", `전체 ${formatCount(items.length)}`],
+            ["all", `책갈피 ${formatCount(items.length)}`],
+            ["highlight", `형광펜·밑줄 ${formatCount(highlightCount)}`],
             ["memo", `메모 ${formatCount(memoCount)}`],
           ] as const
         ).map(([id, label]) => (
@@ -121,12 +123,14 @@ export function BookmarksView() {
   return (
     <div className="flex flex-col gap-4">
       {toolbar}
-      {shown.length === 0 ? (
+      {filter === "highlight" ? (
+        <HighlightList />
+      ) : shown.length === 0 ? (
         <Card>
           <EmptyState
             icon={filter === "memo" ? NotebookPen : Bookmark}
             title={filter === "memo" ? "메모를 남긴 문장이 없습니다" : "저장한 문장이 없습니다"}
-            description="경을 읽다가 문장 왼쪽의 메뉴(⋯)에서 북마크나 메모를 남기면 여기에 모입니다. 다른 기기에서 내보낸 파일이 있으면 가져오기를 누르세요."
+            description="경을 읽다가 문장 옆 메뉴(⋯)에서 북마크나 메모를 남기면 여기에 모입니다. 다른 기기에서 내보낸 파일이 있으면 가져오기를 누르세요."
             action={
               <Button nativeButton={false} render={<Link href="/suttas" />}>
                 경전 목록으로
@@ -172,7 +176,6 @@ export function BookmarksView() {
           </ul>
         </Card>
       )}
-      <HighlightList />
     </div>
   );
 }
@@ -181,10 +184,19 @@ export function BookmarksView() {
 function HighlightList() {
   const items = useHighlightsStore((s) => s.items);
   const remove = useHighlightsStore((s) => s.remove);
-  if (items.length === 0) return null;
+  if (items.length === 0) {
+    return (
+      <Card>
+        <EmptyState
+          icon={Highlighter}
+          title="형광펜·밑줄을 그은 글이 없습니다"
+          description="경을 읽다가 글을 손가락이나 마우스로 끌어 고르면 뜨는 막대에서 형광펜이나 밑줄을 고르세요. 그은 글이 여기에 모입니다."
+        />
+      </Card>
+    );
+  }
   return (
     <section className="flex flex-col gap-2">
-      <h2 className="px-1 text-sm font-bold">밑줄 친 글 {items.length}</h2>
       <Card className="gap-0 p-0">
         <ul className="flex flex-col">
           {items.map((h) => (

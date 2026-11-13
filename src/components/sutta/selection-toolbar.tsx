@@ -36,6 +36,31 @@ function offsetIn(cell: Element, node: Node, offset: number): number {
   return count;
 }
 
+/** 고른 글 중 본문 문장 칸의 글만 (문단 번호·배지 같은 화면 글자는 뺀다). 칸마다 줄을 나눈다 */
+export function selectedCellText(root: Element, range: Range): string {
+  const out: string[] = [];
+  for (const cell of root.querySelectorAll("[data-cell]")) {
+    if (!range.intersectsNode(cell)) continue;
+    const r = range.cloneRange();
+    if (!cell.contains(range.startContainer)) r.setStart(cell, 0);
+    if (!cell.contains(range.endContainer)) r.setEnd(cell, cell.childNodes.length);
+    const t = r.toString().trim();
+    if (t) out.push(t);
+  }
+  return out.length ? out.join("\n") : range.toString().trim();
+}
+
+/** 고른 범위에 걸친 문장 칸들의 판본 id (나온 차례대로, 겹치지 않게) */
+export function editionsIn(root: Element, range: Range): string[] {
+  const ids: string[] = [];
+  for (const cell of root.querySelectorAll("[data-cell]")) {
+    if (!range.intersectsNode(cell)) continue;
+    const id = (cell.getAttribute("data-cell") ?? "").split("|")[0];
+    if (id && !ids.includes(id)) ids.push(id);
+  }
+  return ids;
+}
+
 /**
  * 본문에서 글을 고르면 그 위(휴대폰은 아래)에 뜨는 막대 — 복사 · 공유 · 밑줄(형광펜).
  * 여러 문장·문단을 한꺼번에 골라 복사·공유할 수 있다. 밑줄은 한 문장 안에서 긋는다.
@@ -48,13 +73,19 @@ export function SelectionToolbar({
 }: {
   /** 이 안에서 고른 글만 (본문 article) */
   container: () => HTMLElement | null;
-  onCopy: (text: string) => void;
-  onShare: (text: string) => void;
+  /** editionIds: 고른 글이 걸친 판본들 (번역자 표시용) */
+  onCopy: (text: string, editionIds: string[]) => void;
+  onShare: (text: string, editionIds: string[]) => void;
   onHighlight: (range: CellRange, color: HighlightColor) => void;
 }) {
-  const [sel, setSel] = useState<{ x: number; y: number; below: boolean; text: string; cell: CellRange | null } | null>(
-    null,
-  );
+  const [sel, setSel] = useState<{
+    x: number;
+    y: number;
+    below: boolean;
+    text: string;
+    cell: CellRange | null;
+    editions: string[];
+  } | null>(null);
 
   useEffect(() => {
     let timer: number | undefined;
@@ -66,7 +97,7 @@ export function SelectionToolbar({
         if (!s || s.isCollapsed || s.rangeCount === 0 || !root) return setSel(null);
         const range = s.getRangeAt(0);
         if (!root.contains(range.commonAncestorContainer)) return setSel(null);
-        const text = s.toString().trim();
+        const text = selectedCellText(root, range);
         if (!text) return setSel(null);
         const rect = range.getBoundingClientRect();
         const el = (n: Node | null) => (n instanceof Element ? n : n?.parentElement ?? null);
@@ -82,7 +113,14 @@ export function SelectionToolbar({
         // 휴대폰은 브라우저 자체 메뉴가 위에 떠서 아래에 둔다
         const touch = window.matchMedia("(pointer: coarse)").matches;
         const below = touch || rect.top < 90;
-        setSel({ x: rect.left + rect.width / 2, y: below ? rect.bottom + 10 : rect.top - 10, below, text, cell });
+        setSel({
+          x: rect.left + rect.width / 2,
+          y: below ? rect.bottom + 10 : rect.top - 10,
+          below,
+          text,
+          cell,
+          editions: editionsIn(root, range),
+        });
       }, 120);
     };
     document.addEventListener("selectionchange", update);
@@ -110,11 +148,11 @@ export function SelectionToolbar({
         transform: `translate(-50%, ${sel.below ? "0" : "-100%"})`,
       }}
     >
-      <button type="button" className={button} onClick={() => (onCopy(sel.text), done())}>
+      <button type="button" className={button} onClick={() => (onCopy(sel.text, sel.editions), done())}>
         <Copy className="size-3.5" aria-hidden />
         복사
       </button>
-      <button type="button" className={button} onClick={() => (onShare(sel.text), done())}>
+      <button type="button" className={button} onClick={() => (onShare(sel.text, sel.editions), done())}>
         <Share2 className="size-3.5" aria-hidden />
         공유
       </button>
