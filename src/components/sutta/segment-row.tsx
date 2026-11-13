@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Copy, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
+import { Bookmark, Copy, Headphones, Link2, MoreHorizontal, NotebookPen } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { InlineText } from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
@@ -27,6 +27,8 @@ export interface SentenceActions {
   onMemo: () => void;
   onCopyLink: () => void;
   onCopyText: () => void;
+  /** 이 문장부터 소리로 듣기 */
+  onListen?: () => void;
 }
 
 /** 누른 곳이 단어·각주 버튼·링크가 아니고, 글자를 끌어 고르는 중도 아닐 때만 문장 누르기로 본다 */
@@ -220,6 +222,7 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-48">
+        {actions.onListen ? item(<Headphones aria-hidden />, "여기서부터 듣기", actions.onListen) : null}
         {item(
           <Bookmark className={cn(saved && "fill-current")} aria-hidden />,
           saved ? "북마크 지우기" : "북마크",

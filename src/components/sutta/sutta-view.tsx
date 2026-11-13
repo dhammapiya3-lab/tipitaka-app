@@ -1,6 +1,20 @@
 "use client";
 
-import { BookA, BookOpen, ChevronLeft, ChevronRight, CloudOff, List, Type } from "lucide-react";
+import {
+  BookA,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  CloudOff,
+  Headphones,
+  List,
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+  Square,
+  Type,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -30,6 +44,7 @@ import {
 import { orderEditions } from "@/components/suttas/sutta-row";
 import { ANALYSIS_LABEL } from "@/components/dictionary/analysis-panel";
 import { useReaderKeys } from "@/components/sutta/use-reader-keys";
+import { useTts, type TtsLang } from "@/components/sutta/use-tts";
 import { useAnalysisKeys, useSuttaNotes, useSuttaTexts } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,6 +55,7 @@ import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
   alignEditions,
+  compareSegmentKeys,
   paragraphOf,
   plainText,
   rowKind,
@@ -261,6 +277,37 @@ export function SuttaView({
     Object.fromEntries(loaded.map((t) => [t.editionId, t.segments])),
   ).filter((row) => rowKind(row.key, suttaId) !== "hidden");
   const textRows = rows.filter((row) => rowKind(row.key, suttaId) === "text");
+
+  // ── 소리로 듣기 (TTS) — 한국어 번역 또는 빠알리 원문을 문장마다 읽는다 ──
+  const ttsLangs: TtsLang[] = [
+    ...(shown.some((e) => e.language !== "pli") ? (["ko"] as const) : []),
+    ...(shown.some((e) => e.language === "pli") ? (["pli"] as const) : []),
+  ];
+  const [ttsLangPick, setTtsLang] = useState<TtsLang>("ko");
+  const ttsLang: TtsLang = ttsLangs.includes(ttsLangPick) ? ttsLangPick : (ttsLangs[0] ?? "ko");
+  const ttsEdition = shown.find((e) => (ttsLang === "pli" ? e.language === "pli" : e.language !== "pli"));
+  const ttsItems = textRows.flatMap((row) => {
+    const cell = ttsEdition ? row.cells[ttsEdition.id] : undefined;
+    const text = cell ? plainText(cell.parts).replace(/\s+/g, " ").trim() : "";
+    return text ? [{ key: row.key, text }] : [];
+  });
+  // 문단별로 보기면 읽는 문장이 있는 문단으로 넘긴다
+  const tts = useTts(
+    ttsItems,
+    (key) => {
+      const p = paragraphOf(key, suttaId);
+      setFocus((f) => (f && f !== p ? p : f));
+    },
+    () =>
+      toast.error(
+        ttsLang === "ko"
+          ? "이 기기에서 한국어 음성을 낼 수 없습니다. 기기 설정에서 한국어 음성(TTS)을 설치해 주세요."
+          : "이 기기에서 빠알리를 읽을 음성을 찾지 못했습니다.",
+      ),
+  );
+  function listenFrom(key: string) {
+    tts.speakFrom(key, { lang: ttsLang, rate: tts.rate });
+  }
   const waiting = loaded.length === 0 && !error;
 
   // 본문이 늦게 그려지므로, 주소의 #문장번호(북마크·목차·검색 링크)로 한 번만 이동한다.
@@ -401,6 +448,7 @@ export function SuttaView({
       onBookmark: () => toggleBookmark(baseOf(row)),
       onMemo: () => setMemoRow(row),
       onCopyLink: () => copy(url, "문장 링크를 복사했습니다."),
+      onListen: tts.supported ? () => listenFrom(row.key) : undefined,
       onCopyText: () => {
         const { text, skipped } = sentenceCopyText(row, shown, `${rowLabel(row.key)} ${suttaTitle}`, url);
         void copy(
@@ -628,6 +676,15 @@ export function SuttaView({
     </div>
   );
 
+  // 읽는 문장을 따라 화면을 옮긴다 (문단별로 보기면 그 문단으로 넘긴다)
+  const ttsCurrent = tts.current;
+  useEffect(() => {
+    if (!ttsCurrent) return;
+    requestAnimationFrame(() =>
+      document.getElementById(ttsCurrent)?.scrollIntoView({ block: "center", behavior: "smooth" }),
+    );
+  }, [ttsCurrent]);
+
   function paragraphCard(p: string, inFocus: boolean) {
     const keys = paragraphs.get(p) ?? [];
     const kinds = kindsFor(keys);
@@ -733,7 +790,7 @@ export function SuttaView({
                 row={row}
                 heading={false}
                 unitLabel={null}
-                active={active?.key === row.key}
+                active={active?.key === row.key || tts.current === row.key}
                 activeWord={active?.key === row.key ? active.word : null}
                 actions={actionsFor(row)}
                 shown={shown}
@@ -950,6 +1007,18 @@ export function SuttaView({
                 <List aria-hidden />
               </BarButton>
             )}
+            {tts.supported ? (
+              <BarButton
+                label={tts.current ? "듣기 멈추기" : "소리로 듣기"}
+                onClick={() => {
+                  if (tts.current) return tts.stop();
+                  const from = paragraphs.get(focus ?? currentParagraph ?? paragraphList[0] ?? "")?.[0];
+                  listenFrom(ttsItems.find((i) => !from || compareSegmentKeys(i.key, from) >= 0)?.key ?? ttsItems[0]?.key ?? "");
+                }}
+              >
+                <Headphones aria-hidden className={cn(tts.current && "text-primary")} />
+              </BarButton>
+            ) : null}
             <BarButton label="텍스트 설정" onClick={() => setSheet("text")}>
               <Type aria-hidden />
             </BarButton>
@@ -1213,6 +1282,89 @@ export function SuttaView({
       ) : word && parallel ? (
         // 주석 나란히 보기: Digital Pāḷi Reader 처럼 화면 아래 칸 (끄면 오른쪽 칸)
         <WordBottomDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
+      ) : null}
+
+      {tts.current ? (
+        // 소리로 듣는 동안 아래에 뜨는 작은 재생 막대
+        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 print:hidden lg:left-60">
+          <div className="flex items-center gap-1 rounded-2xl border bg-card px-2 py-1.5 shadow-lg">
+            <button
+              type="button"
+              aria-label="앞 문장"
+              className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-muted"
+              onClick={() => {
+                const i = ttsItems.findIndex((x) => x.key === tts.current);
+                listenFrom(ttsItems[Math.max(0, i - 1)]?.key ?? "");
+              }}
+            >
+              <SkipBack className="size-4" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label={tts.playing ? "잠시 멈춤" : "이어 듣기"}
+              className="rounded-full bg-primary p-2.5 text-primary-foreground"
+              onClick={() => (tts.playing ? tts.pause() : tts.resume())}
+            >
+              {tts.playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
+            </button>
+            <button
+              type="button"
+              aria-label="다음 문장"
+              className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-muted"
+              onClick={() => {
+                const i = ttsItems.findIndex((x) => x.key === tts.current);
+                const next = ttsItems[i + 1];
+                if (next) listenFrom(next.key);
+              }}
+            >
+              <SkipForward className="size-4" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label="듣기 끝내기"
+              className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-muted"
+              onClick={tts.stop}
+            >
+              <Square className="size-4" aria-hidden />
+            </button>
+            <span className="mx-1 h-6 w-px bg-border" aria-hidden />
+            {ttsLangs.length > 1 ? (
+              <div className="flex rounded-lg bg-muted p-0.5 text-xs" role="group" aria-label="읽을 글">
+                {ttsLangs.map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    aria-pressed={ttsLang === l}
+                    onClick={() => {
+                      setTtsLang(l);
+                      const at = tts.current;
+                      if (at) setTimeout(() => tts.speakFrom(at, { lang: l, rate: tts.rate }), 0);
+                    }}
+                    className={cn("rounded-md px-2 py-1", ttsLang === l ? "bg-card font-bold text-primary shadow-sm" : "text-muted-foreground")}
+                  >
+                    {l === "ko" ? "번역" : "빠알리"}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            <select
+              aria-label="읽는 빠르기"
+              value={tts.rate}
+              onChange={(e) => {
+                const r = Number(e.target.value);
+                tts.setRate(r);
+                if (tts.current) tts.speakFrom(tts.current, { lang: ttsLang, rate: r });
+              }}
+              className="ml-1 rounded-lg border bg-card px-1.5 py-1 text-xs"
+            >
+              {[0.75, 1, 1.25, 1.5].map((r) => (
+                <option key={r} value={r}>
+                  {r}배
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       ) : null}
 
       <MemoDialog
