@@ -68,6 +68,25 @@ function norm(text: string): string {
     .replace(/[^a-zāīūṃṅñṭḍṇḷ]/g, "");
 }
 
+/** norm() 과 같은 글자를 만들되, 글자마다 원래 글의 몇 번째 글자였는지도 돌려준다 (VRI 줄을 문장 자리에서 자를 때) */
+function normWithIndex(text: string): { s: string; at: number[] } {
+  const drop = new Uint8Array(text.length);
+  for (const re of [/\[[^\]]*\]/g, /…\s*pe\s*…|\.\.\.pe\.\.\./gi]) {
+    for (const m of text.matchAll(re)) drop.fill(1, m.index, m.index + m[0].length);
+  }
+  let out = "";
+  const at: number[] = [];
+  for (let i = 0; i < text.length; i++) {
+    if (drop[i]) continue;
+    const c = text[i].toLowerCase().replace("ṁ", "ṃ");
+    if (/^[a-zāīūṃṅñṭḍṇḷ]$/.test(c)) {
+      out += c;
+      at.push(i);
+    }
+  }
+  return { s: out, at };
+}
+
 function linesOf(book: string, from: number, to: number): Line[] {
   return (
     db
@@ -90,7 +109,7 @@ const msFiles = new Map<string, string>();
 
 
 
-const stats = { done: 0, lines: 0, unmatched: 0, missing: [] as string[], withUnmatched: [] as string[] };
+const stats = { done: 0, lines: 0, unmatched: 0, unsure: [] as string[], gaps: 0, segs: 0, missing: [] as string[], withUnmatched: [] as string[] };
 for (const suttaId of ids) {
   const heads = db
     .prepare("select book_id, para_id, chapter_len, title from headings where sc_id = ? order by level, para_id")
@@ -165,6 +184,13 @@ for (const suttaId of ids) {
     }
     return lo;
   };
+  // VRI 줄 하나에 빌랄라 문장이 여럿 들어 있으면, 두 판본의 글이 그 자리 앞뒤로 똑같을 때만(확실할 때만) 그 자리에서 잘라 나눈다.
+  // 글이 달라 자리가 애매하면 자르지 않고 앞 문장에 그대로 두고, 그 문장 번호를 unsure 에 적는다 (화면 표시·검토 목록).
+  const SURE = 4; // 자르는 자리 앞뒤로 이만큼 글자가 똑같이 맞아야 확실하다고 본다
+  const unsure = new Set<string>();
+  const add = (key: string, text: string) => {
+    if (text) segments[key] = segments[key] ? `${segments[key]} ${text}` : text;
+  };
   let prevSeg = 0;
   vri.forEach((l, n) => {
     const from = vStarts[n];
@@ -180,10 +206,40 @@ for (const suttaId of ids) {
     let seg = hit >= 0 ? segOf(hit) : prevSeg;
     if (seg < prevSeg) seg = prevSeg; // 차례를 거꾸로 가지 않는다
     if (to > from && matched < (to - from) / 2) unmatched.push(`${l.para}:${l.line} ${l.text.slice(0, 40)}`);
-    prevSeg = seg;
-    const key = ms[seg]?.[0] ?? ms.at(-1)![0];
-    segments[key] = segments[key] ? `${segments[key]} ${l.text}` : l.text;
-    vriToKey.set(`${l.para}:${l.line}`, key);
+    vriToKey.set(`${l.para}:${l.line}`, ms[seg]?.[0] ?? ms.at(-1)![0]);
+
+    const { s: ns, at } = normWithIndex(l.text);
+    const cuts: { raw: number; seg: number }[] = [];
+    if (ns === vNorm[n]) {
+      let cur = seg;
+      for (let x = from + 1; x < to; x++) {
+        if (map[x] < 0) continue;
+        const s2 = segOf(map[x]);
+        if (s2 <= cur) continue;
+        const exact =
+          map[x] === mStarts[s2] &&
+          Array.from({ length: SURE }, (_, d) => d + 1).every(
+            (d) => (x - d < from || map[x - d] === map[x] - d) && (x + d - 1 >= to || map[x + d - 1] === map[x] + d - 1),
+          );
+        if (exact) {
+          let raw = at[x - from];
+          while (raw > 0 && /[“‘(\[]/.test(l.text[raw - 1])) raw--;
+          cuts.push({ raw, seg: s2 });
+        } else {
+          for (let k = cur + 1; k <= s2; k++) unsure.add(ms[cur]![0]);
+        }
+        cur = s2;
+      }
+    }
+    let start = 0;
+    let curSeg = seg;
+    for (const c of cuts) {
+      add(ms[curSeg]?.[0] ?? ms.at(-1)![0], l.text.slice(start, c.raw).trim());
+      start = c.raw;
+      curSeg = c.seg;
+    }
+    add(ms[curSeg]?.[0] ?? ms.at(-1)![0], l.text.slice(start).trim());
+    prevSeg = curSeg;
   });
   // 경 이름 줄 — 마하상기띠본의 마지막 제목 줄(0.x) 자리에 VRI 경 이름을 둔다
   const msTitleKey = Object.keys(JSON.parse(readFileSync(msFile, "utf8")) as Record<string, string>)
@@ -351,6 +407,8 @@ for (const suttaId of ids) {
       vripara: vri.find((l) => l.vripara)?.vripara ?? null,
     },
     segments: { ...titled, ...segments },
+    /** VRI 한 줄에 다음 문장까지 들어 있을 수 있는 문장 (두 판본 글이 달라 자를 자리가 확실하지 않음) */
+    unsure: [...unsure],
     attha: commentaryFor(meta?.attha_ref),
     tika: commentaryFor(meta?.tika_ref),
     // 복주석서가 두 종류인 책(디가니까야: 옛 복주석서 Sv-pt 와 새 복주석서 Abhinavaṭīkā Sv-nt)
@@ -368,6 +426,9 @@ for (const suttaId of ids) {
   writeFileSync(path.join(OUT, `${suttaId}.json`), quiet ? `${JSON.stringify(out)}\n` : `${JSON.stringify(out, null, 2)}\n`);
   stats.done++;
   stats.unmatched += unmatched.length;
+  stats.unsure.push(...unsure);
+  stats.segs += ms.length;
+  stats.gaps += ms.filter(([k]) => !segments[k]).length;
   stats.lines += vri.length;
   if (unmatched.length) stats.withUnmatched.push(`${suttaId}(${unmatched.length})`);
   if (!quiet) console.log(
@@ -430,8 +491,10 @@ if (quiet) {
 if (quiet) {
   console.log(
     `경 ${stats.done}개 · VRI ${stats.lines}줄 · 짝을 못 찾은 줄 ${stats.unmatched}개 (${stats.withUnmatched.length}개 경)\n` +
-      `E-Piṭaka 에 없는 경 ${stats.missing.length}개: ${stats.missing.join(" ")}`,
+      `E-Piṭaka 에 없는 경 ${stats.missing.length}개: ${stats.missing.join(" ")}\n` +
+      `빌랄라 ${stats.segs}문장 중 VRI 글이 빈 문장 ${stats.gaps}개 · 자를 자리가 애매해 앞 문장에 합친 곳 ${stats.unsure.length}개`,
   );
+  writeFileSync(path.join(OUT, "_unsure.txt"), `${stats.unsure.join("\n")}\n`);
   writeFileSync(
     path.join(OUT, "_import-report.txt"),
     `짝을 못 찾은 줄이 있는 경:\n${stats.withUnmatched.join("\n")}\n\nE-Piṭaka 에 없는 경:\n${stats.missing.join("\n")}\n`,

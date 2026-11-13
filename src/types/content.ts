@@ -28,6 +28,8 @@ export type InlinePart =
 export interface Segment {
   key: string;
   parts: InlinePart[];
+  /** VRI 원문: 이 줄에 다음 문장 내용까지 함께 들어 있을 수 있음 (두 판본 글이 달라 정확히 나누지 못함) */
+  unsure?: boolean;
 }
 
 /** 경 하나의 한 판본 본문 */

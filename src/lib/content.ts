@@ -84,6 +84,8 @@ function vriShard(kind: "t" | "c", n: number): Promise<Record<string, unknown>> 
 const vriTextBodySchema = z.object({
   s: z.array(z.unknown()),
   p: z.array(z.tuple([z.string(), z.string(), z.string()])).default([]),
+  /** 다음 문장 내용까지 함께 들어 있을 수 있는 문장 번호 */
+  u: z.array(z.string()).default([]),
 });
 
 /** 책 쪽 번호: [문장 번호, 판(P·M·T·V), 권.쪽] — 쪽이 바뀌는 문장마다 */
@@ -105,7 +107,11 @@ export async function fetchSuttaText(suttaId: string, editionId: string): Promis
     const { t } = await vriEntry(suttaId);
     const shard = await vriShard("t", t);
     const body = vriTextBodySchema.parse(shard[suttaId]);
-    return suttaTextSchema.parse({ suttaId, editionId, segments: body.s });
+    const text = suttaTextSchema.parse({ suttaId, editionId, segments: body.s });
+    const unsure = new Set(body.u);
+    return unsure.size
+      ? { ...text, segments: text.segments.map((s) => (unsure.has(s.key) ? { ...s, unsure: true } : s)) }
+      : text;
   }
   const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
   // 복사를 막아 둔 번역은 감싸 둔 글을 풀어서 같은 검사를 한다

@@ -173,6 +173,15 @@ export function SegmentRow({
                   activeWord={isPali && active ? activeWord : null}
                   onNote={noteEditions.includes(edition.id) ? (mark) => onNote(edition.id, row.key, mark) : undefined}
                 />
+                {segment.unsure ? (
+                  <span
+                    className="ml-1.5 inline-block rounded border border-dashed border-primary/60 px-1 align-middle font-sans text-[10px] font-bold text-primary select-none"
+                    title="VRI 원문의 이 줄에는 다음 문장 내용까지 함께 들어 있을 수 있어요. 두 판본의 글이 조금 달라 정확한 자리에서 나누지 못했습니다."
+                    aria-label="다음 문장 내용까지 함께 있음"
+                  >
+                    ↓ 합침
+                  </span>
+                ) : null}
               </p>
             );
             return (
