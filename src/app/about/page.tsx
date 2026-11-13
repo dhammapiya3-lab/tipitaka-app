@@ -125,7 +125,7 @@ export default function AboutPage() {
             <span className="font-semibold text-foreground">
               Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료
             </span>{" "}
-            — Ven. Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를
+            — Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를
             가져와 다듬었습니다.
           </p>
         </CardContent>

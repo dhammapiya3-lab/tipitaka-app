@@ -79,7 +79,7 @@ const PLAIN_SECTIONS: {
     id: "mm",
     lang: "my",
     credit:
-      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Ven. Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
+      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
   },
 ];
 
