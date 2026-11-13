@@ -293,7 +293,44 @@ function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
  * VRI 줄을 빌랄라 문장에 나눠 담으면서 다음 문단의 번호가 앞 문장 끝에 붙은 것이라 잘못된 자리에 보이고,
  * 문단 번호는 화면의 문단 머리에 이미 있다. (VRI 문단 번호는 주석 연결용으로 따로 남아 있다)
  */
-function withoutParaNumbers(segments: Record<string, string>): Record<string, string> {
+/**
+ * 본문에서 떼는 VRI 번호를 경 문단에 매긴다. 문장 끝의 번호는 다음 문단의 번호이고(VRI 는 문단 앞에 번호가 있다),
+ * 문장 가운데의 번호는 그 문장이 든 문단, 경 첫 문단은 VRI 자료의 첫 번호.
+ */
+function vriParaNumbers(
+  segments: Record<string, string>,
+  suttaId: string,
+  first: unknown,
+): Record<string, string> {
+  const keys = Object.keys(segments);
+  const found = new Map<string, string[]>();
+  const add = (key: string | undefined, n: string) => {
+    if (!key) return;
+    const p = paragraphOf(key, suttaId);
+    const list = found.get(p) ?? [];
+    if (!list.includes(n)) list.push(n);
+    found.set(p, list);
+  };
+  const firstText = keys.find((k) => !/:0\.\d+$/.test(k));
+  const head = String(first ?? "").match(/^(\d+(?:-\d+)?)/)?.[1];
+  if (head) add(firstText, head);
+  keys.forEach((key, i) => {
+    const text = segments[key];
+    for (const m of text.matchAll(
+      /[.?!;:’”–—\])]\s+(\d+(?:-\d+)?)\.(?=\s+\S)/g,
+    ))
+      add(key, m[1]);
+    const end = text.match(/\S\s+(\d+(?:-\d+)?)\.\s*$/);
+    if (end) add(keys[i + 1], end[1]);
+  });
+  return Object.fromEntries(
+    [...found].map(([p, list]) => [p, list.join(", ")]),
+  );
+}
+
+function withoutParaNumbers(
+  segments: Record<string, string>,
+): Record<string, string> {
   return Object.fromEntries(
     Object.entries(segments).map(([key, text]) => [
       key,
@@ -390,11 +427,14 @@ const vriSchema = z.object({
   tika2: vriCommentarySchema.nullable().optional(),
   unsure: z.array(z.string()).default([]),
   preface: z.array(z.string()).default([]),
+  source: z.object({ vripara: z.unknown() }).partial().optional(),
 });
 const commentaryFiles: SuttaCommentary[] = [];
 const vriTexts: SuttaText[] = [];
 const vriUnsure = new Map<string, string[]>();
 const vriPreface = new Map<string, string[]>();
+/** 경 문단 → VRI 문단·게송 번호 (본문에서 뗀 번호를 문단 머리에 따로 보인다) */
+const vriNumbers = new Map<string, Record<string, string>>();
 /** 주석 번역 판본 id — 판본 정보 창의 소개 글(translator_info)을 함께 옮긴다 */
 const commentaryEditionIds = new Set<string>();
 const usedEditions = new Set<string>();
@@ -405,20 +445,22 @@ const embeddedNotes = new Map<string, SuttaNotes["notes"]>();
 
 /** 빌라라 각주 글: 링크(<a>)·<span> 은 글자만 남긴다 (HTML 로 그리지 않는다) */
 function cleanBilaraComment(text: string): string {
-  return text
-    .replace(/<a\b[^>]*>/g, "")
-    .replace(/<\/a>/g, "")
-    .replace(/<\/?span\b[^>]*>/g, "")
-    // <i lang='pi' translate='no'> 처럼 속성이 붙은 서식 태그는 속성을 뗀다 (parseInline 은 <i>·<em>·<b> 만 안다)
-    .replace(/<(i|em|b)\s[^>]*>/g, "<$1>")
-    // 그 밖의 태그는 지운다
-    .replace(/<(?!\/?(?:i|em|b)>)[^>]*>/g, "")
-    // 수자또 스님이 각주 여러 개를 " | " 로 이어 둔 것 → 줄을 바꿔 보인다
-    .replace(/\s+\|\s+/g, "\n\n")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "‹")
-    .replace(/&gt;/g, "›")
-    .trim();
+  return (
+    text
+      .replace(/<a\b[^>]*>/g, "")
+      .replace(/<\/a>/g, "")
+      .replace(/<\/?span\b[^>]*>/g, "")
+      // <i lang='pi' translate='no'> 처럼 속성이 붙은 서식 태그는 속성을 뗀다 (parseInline 은 <i>·<em>·<b> 만 안다)
+      .replace(/<(i|em|b)\s[^>]*>/g, "<$1>")
+      // 그 밖의 태그는 지운다
+      .replace(/<(?!\/?(?:i|em|b)>)[^>]*>/g, "")
+      // 수자또 스님이 각주 여러 개를 " | " 로 이어 둔 것 → 줄을 바꿔 보인다
+      .replace(/\s+\|\s+/g, "\n\n")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "‹")
+      .replace(/&gt;/g, "›")
+      .trim()
+  );
 }
 /** 대역·문법분석 파일 (같은 모양) */
 const analysisFiles: (SuttaNissaya & { kind: "nissaya" | "grammar" })[] = [];
@@ -583,6 +625,8 @@ function buildSutta(
     });
     if (vri.unsure.length) vriUnsure.set(id, vri.unsure);
     if (vri.preface.length) vriPreface.set(id, vri.preface);
+    const numbers = vriParaNumbers(vri.segments, id, vri.source?.vripara);
+    if (Object.keys(numbers).length) vriNumbers.set(id, numbers);
     const rootParas = new Set(
       Object.keys(root).map((key) => paragraphOf(key, id)),
     );
@@ -982,6 +1026,7 @@ mkdirSync(OUT_VRI, { recursive: true });
         p: pages[t.suttaId] ?? [],
         ...(vriUnsure.has(t.suttaId) ? { u: vriUnsure.get(t.suttaId) } : {}),
         ...(vriPreface.has(t.suttaId) ? { h: vriPreface.get(t.suttaId) } : {}),
+        ...(vriNumbers.has(t.suttaId) ? { n: vriNumbers.get(t.suttaId) } : {}),
       },
     })),
   );

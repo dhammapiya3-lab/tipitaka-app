@@ -54,6 +54,7 @@ export const suttaTextSchema: z.ZodType<SuttaText> = z.object({
   editionId: z.string().min(1),
   segments: z.array(segmentSchema),
   preface: z.array(z.string()).optional(),
+  vriNumbers: z.record(z.string(), z.string()).optional(),
   notes: z.lazy(() => z.array(footnoteSchema)).optional(),
 });
 

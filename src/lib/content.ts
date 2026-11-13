@@ -99,6 +99,8 @@ const vriTextBodySchema = z.object({
   u: z.array(z.string()).default([]),
   /** 책 첫머리 줄 */
   h: z.array(z.string()).default([]),
+  /** 경 문단 → VRI 문단·게송 번호 */
+  n: z.record(z.string(), z.string()).default({}),
 });
 
 /** 책 쪽 번호: [문장 번호, 판(P·M·T·V), 권.쪽] — 쪽이 바뀌는 문장마다 */
@@ -130,6 +132,7 @@ export async function fetchSuttaText(
       editionId,
       segments: body.s,
       ...(body.h.length ? { preface: body.h } : {}),
+      ...(Object.keys(body.n).length ? { vriNumbers: body.n } : {}),
     });
     const unsure = new Set(body.u);
     return unsure.size

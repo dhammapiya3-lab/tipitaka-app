@@ -39,6 +39,8 @@ export interface SuttaText {
   segments: Segment[];
   /** 책 첫머리 줄 (VRI 의 "Namo tassa…") — 경 문장과 따로 맨 위에 */
   preface?: string[];
+  /** VRI 원문만: 경 문단 → VRI 문단·게송 번호 (예: "ja478:6" → "59") */
+  vriNumbers?: Record<string, string>;
   /** 본문 파일에 함께 넣은 각주 (빌라라 각주 — 따로 .notes.json 을 만들지 않는다) */
   notes?: Footnote[];
 }
