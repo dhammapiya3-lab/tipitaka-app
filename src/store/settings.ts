@@ -27,6 +27,9 @@ interface SettingsState {
   onlyReadable: boolean;
   /** 컴퓨터에서 판본 여럿을 볼 때: 옆으로 나란히(side) · 문장마다 번갈아(alternate) */
   compareMode: "side" | "alternate";
+  /** 문장 옆에 보일 책 쪽 번호 — P: PTS, M: 미얀마 6차 결집본, T: 태국본, V: VRI 인쇄본 */
+  pageEditions: string[];
+  setPageEditions: (eds: string[]) => void;
   /** 주석과 이어진 낱말에 밑줄 (누르면 그 주석 줄) */
   wordLinks: boolean;
   setWordLinks: (on: boolean) => void;
@@ -61,6 +64,8 @@ export const useSettingsStore = create<SettingsState>()(
       onlyReadable: false,
       compareMode: "side",
       wordLinks: true,
+      pageEditions: [],
+      setPageEditions: (eds) => set({ pageEditions: eds }),
       setWordLinks: (on) => set({ wordLinks: on }),
       setCompareMode: (mode) => set({ compareMode: mode }),
       setOnlyReadable: (on) => set({ onlyReadable: on }),
@@ -98,7 +103,9 @@ export const useSettingsStore = create<SettingsState>()(
         onlyReadable,
         compareMode,
         wordLinks,
+        pageEditions,
       }) => ({
+        pageEditions,
         noteFontSize,
         panelFontSize,
         compareMode,

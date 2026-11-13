@@ -4,7 +4,7 @@
  *   조각 사전: public/data/dict/ (`pnpm build:dictionary`) — 찾는 단어가 든 조각만 받는다.
  *   검색 색인: public/data/search/ (`pnpm build:content`) — 찾는 단어가 든 조각만 받는다.
  */
-import type { z } from "zod";
+import { z } from "zod";
 import { cleanLemma, foldPali, normalizeWord, shardOf } from "@/lib/pali";
 import { unseal } from "@/lib/seal";
 import {
@@ -81,6 +81,19 @@ function vriShard(kind: "t" | "c", n: number): Promise<Record<string, unknown>> 
   return promise;
 }
 
+const vriTextBodySchema = z.object({
+  s: z.array(z.unknown()),
+  p: z.array(z.tuple([z.string(), z.string(), z.string()])).default([]),
+});
+
+/** 책 쪽 번호: [문장 번호, 판(P·M·T·V), 권.쪽] — 쪽이 바뀌는 문장마다 */
+export async function fetchPageMarks(suttaId: string): Promise<[string, string, string][]> {
+  const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
+  if (!entry?.vri) return [];
+  const shard = await vriShard("t", entry.vri.t);
+  return vriTextBodySchema.parse(shard[suttaId]).p;
+}
+
 async function vriEntry(suttaId: string) {
   const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
   if (!entry?.vri) throw new Error("VRI 자료가 없습니다");
@@ -91,7 +104,8 @@ export async function fetchSuttaText(suttaId: string, editionId: string): Promis
   if (editionId === VRI_EDITION_ID) {
     const { t } = await vriEntry(suttaId);
     const shard = await vriShard("t", t);
-    return suttaTextSchema.parse({ suttaId, editionId, segments: shard[suttaId] });
+    const body = vriTextBodySchema.parse(shard[suttaId]);
+    return suttaTextSchema.parse({ suttaId, editionId, segments: body.s });
   }
   const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
   // 복사를 막아 둔 번역은 감싸 둔 글을 풀어서 같은 검사를 한다

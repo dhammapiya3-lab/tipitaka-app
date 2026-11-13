@@ -70,7 +70,10 @@ export function SegmentRow({
   highlightsFor,
   onHighlight,
   bookmarked = false,
+  pageMarks,
 }: {
+  /** 이 문장에서 인쇄본 쪽이 바뀌면 그 쪽 번호들 (예: "PTS S v 421") */
+  pageMarks?: string[];
   /** 판본별 밑줄 */
   highlightsFor?: (editionId: string) => InlineHighlight[];
   onHighlight?: (id: string, target: HTMLElement) => void;
@@ -119,6 +122,16 @@ export function SegmentRow({
           className="absolute top-2.5 -left-4 size-3.5 fill-amber-500 text-amber-500 print:hidden"
           aria-label="책갈피"
         />
+      ) : null}
+      {pageMarks?.length ? (
+        // 인쇄본 쪽이 바뀌는 문장 — 오른쪽 위에 작게
+        <span className="pointer-events-none absolute -top-1.5 right-7 flex gap-1 font-sans text-[10px] leading-none text-faint select-none">
+          {pageMarks.map((m) => (
+            <span key={m} className="rounded bg-gray-100 px-1 py-0.5 dark:bg-muted">
+              {m}
+            </span>
+          ))}
+        </span>
       ) : null}
       <div
         className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}

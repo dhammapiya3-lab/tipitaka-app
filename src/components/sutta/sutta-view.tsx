@@ -52,7 +52,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PALI_EDITION } from "@/lib/constants";
 import { foldPali } from "@/lib/pali";
-import { fetchCommentary } from "@/lib/content";
+import { fetchCommentary, fetchPageMarks } from "@/lib/content";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
@@ -228,6 +228,37 @@ export function SuttaView({
       const now = cur[p] ?? [];
       return { ...cur, [p]: now.includes(l) ? now.filter((x) => x !== l) : [...now, l] };
     });
+  // ── 책 쪽 번호 (텍스트 설정에서 고른 인쇄본) ──
+  const pageEditions = useSettingsStore((s) => s.pageEditions);
+  const [pageData, setPageData] = useState<{ id: string; marks: [string, string, string][] } | null>(null);
+  useEffect(() => {
+    if (pageEditions.length === 0) return;
+    let alive = true;
+    fetchPageMarks(suttaId)
+      .then((marks) => alive && setPageData({ id: suttaId, marks }))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [pageEditions.length, suttaId]);
+  const pageMarksOf = useMemo(() => {
+    const map = new Map<string, string[]>();
+    if (pageEditions.length === 0 || pageData?.id !== suttaId) return map;
+    const nikaya = suttaId.match(/^(dn|mn|sn|an)/)?.[1];
+    const roman = ["", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x"];
+    for (const [key, ed, n] of pageData.marks) {
+      if (!pageEditions.includes(ed)) continue;
+      const [vol, page] = n.split(".");
+      const pg = String(Number(page));
+      // PTS 는 학계에서 쓰는 꼴로 (S v 421), 나머지는 판 이름 + 권.쪽
+      const label =
+        ed === "P"
+          ? `PTS ${nikaya ? `${nikaya[0].toUpperCase()} ${roman[Number(vol)] ?? vol} ` : `${Number(vol)}.`}${pg}`
+          : `${{ M: "Mya", T: "Thai", V: "VRI" }[ed] ?? ed} ${Number(vol)}.${pg}`;
+      map.set(key, [...(map.get(key) ?? []), label]);
+    }
+    return map;
+  }, [pageData, pageEditions, suttaId]);
   /** 주석 연결 낱말 (켜고 끄기는 텍스트 설정·탭 줄) */
   const wordLinksOn = useSettingsStore((s) => s.wordLinks);
   const setWordLinks = useSettingsStore((s) => s.setWordLinks);
@@ -835,6 +866,7 @@ export function SuttaView({
                 columns={columns}
                 linked={wordLinksOn && linkIndex.has(row.key) ? (w) => linkHits(row.key, w).length > 0 : undefined}
                 bookmarked={mine.has(row.key)}
+                pageMarks={pageMarksOf.get(row.key)}
                 highlightsFor={(editionId) => highlightsByCell.get(`${editionId}|${row.key}`) ?? []}
                 onHighlight={(id, target) => {
                   const r = target.getBoundingClientRect();

@@ -255,6 +255,7 @@ export function TextSettingsSheet({
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title="텍스트 설정">
       <div className="flex flex-col gap-6">
+        <PageEditionsPicker />
         <WordLinksSwitch
           on={wordLinks}
           onChange={(on) => {
@@ -415,6 +416,46 @@ function SizeSlider({
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-primary"
       />
+    </div>
+  );
+}
+
+const PAGE_EDITIONS = [
+  { ed: "P", label: "PTS" },
+  { ed: "M", label: "미얀마 6차" },
+  { ed: "T", label: "태국" },
+  { ed: "V", label: "VRI 인쇄본" },
+] as const;
+
+/** 책 쪽 번호 표시 — 인쇄본의 쪽이 바뀌는 문장 옆에 작게 (논문·책 인용용) */
+function PageEditionsPicker() {
+  const eds = useSettingsStore((s) => s.pageEditions);
+  const setEds = useSettingsStore((s) => s.setPageEditions);
+  return (
+    <div className="rounded-xl border px-4 py-3">
+      <p className="text-sm font-bold">책 쪽 번호</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        인쇄본의 쪽이 바뀌는 문장 옆에 쪽 번호를 작게 보입니다 (VRI 원문이 있는 경). 인용할 때 쓰세요.
+      </p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {PAGE_EDITIONS.map(({ ed, label }) => {
+          const on = eds.includes(ed);
+          return (
+            <button
+              key={ed}
+              type="button"
+              aria-pressed={on}
+              onClick={() => setEds(on ? eds.filter((x) => x !== ed) : [...eds, ed])}
+              className={cn(
+                "rounded-lg border px-2.5 py-1 text-xs font-bold transition-colors",
+                on ? "border-transparent bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-gray-50",
+              )}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

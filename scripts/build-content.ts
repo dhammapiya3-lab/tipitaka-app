@@ -620,9 +620,17 @@ mkdirSync(OUT_VRI, { recursive: true });
     flush();
     return n;
   };
+  // 책 쪽 번호(PTS·미얀마·태국·VRI 인쇄본) — content/vri-pages.json (`pnpm import:pages`)
+  const pagesFile = path.join(ROOT, "content", "vri-pages.json");
+  const pages = existsSync(pagesFile)
+    ? z.record(z.string(), z.array(z.tuple([z.string(), z.string(), z.string()]))).parse(readJson(pagesFile))
+    : {};
   const tCount = writeShards(
     "t",
-    byOrder(vriTexts).map((t) => ({ suttaId: t.suttaId, body: suttaTextSchema.parse(t).segments })),
+    byOrder(vriTexts).map((t) => ({
+      suttaId: t.suttaId,
+      body: { s: suttaTextSchema.parse(t).segments, p: pages[t.suttaId] ?? [] },
+    })),
   );
   const grouped = new Map<string, Partial<Record<"attha" | "tika", SuttaCommentary>>>();
   for (const c of commentaryFiles) {
