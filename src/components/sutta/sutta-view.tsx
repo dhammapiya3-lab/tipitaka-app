@@ -1,5 +1,6 @@
 "use client";
 
+import { TtsLockOverlay } from "@/components/sutta/tts-lock";
 import {
   BookA,
   BookOpen,
@@ -11,6 +12,7 @@ import {
   Pause,
   Play,
   SkipBack,
+  Lock,
   SkipForward,
   Square,
   Type,
@@ -346,6 +348,8 @@ export function SuttaView({
   const [ttsLangPick, setTtsLang] = useState<TtsLang>("ko");
   const ttsLang: TtsLang = ttsLangs.includes(ttsLangPick) ? ttsLangPick : (ttsLangs[0] ?? "ko");
   const ttsEdition = shown.find((e) => (ttsLang === "pli" ? e.language === "pli" : e.language !== "pli"));
+  /** 듣기 잠금 (화면 덮개 + 화면 꺼짐 막기) */
+  const [ttsLocked, setTtsLocked] = useState(false);
   const ttsItems = textRows.flatMap((row) => {
     const cell = ttsEdition ? row.cells[ttsEdition.id] : undefined;
     const text = cell ? plainText(cell.parts).replace(/\s+/g, " ").trim() : "";
@@ -366,6 +370,8 @@ export function SuttaView({
       ),
   );
   function listenFrom(key: string) {
+    // 듣기를 처음 시작하면 잠금은 풀린 채로 (지난번 잠금이 남아 있지 않게)
+    if (!tts.current) setTtsLocked(false);
     tts.speakFrom(key, { lang: ttsLang, rate: tts.rate });
   }
   const waiting = loaded.length === 0 && !error;
@@ -1397,6 +1403,13 @@ export function SuttaView({
         <WordBottomDock target={word} suttaId={suttaId} analysisEditions={analysisEditions} onClose={() => setWord(null)} />
       ) : null}
 
+      {tts.current && ttsLocked ? (
+        <TtsLockOverlay
+          sentence={ttsItems.find((x) => x.key === tts.current)?.text ?? ""}
+          playing={tts.playing}
+          onUnlock={() => setTtsLocked(false)}
+        />
+      ) : null}
       {tts.current ? (
         // 소리로 듣는 동안 아래에 뜨는 작은 재생 막대
         <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 print:hidden lg:left-60">
@@ -1439,6 +1452,15 @@ export function SuttaView({
               onClick={tts.stop}
             >
               <Square className="size-4" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label="화면 잠금 — 듣는 동안 잘못 눌리지 않게, 화면이 꺼지지 않게"
+              title="화면 잠금"
+              className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-muted"
+              onClick={() => setTtsLocked(true)}
+            >
+              <Lock className="size-4" aria-hidden />
             </button>
             <span className="mx-1 h-6 w-px bg-border" aria-hidden />
             {ttsLangs.length > 1 ? (
