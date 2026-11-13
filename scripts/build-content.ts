@@ -247,6 +247,7 @@ const vriSchema = z.object({
   segments: z.record(z.string(), z.string()),
   attha: vriCommentarySchema.nullable(),
   tika: vriCommentarySchema.nullable(),
+  tika2: vriCommentarySchema.nullable().optional(),
 });
 const commentaryFiles: SuttaCommentary[] = [];
 const vriTexts: SuttaText[] = [];
@@ -355,8 +356,17 @@ function buildSutta(
     const rootParas = new Set(Object.keys(root).map((key) => key.slice(0, key.lastIndexOf("."))));
     sutta.editions.push(VRI_EDITION.id);
     usedEditions.add(VRI_EDITION.id);
+    // 복주석서가 두 종류면(디가 옛·새 복주석서) 한 층에 이어 붙이고, 문단마다 어느 책인지 적는다
+    const tikaBoth = (() => {
+      const [a, b] = [vri.tika, vri.tika2 ?? null];
+      const tag = (c: NonNullable<typeof a>) => c.paras.map((p) => ({ ...p, book: c.book }));
+      if (a && b) return { ...a, paras: [...tag(a), ...tag(b)], books: [a, b] };
+      if (b) return { ...b, paras: tag(b), books: [b] };
+      if (a) return { ...a, paras: tag(a), books: [a] };
+      return null;
+    })();
     for (const layer of ["attha", "tika"] as const) {
-      const c = vri[layer];
+      const c = layer === "tika" ? tikaBoth : vri.attha ? { ...vri.attha, books: [vri.attha] } : null;
       if (!c) continue;
       const koFile = path.join(ROOT, "content", "vri", `${id}.ko.json`);
       const ko = existsSync(koFile) ? vriKoSchema.parse(readJson(koFile)) : undefined;
@@ -382,6 +392,7 @@ function buildSutta(
         }
         return {
           para: p.para,
+          ...("book" in p && typeof p.book === "string" && p.book !== c.book ? { book: p.book } : {}),
           vripara: p.vripara,
           refs: p.refs,
           lines: p.lines.map((line) => parseInline(line)),
@@ -409,6 +420,7 @@ function buildSutta(
         title: ko?.[layer]?.title ?? null,
         nameKo: ko?.[layer]?.nameKo ?? null,
         editions: layerEditions,
+        books: c.books.map((b) => ({ id: b.book, name: b.bookName })),
         links: c.wordLinks
           .filter(([key]) => key in root)
           .map(([key, word, para, line]) => ({ key, word, para, line })),

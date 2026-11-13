@@ -28,7 +28,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
-import { CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
+import { bookLabel, CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
 import { WordBottomDock } from "@/components/dictionary/word-dock-bottom";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
@@ -651,6 +651,7 @@ export function SuttaView({
         para={comm[l]!.paras[i]}
         onWord={onCommentaryWord}
         label={label ? LAYER_NAME[l] : undefined}
+        bookBadge={bookLabel(comm[l]!, comm[l]!.paras[i].book)}
         picked={commPicked}
         editions={comm[l]!.editions}
       />

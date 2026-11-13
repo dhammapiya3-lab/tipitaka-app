@@ -217,7 +217,7 @@ for (const suttaId of ids) {
    * 주석서 책이 여럿으로 나뉜 경우("Th-a-i Th-a-ii")가 있어 하나씩 본다.
    * 낱말 연결(book_links)이 없으면 VRI 문단 번호로 잇는다 — 주석 문단은 풀이하는 경 문단의 번호로 시작한다(예: "1081.").
    */
-  function commentaryFor(ref: string | null | undefined) {
+  function commentaryFor(ref: string | null | undefined, maxFallbackParas = 120) {
     for (const dstBook of (ref ?? "").split(/\s+/).filter(Boolean)) {
       const links = db
         .prepare(
@@ -252,7 +252,7 @@ for (const suttaId of ids) {
       }
       const result = commentary(dstBook, links);
       // 번호가 책 안에서 되풀이되면(아빠다나 등) 엉뚱하게 넓게 잡히므로, 너무 길면 쓰지 않는다
-      if (result && result.paras.length <= 120) return result;
+      if (result && result.paras.length <= maxFallbackParas) return result;
     }
     return null;
   }
@@ -351,6 +351,17 @@ for (const suttaId of ids) {
     segments: { ...titled, ...segments },
     attha: commentaryFor(meta?.attha_ref),
     tika: commentaryFor(meta?.tika_ref),
+    // 복주석서가 두 종류인 책(디가니까야: 옛 복주석서 Sv-pt 와 새 복주석서 Abhinavaṭīkā Sv-nt)
+    tika2: commentaryFor(
+      (
+        db
+          .prepare("select book_id from books where mula_ref = ? and category = 'Ṭīkā' and book_id != ?")
+          .all(book, (meta?.tika_ref ?? "").split(/\s+/)[0] ?? "") as unknown as { book_id: string }[]
+      )
+        .map((r) => r.book_id)
+        .join(" "),
+      3000,
+    ),
   };
   writeFileSync(path.join(OUT, `${suttaId}.json`), quiet ? `${JSON.stringify(out)}\n` : `${JSON.stringify(out, null, 2)}\n`);
   stats.done++;

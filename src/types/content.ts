@@ -103,11 +103,15 @@ export interface SuttaCommentary {
   nameKo: string | null;
   /** 이 주석의 번역 판본들 (번역자) — 빠알리 원문은 VRI 판본(pli-vri) */
   editions: Edition[];
+  /** 이 층에 든 책들 (디가 복주석서는 옛·새 두 권). 첫째가 book */
+  books: { id: string; name: string }[];
   /** 낱말 연결: 경 문장(key)의 낱말(word) → 이 주석의 문단 순번(para)·줄 순번(line) */
   links: { key: string; word: string; para: number; line: number }[];
   paras: {
     /** 책 안의 문단 번호 (예: 882) */
     para: number;
+    /** 첫째 책(book)이 아닌 책의 문단이면 그 책 id (예: Sv-nt-i) */
+    book?: string;
     /** VRI 문단 번호 (있으면) */
     vripara: string | null;
     /** 이 문단이 풀이하는 경의 문단 (예: sn56.11:2) */

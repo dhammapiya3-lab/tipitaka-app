@@ -1,7 +1,7 @@
 "use client";
 
 import { CloudOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,15 @@ import type { CommentaryLayer, Edition, SuttaCommentary } from "@/types";
 
 /** 주석 원문 판본 — VRI 제6차 결집본 */
 export const VRI_ID = "pli-vri";
+
+/** 한 층에 책이 둘이면(디가 복주석서) 책마다 이름 — 옛 복주석서(purāṇaṭīkā) · 새 복주석서(abhinavaṭīkā) */
+export function bookLabel(data: SuttaCommentary, bookId: string | undefined): string | null {
+  if (data.books.length < 2) return null;
+  const id = bookId ?? data.book;
+  if (/-nt-/.test(id)) return "새 복주석서 (Abhinavaṭīkā)";
+  if (/-pt-/.test(id)) return "옛 복주석서 (Purāṇaṭīkā)";
+  return data.books.find((b) => b.id === id)?.name ?? id;
+}
 
 export const LAYER_NAME: Record<CommentaryLayer, string> = { attha: "주석서", tika: "복주석서" };
 
@@ -104,8 +113,21 @@ export function CommentaryView({
           이 문단을 풀이한 {LAYER_NAME[layer]} 내용이 없습니다.
         </p>
       ) : null}
-      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }) => (
+      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }, n, list) => (
+        <Fragment key={i}>
+          {/* 책이 바뀌는 곳에 책 이름 (디가 옛·새 복주석서) */}
+          {bookLabel(data, para.book) && (n === 0 || list[n - 1].para.book !== para.book) ? (
+            <h3 className="mt-2 flex items-center gap-2 px-1 text-sm font-bold text-primary">
+              <span className={cn("rounded-md px-2 py-0.5 text-xs", para.book ? "bg-violet-50 text-violet-700" : "bg-amber-50 text-amber-800")}>
+                {bookLabel(data, para.book)}
+              </span>
+              <span className="font-pali text-xs font-medium text-faint">
+                {data.books.find((b) => b.id === (para.book ?? data.book))?.name}
+              </span>
+            </h3>
+          ) : null}
         <CommentaryCard
+          bookBadge={bookLabel(data, para.book)}
           key={i}
           layer={layer}
           index={i}
@@ -116,6 +138,7 @@ export function CommentaryView({
           editions={data.editions}
           onlyLines={lines}
         />
+        </Fragment>
       ))}
       <p className="px-1 text-xs leading-relaxed text-faint">
         출처: VRI Chaṭṭha Saṅgāyana Tipiṭaka · 문단 연결 E-Piṭaka (CC BY-NC 4.0)
@@ -135,7 +158,10 @@ export function CommentaryCard({
   picked,
   editions,
   onlyLines,
+  bookBadge,
 }: {
+  /** 책이 둘인 층에서 이 문단의 책 이름 (머리에 작게) */
+  bookBadge?: string | null;
   /** 이 줄들만 보인다 (문단별로 보기) */
   onlyLines?: number[];
   picked: string[];
@@ -157,6 +183,16 @@ export function CommentaryCard({
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-5 py-3 dark:border-border">
         <h3 className="mr-auto text-sm font-bold">
           {label ? <span className="mr-2 text-primary">{label}</span> : null}
+          {bookBadge ? (
+            <span
+              className={cn(
+                "mr-2 rounded px-1.5 py-0.5 text-[10px] font-bold",
+                /^새/.test(bookBadge) ? "bg-violet-50 text-violet-700" : "bg-amber-50 text-amber-800",
+              )}
+            >
+              {bookBadge.replace(/\s*\(.*\)$/, "")}
+            </span>
+          ) : null}
           {index + 1}
           {para.vripara ? <span className="ml-2 text-xs font-medium text-faint">VRI {para.vripara}</span> : null}
         </h3>
