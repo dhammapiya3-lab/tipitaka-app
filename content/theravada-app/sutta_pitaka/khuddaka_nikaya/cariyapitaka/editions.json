@@ -1,5 +1,5 @@
 [
     
     { "folder": "cariyapitaka_pli_ms",             "edition": "pli-ms" },
-    { "folder": "cariyapitaka_en_sujato", "edition": "en-sujato" }
+    { "folder": "cariyapitaka_en_sujato", "edition": "en-sujato", "comments": "cariyapitaka_en_sujato_comment" }
 ]

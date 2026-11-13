@@ -1,5 +1,5 @@
 [
     
     { "folder": "udana_pli_ms",             "edition": "pli-ms" },
-    { "folder": "udana_en_sujato", "edition": "en-sujato" }
+    { "folder": "udana_en_sujato", "edition": "en-sujato", "comments": "udana_en_sujato_comment" }
 ]

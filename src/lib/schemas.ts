@@ -54,6 +54,7 @@ export const suttaTextSchema: z.ZodType<SuttaText> = z.object({
   editionId: z.string().min(1),
   segments: z.array(segmentSchema),
   preface: z.array(z.string()).optional(),
+  notes: z.lazy(() => z.array(footnoteSchema)).optional(),
 });
 
 /** 복사를 막아 둔 번역의 본문 파일 — segments 를 lib/seal 로 감싼 것 */

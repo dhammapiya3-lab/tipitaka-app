@@ -8,5 +8,5 @@
     { "folder": "samyutta_nikaya_kor_baekdosoo_calmvoice","edition": "kor-baekdosoo-calmvoice"  },
     { "folder": "samyutta_nikaya_pli_ms",                 "edition": "pli-ms"                  },
     { "folder": "samyutta_nikaya_pli_pts",                "edition": "pli-pts"                 },
-    { "folder": "samyutta_nikaya_en_sujato",                "edition": "en-sujato" }
+    { "folder": "samyutta_nikaya_en_sujato",                "edition": "en-sujato", "comments": "samyutta_nikaya_en_sujato_comment" }
 ]

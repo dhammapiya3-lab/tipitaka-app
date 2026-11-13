@@ -1,5 +1,5 @@
 [
     
     { "folder": "itivuttaka_pli_ms",             "edition": "pli-ms" },
-    { "folder": "itivuttaka_en_sujato", "edition": "en-sujato" }
+    { "folder": "itivuttaka_en_sujato", "edition": "en-sujato", "comments": "itivuttaka_en_sujato_comment" }
 ]

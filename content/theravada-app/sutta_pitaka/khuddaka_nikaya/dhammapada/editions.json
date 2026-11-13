@@ -4,6 +4,6 @@
     { "folder": "dhammapada_kor_ohwontak", "footnote": "dhammapada_kor_ohwontak_comment", "edition": "kor-ohwontak" },
     { "folder": "dhammapada_pli_ms",             "edition": "pli-ms" },
     { "folder": "dhammapada_pli_pts",            "edition": "pli-pts" },
-    { "folder": "dhammapada_en_sujato",          "edition": "en-sujato" }
+    { "folder": "dhammapada_en_sujato",          "edition": "en-sujato", "comments": "dhammapada_en_sujato_comment" }
 ]
 

@@ -158,6 +158,12 @@ export async function fetchSuttaNotes(
   suttaId: string,
   editionId: string,
 ): Promise<SuttaNotes> {
+  // 각주가 본문 파일 안에 함께 든 판본(수자또 스님 — 빌라라 각주)이 있다
+  const text = suttaTextSchema.safeParse(
+    await getJson(suttaUrl(suttaId, editionId, ".json")),
+  );
+  if (text.success && text.data.notes)
+    return { suttaId, editionId, notes: text.data.notes };
   return suttaNotesSchema.parse(
     await getJson(suttaUrl(suttaId, editionId, ".notes.json")),
   );
