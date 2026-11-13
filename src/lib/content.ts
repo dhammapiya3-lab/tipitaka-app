@@ -34,6 +34,7 @@ import {
   extrasSchema,
   suttaIndexSchema,
   suttaTextSchema,
+  topicsSchema,
 } from "@/lib/schemas";
 import type {
   DictionaryId,
@@ -175,6 +176,21 @@ export async function fetchSuttaNotes(
 let suttaIndexPromise: Promise<SuttaIndexEntry[]> | null = null;
 
 /** 경 읽기 화면용 목록 — 한 번만 받는다 */
+
+export type Topics = z.infer<typeof topicsSchema>;
+let topicsPromise: Promise<Topics> | null = null;
+/** ATI 주제 — 경마다 주제, 주제마다 이름 (한 번만 받는다) */
+export function fetchTopics(): Promise<Topics> {
+  if (!topicsPromise) {
+    topicsPromise = getJson("/data/topics.json").then((d) =>
+      topicsSchema.parse(d),
+    );
+    topicsPromise.catch(() => {
+      topicsPromise = null;
+    });
+  }
+  return topicsPromise;
+}
 
 export function fetchSuttaIndex(): Promise<SuttaIndexEntry[]> {
   if (!suttaIndexPromise) {

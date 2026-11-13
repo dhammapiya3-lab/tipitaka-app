@@ -27,7 +27,7 @@ export interface NavItem {
  */
 export const NAV_MAIN: NavItem[] = [
   { href: "/", label: "홈", icon: House },
-  { href: "/suttas", label: "경전", icon: BookOpen, alsoActiveFor: ["/sutta/", "/readable/"] },
+  { href: "/suttas", label: "경전", icon: BookOpen, alsoActiveFor: ["/sutta/", "/readable/", "/topics"] },
   { href: "/books", label: "서적", icon: BookText },
   { href: "/practice", label: "실천", icon: Heart },
   { href: "/chanting", label: "예불", icon: Flower2 },

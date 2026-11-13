@@ -3,6 +3,7 @@
 import { TtsLockOverlay } from "@/components/sutta/tts-lock";
 import { GlossDialog } from "@/components/dictionary/gloss-dialog";
 import { SuttaEndNav } from "@/components/sutta/sutta-end";
+import { TopicChips } from "@/components/topics/topic-chips";
 import {
   BookA,
   BookOpen,
@@ -1495,6 +1496,7 @@ export function SuttaView({
             }
           >
             <Breadcrumb items={head.crumbs} />
+        <TopicChips suttaId={suttaId} />
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <EditionBadges
                 editions={

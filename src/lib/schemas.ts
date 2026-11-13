@@ -118,6 +118,23 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
   }),
 );
 
+/** ATI 주제 (scripts/build-topics.ts — Access to Insight Index of Subjects, CC BY 4.0) */
+export const topicsSchema = z.object({
+  topics: z.array(
+    z.object({
+      id: z.string(),
+      ko: z.string(),
+      en: z.string(),
+      count: z.number(),
+    }),
+  ),
+  /** 경 → 주제와 ATI 의 설명 (영어) */
+  suttas: z.record(
+    z.string(),
+    z.array(z.object({ t: z.string(), n: z.string() })),
+  ),
+});
+
 export const catalogNodeSchema: z.ZodType<CatalogNode> = z.lazy(() =>
   z.object({
     id: z.string().min(1),
