@@ -183,7 +183,48 @@ export const dpdEntrySchema: z.ZodType<DpdEntry> = z.object({
   hasInflections: z.boolean(),
   stem: z.string().optional(),
   pattern: z.string().optional(),
+  fam: z
+    .object({
+      root: z.string().optional(),
+      word: z.string().optional(),
+      compound: z.array(z.string()).optional(),
+      idiom: z.array(z.string()).optional(),
+      set: z.array(z.string()).optional(),
+    })
+    .optional(),
 });
+
+export const dpdFamilyShardSchema = z.record(
+  z.string(),
+  z.object({
+    head: z.string().optional(),
+    words: z.array(z.tuple([z.number(), z.string(), z.string(), z.string()])),
+  }),
+);
+export const dpdFreqShardSchema = z.record(
+  z.string(),
+  z.object({
+    c: z.array(z.number()),
+    b: z.array(z.number()).optional(),
+    s: z.array(z.number()).optional(),
+    m: z.array(z.number()).optional(),
+    h: z.string(),
+  }),
+);
+export const dpdFreqLayoutSchema = z.array(
+  z.object({
+    group: z.string().optional(),
+    groupSpan: z.number().optional(),
+    label: z.string().optional(),
+    cells: z.array(
+      z.union([
+        z.object({ src: z.enum(["c", "b", "s", "m"]), i: z.number(), rs: z.number() }),
+        z.object({ gap: z.literal(true) }),
+        z.object({ void: z.literal(true) }),
+      ]),
+    ),
+  }),
+);
 
 export const dpdTemplatesSchema = z.record(
   z.string(),

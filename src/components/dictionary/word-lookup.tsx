@@ -1,19 +1,37 @@
 "use client";
 
 import { CloudOff, SearchX } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchDpdTemplates, fetchInflections, lookupWord, type WordLookup } from "@/lib/content";
+import {
+  fetchDpdFamily,
+  fetchDpdFreqLayout,
+  fetchDpdFrequency,
+  fetchDpdTemplates,
+  fetchInflections,
+  lookupWord,
+  type WordLookup,
+} from "@/lib/content";
 import { normalizeWord } from "@/lib/pali";
 import { DICTIONARY_LABELS, DICTIONARY_ORDER, LICENSE_UNKNOWN } from "@/lib/constants";
 import { parseInline } from "@/lib/segments";
 import { cn } from "@/lib/utils";
 import { useRecentStore } from "@/store/recent";
 import { useSettingsStore } from "@/store/settings";
-import type { DictionaryId, DpdEntry, DpdTemplate, PlainDictionaryId, PlainEntry } from "@/types";
+import type {
+  DictionaryId,
+  DpdEntry,
+  DpdFamily,
+  DpdFamilyKind,
+  DpdFreqRow,
+  DpdFrequency,
+  DpdTemplate,
+  PlainDictionaryId,
+  PlainEntry,
+} from "@/types";
 
 /** 뜻풀이 글만 있는 사전들 — 표시 순서, 글 언어, 출처 */
 const PLAIN_SECTIONS: { id: PlainDictionaryId; lang: string; credit: string | null }[] = [
@@ -123,9 +141,13 @@ export function WordLookupResult({
   const { result } = state;
   const count = (id: DictionaryId) => (id === "dpd" ? result.dpd : result[id]).length;
   const resolved = (
-    <ResolvedNote word={word} result={result} onSearch={onSearch} />
+    <>
+      <ResolvedNote word={word} result={result} onSearch={onSearch} />
+      {result.split.length > 1 ? <SplitterCard word={result.normalized || word} parts={result.split} onSearch={onSearch} /> : null}
+    </>
   );
   if (dictionaries.every((id) => count(id) === 0)) {
+    if (result.split.length > 1) return resolved;
     return (
       <>
       {resolved}
@@ -152,7 +174,7 @@ export function WordLookupResult({
               </div>
               <div className="flex flex-col divide-y">
                 {result.dpd.map((entry) => (
-                  <DpdCard key={entry.id} entry={entry} />
+                  <DpdCard key={entry.id} entry={entry} onSearch={onSearch} />
                 ))}
               </div>
               <p className="t-meta mt-2">Digital Pāḷi Dictionary 제공 · CC BY-NC-SA 4.0</p>
@@ -226,15 +248,26 @@ function Rich({ text }: { text: string }) {
   return <InlineText parts={parseInline(text)} />;
 }
 
-type DpdTab = "grammar" | "examples" | "declension";
+type DpdTab = "grammar" | "examples" | "declension" | DpdFamilyKind | "frequency";
 
-/** DPD 누리집에서 이 낱말 찾기 (어근 가족·합성어 가족·숙어·빈도·의견 보내기는 그곳에서) */
-function dpdUrl(lemma: string): string {
-  return `https://www.dpdict.net/?q=${encodeURIComponent(lemma.replace(/\s+\d+(\.\d+)?$/, ""))}`;
+/** DPD 의견 보내기 (DPD 가 쓰는 구글 설문 — 낱말 번호·표제어를 미리 채운다) */
+function dpdFeedbackUrl(entry: DpdEntry): string {
+  return (
+    "https://docs.google.com/forms/d/e/1FAIpQLSf9boBe7k5tCwq7LdWgBHHGIPVc4ROO5yjVDo1X5LDAxkmGWQ/viewform?usp=pp_url" +
+    `&entry.438735500=${encodeURIComponent(`${entry.id} ${entry.lemma}`)}`
+  );
 }
 
+const FAMILY_LABEL: Record<DpdFamilyKind, string> = {
+  root: "root family",
+  word: "word family",
+  compound: "compound family",
+  idiom: "idioms",
+  set: "sets",
+};
+
 /** 원래 앱과 같은 DPD 표제어 — 호박색 표제어, 품사 + 굵은 뜻; lit. [구성] ✓, 아래에 동그란 단추들 */
-function DpdCard({ entry }: { entry: DpdEntry }) {
+function DpdCard({ entry, onSearch }: { entry: DpdEntry; onSearch?: (word: string) => void }) {
   const [tab, setTab] = useState<DpdTab | null>(null);
   const rows: [string, string][] = [
     ["Grammar", entry.grammar],
@@ -268,18 +301,11 @@ function DpdCard({ entry }: { entry: DpdEntry }) {
       {label}
     </button>
   );
-  const link = (label: string) => (
-    <a
-      key={label}
-      href={dpdUrl(entry.lemma)}
-      target="_blank"
-      rel="noopener noreferrer"
-      title="DPD 누리집에서 보기"
-      className="rounded-full border border-gray-300 px-3 py-1 font-pali text-sm font-semibold text-gray-600 transition-colors hover:border-amber-300 hover:bg-amber-50 dark:border-border dark:text-muted-foreground"
-    >
-      {label}
-    </a>
-  );
+  const fam = entry.fam ?? {};
+  const familyKeys = (kind: DpdFamilyKind): string[] => {
+    const v = fam[kind];
+    return v === undefined ? [] : Array.isArray(v) ? v : [v];
+  };
 
   return (
     <article className="flex flex-col gap-2 py-3 first:pt-1">
@@ -310,11 +336,19 @@ function DpdCard({ entry }: { entry: DpdEntry }) {
         {pill("grammar", "grammar")}
         {entry.examples.length > 0 ? pill("examples", entry.examples.length === 1 ? "example" : "examples") : null}
         {entry.hasInflections ? pill("declension", verb ? "conjugation" : "declension") : null}
-        {link("root family")}
-        {link("compound family")}
-        {link("idioms")}
-        {link("frequency")}
-        {link("feedback")}
+        {(["root", "word", "compound", "idiom", "set"] as const).map((kind) =>
+          familyKeys(kind).length ? pill(kind, FAMILY_LABEL[kind]) : null,
+        )}
+        {pill("frequency", "frequency")}
+        <a
+          href={dpdFeedbackUrl(entry)}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="DPD 편집자에게 이 낱말에 대한 의견을 보냅니다 (구글 설문, 영어)"
+          className="rounded-full border border-gray-300 px-3 py-1 font-pali text-sm font-semibold text-gray-600 transition-colors hover:border-amber-300 hover:bg-amber-50 dark:border-border dark:text-muted-foreground"
+        >
+          feedback ↗
+        </a>
       </div>
 
       {tab === "grammar" ? (
@@ -348,6 +382,18 @@ function DpdCard({ entry }: { entry: DpdEntry }) {
       {tab === "declension" ? (
         <div className="mt-1 rounded-xl bg-gray-50 p-3 dark:bg-muted">
           <Inflections entry={entry} verb={verb} />
+        </div>
+      ) : null}
+      {tab === "root" || tab === "word" || tab === "compound" || tab === "idiom" || tab === "set" ? (
+        <div className="mt-1 flex flex-col gap-4 rounded-xl bg-gray-50 p-3 dark:bg-muted">
+          {familyKeys(tab).map((key) => (
+            <FamilyList key={`${tab}-${key}`} kind={tab} familyKey={key} self={entry.id} onSearch={onSearch} />
+          ))}
+        </div>
+      ) : null}
+      {tab === "frequency" ? (
+        <div className="mt-1 rounded-xl bg-gray-50 p-3 dark:bg-muted">
+          <FrequencyTable id={entry.id} />
         </div>
       ) : null}
     </article>
@@ -479,5 +525,220 @@ function PlainCard({ entry, lang }: { entry: PlainEntry; lang: string }) {
         ))}
       </div>
     </article>
+  );
+}
+
+/** DPD 가족 하나 — 머리(어근 뜻 등)와 낱말 목록. 낱말을 누르면 그 낱말을 찾는다 */
+function FamilyList({
+  kind,
+  familyKey,
+  self,
+  onSearch,
+}: {
+  kind: DpdFamilyKind;
+  familyKey: string;
+  self: number;
+  onSearch?: (word: string) => void;
+}) {
+  const [family, setFamily] = useState<DpdFamily | null | "error" | undefined>(undefined);
+  useEffect(() => {
+    let cancelled = false;
+    fetchDpdFamily(kind, familyKey).then(
+      (f) => !cancelled && setFamily(f),
+      () => !cancelled && setFamily("error"),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [kind, familyKey]);
+  if (family === undefined) return <Skeleton className="h-24 w-full" />;
+  if (family === "error" || family === null) return <p className="text-sm text-faint">가족 자료를 받지 못했습니다.</p>;
+  const title = kind === "root" ? familyKey.split("|")[1] : familyKey;
+  const what =
+    kind === "root"
+      ? "어근"
+      : kind === "word"
+        ? "낱말"
+        : kind === "compound"
+          ? "합성어"
+          : kind === "idiom"
+            ? "숙어"
+            : "같은 묶음";
+  return (
+    <section>
+      <p lang="pi" className="mb-2 font-pali text-[15px]">
+        <b>{title}</b> {family.head ? <span className="text-muted-foreground">{family.head}</span> : null}{" "}
+        <span className="font-sans text-xs text-faint">
+          · {what} 가족 {family.words.length}개
+        </span>
+      </p>
+      <div className="overflow-x-auto rounded-xl border bg-card">
+        <table className="w-full border-collapse text-sm">
+          <tbody>
+            {family.words.map(([id, lemma, pos, meaning]) => (
+              <tr key={id} className={cn("border-t first:border-t-0 align-top", id === self && "bg-brand-soft")}>
+                <td lang="pi" className="px-3 py-1.5 font-pali font-semibold whitespace-nowrap">
+                  {onSearch && id !== self ? (
+                    <button
+                      type="button"
+                      onClick={() => onSearch(lemma.replace(/\s+\d+(\.\d+)?$/, ""))}
+                      className="text-left text-primary hover:underline"
+                    >
+                      {lemma}
+                    </button>
+                  ) : (
+                    lemma
+                  )}
+                </td>
+                <td className="px-2 py-1.5 text-xs whitespace-nowrap text-muted-foreground">{pos}</td>
+                <td className="py-1.5 pr-3">{meaning}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+const FREQ_EDITIONS = [
+  { src: "c", name: "CST", title: "Chaṭṭha Saṅgāyana Tipiṭaka (미얀마 6차 결집본)", cols: ["M", "A", "Ṭ"] },
+  { src: "b", name: "BJT", title: "Buddha Jayanti Tipiṭaka (스리랑카)", cols: ["M", "A"] },
+  { src: "s", name: "SYA", title: "Syāmaraṭṭha 1927 (태국 왕실본)", cols: ["M", "A"] },
+  { src: "m", name: "MST", title: "Mahāsaṅgīti Tipiṭaka (수따센트럴)", cols: ["M"] },
+] as const;
+
+/** DPD 와 같은 빈도표 — 판본(CST·BJT·SYA·MST) × 경·주석·복주석, 책 묶음별 출현 횟수. 많을수록 진한 색 */
+function FrequencyTable({ id }: { id: number }) {
+  const [data, setData] = useState<{ freq: DpdFrequency | null; layout: DpdFreqRow[] } | "error" | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([fetchDpdFrequency(id), fetchDpdFreqLayout()]).then(
+      ([freq, layout]) => !cancelled && setData({ freq, layout }),
+      () => !cancelled && setData("error"),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+  if (data === null) return <Skeleton className="h-40 w-full" />;
+  if (data === "error") return <p className="text-sm text-faint">빈도 자료를 받지 못했습니다.</p>;
+  const { freq, layout } = data;
+  if (!freq) return <p className="text-sm text-faint">이 낱말은 합성어 안에서만 나오거나 빈도 자료가 없습니다.</p>;
+  const all = [...freq.c, ...(freq.b ?? []), ...(freq.s ?? []), ...(freq.m ?? [])];
+  const max = Math.max(1, ...all);
+  const shade = (n: number) => (n === 0 ? 0 : Math.max(1, Math.ceil((Math.log(n + 1) / Math.log(max + 1)) * 10)));
+  return (
+    <div className="flex flex-col gap-2">
+      <p lang="pi" className="font-pali text-[15px]">
+        <Rich text={freq.h} />
+      </p>
+      <div className="overflow-x-auto rounded-xl border bg-card">
+        <table className="border-collapse text-right text-xs tabular-nums">
+          <thead>
+            <tr>
+              <th colSpan={2} />
+              {FREQ_EDITIONS.map((e, k) => (
+                <Fragment key={e.src}>
+                  {k ? <th className="w-2" /> : null}
+                  <th colSpan={e.cols.length} title={e.title} className="px-1 pt-2 text-center font-bold">
+                    {e.name}
+                  </th>
+                </Fragment>
+              ))}
+            </tr>
+            <tr>
+              <th colSpan={2} />
+              {FREQ_EDITIONS.map((e, k) => (
+                <Fragment key={e.src}>
+                  {k ? <th /> : null}
+                  {e.cols.map((c) => (
+                    <th key={c} title={{ M: "경 (mūla)", A: "주석서 (aṭṭhakathā)", Ṭ: "복주석서 (ṭīkā)" }[c]} className="px-1.5 pb-1 font-semibold text-muted-foreground">
+                      {c}
+                    </th>
+                  ))}
+                </Fragment>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {layout.map((row, r) =>
+              row.group ? (
+                <tr key={r}>
+                  <th
+                    rowSpan={row.groupSpan}
+                    className="border-t px-1 align-middle text-[10px] font-bold text-muted-foreground [writing-mode:vertical-rl] rotate-180"
+                  >
+                    {row.group}
+                  </th>
+                </tr>
+              ) : (
+                <tr key={r}>
+                  <th lang="pi" className="border-t px-2 py-0.5 text-left font-pali font-semibold whitespace-nowrap">
+                    {row.label}
+                  </th>
+                  {row.cells.map((cell, k) => {
+                    if ("gap" in cell) return <td key={k} className="w-2" />;
+                    if ("void" in cell) return <td key={k} />;
+                    const n = freq[cell.src]?.[cell.i] ?? 0;
+                    const g = shade(n);
+                    return (
+                      <td
+                        key={k}
+                        rowSpan={cell.rs}
+                        className="border border-background px-1.5 py-0.5"
+                        style={{
+                          backgroundColor: g ? `color-mix(in oklab, var(--color-primary) ${g * 8}%, transparent)` : undefined,
+                          color: g >= 7 ? "var(--color-primary-foreground)" : undefined,
+                        }}
+                      >
+                        {n || "-"}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ),
+            )}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-faint">
+        낱말과 그 모든 어형이 각 책 묶음에 나온 횟수예요 (합성어·연음 속에 든 것은 세지 않음). 출처: Digital Pāḷi Dictionary ·{" "}
+        <a href="https://digitalpalidictionary.github.io/features/frequency/" target="_blank" rel="noopener noreferrer" className="underline">
+          계산 방법
+        </a>
+      </p>
+    </div>
+  );
+}
+
+/** 낱말 나누기(Splitter) — DPD 의 Splitter 처럼 연음으로 붙은 낱말을 사전 낱말로 나눠 보인다. 조각을 누르면 그 낱말을 찾는다 */
+function SplitterCard({ word, parts, onSearch }: { word: string; parts: string[]; onSearch?: (word: string) => void }) {
+  return (
+    <section className="rounded-2xl border bg-card px-5 py-4 shadow-sm">
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <h3 className="text-base font-bold">낱말 나누기 <span className="font-pali text-sm font-normal text-faint">Splitter</span></h3>
+      </div>
+      <p lang="pi" className="font-pali text-lg font-bold text-amber-800 dark:text-amber-300">
+        {word}
+      </p>
+      <p lang="pi" className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-pali text-lg">
+        {parts.map((p, i) => (
+          <Fragment key={i}>
+            {i ? <span className="text-faint">+</span> : null}
+            {onSearch ? (
+              <button type="button" onClick={() => onSearch(p)} className="text-primary hover:underline" title={`“${p}” 찾기`}>
+                {p}
+              </button>
+            ) : (
+              <span>{p}</span>
+            )}
+          </Fragment>
+        ))}
+      </p>
+      <p className="t-meta mt-2 border-t pt-2">
+        연음(sandhi)으로 붙은 낱말을 프로그램이 자동으로 나눈 것이라 틀릴 수 있어요. 나눈 조각을 누르면 그 낱말을 찾아요.
+      </p>
+    </section>
   );
 }

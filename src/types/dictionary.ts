@@ -52,6 +52,38 @@ export interface DpdEntry {
   /** 어형 변화표: 어간 + 변화 유형 (dpd-templates.json 의 표 틀) */
   stem?: string;
   pattern?: string;
+  /** DPD 가족 열쇠 — 어근 가족("√mant|ā √mant")·낱말 가족·합성어 가족·숙어·같은 묶음 */
+  fam?: DpdFamilyKeys;
+}
+
+export type DpdFamilyKind = "root" | "word" | "compound" | "idiom" | "set";
+export interface DpdFamilyKeys {
+  root?: string;
+  word?: string;
+  compound?: string[];
+  idiom?: string[];
+  set?: string[];
+}
+/** 가족 하나: 머리(어근 뜻 등)와 낱말들 [번호, 표제어, 품사, 뜻] */
+export interface DpdFamily {
+  head?: string;
+  words: [number, string, string, string][];
+}
+/** 빈도: CST·BJT·SYA·MST(수따센트럴) 판본별 칸 숫자, h = 제목 */
+export interface DpdFrequency {
+  c: number[];
+  b?: number[];
+  s?: number[];
+  m?: number[];
+  h: string;
+}
+/** 빈도표 한 줄 — 큰 묶음 줄(group) 또는 책 줄(label + 칸들) */
+export interface DpdFreqRow {
+  group?: string;
+  groupSpan?: number;
+  label?: string;
+  /** gap = 판본 사이 틈, void = 빈 칸 (그 책에는 이 층이 없음) */
+  cells: ({ src: "c" | "b" | "s" | "m"; i: number; rs: number } | { gap: true } | { void: true })[];
 }
 
 /** DPD 변화 유형별 표 틀: rows[줄][칸] = 어미들. 0번 줄은 머리, 0번 칸은 줄 이름, 홀수 칸이 어미, 짝수 칸은 문법 이름 */

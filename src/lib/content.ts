@@ -16,6 +16,9 @@ import {
 } from "@/lib/search";
 import {
   dictionaryIndexSchema,
+  dpdFamilyShardSchema,
+  dpdFreqLayoutSchema,
+  dpdFreqShardSchema,
   dpdShardSchema,
   dpdTemplatesSchema,
   foldShardSchema,
@@ -36,6 +39,10 @@ import type {
   DictionaryId,
   DictionaryIndex,
   DpdEntry,
+  DpdFamily,
+  DpdFamilyKind,
+  DpdFreqRow,
+  DpdFrequency,
   DpdTemplate,
   Language,
   PlainDictionaryId,
@@ -272,6 +279,21 @@ export interface WordLookup extends Record<PlainDictionaryId, PlainEntry[]> {
   /** 자판 글자로 찾았을 때 그 글자에 해당하는 다른 형태들 (고를 수 있게 보여 준다) */
   alternatives: string[];
   dpd: DpdEntry[];
+  /** 낱말 나누기(Splitter) — 연음으로 붙은 낱말을 사전 낱말들로 나눈 것 (자동, 없으면 빈 목록) */
+  split: string[];
+}
+
+/** 낱말 나누기 조각 — scripts/build-splitter.ts 의 shardNo 와 같은 계산 */
+const SPLITTER_SHARDS = 128;
+async function fetchSplit(word: string): Promise<string[]> {
+  let h = 0;
+  for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
+  try {
+    const shard = await getShard(`${DICT_BASE}/splitter/${h % SPLITTER_SHARDS}.json`, z.record(z.string(), z.string()));
+    return shard[word]?.split(" + ") ?? [];
+  } catch {
+    return [];
+  }
 }
 
 const PLAIN_DICTIONARIES: PlainDictionaryId[] = ["kpts", "pts", "mm"];
@@ -315,6 +337,7 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
     normalized: typed,
     alternatives: [],
     dpd: [],
+    split: [],
     kpts: [],
     pts: [],
     mm: [],
@@ -322,7 +345,7 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
   if (!typed) return empty;
 
   const index = await fetchDictionaryIndex();
-  const { form: normalized, ids, alternatives } = await resolveForm(index, typed);
+  const [{ form: normalized, ids, alternatives }, split] = await Promise.all([resolveForm(index, typed), fetchSplit(typed)]);
   const dpd = await fetchDpdEntries(index, ids);
   const candidates = [
     ...new Set([normalized, ...dpd.map((e) => normalizeWord(cleanLemma(e.lemma)))]),
@@ -335,9 +358,42 @@ export async function lookupWord(query: string, dicts: DictionaryId[]): Promise<
     ...empty,
     normalized,
     alternatives,
+    split,
     dpd: dicts.includes("dpd") ? dpd : [],
     ...Object.fromEntries(PLAIN_DICTIONARIES.map((id, i) => [id, plain[i]])),
   };
+}
+
+/** DPD 가족 조각 — scripts/build-dpd-extras.ts 의 familyShard 와 같은 계산 */
+const DPD_FAMILY_SHARDS = 8;
+function dpdFamilyShard(key: string): number {
+  let h = 0;
+  for (const ch of key) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
+  return h % DPD_FAMILY_SHARDS;
+}
+
+/** DPD 가족(어근·낱말·합성어·숙어·같은 묶음) — 단추를 누를 때만 받는다 */
+export async function fetchDpdFamily(kind: DpdFamilyKind, key: string): Promise<DpdFamily | null> {
+  const shard = await getShard(`${DICT_BASE}/dpd-family/${kind}-${dpdFamilyShard(key)}.json`, dpdFamilyShardSchema);
+  return shard[key] ?? null;
+}
+
+/** DPD 빈도 (판본·책별 출현 횟수) */
+export async function fetchDpdFrequency(id: number): Promise<DpdFrequency | null> {
+  const shard = await getShard(`${DICT_BASE}/dpd-freq/${Math.floor(id / 1000)}.json`, dpdFreqShardSchema);
+  return shard[String(id)] ?? null;
+}
+
+let freqLayoutPromise: Promise<DpdFreqRow[]> | null = null;
+/** DPD 빈도표 모양 — 한 번만 받는다 */
+export function fetchDpdFreqLayout(): Promise<DpdFreqRow[]> {
+  if (!freqLayoutPromise) {
+    freqLayoutPromise = getJson(`${DICT_BASE}/dpd-freq-layout.json`).then((d) => dpdFreqLayoutSchema.parse(d));
+    freqLayoutPromise.catch(() => {
+      freqLayoutPromise = null;
+    });
+  }
+  return freqLayoutPromise;
 }
 
 /** DPD 표제어의 어형 변화 목록 (펼칠 때만 받는다) */
