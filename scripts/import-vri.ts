@@ -223,7 +223,8 @@ for (const suttaId of ids) {
   const head = found ? found.head : heads[0];
   const book = head.book_id;
   const first = found ? found.first : head.para_id + 1;
-  const last = found ? found.last : head.para_id + head.chapter_len - 1;
+  // 한 경이 목차 여러 칸(자따까 546·547 의 품들)으로 나뉘어 있으면 모두 합친 범위
+  const last = found ? found.last : Math.max(...heads.map((h) => h.para_id + h.chapter_len - 1));
   const vri = linesOf(book, first, last).filter((l) => l.text);
 
   // 마하상기띠본 문장 (0.x 제목 줄 빼고)
@@ -544,13 +545,13 @@ for (const suttaId of ids) {
 // Digital Pāḷi Reader 처럼 주석에서 앞으로 넘기면 보이게 한다 (--all 일 때만: 책 전체의 빈 곳을 알아야 한다)
 if (quiet) {
   const files = readdirSync(OUT).filter((f) => f.endsWith(".json") && !f.endsWith(".ko.json") && !f.startsWith("_"));
-  type Span = { file: string; layer: "attha" | "tika"; min: number; max: number };
+  type Span = { file: string; layer: "attha" | "tika" | "tika2"; min: number; max: number };
   const byBook = new Map<string, Span[]>();
   const docs = new Map<string, Record<string, unknown>>();
   for (const file of files) {
     const d = JSON.parse(readFileSync(path.join(OUT, file), "utf8")) as Record<string, unknown>;
     docs.set(file, d);
-    for (const layer of ["attha", "tika"] as const) {
+    for (const layer of ["attha", "tika", "tika2"] as const) {
       const c = d[layer] as { book: string; paras: { para: number }[] } | null;
       if (!c?.paras.length) continue;
       const ps = c.paras.map((p) => p.para);
@@ -568,7 +569,7 @@ if (quiet) {
     for (const span of spans) {
       const from = covered + 1;
       const to = span.min - 1;
-      if (to >= from && to - from < 600) {
+      if (to >= from && to - from < 2000) {
         const lines = linesOf(book, from, to).filter((l) => l.text);
         const before = [...new Set(lines.map((l) => l.para))].map((para) => ({
           para,

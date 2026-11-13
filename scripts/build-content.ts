@@ -388,7 +388,9 @@ function buildSutta(
         // 낱말 연결은 문단 순번을 쓰므로 옛 복주석서 쪽 순번을 새 차례로 옮긴다
         const moved = new Map(sorted.flatMap((x, n) => (x.book === 0 ? [[x.i, n] as const] : [])));
         const wordLinks = a.wordLinks.map(([k, w, pi, li]) => [k, w, moved.get(pi) ?? pi, li] as typeof a.wordLinks[number]);
-        return { ...a, paras: sorted.map((x) => x.p), books: [a, b], wordLinks };
+        // 앞 부분(머리말 등)도 두 책 것을 이어 붙인다
+        const before = [...(a.before ?? []), ...(b.before ?? [])];
+        return { ...a, paras: sorted.map((x) => x.p), books: [a, b], wordLinks, before };
       }
       if (b) return { ...b, paras: tag(b), books: [b] };
       if (a) return { ...a, paras: tag(a), books: [a] };
