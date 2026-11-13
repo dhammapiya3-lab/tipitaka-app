@@ -8,6 +8,7 @@ import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchCommentary } from "@/lib/content";
+import { useSettingsStore } from "@/store/settings";
 import { cn } from "@/lib/utils";
 import type { CommentaryLayer, Edition, SuttaCommentary } from "@/types";
 
@@ -21,6 +22,55 @@ export function bookLabel(data: SuttaCommentary, bookId: string | undefined): st
   if (/-nt-/.test(id)) return "새 복주석서 (Abhinavaṭīkā)";
   if (/-pt-/.test(id)) return "옛 복주석서 (Purāṇaṭīkā)";
   return data.books.find((b) => b.id === id)?.name ?? id;
+}
+
+/** 이 문단이 책 목록의 몇 번째 책인가 (책이 하나면 0) */
+export function bookIndexOf(data: SuttaCommentary, bookId: string | undefined): number {
+  const k = data.books.findIndex((b) => b.id === (bookId ?? data.book));
+  return k < 0 ? 0 : k;
+}
+
+/** 복주석서가 여럿일 때(디가: 옛·새 복주석서) 볼 책을 고르는 단추 — 모두 · 옛 복주석서 · 새 복주석서 */
+export function BookSwitch({
+  data,
+  value,
+  onChange,
+  className,
+}: {
+  data: SuttaCommentary;
+  value: number | null;
+  onChange: (book: number | null) => void;
+  className?: string;
+}) {
+  if (data.books.length < 2) return null;
+  const options: { k: number | null; label: string; tone: string }[] = [
+    { k: null, label: "모두", tone: "" },
+    ...data.books.map((b, k) => ({
+      k,
+      label: bookLabel(data, k ? b.id : undefined)?.replace(/\s*\(.*\)$/, "") ?? b.name,
+      tone: k ? "text-violet-700" : "text-amber-800",
+    })),
+  ];
+  const current = value !== null && value < data.books.length ? value : null;
+  return (
+    <span role="group" aria-label="복주석서 고르기" className={cn("inline-flex rounded-lg border bg-card p-0.5 font-sans text-xs font-bold", className)}>
+      {options.map((o) => (
+        <button
+          key={String(o.k)}
+          type="button"
+          aria-pressed={current === o.k}
+          title={o.k === null ? "두 복주석서를 경 문단 차례대로 함께" : data.books[o.k]?.name}
+          onClick={() => onChange(o.k)}
+          className={cn(
+            "rounded-md px-2 py-0.5 transition-colors",
+            current === o.k ? "bg-primary text-primary-foreground" : cn("hover:bg-hover", o.tone || "text-muted-foreground"),
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </span>
+  );
 }
 
 export const LAYER_NAME: Record<CommentaryLayer, string> = { attha: "주석서", tika: "복주석서" };
@@ -58,6 +108,8 @@ export function CommentaryView({
   fontStyle?: React.CSSProperties;
 }) {
   const [state, setState] = useState<{ key: string; data?: SuttaCommentary; error?: string } | null>(null);
+  const tikaBook = useSettingsStore((s) => s.tikaBook);
+  const setTikaBook = useSettingsStore((s) => s.setTikaBook);
   const [attempt, setAttempt] = useState(0);
   const [showBefore, setShowBefore] = useState(false);
   const key = `${suttaId}/${layer}/${attempt}`;
@@ -171,6 +223,7 @@ export function CommentaryView({
       {data.books.length > 1 ? (
         // 옛·새 복주석서가 경 문단 차례대로 섞여 있다 — 카드 머리의 색 표시로 구분
         <p className="flex flex-wrap items-center gap-2 px-1 text-xs text-faint">
+          <BookSwitch data={data} value={tikaBook} onChange={setTikaBook} />
           {data.books.map((b, k) => (
             <span key={b.id} className="inline-flex items-center gap-1">
               <span className={cn("rounded px-1.5 py-0.5 font-bold", k ? "bg-violet-50 text-violet-700" : "bg-amber-50 text-amber-800")}>
@@ -182,7 +235,9 @@ export function CommentaryView({
           <span>— 같은 경 문단의 풀이끼리 나란히</span>
         </p>
       ) : null}
-      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined }))).map(({ para, i, lines }) => (
+      {(only ?? data.paras.map((para, i) => ({ para, i, lines: undefined as number[] | undefined })))
+        .filter(({ para }) => tikaBook === null || data.books.length < 2 || bookIndexOf(data, para.book) === tikaBook)
+        .map(({ para, i, lines }) => (
         <Fragment key={i}>
         <CommentaryCard
           bookBadge={bookLabel(data, para.book)}

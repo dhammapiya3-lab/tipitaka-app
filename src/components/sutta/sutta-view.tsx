@@ -27,7 +27,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import { DESKTOP_QUERY, useMediaQuery } from "@/components/shared/use-media-query";
 import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
-import { bookLabel, CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
+import { bookIndexOf, bookLabel, BookSwitch, CommentaryCard, CommentaryView, LAYER_NAME, VRI_ID } from "@/components/sutta/commentary-view";
 import { WordBottomDock } from "@/components/dictionary/word-dock-bottom";
 import { MemoDialog } from "@/components/sutta/memo-dialog";
 import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
@@ -329,6 +329,8 @@ export function SuttaView({
   const articleRef = useRef<HTMLElement | null>(null);
   const getArticle = useCallback(() => articleRef.current, []);
   const saveReading = useReadingStore((s) => s.save);
+  const tikaBook = useSettingsStore((s) => s.tikaBook);
+  const setTikaBook = useSettingsStore((s) => s.setTikaBook);
 
   const loaded = shown.flatMap((e) => (texts[e.id] ? [texts[e.id]] : []));
   const rows = alignEditions(
@@ -687,7 +689,9 @@ export function SuttaView({
       ]),
     ) as Partial<Record<CommentaryLayer, number[]>>;
   const commentaryCards = (l: CommentaryLayer, ids: number[] | undefined, label?: boolean, only?: string) =>
-    (ids ?? []).map((i) => (
+    (ids ?? [])
+      .filter((i) => tikaBook === null || comm[l]!.books.length < 2 || bookIndexOf(comm[l]!, comm[l]!.paras[i].book) === tikaBook)
+      .map((i) => (
       <CommentaryCard
         onlyLines={
           only
@@ -743,8 +747,14 @@ export function SuttaView({
         </span>
       ) : null}
       {parallelLayers.map((l) => (
-        <span key={l} className="truncate">
-          {LAYER_NAME[l]} <span className="font-pali text-xs font-medium text-faint">{comm[l]!.bookName}</span>
+        <span key={l} className="flex min-w-0 items-center gap-2">
+          <span className="truncate">
+            {LAYER_NAME[l]}{" "}
+            <span className="font-pali text-xs font-medium text-faint">
+              {(tikaBook !== null && comm[l]!.books.length > 1 ? comm[l]!.books[tikaBook]?.name : null) ?? comm[l]!.bookName}
+            </span>
+          </span>
+          <BookSwitch data={comm[l]!} value={tikaBook} onChange={setTikaBook} className="ml-auto shrink-0" />
         </span>
       ))}
     </div>

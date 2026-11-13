@@ -33,6 +33,9 @@ interface SettingsState {
   /** 주석과 이어진 낱말에 밑줄 (누르면 그 주석 줄) */
   wordLinks: boolean;
   setWordLinks: (on: boolean) => void;
+  /** 복주석서가 여럿인 경(디가: 옛·새 복주석서)에서 볼 책 — null 이면 모두, 아니면 책 차례(0: 옛, 1: 새) */
+  tikaBook: number | null;
+  setTikaBook: (book: number | null) => void;
   setCompareMode: (mode: "side" | "alternate") => void;
   setOnlyReadable: (on: boolean) => void;
   setFontSize: (size: number) => void;
@@ -64,6 +67,8 @@ export const useSettingsStore = create<SettingsState>()(
       onlyReadable: false,
       compareMode: "side",
       wordLinks: false,
+      tikaBook: null,
+      setTikaBook: (book) => set({ tikaBook: book }),
       pageEditions: [],
       setPageEditions: (eds) => set({ pageEditions: eds }),
       setWordLinks: (on) => set({ wordLinks: on }),
@@ -103,7 +108,9 @@ export const useSettingsStore = create<SettingsState>()(
         onlyReadable,
         compareMode,
         pageEditions,
+        tikaBook,
       }) => ({
+        tikaBook,
         pageEditions,
         noteFontSize,
         panelFontSize,
