@@ -30,6 +30,7 @@ describe("rowKind · unitOf", () => {
     expect(rowKind("dn22:0.2", "dn22")).toBe("hidden");
     expect(rowKind("dn22:3.0", "dn22")).toBe("heading");
     expect(rowKind("dn22:1.2", "dn22")).toBe("text");
+    expect(rowKind("dn1:1.7.0.2", "dn1")).toBe("heading");
   });
 
   it("법구경: 품 이름은 숨기고 게송 일화 제목은 제목으로", () => {
@@ -56,13 +57,24 @@ describe("paragraphOf", () => {
 });
 
 describe("pickEditions", () => {
-  const ed = (id: string) => ({ id, language: id.slice(0, id.indexOf("-")) === "kor" ? "ko" : id.startsWith("pli") ? "pli" : "en" });
+  const ed = (id: string) => ({
+    id,
+    language:
+      id.slice(0, id.indexOf("-")) === "kor"
+        ? "ko"
+        : id.startsWith("pli")
+          ? "pli"
+          : "en",
+  });
   const dn22 = ["pli-ms", "kor-a", "kor-b", "en-s"].map(ed);
   const dn1 = ["pli-ms", "en-s"].map(ed);
   const dhp = ["pli-ms", "pli-pts", "kor-m", "en-s"].map(ed);
 
   it("저장된 선택 중 이 경에 있는 판본을 available 순서로", () => {
-    expect(pickEditions(dn22, ["kor-b", "pli-ms"])).toEqual(["pli-ms", "kor-b"]);
+    expect(pickEditions(dn22, ["kor-b", "pli-ms"])).toEqual([
+      "pli-ms",
+      "kor-b",
+    ]);
   });
 
   it("고른 번역이 이 경에 없으면 첫 번역을 더한다", () => {
@@ -78,10 +90,9 @@ describe("toggleEdition", () => {
   const dn1 = ["pli-ms", "en-s"];
 
   it("이 경에 없는 판본 선택은 남겨 둔다", () => {
-    expect(toggleEdition(dn1, ["pli-ms", "kor-a"], ["pli-ms", "en-s"], "pli-ms")).toEqual([
-      "kor-a",
-      "en-s",
-    ]);
+    expect(
+      toggleEdition(dn1, ["pli-ms", "kor-a"], ["pli-ms", "en-s"], "pli-ms"),
+    ).toEqual(["kor-a", "en-s"]);
   });
 
   it("마지막 하나는 끌 수 없다", () => {
@@ -99,7 +110,13 @@ describe("toSuttaId", () => {
 
 describe("compareSegmentKeys", () => {
   it("숫자 크기대로 정렬한다 (1.9 < 1.10)", () => {
-    const keys = ["dn22:1.10", "dn22:1.9", "dn22:0.2", "dn22:1.1.1", "dn22:1.1"];
+    const keys = [
+      "dn22:1.10",
+      "dn22:1.9",
+      "dn22:0.2",
+      "dn22:1.1.1",
+      "dn22:1.1",
+    ];
     expect([...keys].sort(compareSegmentKeys)).toEqual([
       "dn22:0.2",
       "dn22:1.1",

@@ -50,6 +50,18 @@ def xml_text(path: Path) -> str:
     return t.replace("&amp;", "&")
 
 
+_ROOTS: dict[str, Path] | None = None
+
+
+def root_keys(sutta_id: str) -> list[str]:
+    """마하상기띠본(빌랄라) 원문의 문장 번호들"""
+    global _ROOTS
+    if _ROOTS is None:
+        _ROOTS = {f.name.removesuffix("_root-pli-ms.json"): f for f in (ROOT / "content" / "theravada-app" / "sutta_pitaka").rglob("*_root-pli-ms.json")}
+    f = _ROOTS.get(sutta_id)
+    return list(json.loads(f.read_text(encoding="utf-8"))) if f else []
+
+
 def paragraph_of(key: str, sutta_id: str) -> str:
     """src/lib/segments.ts 의 paragraphOf 와 같은 규칙"""
     prefix, _, tail = key.partition(":")
@@ -111,6 +123,7 @@ def main() -> None:
             sid = docs[di][1]["suttaId"]
             paranums.setdefault(sid, {}).setdefault(paragraph_of(key, sid), []).append(m.group(1))
         inserts: dict[tuple[int, str], list[tuple[int, str]]] = collections.defaultdict(list)
+        headings: dict[tuple[int, str], tuple[str, str]] = {}
         prefaces: dict[int, list[str]] = collections.defaultdict(list)
         for op, a1, a2, b1, b2 in sm.get_opcodes():
             if op != "delete":
@@ -150,9 +163,21 @@ def main() -> None:
                     and t[: xt[a1][0]].rstrip(" ").endswith("\n")
                     and t[xt[a2 - 1][1] :].lstrip(" .").startswith("\n")
                 )
+                if heading and re.search(r"\.\d+$", key):
+                    # 소제목은 다음 문장에 붙이지 않고 따로 소제목 칸으로:
+                    # 마하상기띠본에 그 문단의 소제목 칸(<문단>.0.N)이 있으면 그 마지막 칸, 없으면 VRI 에만 있는 <문단>.0
+                    para = re.sub(r"\.\d+$", "", key)
+                    if para.endswith(":0"):
+                        prefaces[di].append(text)
+                        continue
+                    ms_heads = [r for r in root_keys(docs[di][1]["suttaId"]) if r.startswith(para + ".0.")]
+                    head_key = ms_heads[-1] if ms_heads else para + ".0"
+                    if head_key not in docs[di][1]["segments"]:
+                        headings[(di, head_key)] = (key, text)
+                        continue
                 if first_word:
                     at = 0
-                inserts[(di, key)].append((at, f"<b>{text}</b> " if heading else text + " "))
+                inserts[(di, key)].append((at, text + " "))
         if check:
             continue
         changed = set()
@@ -161,6 +186,14 @@ def main() -> None:
             for at, s in sorted(items, key=lambda x: -x[0]):
                 seg = seg[:at] + s + seg[at:]
             docs[di][1]["segments"][key] = re.sub(r" {2,}", " ", seg).strip()
+            changed.add(di)
+        for (di, head_key), (before_key, text) in headings.items():
+            segs = docs[di][1]["segments"]
+            docs[di][1]["segments"] = {
+                k2: v2
+                for k, v in segs.items()
+                for k2, v2 in ([(head_key, text), (k, v)] if k == before_key else [(k, v)])
+            }
             changed.add(di)
         for di, lines in prefaces.items():
             docs[di][1]["preface"] = docs[di][1].get("preface", []) + lines

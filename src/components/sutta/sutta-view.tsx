@@ -87,6 +87,7 @@ import {
   EditionBadges,
   EditionPickerSheet,
   TextSettingsSheet,
+  type BookToc,
   TocSheet,
   type TocEntry,
 } from "@/components/sutta/reader-sheets";
@@ -109,6 +110,7 @@ import { sentenceCopyText, wordsOf } from "@/lib/reader";
 import {
   alignEditions,
   compareSegmentKeys,
+  paragraphMark,
   paragraphOf,
   plainText,
   rowKind,
@@ -159,7 +161,10 @@ export function SuttaView({
   commentary = [],
   paliName,
   initialLayer,
+  book,
 }: {
+  /** 맨 위 목차 단추로 보는 이 문헌 전체의 장(경) 목록 */
+  book?: BookToc;
   /** 주석에서 앞뒤 경으로 넘어왔으면 그 층 (?layer=) */
   initialLayer?: "attha" | "tika" | null;
   /** 목록의 빠알리 경 이름 (빠알리 판본 제목을 아직 못 읽었을 때) */
@@ -894,25 +899,33 @@ export function SuttaView({
 
   // 단락 제목(.0 줄)을 그 다음 문단에 붙인다 — 문단 카드 위 제목과 목차, 문단 보기의 제목에 쓴다
   const headingOf = new Map<string, string>();
-  /** 제목 줄 자체 (각주 표시를 그대로 보여 주려고) — 문단 → 제목 줄과 그 글을 가진 판본 */
-  const headingRowOf = new Map<string, { row: AlignedRow; edition: Edition }>();
+  /**
+   * 제목 줄 자체 (각주 표시를 그대로 보여 주려고) — 문단 → 제목 줄들과 그 글을 가진 판본.
+   * 마하상기띠본은 큰 제목·작은 제목을 잇달아 둔다(예: dn1:1.7.0.1 "2. Sīla", 1.7.0.2 "2.1. Cūḷasīla").
+   */
+  const headingRowOf = new Map<
+    string,
+    { row: AlignedRow; edition: Edition }[]
+  >();
   {
-    let pending: { row: AlignedRow; edition: Edition } | null = null;
+    let pending: { row: AlignedRow; edition: Edition }[] = [];
     for (const row of rows) {
       if (rowKind(row.key, suttaId) === "heading") {
         const edition = [
           ...shown.filter((e) => e.language !== "pli"),
           ...shown,
         ].find((e) => row.cells[e.id]);
-        if (edition) pending = { row, edition };
-      } else if (pending) {
+        if (edition) pending.push({ row, edition });
+      } else if (pending.length) {
         const p = paragraphOf(row.key, suttaId);
         headingRowOf.set(p, pending);
         headingOf.set(
           p,
-          plainText(pending.row.cells[pending.edition.id]!.parts),
+          pending
+            .map((h) => plainText(h.row.cells[h.edition.id]!.parts).trim())
+            .join(" · "),
         );
-        pending = null;
+        pending = [];
       }
     }
   }
@@ -1431,9 +1444,12 @@ export function SuttaView({
 
   /** 이야기·단락 제목 — 가운데 호박색 글자, 양옆에 옅은 선. 각주 표시를 누르면 아래에 각주가 열린다 */
   function headingBlock(p: string) {
-    const h = headingRowOf.get(p);
-    if (!h) return null;
-    const { row, edition } = h;
+    const list = headingRowOf.get(p);
+    if (!list) return null;
+    return list.map((h) => headingOne(h));
+  }
+
+  function headingOne({ row, edition }: { row: AlignedRow; edition: Edition }) {
     const parts = row.cells[edition.id]!.parts;
     const marks = new Set(
       parts.flatMap((part) =>
@@ -1444,7 +1460,7 @@ export function SuttaView({
       ),
     );
     return (
-      <div id={row.key} className="scroll-mt-32">
+      <div key={row.key} id={row.key} className="scroll-mt-32">
         <h2 className="flex items-center gap-3 px-2 pt-3 pb-1 font-sans">
           <span
             aria-hidden
@@ -1903,6 +1919,8 @@ export function SuttaView({
               panel={panel}
               onPanel={(p) => setChosen({ panel: p, for: word })}
               toc={toc}
+              book={book}
+              tocEdition={shown[0]?.id}
               current={focus ?? currentParagraph}
               onPick={(p) =>
                 focus
@@ -2183,6 +2201,16 @@ export function SuttaView({
             onOpenChange={onOpenChange}
             title={head.title}
             items={toc}
+            book={book}
+            bookTitle={
+              layer === "sutta"
+                ? undefined
+                : (comm[layer]?.bookName ?? undefined)
+            }
+            currentId={suttaId}
+            chapterHref={(id) =>
+              suttaHref(id, undefined, layer === "sutta" ? undefined : layer)
+            }
             onPick={(p) => {
               setSheet(null);
               revealAll();
@@ -2209,14 +2237,6 @@ export function SuttaView({
 /** 문단 번호 표시: sn56.11:2 → 2, sn56.11:2.3 → 2.3, 게송(dhp5) → Dhp 5 */
 /** VRI 번호가 게송 번호인 책 (게송으로 된 책) — 나머지는 문단 번호 */
 const VERSE_BOOKS = /^(dhp|snp|thag|thig|ja|vv|pv|tha-ap|thi-ap|bv|cp)\d/;
-
-function paragraphMark(paragraph: string): string {
-  const colon = paragraph.indexOf(":");
-  // 게송(dhp5)은 원래 앱처럼 번호만
-  return colon >= 0
-    ? paragraph.slice(colon + 1)
-    : paragraph.replace(/^[a-z-]+/, "");
-}
 
 /** 게송 번호 표시: dhp5 → Dhp 5 */
 function unitLabel(unit: string): string {

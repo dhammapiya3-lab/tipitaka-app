@@ -9,8 +9,9 @@ import {
   type WordTarget,
 } from "@/components/dictionary/word-sheet";
 import { ParallelList, type useParallels } from "@/components/sutta/parallels";
-import type { TocEntry } from "@/components/sutta/reader-sheets";
-import { fetchExtras } from "@/lib/content";
+import type { BookToc, TocEntry } from "@/components/sutta/reader-sheets";
+import { fetchExtras, fetchSuttaText } from "@/lib/content";
+import { paragraphMark, paragraphOf, plainText, rowKind } from "@/lib/segments";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ExtraKind, SuttaExtras } from "@/types";
@@ -43,6 +44,8 @@ export function ReaderSide({
   panel,
   onPanel,
   toc,
+  book,
+  tocEdition,
   current,
   onPick,
   word,
@@ -54,6 +57,10 @@ export function ReaderSide({
   panel: SidePanel;
   onPanel: (panel: SidePanel) => void;
   toc: TocEntry[];
+  /** 이 문헌의 장(경)들 — 목차 위에 장 탭으로 */
+  book?: BookToc;
+  /** 다른 장의 목차를 읽어 올 판본 (지금 보이는 첫 판본) */
+  tocEdition?: string;
   current: string | null;
   onPick: (paragraph: string) => void;
   word: WordTarget | null;
@@ -169,36 +176,14 @@ export function ReaderSide({
           heading={EXTRA_TABS.find((t) => t.id === panel)!.label}
         />
       ) : panel === "toc" ? (
-        <nav aria-label="목차" className="min-h-0 flex-1 overflow-y-auto pb-3">
-          <p className="px-4 pb-2 text-xs text-faint">문단 {toc.length}개</p>
-          {toc.map((item) => {
-            const on = item.paragraph === current;
-            return (
-              <button
-                key={item.paragraph}
-                type="button"
-                aria-current={on ? "location" : undefined}
-                onClick={() => onPick(item.paragraph)}
-                className={cn(
-                  "flex w-full gap-2.5 border-l-2 px-3.5 py-2 text-left text-sm transition-colors outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50",
-                  on
-                    ? "border-primary bg-brand-soft font-bold text-foreground"
-                    : "border-transparent text-secondary-foreground",
-                )}
-              >
-                <span
-                  className={cn(
-                    "w-9 shrink-0 font-pali",
-                    on ? "text-primary" : "text-faint",
-                  )}
-                >
-                  {item.label}
-                </span>
-                <span className="min-w-0 break-keep">{item.title ?? ""}</span>
-              </button>
-            );
-          })}
-        </nav>
+        <TocPanel
+          toc={toc}
+          book={book}
+          tocEdition={tocEdition}
+          suttaId={suttaId}
+          current={current}
+          onPick={onPick}
+        />
       ) : word ? (
         <div className="flex min-h-0 flex-1 flex-col border-t">
           <WordPanelBody
@@ -298,5 +283,191 @@ function ExtraList({
         );
       })}
     </ul>
+  );
+}
+
+/** 장 탭 이름 — 청정도론은 "1장", 나머지는 경 번호(DN 1) */
+function chapterTab(ch: BookToc["chapters"][number]): string {
+  return /^\d+장/.exec(ch.title)?.[0] ?? ch.sub;
+}
+
+/** 다른 장의 목차 — 그 장의 본문을 읽어 문단 번호와 단락 제목을 뽑는다 (문단 → 첫 문장 번호) */
+async function loadChapterToc(
+  id: string,
+  editionId: string | undefined,
+): Promise<(TocEntry & { firstKey: string })[]> {
+  const text = await (editionId
+    ? fetchSuttaText(id, editionId).catch(() => fetchSuttaText(id, "pli-vri"))
+    : fetchSuttaText(id, "pli-vri"));
+  const out = new Map<string, TocEntry & { firstKey: string }>();
+  let pending: string[] = [];
+  for (const seg of text.segments) {
+    const kind = rowKind(seg.key, id);
+    if (kind === "hidden") continue;
+    if (kind === "heading") {
+      const s = plainText(seg.parts).trim();
+      if (s) pending.push(s);
+      continue;
+    }
+    const p = paragraphOf(seg.key, id);
+    if (!out.has(p)) {
+      out.set(p, {
+        paragraph: p,
+        label: paragraphMark(p),
+        title: pending.length ? pending.join(" · ") : undefined,
+        firstKey: seg.key,
+      });
+    }
+    pending = [];
+  }
+  return [...out.values()];
+}
+
+/**
+ * 오른쪽 칸 목차 — 위에 장 탭(1장·2장… 또는 DN 1·DN 2…), 처음에는 지금 읽는 장.
+ * 다른 장 탭을 누르면 그 장의 세부 목차가 뜨고, 항목을 누르면 그 장의 그 문단으로 간다.
+ */
+function TocPanel({
+  toc,
+  book,
+  tocEdition,
+  suttaId,
+  current,
+  onPick,
+}: {
+  toc: TocEntry[];
+  book?: BookToc;
+  tocEdition?: string;
+  suttaId: string;
+  current: string | null;
+  onPick: (paragraph: string) => void;
+}) {
+  const [chosen, setChosen] = useState(suttaId);
+  const [other, setOther] = useState<{
+    id: string;
+    items: (TocEntry & { firstKey: string })[] | "loading" | "error";
+  } | null>(null);
+  const viewing = chosen === suttaId ? null : chosen;
+  useEffect(() => {
+    if (!viewing) return;
+    let alive = true;
+    loadChapterToc(viewing, tocEdition)
+      .then((items) => alive && setOther({ id: viewing, items }))
+      .catch(() => alive && setOther({ id: viewing, items: "error" }));
+    return () => {
+      alive = false;
+    };
+  }, [viewing, tocEdition]);
+  const chapters = book && book.chapters.length > 1 ? book.chapters : null;
+  const otherItems = viewing && other?.id === viewing ? other.items : "loading";
+  const row = (
+    key: string,
+    label: string,
+    title: string | undefined,
+    on: boolean,
+  ) => (
+    <>
+      <span
+        className={cn(
+          "w-9 shrink-0 font-pali",
+          on ? "text-primary" : "text-faint",
+        )}
+      >
+        {label}
+      </span>
+      <span key={key} className="min-w-0 break-keep">
+        {title ?? ""}
+      </span>
+    </>
+  );
+  const itemClass = (on: boolean) =>
+    cn(
+      "flex w-full gap-2.5 border-l-2 px-3.5 py-2 text-left text-sm transition-colors outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50",
+      on
+        ? "border-primary bg-brand-soft font-bold text-foreground"
+        : "border-transparent text-secondary-foreground",
+    );
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      {chapters ? (
+        <div
+          role="tablist"
+          aria-label="장"
+          className="mx-3 mb-2 flex max-h-28 shrink-0 flex-wrap gap-1 overflow-y-auto border-b pb-2"
+        >
+          {chapters.map((ch) => {
+            const on = ch.id === chosen;
+            return (
+              <button
+                key={ch.id}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                title={`${ch.sub} · ${ch.title}${ch.id === suttaId ? " (지금 읽는 곳)" : ""}`}
+                ref={
+                  ch.id === suttaId
+                    ? (el) => el?.scrollIntoView({ block: "nearest" })
+                    : undefined
+                }
+                onClick={() => setChosen(ch.id)}
+                className={cn(
+                  "rounded-md border px-2 py-0.5 text-xs whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                  on
+                    ? "border-primary bg-primary font-bold text-primary-foreground"
+                    : ch.id === suttaId
+                      ? "border-primary text-primary hover:bg-brand-soft"
+                      : "text-secondary-foreground hover:bg-hover",
+                )}
+              >
+                {chapterTab(ch)}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+      <nav aria-label="목차" className="min-h-0 flex-1 overflow-y-auto pb-3">
+        {!viewing ? (
+          <>
+            <p className="px-4 pb-2 text-xs text-faint">문단 {toc.length}개</p>
+            {toc.map((item) => {
+              const on = item.paragraph === current;
+              return (
+                <button
+                  key={item.paragraph}
+                  type="button"
+                  aria-current={on ? "location" : undefined}
+                  onClick={() => onPick(item.paragraph)}
+                  className={itemClass(on)}
+                >
+                  {row(item.paragraph, item.label, item.title, on)}
+                </button>
+              );
+            })}
+          </>
+        ) : otherItems === "loading" ? (
+          <p className="px-4 py-3 text-sm text-faint">목차를 불러오는 중…</p>
+        ) : otherItems === "error" ? (
+          <p className="px-4 py-3 text-sm text-faint">
+            이 장의 목차를 불러오지 못했습니다.
+          </p>
+        ) : (
+          <>
+            <p className="px-4 pb-2 text-xs text-faint">
+              {chapters?.find((c) => c.id === viewing)?.title} · 문단{" "}
+              {otherItems.length}개
+            </p>
+            {otherItems.map((item) => (
+              <Link
+                key={item.paragraph}
+                href={suttaHref(viewing, item.firstKey)}
+                className={itemClass(false)}
+              >
+                {row(item.paragraph, item.label, item.title, false)}
+              </Link>
+            ))}
+          </>
+        )}
+      </nav>
+    </div>
   );
 }

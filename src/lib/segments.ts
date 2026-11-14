@@ -61,7 +61,8 @@ export function parseInline(raw: string): InlinePart[] {
     else if (token === "</em>" || token === "</i>") em = false;
     else {
       const mark = token.match(NOTE_MARK);
-      if (mark && mark[0] === token) parts.push({ type: "note", mark: mark[1] });
+      if (mark && mark[0] === token)
+        parts.push({ type: "note", mark: mark[1] });
       else pushText(token);
     }
   }
@@ -140,11 +141,16 @@ export function paragraphOf(key: string, suttaId: string): string {
  *   text   : 본문
  * (원래 앱과 같은 규칙)
  */
-export function rowKind(key: string, suttaId: string): "hidden" | "heading" | "text" {
+export function rowKind(
+  key: string,
+  suttaId: string,
+): "hidden" | "heading" | "text" {
   const tail = key.slice(key.indexOf(":") + 1);
-  if (unitOf(key, suttaId) && (tail === "0" || tail === "0.4")) return "heading";
+  if (unitOf(key, suttaId) && (tail === "0" || tail === "0.4"))
+    return "heading";
   if (tail === "0" || tail.startsWith("0.")) return "hidden";
-  return /\.0$/.test(tail) ? "heading" : "text";
+  // 마하상기띠본의 겹 제목 칸(dn1:1.7.0.1 "2. Sīla", 1.7.0.2 "2.1. Cūḷasīla")도 단락 제목
+  return /\.0(\.\d+)?$/.test(tail) ? "heading" : "text";
 }
 
 /** `dn22:0.1` 처럼 경 이름 줄(0번)인지 */
@@ -154,7 +160,7 @@ export function isTitleKey(key: string): boolean {
 
 /** `dn22:3.0`, `dn1:1.11.0` 처럼 .0 으로 끝나는 단락 제목 줄인지 */
 export function isHeadingKey(key: string): boolean {
-  return !isTitleKey(key) && /\.0$/.test(key);
+  return !isTitleKey(key) && /\.0(\.\d+)?$/.test(key);
 }
 
 /**
@@ -169,7 +175,8 @@ export function pickEditions(
 ): string[] {
   const ids = available.map((e) => e.id);
   const chosen = new Set(preferred.filter((id) => ids.includes(id)));
-  const isTranslation = (id: string) => available.some((e) => e.id === id && e.language !== "pli");
+  const isTranslation = (id: string) =>
+    available.some((e) => e.id === id && e.language !== "pli");
   if (![...chosen].some(isTranslation)) {
     const firstTranslation = available.find((e) => e.language !== "pli");
     if (firstTranslation) chosen.add(firstTranslation.id);
@@ -188,7 +195,9 @@ export function toggleEdition(
   shown: string[],
   id: string,
 ): string[] {
-  const next = shown.includes(id) ? shown.filter((e) => e !== id) : [...shown, id];
+  const next = shown.includes(id)
+    ? shown.filter((e) => e !== id)
+    : [...shown, id];
   if (next.length === 0) return preferred;
   return [...preferred.filter((e) => !available.includes(e)), ...next];
 }
@@ -214,4 +223,13 @@ export function alignEditions(texts: Record<string, Segment[]>): AlignedRow[] {
     }
   }
   return [...rows.values()].sort((a, b) => compareSegmentKeys(a.key, b.key));
+}
+
+/** 문단 번호 표시: sn56.11:2 → 2, sn56.11:2.3 → 2.3, 게송(dhp5) → 5 */
+export function paragraphMark(paragraph: string): string {
+  const colon = paragraph.indexOf(":");
+  // 게송(dhp5)은 원래 앱처럼 번호만
+  return colon >= 0
+    ? paragraph.slice(colon + 1)
+    : paragraph.replace(/^[a-z-]+/, "");
 }

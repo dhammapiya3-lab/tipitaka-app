@@ -546,7 +546,13 @@ export function CommentaryCard({
                         `c:${para.book ?? bookId}:${para.para}:${j}`,
                       )}
                     />
-                    <InlineText parts={parts} onWord={onWord} variants />
+                    {para.heads?.includes(j) ? (
+                      <HeadLine>
+                        <InlineText parts={parts} onWord={onWord} variants />
+                      </HeadLine>
+                    ) : (
+                      <InlineText parts={parts} onWord={onWord} variants />
+                    )}
                   </p>
                 ) : null}
                 {trs.map((e) =>
@@ -574,6 +580,28 @@ export function CommentaryCard({
         })()}
       </div>
     </section>
+  );
+}
+
+/**
+ * 소제목 줄 — 경의 단락 제목처럼 가운데 호박색 글자, 양옆에 옅은 선 (VRI 원본에서 소제목인 줄).
+ * 글자는 원문 그대로(굵게 등도 원문에 있는 대로)이고 모양만 바꾼다.
+ */
+function HeadLine({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex items-center gap-3 pt-1 font-sans">
+      <span
+        aria-hidden
+        className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900"
+      />
+      <span className="max-w-[80%] text-center text-[0.9em] font-bold tracking-wide text-balance break-keep text-amber-800 dark:text-amber-300">
+        {children}
+      </span>
+      <span
+        aria-hidden
+        className="h-px min-w-6 flex-1 bg-amber-200 dark:bg-amber-900"
+      />
+    </span>
   );
 }
 

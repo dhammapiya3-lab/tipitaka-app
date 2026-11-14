@@ -478,6 +478,28 @@ const vriSchema = z.object({
   preface: z.array(z.string()).default([]),
   source: z.object({ vripara: z.unknown() }).partial().optional(),
 });
+/**
+ * VRI 주석서·복주석서 원본의 소제목 줄 (content/vri-heads.json, scripts/import-vri-heads.py).
+ * 주석 줄이 이 가운데 하나와 같으면 그 줄 번호를 heads 에 적어 화면에서 소제목처럼 그린다(글자는 그대로).
+ */
+const vriHeadsFile = path.join(ROOT, "content", "vri-heads.json");
+const vriHeads = new Set<string>(
+  existsSync(vriHeadsFile)
+    ? z.array(z.string()).parse(readJson(vriHeadsFile))
+    : [],
+);
+/** scripts/import-vri-heads.py 의 norm 과 같아야 한다 */
+function headNorm(s: string): string {
+  return s
+    .replace(/<[^>]+>/g, "")
+    .normalize("NFC")
+    .replace(/[“”‘’"'.,;:!?–—()\-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/( \d+)+$/, "");
+}
+
 /** VRI XML 의 문단 번호 자리 — 경 → 경 문단 → VRI 문단 번호 (content/vri-paranums.json, scripts/fill-vri-gaps.py) */
 const vriParanumsFile = path.join(ROOT, "content", "vri-paranums.json");
 const vriParanums: Record<string, Record<string, string>> = existsSync(
@@ -681,7 +703,15 @@ function buildSutta(
   if (existsSync(vriFile) && root) {
     const vri = vriSchema.parse(readJson(vriFile));
     const where = `${id} VRI`;
-    const extra = Object.keys(vri.segments).filter((key) => !(key in root));
+    // VRI 에만 있는 소제목 칸(<문단>.0 — 마하상기띠본에 소제목이 없는 곳, scripts/fill-vri-gaps.py)은 받는다
+    const rootParasForHeads = new Set(
+      Object.keys(root).map((key) => paragraphOf(key, id)),
+    );
+    const extra = Object.keys(vri.segments).filter(
+      (key) =>
+        !(key in root) &&
+        !(/\.0$/.test(key) && rootParasForHeads.has(paragraphOf(key, id))),
+    );
     if (extra.length)
       errors.push(
         `${where}: 원문에 없는 문장 번호 ${extra.slice(0, 5).join(", ")}`,
@@ -817,6 +847,12 @@ function buildSutta(
           refs: p.refs,
           lines: p.lines.map((line) => parseInline(line)),
           lineRefs: p.lineRefs,
+          ...(() => {
+            const heads = p.lines.flatMap((line, i) =>
+              line.length < 160 && vriHeads.has(headNorm(line)) ? [i] : [],
+            );
+            return heads.length ? { heads } : {};
+          })(),
           tr,
         };
       });

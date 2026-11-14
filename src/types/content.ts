@@ -158,6 +158,8 @@ export interface SuttaCommentary {
     lines: InlinePart[][];
     /** 줄마다 풀이하는 경 문단 */
     lineRefs: string[][];
+    /** 소제목 줄 번호 (VRI 원본에서 소제목인 줄) — 화면에서 가운데 호박색 글자로 */
+    heads?: number[];
     /** 번역 판본 id → 줄마다 번역 (없으면 null) */
     tr: Record<string, (InlinePart[] | null)[]>;
   }[];

@@ -370,6 +370,8 @@ export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
       refs: z.array(z.string()),
       lines: z.array(z.array(inlinePartSchema)),
       lineRefs: z.array(z.array(z.string())),
+      /** 소제목 줄 번호 (VRI 원본에서 소제목인 줄) */
+      heads: z.array(z.number()).optional(),
       tr: z.record(z.string(), z.array(z.array(inlinePartSchema).nullable())),
     }),
   ),

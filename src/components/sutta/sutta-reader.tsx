@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { type CrumbItem, Screen, SubBar } from "@/components/layout/app-bar";
 import { EmptyState } from "@/components/shared/empty-state";
+import type { BookToc } from "@/components/sutta/reader-sheets";
 import { SuttaView } from "@/components/sutta/sutta-view";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -112,7 +113,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
     );
   }
 
-  const sameNikaya = (s: SuttaIndexEntry | undefined) =>
+  const neighbour = (s: SuttaIndexEntry | undefined) =>
     s && s.nikaya === sutta.nikaya ? { id: s.id, title: titleOf(s) } : null;
 
   const { nikayaName, groups, groupPages } = sutta.trail;
@@ -189,6 +190,28 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
     },
   ];
 
+  /**
+   * 맨 위 목차 단추로 보는 "이 문헌 전체" — 니까야(예: 청정도론 23장 전체)가 200개 이하이면 니까야 전체,
+   * 그보다 크면(상윳따 등) 첫째 묶음(예: Sagāthāvagga). 묶음마다 머리 글을 단다.
+   */
+  const sameNikaya = index.filter((s) => s.nikaya === sutta.nikaya);
+  const bookScope =
+    sameNikaya.length <= 200 || here.length === 0
+      ? sameNikaya
+      : sameNikaya.filter((s) => pathOf(s)[0] === here[0]);
+  const book: BookToc = {
+    title:
+      sameNikaya.length <= 200 || groups.length === 0
+        ? nikayaName
+        : `${nikayaName} · ${groups[0].label}`,
+    chapters: bookScope.map((s) => ({
+      id: s.id,
+      title: titleOf(s),
+      sub: suttaLabel(s.id),
+      group: s.trail.groups.at(-1)?.label ?? null,
+    })),
+  };
+
   // 경이 바뀌면 읽기 화면을 새로 그린다 (열어 둔 각주·사전 창 등을 비운다)
   return (
     <SuttaView
@@ -212,8 +235,9 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
         nissaya: editions.filter((e) => sutta.nissaya.includes(e.id)),
         grammar: editions.filter((e) => sutta.grammar.includes(e.id)),
       }}
-      prev={sameNikaya(index[i - 1])}
-      next={sameNikaya(index[i + 1])}
+      prev={neighbour(index[i - 1])}
+      next={neighbour(index[i + 1])}
+      book={book}
     />
   );
 }
