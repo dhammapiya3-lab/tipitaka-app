@@ -36,8 +36,16 @@ export function NikayaBar({
         <Breadcrumb items={crumbs} />
       </SubBar>
       {introduction ? (
-        <BottomSheet open={open} onOpenChange={setOpen} title={title} subtitle={pali} subtitleLang="pi">
-          <p className="text-sm leading-relaxed whitespace-pre-line text-secondary-foreground">{introduction}</p>
+        <BottomSheet
+          open={open}
+          onOpenChange={setOpen}
+          title={title}
+          subtitle={pali}
+          subtitleLang="pi"
+        >
+          <p className="text-sm leading-relaxed whitespace-pre-line text-secondary-foreground">
+            {introduction}
+          </p>
         </BottomSheet>
       ) : null}
     </>

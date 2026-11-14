@@ -22,13 +22,28 @@ export function CatalogTree({
   return (
     <div className="flex flex-col gap-3">
       {nodes.map((node, i) => (
-        <CatalogGroup key={node.id} nikaya={nikaya} node={node} index={i + 1} depth={0} lazy={lazy} />
+        <CatalogGroup
+          key={node.id}
+          nikaya={nikaya}
+          node={node}
+          index={i + 1}
+          depth={0}
+          lazy={lazy}
+        />
       ))}
     </div>
   );
 }
 
-function GroupHeader({ node, index, depth }: { node: CatalogNode; index: number; depth: number }) {
+function GroupHeader({
+  node,
+  index,
+  depth,
+}: {
+  node: CatalogNode;
+  index: number;
+  depth: number;
+}) {
   const title = node.nameKo ?? node.name ?? node.id;
   return (
     <>
@@ -49,15 +64,26 @@ function GroupHeader({ node, index, depth }: { node: CatalogNode; index: number;
             </span>
           ) : null}
         </div>
-        {node.description ? (
-          <p className="font-pali text-xs text-muted-foreground">{node.description}</p>
-        ) : node.name && node.name !== title ? (
-          <p lang="pi" className="font-pali text-xs text-muted-foreground">
-            {node.name}
+        {/* 범위는 설명 줄 끝에 (경전 목록 카드와 같은 모양) */}
+        {node.description ||
+        (node.name && node.name !== title) ||
+        node.range ? (
+          <p className="font-pali text-xs break-keep text-muted-foreground">
+            {node.description ??
+              (node.name && node.name !== title ? (
+                <span lang="pi">{node.name}</span>
+              ) : null)}
+            {node.range ? (
+              <span className="whitespace-nowrap">
+                {node.description || (node.name && node.name !== title)
+                  ? " · "
+                  : ""}
+                <span className="font-bold text-primary">{node.range}</span>
+              </span>
+            ) : null}
           </p>
         ) : null}
       </div>
-      {node.range ? <span className="shrink-0 text-sm font-bold text-primary">{node.range}</span> : null}
     </>
   );
 }
@@ -101,12 +127,22 @@ function CatalogGroup({
       >
         <div className="flex items-center gap-3">
           <GroupHeader node={node} index={index} depth={depth} />
-          <ChevronDown className="size-5 shrink-0 text-faint transition-transform group-open/g:rotate-180" aria-hidden />
+          <ChevronDown
+            className="size-5 shrink-0 text-faint transition-transform group-open/g:rotate-180"
+            aria-hidden
+          />
         </div>
       </summary>
       <div className={cn("mt-2 flex flex-col gap-2", depth > 0 && "ml-4")}>
         {node.children.map((child, i) => (
-          <CatalogGroup key={child.id} nikaya={nikaya} node={child} index={i + 1} depth={depth + 1} lazy={lazy} />
+          <CatalogGroup
+            key={child.id}
+            nikaya={nikaya}
+            node={child}
+            index={i + 1}
+            depth={depth + 1}
+            lazy={lazy}
+          />
         ))}
         {node.suttas.map((s) => (
           <SuttaRow key={s.id} sutta={rowData(s)} />

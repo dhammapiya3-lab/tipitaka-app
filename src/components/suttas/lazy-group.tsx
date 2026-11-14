@@ -35,7 +35,10 @@ export function LazyGroup({
       fetchSuttaIndex()
         .then((index) =>
           setSuttas(
-            index.filter((s) => s.nikaya === nikaya && s.trail.groups.at(-1)?.id === groupId),
+            index.filter(
+              (s) =>
+                s.nikaya === nikaya && s.trail.groups.at(-1)?.id === groupId,
+            ),
           ),
         )
         .catch(() => setSuttas("error"));
@@ -55,7 +58,13 @@ export function LazyGroup({
       >
         <div className="flex items-center gap-3">
           {header}
-          <ChevronDown className={cn("size-5 shrink-0 text-faint transition-transform", open && "rotate-180")} aria-hidden />
+          <ChevronDown
+            className={cn(
+              "size-5 shrink-0 text-faint transition-transform",
+              open && "rotate-180",
+            )}
+            aria-hidden
+          />
         </div>
       </button>
       {open ? (
@@ -66,7 +75,9 @@ export function LazyGroup({
               <Skeleton className="ml-4 h-12 rounded-2xl" />
             </>
           ) : suttas === "error" ? (
-            <p className="ml-4 text-sm text-muted-foreground">목록을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.</p>
+            <p className="ml-4 text-sm text-muted-foreground">
+              목록을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.
+            </p>
           ) : (
             suttas.map((s) => <SuttaRow key={s.id} sutta={s} />)
           )}

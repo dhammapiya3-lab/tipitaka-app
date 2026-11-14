@@ -11,8 +11,18 @@ import type { Edition } from "@/types";
 const EditionsContext = createContext<Edition[]>([]);
 
 /** 경 줄마다 판본 이름을 보여 주려고, 판본 목록을 한 번만 내려 준다 */
-export function EditionsProvider({ editions, children }: { editions: Edition[]; children: ReactNode }) {
-  return <EditionsContext.Provider value={editions}>{children}</EditionsContext.Provider>;
+export function EditionsProvider({
+  editions,
+  children,
+}: {
+  editions: Edition[];
+  children: ReactNode;
+}) {
+  return (
+    <EditionsContext.Provider value={editions}>
+      {children}
+    </EditionsContext.Provider>
+  );
 }
 
 export interface SuttaRowData {
@@ -30,7 +40,9 @@ export function editionBadgeClass(e: Pick<Edition, "language">): string {
 }
 
 /** 판본 순서: 한국어 → 빠알리 → 영어 (원래 앱의 경 목록·판본 선택과 같다) */
-export function orderEditions<T extends Pick<Edition, "language">>(list: T[]): T[] {
+export function orderEditions<T extends Pick<Edition, "language">>(
+  list: T[],
+): T[] {
   const rank = { ko: 0, pli: 1, en: 2 } as const;
   return [...list].sort((a, b) => rank[a.language] - rank[b.language]);
 }
@@ -39,17 +51,29 @@ export function orderEditions<T extends Pick<Edition, "language">>(list: T[]): T
  * 경 한 줄 — 원래 앱과 같다. 줄을 누르면 경을 열고, 오른쪽 ⌄ 를 누르면 판본 목록이 펼쳐져
  * 판본 하나를 골라 열 수 있다.
  */
-export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested?: boolean }) {
+export function SuttaRow({
+  sutta,
+  nested = true,
+}: {
+  sutta: SuttaRowData;
+  nested?: boolean;
+}) {
   const all = useContext(EditionsContext);
   const [open, setOpen] = useState(false);
   const readable = sutta.editions.length > 0;
-  const editions = orderEditions(all.filter((e) => sutta.editions.includes(e.id)));
+  const editions = orderEditions(
+    all.filter((e) => sutta.editions.includes(e.id)),
+  );
   const korean = editions.some((e) => e.language === "ko");
 
   const title = (
     <div className="flex flex-wrap items-baseline gap-x-1.5">
-      <span className="shrink-0 text-xs font-bold text-primary">{suttaLabel(sutta.id)}</span>
-      {sutta.nameKo ? <h4 className="text-sm font-bold">{sutta.nameKo}</h4> : null}
+      <span className="shrink-0 text-xs font-bold text-primary">
+        {suttaLabel(sutta.id)}
+      </span>
+      {sutta.nameKo ? (
+        <h4 className="text-sm font-bold">{sutta.nameKo}</h4>
+      ) : null}
       <span lang="pi" className="text-xs text-faint">
         {sutta.name}
       </span>
@@ -67,7 +91,10 @@ export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested
     >
       <div className="flex items-center gap-3 p-3.5">
         {readable ? (
-          <Link href={suttaHref(sutta.id)} className="min-w-0 flex-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
+          <Link
+            href={suttaHref(sutta.id)}
+            className="min-w-0 flex-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
             {title}
           </Link>
         ) : (
@@ -81,7 +108,13 @@ export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested
             onClick={() => setOpen((v) => !v)}
             className="-m-1 shrink-0 rounded-full p-1 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            <ChevronDown className={cn("size-4 text-faint transition-transform", open && "rotate-180")} aria-hidden />
+            <ChevronDown
+              className={cn(
+                "size-4 text-faint transition-transform",
+                open && "rotate-180",
+              )}
+              aria-hidden
+            />
           </button>
         ) : (
           <span className="shrink-0 text-xs text-faint">준비 중</span>
@@ -104,7 +137,9 @@ export function SuttaRow({ sutta, nested = true }: { sutta: SuttaRowData; nested
                 >
                   {e.badge})
                 </span>
-                <span className="text-sm font-medium text-secondary-foreground">{e.label}</span>
+                <span className="text-sm font-medium text-secondary-foreground">
+                  {e.label}
+                </span>
               </Link>
             ))}
           </div>

@@ -19,11 +19,15 @@ export function PitakaTabs({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="flex items-start gap-2 px-3 pt-2">
-        <CircleAlert className="mt-0.5 size-4 shrink-0 text-faint" aria-hidden />
+        <CircleAlert
+          className="mt-0.5 size-4 shrink-0 text-faint"
+          aria-hidden
+        />
         <p className="text-xs leading-relaxed text-muted-foreground">
-          <b className="text-foreground">경장, 율장, 논장은</b> 붓다의 말씀입니다.{" "}
-          <b className="text-foreground">붓다의 가르침을 직접</b> 읽고 경청하며{" "}
-          <b className="text-foreground">깨달음의 길</b>을 걸어가세요.
+          <b className="text-foreground">경장, 율장, 논장은</b> 붓다의
+          말씀입니다. <b className="text-foreground">붓다의 가르침을 직접</b>{" "}
+          읽고 경청하며 <b className="text-foreground">깨달음의 길</b>을
+          걸어가세요.
         </p>
       </div>
       <div className="flex gap-2 px-2 py-4" role="tablist" aria-label="삼장">
@@ -36,7 +40,9 @@ export function PitakaTabs({ children }: { children: ReactNode }) {
             onClick={() => setTab(p.id)}
             className={cn(
               "flex-1 rounded-lg py-2.5 text-sm font-bold transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-              tab === p.id ? "bg-primary text-primary-foreground" : "border bg-card text-muted-foreground",
+              tab === p.id
+                ? "bg-primary text-primary-foreground"
+                : "border bg-card text-muted-foreground",
             )}
           >
             {p.label}
