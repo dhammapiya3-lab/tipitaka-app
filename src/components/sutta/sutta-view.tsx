@@ -1074,13 +1074,11 @@ export function SuttaView({
             />
           ) : null}
         </span>
-        {inFocus ? null : (
-          // 마우스를 올리면 누를 수 있다는 것을 알린다
-          <span className="mr-auto hidden items-center gap-0.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover/head:opacity-100 group-focus-visible/head:opacity-100 sm:inline-flex print:hidden">
-            문단별로 보기
-            <ChevronRight className="size-3.5" aria-hidden />
-          </span>
-        )}
+        {/* 마우스를 올리면 누를 수 있다는 것을 알린다 */}
+        <span className="mr-auto hidden items-center gap-0.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover/head:opacity-100 group-focus-visible/head:opacity-100 sm:inline-flex print:hidden">
+          {inFocus ? "장 전체 보기" : "문단별로 보기"}
+          <ChevronRight className="size-3.5" aria-hidden />
+        </span>
         <div className="flex items-center gap-1.5 print:hidden">
           {(["attha", "tika"] as const).map((l) =>
             koCommentary.get(p)?.[l] ? (
@@ -1147,28 +1145,25 @@ export function SuttaView({
         id={`section-${p}`}
         className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm break-inside-avoid"
       >
-        {inFocus ? (
-          <div className="flex items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 dark:border-border">
-            {header}
-          </div>
-        ) : (
-          // 원래 앱처럼 문단 머리를 누르면 그 문단부터 한 문단씩 본다
-          <div
-            role="button"
-            tabIndex={0}
-            title="문단별로 보기"
-            onClick={() => openParagraph(p)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                openParagraph(p);
-              }
-            }}
-            className="group/head flex cursor-pointer items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 transition-colors outline-none hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-border dark:hover:bg-amber-950/40"
-          >
-            {header}
-          </div>
-        )}
+        {/* 원래 앱처럼 문단 머리를 누르면 그 문단부터 한 문단씩 본다 — 문단별로 보기에서 다시 누르면 장 전체로 돌아간다 */}
+        <div
+          role="button"
+          tabIndex={0}
+          title={
+            inFocus ? "장 전체 보기로 돌아가기" : "이 문단부터 문단별로 보기"
+          }
+          onClick={() => (inFocus ? closeParagraph() : openParagraph(p))}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              if (inFocus) closeParagraph();
+              else openParagraph(p);
+            }
+          }}
+          className="group/head flex cursor-pointer items-center justify-between gap-3 border-b border-gray-100 px-5 pt-4 pb-2 transition-colors outline-none hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-border dark:hover:bg-amber-950/40"
+        >
+          {header}
+        </div>
         <div className={inFocus ? "px-5 py-4" : "px-5 py-3"}>
           {columns ? (
             <div
