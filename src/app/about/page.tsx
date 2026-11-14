@@ -31,17 +31,16 @@ export default function AboutPage() {
     <TopLevelPage title="정보">
       <Card id="editions" className="scroll-mt-20">
         <CardHeader>
-          <CardTitle>판본 정보</CardTitle>
+          <CardTitle>판본</CardTitle>
         </CardHeader>
         <CardContent className="overflow-x-auto px-0">
-          <table className="w-full min-w-[560px] text-left">
+          <table className="w-full min-w-[480px] text-left">
             <thead className="bg-surface-2 text-[13px] font-semibold text-muted-foreground">
               <tr>
                 <th className="px-5 py-3">판본</th>
-                <th className="px-3 py-3">언어</th>
-                <th className="px-3 py-3">번역</th>
+                <th className="px-3 py-3 whitespace-nowrap">언어</th>
                 <th className="px-3 py-3">실린 경</th>
-                <th className="px-5 py-3">이용 조건</th>
+                <th className="px-5 py-3 whitespace-nowrap">이용 조건</th>
               </tr>
             </thead>
             <tbody className="t-sub">
@@ -56,19 +55,8 @@ export default function AboutPage() {
                         label={e.source ?? e.label}
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3 whitespace-nowrap">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
-                    </td>
-                    <td className="px-3 py-3">
-                      {e.translator ? (
-                        <EditionInfoDialog
-                          id={e.id}
-                          title={e.source ?? e.label}
-                          label={e.translator}
-                        />
-                      ) : (
-                        "—"
-                      )}
                     </td>
                     <td className="px-3 py-3">
                       {[
@@ -93,7 +81,7 @@ export default function AboutPage() {
                         .filter(Boolean)
                         .join(" · ")}
                     </td>
-                    <td className="px-5 py-3">
+                    <td className="min-w-[6rem] px-5 py-3">
                       {e.license ?? LICENSE_UNKNOWN}
                     </td>
                   </tr>
@@ -170,8 +158,7 @@ export default function AboutPage() {
                     </div>
                   </EditionInfoDialog>
                 </td>
-                <td className="px-3 py-3">빠알리어</td>
-                <td className="px-3 py-3">—</td>
+                <td className="px-3 py-3 whitespace-nowrap">빠알리어</td>
                 <td className="px-3 py-3">
                   JA 519개 (자따까 화면의 &ldquo;복주석서&rdquo; 탭)
                 </td>
@@ -179,6 +166,27 @@ export default function AboutPage() {
                   E-Piṭaka — CC BY-NC 4.0 (비영리, 출처 표시)
                 </td>
               </tr>
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+
+      <Card id="translators" className="scroll-mt-20">
+        <CardHeader>
+          <CardTitle>저자·번역자</CardTitle>
+        </CardHeader>
+        <CardContent className="overflow-x-auto px-0">
+          <table className="w-full min-w-[560px] text-left">
+            <thead className="bg-surface-2 text-[13px] font-semibold text-muted-foreground">
+              <tr>
+                <th className="px-5 py-3">저자·번역자</th>
+                <th className="px-3 py-3 whitespace-nowrap">언어</th>
+                <th className="px-3 py-3">번역</th>
+                <th className="px-3 py-3">실린 경</th>
+                <th className="px-5 py-3 whitespace-nowrap">이용 조건</th>
+              </tr>
+            </thead>
+            <tbody className="t-sub">
               {editions
                 .filter((e) => e.language !== "pli")
                 .map((e) => (
@@ -190,7 +198,7 @@ export default function AboutPage() {
                         label={e.source ?? e.label}
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-3 py-3 whitespace-nowrap">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
                     </td>
                     <td className="px-3 py-3">
@@ -227,7 +235,7 @@ export default function AboutPage() {
                         .filter(Boolean)
                         .join(" · ")}
                     </td>
-                    <td className="px-5 py-3">
+                    <td className="min-w-[6rem] px-5 py-3">
                       {e.license ?? LICENSE_UNKNOWN}
                     </td>
                   </tr>
