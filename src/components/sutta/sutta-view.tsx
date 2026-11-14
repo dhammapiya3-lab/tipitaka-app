@@ -1794,6 +1794,18 @@ export function SuttaView({
                       })
                     }
                     rootName={rootName}
+                    pathLine={
+                      vriPaths ? (
+                        <VriPathLine
+                          suttaId={suttaId}
+                          paths={vriPaths}
+                          paragraphs={paragraphList}
+                          current={null}
+                          layer={layer}
+                          onGoParagraph={() => {}}
+                        />
+                      ) : null
+                    }
                     onGoParagraph={(p) => {
                       setLayer("sutta");
                       setRendered(Infinity);

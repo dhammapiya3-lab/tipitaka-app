@@ -1187,9 +1187,22 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
         }),
       )
       .parse(readJson(pathsFile));
+    // 주석서·복주석서 경로 — content/vri-comm-paths.json (scripts/import-vri-comm-paths.py)
+    const commFile = path.join(ROOT, "content", "vri-comm-paths.json");
+    const comm = existsSync(commFile)
+      ? z
+          .record(
+            z.string(),
+            z.object({
+              attha: z.array(z.string()).optional(),
+              tika: z.array(z.string()).optional(),
+            }),
+          )
+          .parse(readJson(commFile))
+      : {};
     const byNikaya = new Map<string, typeof suttaIndex>();
     for (const s of suttaIndex)
-      if (all[s.id])
+      if (all[s.id] || comm[s.id])
         byNikaya.set(s.nikaya, [...(byNikaya.get(s.nikaya) ?? []), s]);
     for (const [nikaya, list] of byNikaya) {
       const names: string[] = [];
@@ -1202,11 +1215,17 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
         return at.get(name)!;
       };
       const suttas = list.map((s) => {
-        const e = all[s.id]!;
+        const e = all[s.id] ?? { path: [], heads: [] };
+        const c = comm[s.id] ?? {};
         return [
           s.id,
           e.path.map(idx),
           (e.heads ?? []).map(([p, name]) => [p, idx(name)]),
+          Object.fromEntries(
+            (["attha", "tika"] as const)
+              .filter((l) => c[l]?.length)
+              .map((l) => [l, c[l]!.map(idx)]),
+          ),
         ];
       });
       writeFileSync(

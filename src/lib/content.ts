@@ -279,6 +279,12 @@ const vriPathsSchema = z.object({
       z.string(),
       z.array(z.number().int()),
       z.array(z.tuple([z.string(), z.number().int()])),
+      z
+        .object({
+          attha: z.array(z.number().int()).optional(),
+          tika: z.array(z.number().int()).optional(),
+        })
+        .optional(),
     ]),
   ),
 });
@@ -288,6 +294,8 @@ export interface VriPath {
   path: string[];
   /** 경 안 소제목 — [그 소제목이 시작하는 경 문단, 소제목] */
   heads: [string, string][];
+  /** 주석서·복주석서의 경로 (그 책 XML 의 제목 그대로) */
+  layers: Partial<Record<"attha" | "tika", string[]>>;
 }
 
 export interface VriPaths {
@@ -309,11 +317,15 @@ export function fetchVriPaths(nikaya: string): Promise<VriPaths | null> {
         const name = (i: number) => names[i] ?? "";
         return {
           byId: new Map(
-            suttas.map(([id, p, h]) => [
+            suttas.map(([id, p, h, c]) => [
               id,
               {
                 path: p.map(name),
                 heads: h.map(([para, i]): [string, string] => [para, name(i)]),
+                layers: {
+                  ...(c?.attha ? { attha: c.attha.map(name) } : {}),
+                  ...(c?.tika ? { tika: c.tika.map(name) } : {}),
+                },
               },
             ]),
           ),

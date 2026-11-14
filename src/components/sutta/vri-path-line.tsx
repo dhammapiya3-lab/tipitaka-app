@@ -55,7 +55,10 @@ export function VriPathLine({
   paragraphs,
   current,
   onGoParagraph,
+  layer,
 }: {
+  /** 주석서·복주석서 칸이면 그 층 — 그 책의 경로를 보이고, 목록에서 고르면 그 경의 같은 층으로 */
+  layer?: "attha" | "tika";
   suttaId: string;
   paths: VriPaths;
   /** 경 문단 차례 */
@@ -67,7 +70,13 @@ export function VriPathLine({
   const router = useRouter();
   const mine = paths.byId.get(suttaId);
   if (!mine) return null;
-  const { path, heads } = mine;
+  const path = layer ? (mine.layers[layer] ?? []) : mine.path;
+  const heads = layer ? [] : mine.heads;
+  if (!path.length) return null;
+  const pathOf = (id: string) => {
+    const e = paths.byId.get(id)!;
+    return layer ? (e.layers[layer] ?? []) : e.path;
+  };
   // 지금 읽는 자리의 소제목 — 그 문단이거나 그 앞에서 가장 가까운 소제목
   const at = Math.max(0, current ? paragraphs.indexOf(current) : 0);
   const head = heads.reduce<[string, string] | null>((found, h) => {
@@ -79,7 +88,7 @@ export function VriPathLine({
   const optionsAt = (i: number) => {
     const seen = new Map<string, string>();
     for (const id of paths.order) {
-      const p = paths.byId.get(id)!.path;
+      const p = pathOf(id);
       if (p.length <= i) continue;
       if (!path.slice(0, i).every((name, k) => p[k] === name)) continue;
       if (!seen.has(p[i])) seen.set(p[i], id);
@@ -115,7 +124,9 @@ export function VriPathLine({
                   {options.map(([label, id]) => (
                     <DropdownMenuItem
                       key={label}
-                      onClick={() => router.push(suttaHref(id))}
+                      onClick={() =>
+                        router.push(suttaHref(id, undefined, layer))
+                      }
                       className={cn(label === name && "font-bold text-primary")}
                     >
                       {label}

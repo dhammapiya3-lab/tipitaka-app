@@ -118,7 +118,10 @@ export function CommentaryView({
   next,
   pageMarksOf,
   rootName = "경",
+  pathLine,
 }: {
+  /** 맨 위 경로 줄 (VRI 원본 제목 — 이전·다음 줄 아래) */
+  pathLine?: React.ReactNode;
   /** 본문 칸의 이름 — 경, 또는 주석 문헌(청정도론)이면 주석서 */
   rootName?: string;
   /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
@@ -340,6 +343,7 @@ export function CommentaryView({
             extraCard(para, i, "앞 부분", list),
           )
         : null}
+      {only ? null : pathLine}
       <p className="px-1 text-xs leading-relaxed text-faint">
         <span className="font-pali text-secondary-foreground">
           {data.bookName}
