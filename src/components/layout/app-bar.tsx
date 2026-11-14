@@ -3,7 +3,7 @@
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { isActiveItem, NAV_TOOLS } from "@/components/layout/nav-items";
 import { SiteMap } from "@/components/layout/site-map";
 import {
@@ -128,9 +128,7 @@ export function SubBar({
             </button>
           )}
           <div className="min-w-0 flex-1">
-            <h1 lang={titleLang} className="truncate text-lg font-bold">
-              {title}
-            </h1>
+            <ScreenTitle title={title} lang={titleLang} />
             {subtitle ? (
               <p className="mt-0.5 truncate text-xs text-faint">{subtitle}</p>
             ) : null}
@@ -184,6 +182,27 @@ export interface CrumbItem {
   label: string;
   href?: string;
   options?: { label: string; sub?: string; href: string; current?: boolean }[];
+}
+
+/**
+ * 화면 제목 — 길면 한 줄로 줄여 "…" 로 끝난다. 손가락으로 누르면(마우스는 눌러도·올려도) 전체 제목이
+ * 여러 줄로 다 보이고, 다시 누르면 한 줄로.
+ */
+function ScreenTitle({ title, lang }: { title: ReactNode; lang?: string }) {
+  const [full, setFull] = useState(false);
+  return (
+    <h1
+      lang={lang}
+      title={typeof title === "string" ? title : undefined}
+      onClick={() => setFull((v) => !v)}
+      className={cn(
+        "cursor-default text-lg font-bold",
+        full ? "break-words" : "truncate",
+      )}
+    >
+      {title}
+    </h1>
+  );
 }
 
 export function Breadcrumb({ items }: { items: CrumbItem[] }) {
