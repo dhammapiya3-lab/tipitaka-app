@@ -3,11 +3,18 @@ import { Screen, TopBar } from "@/components/layout/app-bar";
 import { ListCard, NikayaCards } from "@/components/suttas/nikaya-cards";
 import { PitakaTabs } from "@/components/suttas/pitaka-tabs";
 import { getNikayaSummaries } from "@/lib/data";
+import { suttaHref } from "@/lib/format";
 
 export const metadata: Metadata = { title: "경전" };
 
-/** 아직 본문이 없는 주석 문헌 — 번역이 올라오면 목록에 연결한다 */
-const COMMENTARIES = [
+/** 주석 문헌 — href 가 있으면 그 화면으로, 없으면 "준비 중" */
+const COMMENTARIES: {
+  abbr: string;
+  name: string;
+  pali: string;
+  note: string;
+  href?: string;
+}[] = [
   {
     abbr: "VISM",
     name: "위숫디막가",
@@ -18,7 +25,9 @@ const COMMENTARIES = [
     abbr: "DhpA",
     name: "법구경 이야기",
     pali: "Dhammapada-aṭṭhakathā",
-    note: "게송마다의 인연담",
+    note: "게송마다의 인연담 — 법구경과 본문이 같아, 법구경을 주석서 쪽으로 엽니다",
+    // 법구경 주석서(Dhammapada-aṭṭhakathā)는 법구경 품마다 이어 붙어 있다 — 첫 품을 주석서 탭으로 연다
+    href: suttaHref("dhp1-20", undefined, "attha"),
   },
 ];
 
@@ -48,7 +57,12 @@ export default function SuttasPage() {
                 title={c.name}
                 pali={c.pali}
                 description={c.note}
-                trailing={<span className="text-xs text-faint">준비 중</span>}
+                href={c.href}
+                trailing={
+                  c.href ? undefined : (
+                    <span className="text-xs text-faint">준비 중</span>
+                  )
+                }
               />
             ))}
           </div>
