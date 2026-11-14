@@ -319,6 +319,24 @@ function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
  * 본문에서 떼는 VRI 번호를 경 문단에 매긴다. 문장 끝의 번호는 다음 문단의 번호이고(VRI 는 문단 앞에 번호가 있다),
  * 문장 가운데의 번호는 그 문장이 든 문단, 경 첫 문단은 VRI 자료의 첫 번호.
  */
+/** 문장 칸인지 (경 이름 줄 0.x · 소제목 칸 .0 / .0.N 이 아닌) — 맨 앞 번호는 문장 칸에서만 문단 번호로 본다 */
+function isSentenceKey(key: string): boolean {
+  const tail = key.slice(key.indexOf(":") + 1);
+  return !(tail === "0" || tail.startsWith("0.") || /\.0(\.\d+)?$/.test(tail));
+}
+
+/** 소제목처럼 보이는 글 (scripts/move-heading-paranums.py 의 heading_like 와 같다) */
+function headingLike(text: string): boolean {
+  return text.length < 80 && !/[“‘"?–;,]/.test(text);
+}
+
+/** 맨 앞 번호를 문단 번호로 볼 칸 — 문장 칸, 또는 소제목 칸 번호지만 VRI 가 문장을 넣어 둔 칸 */
+function leadNumberKey(key: string, text: string): boolean {
+  const tail = key.slice(key.indexOf(":") + 1);
+  if (tail === "0" || tail.startsWith("0.")) return false;
+  return isSentenceKey(key) || !headingLike(text);
+}
+
 function vriParaNumbers(
   segments: Record<string, string>,
   suttaId: string,
@@ -338,6 +356,11 @@ function vriParaNumbers(
   if (head) add(firstText, head);
   keys.forEach((key, i) => {
     const text = segments[key];
+    // 문장 칸 맨 앞의 번호 (VRI 원본처럼 문단 줄 맨 앞 — scripts/move-heading-paranums.py)
+    const lead = leadNumberKey(key, text)
+      ? text.match(/^\s*(\d+(?:-\d+)?)\.\s+(?=\S)/)
+      : null;
+    if (lead) add(key, lead[1]);
     for (const m of text.matchAll(
       /[.?!;:’”–—\])]\s+(\d+(?:-\d+)?)\.(?=\s+\S)/g,
     ))
@@ -356,7 +379,10 @@ function withoutParaNumbers(
   return Object.fromEntries(
     Object.entries(segments).map(([key, text]) => [
       key,
-      text
+      (leadNumberKey(key, text)
+        ? text.replace(/^\s*\d+(?:-\d+)?\.\s+(?=\S)/, "")
+        : text
+      )
         .replace(/([.?!;:’”–—\])])\s+\d+(?:-\d+)?\.(?=\s+\S)/g, "$1")
         .replace(/(\S)\s+\d+(?:-\d+)?\.\s*$/, "$1"),
     ]),
