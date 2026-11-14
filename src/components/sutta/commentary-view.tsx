@@ -115,7 +115,10 @@ export function CommentaryView({
   paragraphLabel,
   prev,
   next,
+  pageMarksOf,
 }: {
+  /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
+  pageMarksOf?: (key: string) => string[] | undefined;
   /** 앞뒤 경 — 주석에서 앞뒤로 넘겨 읽는다 (Digital Pāḷi Reader 처럼) */
   prev?: { id: string; title: string } | null;
   next?: { id: string; title: string } | null;
@@ -127,7 +130,8 @@ export function CommentaryView({
   suttaId: string;
   layer: CommentaryLayer;
   available: boolean;
-  onGoParagraph: (paragraph: string) => void;
+  /** 없으면 카드 머리에 "경 문단" 단추를 두지 않는다 (경 칸이 없는 주석 문헌) */
+  onGoParagraph?: (paragraph: string) => void;
   onWord: (word: string) => void;
   fontStyle?: React.CSSProperties;
 }) {
@@ -233,6 +237,9 @@ export function CommentaryView({
       >
         {para.lines.map((parts, j) => (
           <p key={j}>
+            <PageBadges
+              marks={pageMarksOf?.(`c:${data.book}:${para.para}:${j}`)}
+            />
             <InlineText parts={parts} onWord={onWord} variants />
           </p>
         ))}
@@ -372,6 +379,8 @@ export function CommentaryView({
               picked={picked}
               editions={data.editions}
               onlyLines={lines}
+              bookId={data.book}
+              pageMarksOf={pageMarksOf}
             />
           </Fragment>
         ))}
@@ -407,7 +416,13 @@ export function CommentaryCard({
   editions,
   onlyLines,
   bookBadge,
+  bookId,
+  pageMarksOf,
 }: {
+  /** 이 문단이 든 책 (쪽 번호 찾기용 — 예: Spk-v) */
+  bookId?: string;
+  /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
+  pageMarksOf?: (key: string) => string[] | undefined;
   /** 책이 둘인 층에서 이 문단의 책 이름 (머리에 작게) */
   bookBadge?: string | null;
   /** 이 줄들만 보인다 (문단별로 보기) */
@@ -483,6 +498,11 @@ export function CommentaryCard({
               <div key={j}>
                 {showPali ? (
                   <p>
+                    <PageBadges
+                      marks={pageMarksOf?.(
+                        `c:${para.book ?? bookId}:${para.para}:${j}`,
+                      )}
+                    />
                     <InlineText parts={parts} onWord={onWord} variants />
                   </p>
                 ) : null}
@@ -511,5 +531,22 @@ export function CommentaryCard({
         })()}
       </div>
     </section>
+  );
+}
+
+/** 인쇄본 쪽이 바뀌는 줄 — 줄 앞에 작게 (텍스트 설정의 '책 쪽 번호'를 켰을 때) */
+function PageBadges({ marks }: { marks?: string[] }) {
+  if (!marks?.length) return null;
+  return (
+    <>
+      {marks.map((m) => (
+        <span
+          key={m}
+          className="mr-1.5 inline-flex rounded bg-gray-100 px-1 py-0.5 align-middle font-sans text-[10px] leading-none text-faint select-none dark:bg-muted"
+        >
+          {m}
+        </span>
+      ))}
+    </>
   );
 }

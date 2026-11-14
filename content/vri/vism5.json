@@ -3,7 +3,11 @@
  "source": {
   "db": "VRI Chaṭṭha Saṅgāyana (tipitaka.org XML)",
   "book": "Vism",
-  "vriCode": "e0101n.mul"
+  "vriCode": "e0101n.mul",
+  "paras": [
+   91,
+   101
+  ]
  },
  "segments": {
   "vism5:0.1": "Visuddhimagga",
@@ -145,7 +149,1335 @@
  },
  "unsure": [],
  "preface": [],
- "attha": null,
- "tika": null,
+ "attha": {
+  "book": "Vism",
+  "bookName": "Visuddhimagga",
+  "vriCode": "e0101n.mul",
+  "from": 91,
+  "to": 101,
+  "paras": [
+   {
+    "para": 91,
+    "vripara": "91",
+    "refs": [
+     "vism5:91"
+    ],
+    "lines": [
+     "<b>Āpokasiṇakathā</b>",
+     "Idāni pathavīkasiṇānantare āpokasiṇe vitthārakathā hoti.",
+     "Yatheva hi pathavīkasiṇaṃ, evaṃ āpokasiṇampi bhāvetukāmena sukhanisinnena āpasmiṃ nimittaṃ gaṇhitabbaṃ, kate vā akate vāti sabbaṃ vitthāretabbaṃ.",
+     "Yathā ca idha, evaṃ sabbattha.",
+     "Ito parañhi ettakampi avatvā visesamattameva vakkhāma.",
+     "Idhāpi pubbekatādhikārassa puññavato akate āpasmiṃ pokkharaṇiyā vā taḷāke vā loṇiyaṃ vā samudde vā nimittaṃ uppajjati cūḷasivattherassa viya.",
+     "Tassa kirāyasmato lābhasakkāraṃ pahāya vivittavāsaṃ vasissāmīti mahātitthe nāvamārūhitvā jambudīpaṃ gacchato antarā mahāsamuddaṃ olokayato tappaṭibhāgaṃ kasiṇanimittaṃ udapādi.",
+     "Akatādhikārena cattāro kasiṇadose pariharantena nīlapītalohitodātavaṇṇānamaññataravaṇṇaṃ āpaṃ agahetvā yaṃ pana bhūmiṃ asampattameva ākāse suddhavatthena gahitaṃ udakaṃ, aññaṃ vā tathārūpaṃ vippasannaṃ anāvilaṃ, tena pattaṃ vā kuṇḍikaṃ vā samatittikaṃ pūretvā vihārapaccante vuttappakāre paṭicchanne okāse ṭhapetvā sukhanisinnena na vaṇṇo paccavekkhitabbo.",
+     "Na lakkhaṇaṃ manasi kātabbaṃ.",
+     "Nissayasavaṇṇameva katvā ussadavasena paṇṇattidhamme cittaṃ ṭhapetvā ambu, udakaṃ, vāri, salilantiādīsu āponāmesu pākaṭanāmavaseneva ‘‘āpo āpo’’ti bhāvetabbaṃ.",
+     "Tassevaṃ bhāvayato anukkamena vuttanayeneva nimittadvayaṃ uppajjati.",
+     "Idha pana uggahanimittaṃ calamānaṃ viya upaṭṭhāti, sace pheṇapupphuḷakamissaṃ udakaṃ hoti, tādisameva upaṭṭhāti, kasiṇadoso paññāyati.",
+     "Paṭibhāganimittaṃ pana nipparipphandaṃ ākāse ṭhapitamaṇitālavaṇṭaṃ viya maṇimayādāsamaṇḍalamiva ca hutvā upaṭṭhāti.",
+     "So tassa saha upaṭṭhāneneva upacārajjhānaṃ, vuttanayeneva catukkapañcakajjhānāni ca pāpuṇātīti.",
+     "Āpokasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ]
+    ]
+   },
+   {
+    "para": 92,
+    "vripara": "92",
+    "refs": [
+     "vism5:92"
+    ],
+    "lines": [
+     "<b>Tejokasiṇakathā</b>",
+     "Tejokasiṇaṃ bhāvetukāmenāpi tejasmiṃ nimittaṃ gaṇhitabbaṃ.",
+     "Tattha katādhikārassa puññavato akate nimittaṃ gaṇhantassa dīpasikhāya vā uddhane vā pattapacanaṭṭhāne vā davadāhe vā yattha katthaci aggijālaṃ olokentassa nimittaṃ uppajjati cittaguttattherassa viya.",
+     "Tassa hāyasmato dhammassavanadivase uposathāgāraṃ paviṭṭhassa dīpasikhaṃ olokentasseva nimittaṃ uppajji.",
+     "Itarena pana kātabbaṃ.",
+     "Tatridaṃ karaṇavidhānaṃ, siniddhāni sāradārūni phāletvā sukkhāpetvā ghaṭikaṃ ghaṭikaṃ katvā patirūpaṃ rukkhamūlaṃ vā maṇḍapaṃ vā gantvā pattapacanākārena rāsiṃ katvā ālimpetvā kaṭasārake vā camme vā paṭe vā vidatthicaturaṅgulappamāṇaṃ chiddaṃ kātabbaṃ.",
+     "Taṃ purato ṭhapetvā vuttanayeneva nisīditvā heṭṭhā tiṇakaṭṭhaṃ vā upari dhūmasikhaṃ vā amanasikaritvā vemajjhe ghanajālāya nimittaṃ gaṇhitabbaṃ, nīlanti vā pītanti vātiādivasena vaṇṇo na paccavekkhitabbo, uṇhattavasena lakkhaṇaṃ na manasi kātabbaṃ.",
+     "Nissayasavaṇṇameva katvā ussadavasena paṇṇattidhamme cittaṃ ṭhapetvā pāvako, kaṇhavattanī, jātavedo, hutāsanotiādīsu aggināmesu pākaṭanāmavaseneva ‘‘tejo tejo’’ti bhāvetabbaṃ.",
+     "Tassevaṃ bhāvayato anukkamena vuttanayeneva nimittadvayaṃ uppajjati.",
+     "Tattha uggahanimittaṃ jālaṃ chijjitvā chijjitvā patanasadisaṃ hutvā upaṭṭhāti.",
+     "Akate gaṇhantassa pana kasiṇadoso paññāyati, alātakhaṇḍaṃ vā aṅgārapiṇḍo vā chārikā vā dhūmo vā upaṭṭhāti.",
+     "Paṭibhāganimittaṃ niccalaṃ ākāse ṭhapitarattakambalakkhaṇḍaṃ viya suvaṇṇatālavaṇṭaṃ viya kañcanatthambho viya ca upaṭṭhāti.",
+     "So tassa saha upaṭṭhāneneva upacārajjhānaṃ, vuttanayeneva catukkapañcakajjhānāni ca pāpuṇātīti.",
+     "Tejokasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ]
+    ]
+   },
+   {
+    "para": 93,
+    "vripara": "93",
+    "refs": [
+     "vism5:93"
+    ],
+    "lines": [
+     "<b>Vāyokasiṇakathā</b>",
+     "Vāyokasiṇaṃ bhāvetukāmenāpi vāyusmiṃ nimittaṃ gaṇhitabbaṃ.",
+     "Tañca kho diṭṭhavasena vā phuṭṭhavasena vā.",
+     "Vuttañhetaṃ aṭṭhakathāsu ‘‘vāyokasiṇaṃ uggaṇhanto vāyusmiṃ nimittaṃ gaṇhāti, ucchaggaṃ vā eritaṃ sameritaṃ upalakkheti, veḷaggaṃ vā…pe… rukkhaggaṃ vā kesaggaṃ vā eritaṃ sameritaṃ upalakkheti, kāyasmiṃ vā phuṭṭhaṃ upalakkhetī’’ti.",
+     "Tasmā samasīsaṭṭhitaṃ ghanapattaṃ ucchuṃ vā veḷuṃ vā rukkhaṃ vā caturaṅgulappamāṇaṃ ghanakesassa purisassa sīsaṃ vā vātena pahariyamānaṃ disvā ‘‘ayaṃ vāto etasmiṃ ṭhāne paharatī’’ti satiṃ ṭhapetvā, yaṃ vā panassa vātapānantarikāya vā bhittichiddena vā pavisitvā vāto kāyappadesaṃ paharati, tattha satiṃ ṭhapetvā vātamālutaanilādīsu vāyunāmesu pākaṭanāmavaseneva ‘‘vāto vāto’’ti bhāvetabbaṃ.",
+     "Idha uggahanimittavaḍḍhanato otāritamattassa pāyāsassa usumavaṭṭisadisaṃ calaṃ hutvā upaṭṭhāti.",
+     "Paṭibhāganimittaṃ sannisinnaṃ hoti niccalaṃ.",
+     "Sesaṃ vuttanayeneva veditabbanti.",
+     "Vāyokasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ]
+    ]
+   },
+   {
+    "para": 94,
+    "vripara": "94",
+    "refs": [
+     "vism5:94"
+    ],
+    "lines": [
+     "<b>Nīlakasiṇakathā</b>",
+     "Tadanantaraṃ pana nīlakasiṇaṃ uggaṇhanto nīlakasmiṃ nimittaṃ gaṇhāti pupphasmiṃ vā vatthasmiṃ vā vaṇṇadhātuyā vāti vacanato katādhikārassa puññavato tāva tathārūpaṃ mālāgacchaṃ vā pūjāṭhānesu pupphasantharaṃ vā nīlavatthamaṇīnaṃ vā aññataraṃ disvāva nimittaṃ uppajjati.",
+     "Itarena nīluppalagirikaṇṇikādīni pupphāni gahetvā yathā kesaraṃ vā vaṇṭaṃ vā na paññāyati, evaṃ caṅgoṭakaṃ vā karaṇḍapaṭalaṃ vā pattehiyeva samatittikaṃ pūretvā santharitabbaṃ.",
+     "Nīlavaṇṇena vā vatthena bhaṇḍikaṃ bandhitvā pūretabbaṃ.",
+     "Mukhavaṭṭiyaṃ vā assa bheritalamiva bandhitabbaṃ.",
+     "Kaṃsanīlapalāsanīlaañjananīlānaṃ vā aññatarena dhātunā pathavīkasiṇe vuttanayena saṃhārimaṃ vā bhittiyaṃyeva vā kasiṇamaṇḍalaṃ katvā visabhāgavaṇṇena paricchinditabbaṃ.",
+     "Tato pathavīkasiṇe vuttanayena ‘‘nīlaṃ nīla’’nti manasikāro pavattetabbo.",
+     "Idhāpi uggahanimitte kasiṇadoso paññāyati, kesaradaṇḍakapattantarikādīni upaṭṭhahanti.",
+     "Paṭibhāganimittaṃ kasiṇamaṇḍalato muñcitvā ākāse maṇitālavaṇṭasadisaṃ upaṭṭhāti.",
+     "Sesaṃ vuttanayeneva veditabbanti.",
+     "Nīlakasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ]
+    ]
+   },
+   {
+    "para": 95,
+    "vripara": "95",
+    "refs": [
+     "vism5:95"
+    ],
+    "lines": [
+     "<b>Pītakasiṇakathā</b>",
+     "Pītakasiṇepi eseva nayo.",
+     "Vuttañhetaṃ pītakasiṇaṃ uggaṇhanto pītakasmiṃ nimittaṃ gaṇhāti pupphasmiṃ vā vatthasmiṃ vā vaṇṇadhātuyā vāti.",
+     "Tasmā idhāpi katādhikārassa puññavato tathārūpaṃ mālāgacchaṃ vā pupphasantharaṃ vā pītavatthadhātūnaṃ vā aññataraṃ disvāva nimittaṃ uppajjati cittaguttattherassa viya.",
+     "Tassa kirāyasmato cittalapabbate pattaṅgapupphehi kataṃ āsanapūjaṃ passato saha dassaneneva āsanappamāṇaṃ nimittaṃ udapādi.",
+     "Itarena kaṇikārapupphādinā vā pītavatthena vā dhātunā vā nīlakasiṇe vuttanayeneva kasiṇaṃ katvā ‘‘pītakaṃ pītaka’’nti manasikāro pavattetabbo.",
+     "Sesaṃ tādisamevāti.",
+     "Pītakasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ]
+    ]
+   },
+   {
+    "para": 96,
+    "vripara": "96",
+    "refs": [
+     "vism5:96"
+    ],
+    "lines": [
+     "<b>Lohitakasiṇakathā</b>",
+     "Lohitakasiṇepi eseva nayo.",
+     "Vuttañhetaṃ lohitakasiṇaṃ uggaṇhanto lohitakasmiṃ nimittaṃ gaṇhāti pupphasmiṃ vā vatthasmiṃ vā vaṇṇadhātuyā vāti.",
+     "Tasmā idhāpi katādhikārassa puññavato tathārūpaṃ bandhujīvakādimālāgacchaṃ vā pupphasantharaṃ vā lohitakavatthamaṇidhātūnaṃ vā aññataraṃ disvāva nimittaṃ uppajjati.",
+     "Itarena jayasumanabandhujīvakarattakoraṇḍakādipupphehi vā rattavatthena vā dhātunā vā nīlakasiṇe vuttanayeneva kasiṇaṃ katvā ‘‘lohitakaṃ lohitaka’’nti manasikāro pavattetabbo.",
+     "Sesaṃ tādisamevāti.",
+     "Lohitakasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ]
+    ]
+   },
+   {
+    "para": 97,
+    "vripara": "97",
+    "refs": [
+     "vism5:97"
+    ],
+    "lines": [
+     "<b>Odātakasiṇakathā</b>",
+     "Odātakasiṇepi odātakasiṇaṃ uggaṇhanto odātasmiṃ nimittaṃ gaṇhāti pupphasmiṃ vā vatthasmiṃ vā vaṇṇadhātuyā vāti vacanato katādhikārassa tāva puññavato tathārūpaṃ mālāgacchaṃ vā vassikasumanādipupphasantharaṃ vā kumudapadumarāsiṃ vā odātavatthadhātūnaṃ vā aññataraṃ disvāva nimittaṃ uppajjati, tipumaṇḍalarajatamaṇḍalacandamaṇḍalesupi uppajjatiyeva.",
+     "Itarena vuttappakārehi odātapupphehi vā odātavatthena vā dhātunā vā nīlakasiṇe vuttanayeneva kasiṇaṃ katvā ‘‘odātaṃ odāta’’nti manasikāro pavattetabbo.",
+     "Sesaṃ tādisamevāti.",
+     "Odātakasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ]
+    ]
+   },
+   {
+    "para": 98,
+    "vripara": "98",
+    "refs": [
+     "vism5:98"
+    ],
+    "lines": [
+     "<b>Ālokakasiṇakathā</b>",
+     "Ālokakasiṇe pana ālokakasiṇaṃ uggaṇhanto ālokasmiṃ nimittaṃ gaṇhāti bhittichidde vā tāḷacchidde vā vātapānantarikāya vāti vacanato katādhikārassa tāva puññavato yaṃ bhittichiddādīnaṃ aññatarena sūriyāloko vā candāloko vā pavisitvā bhittiyaṃ vā bhūmiyaṃ vā maṇḍalaṃ samuṭṭhāpeti, ghanapaṇṇarukkhasākhantarena vā ghanasākhāmaṇḍapantarena vā nikkhamitvā bhūmiyameva maṇḍalaṃ samuṭṭhāpeti, taṃ disvāva nimittaṃ uppajjati.",
+     "Itarenāpi tadeva vuttappakāramobhāsamaṇḍalaṃ ‘‘obhāso obhāso’’ti vā ‘‘āloko āloko’’ti vā bhāvetabbaṃ.",
+     "Tathā asakkontena ghaṭe dīpaṃ jāletvā ghaṭamukhaṃ pidahitvā ghaṭe chiddaṃ katvā bhittimukhaṃ ṭhapetabbaṃ.",
+     "Tena chiddena dīpāloko nikkhamitvā bhittiyaṃ maṇḍalaṃ karoti, taṃ āloko ālokoti bhāvetabbaṃ.",
+     "Idamitarehi ciraṭṭhitikaṃ hoti.",
+     "Idha uggahanimittaṃ bhittiyaṃ vā bhūmiyaṃ vā uṭṭhitamaṇḍalasadisameva hoti.",
+     "Paṭibhāganimittaṃ ghanavippasannaālokapuñjasadisaṃ.",
+     "Sesaṃ tādisamevāti.",
+     "Ālokakasiṇaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ]
+    ]
+   },
+   {
+    "para": 99,
+    "vripara": "99",
+    "refs": [
+     "vism5:99"
+    ],
+    "lines": [
+     "<b>Paricchinnākāsakasiṇakathā</b>",
+     "Paricchinnākāsakasiṇepi ākāsakasiṇaṃ uggaṇhanto ākāsasmiṃ nimittaṃ gaṇhāti bhittichidde vā tāḷacchidde vā vātapānantarikāya vāti vacanato katādhikārassa tāva puññavato bhittichiddādīsu aññataraṃ disvāva nimittaṃ uppajjati.",
+     "Itarena succhannamaṇḍape vā cammakaṭasārakādīnaṃ vā aññatarasmiṃ vidatthicaturaṅgulappamāṇaṃ chiddaṃ katvā tadeva vā bhittichiddādibhedaṃ chiddaṃ ‘‘ākāso ākāso’’ti bhāvetabbaṃ.",
+     "Idha uggahanimittaṃ saddhiṃ bhittipariyantādīhi chiddasadisameva hoti, vaḍḍhiyamānampi na vaḍḍhati.",
+     "Paṭibhāganimittamākāsamaṇḍalameva hutvā upaṭṭhāti, vaḍḍhiyamānañca vaḍḍhati.",
+     "Sesaṃ pathavīkasiṇe vuttanayeneva veditabbanti.",
+     "Paricchinnākāsakasiṇaṃ.",
+     "Iti kasiṇāni dasabalo,",
+     "Dasa yāni avoca sabbadhammadaso;",
+     "Rūpāvacaramhi catukkapañcakajjhānahetūni.",
+     "Evaṃ tāni ca tesañca,",
+     "Bhāvanānayamimaṃ viditvāna;",
+     "Tesveva ayaṃ bhiyyo,",
+     "Pakiṇṇakakathāpi viññeyyā."
+    ],
+    "lineRefs": [
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ]
+    ]
+   },
+   {
+    "para": 100,
+    "vripara": "100",
+    "refs": [
+     "vism5:100"
+    ],
+    "lines": [
+     "<b>Pakiṇṇakakathā</b>",
+     "Imesu hi <b>pathavīkasiṇavasena</b> ekopi hutvā bahudhā hotītiādibhāvo, ākāse vā udake vā pathaviṃ nimminitvā padasā gamanaṃ, ṭhānanisajjādikappanaṃ vā, parittaappamāṇanayena abhibhāyatanapaṭilābhoti evamādīni ijjhanti.",
+     "<b>Āpokasiṇavasena</b> pathaviyaṃ ummujjananimmujjanaṃ, udakavuṭṭhisamuppādanaṃ, nadīsamuddādinimmānaṃ, pathavīpabbatapāsādādīnaṃ kampananti evamādīni ijjhanti.",
+     "<b>Tejokasiṇavasena</b> dhūmāyanā, pajjalanā, aṅgāravuṭṭhisamuppādanaṃ, tejasā tejopariyādānaṃ, yadeva so icchati tassa ḍahanasamatthatā, dibbena cakkhunā rūpadassanatthāya ālokakaraṇaṃ, parinibbānasamaye tejodhātuyā sarīrajjhāpananti evamādīni ijjhanti.",
+     "<b>Vāyokasiṇavasena</b> vāyugatigamanaṃ, vātavuṭṭhisamuppādananti evamādīni ijjhanti.",
+     "<b>Nīlakasiṇavasena</b> nīlarūpanimmānaṃ, andhakārakaraṇaṃ, suvaṇṇadubbaṇṇanayena abhibhāyatanapaṭilābho, subhavimokkhādhigamoti evamādīni ijjhanti.",
+     "<b>Pītakasiṇavasena</b> pītakarūpanimmānaṃ, suvaṇṇanti adhimuccanā, vuttanayeneva abhibhāyatanapaṭilābho, subhavimokkhādhigamo cāti evamādīni ijjhanti.",
+     "<b>Lohitakasiṇavasena</b> lohitakarūpanimmānaṃ, vuttanayeneva abhibhāyatanapaṭilābho, subhavimokkhādhigamoti evamādīni ijjhanti.",
+     "<b>Odātakasiṇavasena</b> odātarūpanimmānaṃ, thinamiddhassa dūrabhāvakaraṇaṃ, andhakāravidhamanaṃ, dibbena cakkhunā rūpadassanatthāya ālokakaraṇanti evamādīni ijjhanti.",
+     "<b>Ālokakasiṇavasena</b> sappabhārūpanimmānaṃ, thinamiddhassa dūrabhāvakaraṇaṃ, andhakāravidhamanaṃ, dibbena cakkhunā rūpadassanatthaṃ ālokakaraṇanti evamādīni ijjhanti.",
+     "<b>Ākāsakasiṇavasena</b> paṭicchannānaṃ vivaṭakaraṇaṃ, antopathavīpabbatādīsupi ākāsaṃ nimminitvā iriyāpathakappanaṃ, tirokuḍḍādīsu asajjamānagamananti evamādīni ijjhanti.",
+     "Sabbāneva uddhaṃ adho tiriyaṃ advayaṃ appamāṇanti imaṃ pabhedaṃ labhanti.",
+     "Vuttañhetaṃ ‘‘pathavīkasiṇameko sañjānāti.",
+     "Uddhamadhotiriyaṃ advayamappamāṇa’’ntiādi.",
+     "Tattha <b>uddha</b>nti uparigaganatalābhimukhaṃ.",
+     "<b>Adho</b>ti heṭṭhābhūmitalābhimukhaṃ.",
+     "<b>Tiriya</b>nti khettamaṇḍalamiva samantā paricchinditaṃ.",
+     "Ekacco hi uddhameva kasiṇaṃ vaḍḍheti, ekacco adho, ekacco samantato.",
+     "Tena tena vā kāraṇena evaṃ pasāreti.",
+     "Ālokamiva dibbacakkhunā rūpadassanakāmo.",
+     "Tena vuttaṃ uddhamadhotiriyanti.",
+     "<b>Advaya</b>nti idaṃ pana ekassa aññabhāvānupagamanatthaṃ vuttaṃ.",
+     "Yathā hi udakaṃ paviṭṭhassa sabbadisāsu udakameva hoti, na aññaṃ, evameva pathavīkasiṇaṃ pathavīkasiṇameva hoti, natthi tassa añño kasiṇasambhedoti.",
+     "Eseva nayo sabbattha.",
+     "<b>Appamāṇa</b>nti idaṃ tassa pharaṇaappamāṇavasena vuttaṃ.",
+     "Tañhi cetasā pharanto sakalameva pharati.",
+     "Na ayamassa ādi idaṃ majjhanti pamāṇaṃ gaṇhātīti."
+    ],
+    "lineRefs": [
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ]
+    ]
+   },
+   {
+    "para": 101,
+    "vripara": "101",
+    "refs": [
+     "vism5:101"
+    ],
+    "lines": [
+     "Ye ca te sattā kammāvaraṇena vā samannāgatā kilesāvaraṇena vā samannāgatā vipākāvaraṇena vā samannāgatā asaddhā acchandikā duppaññā abhabbā niyāmaṃ okkamituṃ kusalesu dhammesu sammattanti vuttā, tesamekassāpekakasiṇepi bhāvanā na ijjhati.",
+     "Tattha <b>kammāvaraṇena samannāgatā</b>ti ānantariyakammasamaṅgino.",
+     "<b>Kilesāvaraṇena samannāgatā</b>ti niyatamicchādiṭṭhikā ceva ubhatobyañjanakapaṇḍakā ca.",
+     "<b>Vipākāvaraṇena samannāgatā</b>ti ahetukadvihetukapaṭisandhikā.",
+     "<b>Asaddhā</b>ti buddhādīsu saddhāvirahitā.",
+     "<b>Acchandikā</b>ti apaccanīkapaṭipadāyaṃ chandavirahitā.",
+     "<b>Duppaññā</b>ti lokiyalokuttarasammādiṭṭhiyā virahitā.",
+     "<b>Abhabbā niyāmaṃ okkamituṃ kusalesu dhammesu sammatta</b>nti kusalesu dhammesu niyāmasaṅkhātaṃ sammattasaṅkhātañca ariyamaggaṃ okkamituṃ abhabbāti attho.",
+     "Na kevalañca kasiṇeyeva, aññesupi kammaṭṭhānesu etesamekassapi bhāvanā na ijjhati.",
+     "Tasmā vigatavipākāvaraṇenapi kulaputtena kammāvaraṇañca kilesāvaraṇañca ārakā parivajjetvā saddhammassavanasappurisūpanissayādīhi saddhañca chandañca paññañca vaḍḍhetvā kammaṭṭhānānuyoge yogo karaṇīyoti.",
+     "Iti sādhujanapāmojjatthāya kate visuddhimagge",
+     "Samādhibhāvanādhikāre",
+     "Sesakasiṇaniddeso nāma",
+     "Pañcamo paricchedo."
+    ],
+    "lineRefs": [
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ]
+    ]
+   }
+  ],
+  "wordLinks": [],
+  "before": [],
+  "after": []
+ },
+ "tika": {
+  "book": "Vism-mhṭ",
+  "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
+  "vriCode": "e0103n.att",
+  "from": 91,
+  "to": 101,
+  "paras": [
+   {
+    "para": 91,
+    "vripara": "91",
+    "refs": [
+     "vism5:91"
+    ],
+    "lines": [
+     "<b>Āpokasiṇakathāvaṇṇanā</b>",
+     "Yathāvitthāritassa atthassa atidesopi vitthāraṭṭhāneyeva tiṭṭhatīti āha <b>‘‘vitthārakathā hotī’’</b>ti.",
+     "<b>Āpokasiṇa</b>nti āpokasiṇajjhānaṃ, āpokasiṇakammaṭṭhānaṃ vā.",
+     "<b>Sabbaṃ vitthāretabba</b>nti pathavīkasiṇakammaṭṭhāne vuttanayena vitthāretabbaṃ.",
+     "<b>Ettakampī</b>ti ‘‘kate vā akate vāti sabbaṃ vitthāretabba’’nti ettakampi avatvā.",
+     "Sāmuddikena loṇudakena bharito jalāsayo <b>loṇī</b>.",
+     "Nīlādivaṇṇasaṅkarapariharaṇatthaṃ <b>‘‘suddhavatthena gahita’’</b>nti vuttaṃ.",
+     "<b>Añña</b>nti bhūmiṃ sampattaṃ.",
+     "<b>Tathārūpa</b>nti yādisaṃ ākāsajaṃ udakaṃ, tādisaṃ.",
+     "Tenāha <b>‘‘vippasannaṃ anāvila’’</b>nti, yaṃ pana udakanti sambandho. <b>‘‘Na vaṇṇo paccavekkhitabbo’’</b>tiādīsu yaṃ vattabbaṃ, taṃ pathavīkasiṇakathāyaṃ vuttameva.",
+     "<b>Lakkhaṇaṃ</b> pana idha paggharaṇalakkhaṇaṃ veditabbaṃ.",
+     "<b>Vuttanayenevā</b>ti pathavīkasiṇabhāvanāyaṃ vuttanayeneva.",
+     "Taraṅguṭṭhānādi, pheṇamissatādi ca idha <b>kasiṇadoso.</b>",
+     "<b>So</b>ti yogāvacaro.",
+     "<b>Tassā</b>ti paṭibhāganimittassa."
+    ],
+    "lineRefs": [
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ],
+     [
+      "vism5:91"
+     ]
+    ]
+   },
+   {
+    "para": 92,
+    "vripara": "92",
+    "refs": [
+     "vism5:92"
+    ],
+    "lines": [
+     "<b>Tejokasiṇakathāvaṇṇanā</b>",
+     "<b>Siniddhāni</b> sinehavantāni.",
+     "<b>Sāradārūni</b> na pheggudārūni.",
+     "Jālāya ciraṭṭhitatthaṃ siniddhasāradāruggahaṇaṃ.",
+     "<b>Ghaṭikaṃ ghaṭikaṃ katvā</b>ti khandhaso karitvā.",
+     "<b>Ālimpetvā</b>ti jāletvā.",
+     "<b>Ghanajālāyā</b>ti aviraḷavasena pavattaaggijālāyaṃ.",
+     "<b>Patanasadisa</b>nti patamānasadisaṃ.",
+     "<b>Akate gaṇhantassā</b>ti vuttanayena yathā kasiṇamaṇḍalaṃ paññāyati, evaṃ anabhisaṅkhate kevale tejasmiṃ nimittaṃ gaṇhantassa."
+    ],
+    "lineRefs": [
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ],
+     [
+      "vism5:92"
+     ]
+    ]
+   },
+   {
+    "para": 93,
+    "vripara": "93",
+    "refs": [
+     "vism5:93"
+    ],
+    "lines": [
+     "<b>Vāyokasiṇakathāvaṇṇanā</b>",
+     "<b>Vuttañheta</b>nti ettha <b>hi</b>-saddo hetuattho, yasmāti attho.",
+     "Tassa ‘‘tasmā’’ti iminā sambandho.",
+     "<b>Ucchagga</b>nti ucchukhette yathāṭhitānaṃ aggaṃ.",
+     "<b>Erita</b>nti vātena calitaṃ.",
+     "<b>Samerita</b>nti sabbaso calitaṃ.",
+     "<b>Tasmā</b>ti yasmā ‘‘vāyokasiṇaṃ…pe… upalakkhetī’’ti evaṃ vuttaṃ aṭṭhakathāyaṃ, tasmā.",
+     "<b>Samasīsaṭṭhita</b>nti upari pattānaṃ vasena samasīsaṃ hutvā ṭhitaṃ.",
+     "<b>Veḷuṃ vā rukkhaṃ vā</b>ti etthāpi ‘‘samasīsaṃ ṭhitaṃ ghanapattaveḷuṃ vā ghanapattarukkhaṃ vā’’ti ānetvā yojetabbaṃ.",
+     "Ekaṅgulādippamāṇesu kesesu rassabhāvato, dīghataresu olambanato, viraḷesu anuppavesato vātappahāro na paññāyatīti <b>caturaṅgulappamāṇa</b>ggahaṇaṃ, <b>ghana</b>ggahaṇañca kataṃ.",
+     "<b>Etasmiṃ ṭhāne paharatīti satiṃ ṭhapetvā</b>ti ucchaggādīnaṃ pacalanākāraggahaṇamukhena tesaṃ pahārake vātasaṅghāte satiṃ upaṭṭhapetvā.",
+     "<b>Tattha satiṃ ṭhapetvā</b>ti tasmiṃ kāyapadesassa saṅghaṭṭanavasena pavatte vāyupiṇḍe saṅghaṭṭanākāraggahaṇamukhena satiṃ upaṭṭhapetvā. ‘‘Usumavaṭṭisadisa’’nti etena purimakasiṇassa viya imassāpi nimittassa saṃviggahataṃ dasseti. ‘‘Niccala’’nti iminā niccalabhāvoyeva uggahanimittato imassa visesoti paṭibhāganimittassāpi usumavaṭṭisadisatāva vibhāvitā hoti."
+    ],
+    "lineRefs": [
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ],
+     [
+      "vism5:93"
+     ]
+    ]
+   },
+   {
+    "para": 94,
+    "vripara": "94",
+    "refs": [
+     "vism5:94"
+    ],
+    "lines": [
+     "<b>Nīlakasiṇakathāvaṇṇanā</b>",
+     "Añjanarājivaṭṭādi <b>vaṇṇadhātuyā vā.</b>",
+     "<b>Tathārūpaṃ mālāgaccha</b>nti aviraḷavikasitanīlavaṇṇapupphasañchannaṃ pupphagacchaṃ.",
+     "<b>Itarenā</b>ti akatādhikārena.",
+     "<b>Girikaṇṇika</b>ggahanena nīlaṃ girikaṇṇikamāha.",
+     "<b>Karaṇḍapaṭalaṃ</b> samuggapidhānaṃ.",
+     "<b>Pattehiyevā</b>ti nīluppalādīnaṃ kesaravaṇṭāni apanetvā kevalehi pattehiyeva.",
+     "<b>Pūretabba</b>nti nīlavaṇṇaṃ vatthaṃ gahetvā bhaṇḍikaṃ viya bandhitvā yathā nīlamaṇḍalaṃ hutvā paññāyati, tathā <b>caṅkoṭakaṃ vā karaṇḍapaṭalaṃ vā pūretabbaṃ.</b>",
+     "<b>Mukhavaṭṭiyaṃ vā assā</b>ti assa caṅkoṭakassa, karaṇḍapaṭalassa vā mukhavaṭṭiyaṃ <b>bandhitabbaṃ.</b>",
+     "<b>Maṇitālavaṇṭaṃ</b> indanīlamaṇimayaṃ tālavaṇṭaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ],
+     [
+      "vism5:94"
+     ]
+    ]
+   },
+   {
+    "para": 95,
+    "vripara": "95",
+    "refs": [
+     "vism5:95"
+    ],
+    "lines": [
+     "<b>Pītakasiṇakathāvaṇṇanā</b>",
+     "Pītakasiṇe <b>mālāgaccha</b>nti ikkaṭādimālāgacchaṃ.",
+     "Haritālaṃ, manosilā vā <b>dhātu.</b>",
+     "<b>Pattaṅgapupphehī</b>ti pattaṅganāmikā pītavaṇṇapupphā ekā gacchajāti, tassa pupphehi.",
+     "<b>Āsanapūja</b>nti cetiyaṅgaṇe kataṃ āsanapūjaṃ.",
+     "<b>Kaṇikārapupphādinā</b>ti <b>ādi</b>-saddena ākulikiṅkirātapupphādīnaṃ saṅgaho daṭṭhabbo."
+    ],
+    "lineRefs": [
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ],
+     [
+      "vism5:95"
+     ]
+    ]
+   },
+   {
+    "para": 96,
+    "vripara": "96",
+    "refs": [
+     "vism5:96"
+    ],
+    "lines": [
+     "<b>Lohitakasiṇakathāvaṇṇanā</b>",
+     "<b>Lohitamaṇi</b> lohitaṅgamaṇiādi.",
+     "<b>Lohitadhātu</b> gerukajātihiṅgulikādi."
+    ],
+    "lineRefs": [
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ],
+     [
+      "vism5:96"
+     ]
+    ]
+   },
+   {
+    "para": 97,
+    "vripara": "97",
+    "refs": [
+     "vism5:97"
+    ],
+    "lines": [
+     "<b>Odātakasiṇakathāvaṇṇanā</b>",
+     "Odātakasiṇe <b>mālāgaccha</b>nti nandiyāvattādimālāgacchaṃ.",
+     "<b>Dhātu</b> kakkaṭimuttasetikādi."
+    ],
+    "lineRefs": [
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ],
+     [
+      "vism5:97"
+     ]
+    ]
+   },
+   {
+    "para": 98,
+    "vripara": "98",
+    "refs": [
+     "vism5:98"
+    ],
+    "lines": [
+     "<b>Ālokakasiṇakathāvaṇṇanā</b>",
+     "<b>Tathā asakkontenā</b>ti yathā sūriyālokādivasena obhāsanimittuppādanaṃ vuttaṃ, tassa obhāsamaṇḍalassa na ciraṭṭhititāya tathā nimittuppādanaṃ kātuṃ asakkontena.",
+     "Ghaṭamukhena niggacchanakaobhāsassa mahantabhāvato <b>‘‘ghaṭamukhaṃ pidahitvā’’</b>ti vuttaṃ.",
+     "<b>Bhittimukha</b>nti bhittiabhimukhaṃ.",
+     "<b>Uṭṭhitamaṇḍalasadisa</b>nti bhittiādīsu uṭṭhitapākatikaālokamaṇḍalasadisaṃ.",
+     "<b>Ghanavippasannaṃ ālokapuñjasadisa</b>nti bhagavato byāmappabhā viya bahalo, vippasanno ca hutvā puñjabhūto āloko atthi ce, taṃsadisoti attho."
+    ],
+    "lineRefs": [
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ],
+     [
+      "vism5:98"
+     ]
+    ]
+   },
+   {
+    "para": 99,
+    "vripara": "99",
+    "refs": [
+     "vism5:99"
+    ],
+    "lines": [
+     "<b>Paricchinnākāsakasiṇakathāvaṇṇanā</b>",
+     "<b>Chiddasadisameva hotī</b>ti yehi bhittipariyantādīhi paricchinnaṃ, taṃ chiddaṃ, taṃsadisaṃ, tenavākārena uggahanimittaṃ upaṭṭhātīti attho. <b>‘‘Vaḍḍhiyamānampi na vaḍḍhatī’’</b>ti uggahanimittassa avaḍḍhanīyataṃ dassetuṃ vuttaṃ.",
+     "Sabbampi hi uggahanimittaṃ vaḍḍhiyamānaṃ na vaḍḍhatiyeva.",
+     "Satipi ca vaḍḍhetukāmatāyaṃ vaḍḍhanā na sambhavati bhāvanāya paridubbalattā.",
+     "Bhāvanāvasena hi nimittavaḍḍhanā.",
+     "Paṭibhāganimittaṃ pana tasmiṃ uppanne bhāvanā thirāti katvā <b>‘‘vaḍḍhiyamānaṃ vaḍḍhatī’’</b>ti vuttaṃ.",
+     "Kiñcāpi <b>pāḷiyaṃ</b> ‘‘pathavīkasiṇādīni rūpajhānārammaṇāni aṭṭheva kasiṇāni sarūpato āgatāni, odātakasiṇe pana ālokakasiṇaṃ, ākāsakasiṇe ca paricchinnākāsakasiṇaṃ antogadhaṃ katvā desanā katā’’ti adhippāyenāha <b>‘‘iti kasiṇāni dasabalo, dasa yāni avocā’’</b>ti.",
+     "<b>Pakiṇṇakakathāpi viññeyyā</b>ti pubbe viya asādhāraṇaṃ tasmiṃ tasmiṃ kasiṇe paṭiniyatameva atthaṃ aggahetvā asādhāraṇato, sādhāraṇato ca tattha tattha pakiṇṇakaṃ visaṭaṃ atthaṃ gahetvā pavattā pakiṇṇakakathāpi vijānitabbā."
+    ],
+    "lineRefs": [
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ],
+     [
+      "vism5:99"
+     ]
+    ]
+   },
+   {
+    "para": 100,
+    "vripara": "100",
+    "refs": [
+     "vism5:100"
+    ],
+    "lines": [
+     "<b>Pakiṇṇakakathāvaṇṇanā</b>",
+     "<b>Ādibhāvo</b>ti ettha <b>ādi</b>-saddena yassa kassaci pathavīpakkhiyassa vatthuno nimmānādiṃ saṅgaṇhāti.",
+     "<b>Ṭhānanisajjādikappanaṃ vā</b>ti etthāpi ‘‘ākāse vā udake vā’’ti ānetvā sambandhitabbaṃ.",
+     "<b>Parittaappamāṇanayenā</b>ti nīlādivaṇṇaṃ anāmasitvā parittaappamāṇanayeneva.",
+     "<b>Evamādīnī</b>ti <b>ādi</b>-saddena sarīrato udakadhārānimmānādiṃ saṅgaṇhāti.",
+     "<b>Yadeva so icchati tassa ḍahanasamatthatā</b>ti bahūsu kappāsapicusāradāruādīsu ekajjhaṃ rāsibhūtesu ṭhitesu yaṃ yadeva icchati, tassa tasseva ḍahanasamatthatā.",
+     "Idha <b>ādi</b>-saddena andhakāravidhamanādiṃ saṅgaṇhāti.",
+     "Vāyugatiyā gamanaṃ <b>vāyugatigamanaṃ,</b> atisīghagamanaṃ.",
+     "Idha <b>ādi</b>-saddena yadicchitadesantaraṃ pāpuṇanādiṃ saṅgaṇhāti.",
+     "<b>Suvaṇṇanti adhimuccanā</b> suvaṇṇabhāvādhiṭṭhānaṃ seyyathāpi āyasmā pilindavaccho (pārā. 619-620) tiṇaṇḍupagapāsādādīnaṃ.",
+     "<b>Vuttanayenā</b>ti suvaṇṇadubbaṇṇanayena.",
+     "Vaṇṇakasiṇesu tattha tattha <b>ādi</b>-saddena nīlobhāsanimmānādīnaṃ saṅgaho daṭṭhabbo.",
+     "<b>Pathavīpabbatādī</b>ti <b>ādi</b>-saddena samuddādīnaṃ saṅgaho daṭṭhabbo.",
+     "<b>Sabbāneva</b> dasapi kasiṇāni.",
+     "<b>Imaṃ pabhedaṃ labhantī</b>ti imaṃ vaḍḍhanādivisesaṃ pāpuṇanti.",
+     "<b>Eko</b>ti ekacco.",
+     "<b>Sañjānātī</b>ti bhāvanāpaññāya sañjānāti.",
+     "<b>Ādi</b>-saddena ‘‘āpokasiṇa’’ntiādipāḷiṃ saṅgaṇhāti.",
+     "<b>Uparigaganatalābhimukhaṃ</b> ‘‘pathavīkasiṇameko sañjānātī’’ti pāḷipadāni ānetvā sambandhitabbaṃ.",
+     "Tañca kho vaḍḍhanavasena.",
+     "Tenāha <b>‘‘ekacco hi uddhameva kasiṇaṃ vaḍḍhetī’’</b>ti.",
+     "<b>Heṭṭhābhūmitalābhimukha</b>ntiādīsupi eseva nayo.",
+     "Pubbe vaḍḍhanakāle payojanaṃ anapekkhitvā vaḍḍhentānaṃ vasena vuttattā idāni <b>‘‘tena tena vā kāraṇena evaṃ pasāretī’’</b>ti āha, kasiṇaṃ vaḍḍhetīti attho.",
+     "Yathā kinti āha <b>‘‘ālokamiva dibbacakkhunā rūpadassanakāmo’’</b>ti.",
+     "Uddhañce rūpaṃ daṭṭhukāmo uddhaṃ ālokaṃ pasāreti, adho ce rūpaṃ daṭṭhukāmo adho ālokaṃ pasāreti, samantato ce rūpaṃ daṭṭhukāmo samantato ālokaṃ pasāreti, evamayaṃ kasiṇanti attho.",
+     "<b>Ekassā</b>ti pathavīkasiṇādīsu ekekassa.",
+     "<b>Aññabhāvānupagamanattha</b>nti aññakasiṇabhāvānupagamanadīpanatthaṃ, na aññaṃ pathavīādi.",
+     "Na hi udakena ṭhitaṭṭhāne sasambhārapathavī atthi.",
+     "<b>Añño kasiṇasambhedo</b>ti āpokasiṇādinā saṅkaro.",
+     "<b>Sabbatthā</b>ti sabbesu āpokasiṇādīsu sesakasiṇesu.",
+     "Ekadese aṭṭhatvā anavasesena pharaṇappamāṇassa aggahaṇato pharaṇaṃ <b>appamāṇaṃ</b>.",
+     "Teneva hi nesaṃ kasiṇasamaññā.",
+     "Tathā cāha <b>‘‘tañhī’’</b>tiādi.",
+     "Tattha <b>cetasā pharanto</b>ti bhāvanācittena ālambanaṃ karonto.",
+     "Bhāvanācittañhi kasiṇaṃ parittaṃ vā vipulaṃ vā ekakkhaṇe sakalameva manasi karoti, na ekadesanti."
+    ],
+    "lineRefs": [
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ],
+     [
+      "vism5:100"
+     ]
+    ]
+   },
+   {
+    "para": 101,
+    "vripara": "101",
+    "refs": [
+     "vism5:101"
+    ],
+    "lines": [
+     "<b>Ānantariyakammasamaṅgino</b>ti pañcasu ānantariyakammesu yena kenaci samannāgatā.",
+     "<b>Niyatamicchādiṭṭhikā</b>ti ahetukadiṭṭhi akiriyadiṭṭhi natthikadiṭṭhīti tīsu micchādiṭṭhīsu yāya kāyaci niyatāya micchādiṭṭhiyā samannāgatā.",
+     "<b>Ubhatobyañjanakapaṇḍakā</b>ti ubhatobyañjanakā, paṇḍakā ca.",
+     "Kāmañcete ahetukapaṭisandhikattā vipākāvaraṇena samannāgatā honti, tathāpi tibbakilesattā kilesāvaraṇena samannāgatā vuttā.",
+     "<b>Ahetukadvihetukapaṭisandhikā</b>ti ahetukapaṭisandhikā, dvihetukapaṭisandhikā ca.",
+     "Duhetukapaṭisandhikānampi hi ariyamaggapaṭivedho, jhānapaṭilābho ca natthi, tasmā tepi vipākāvaraṇena samannāgatā eva.",
+     "<b>Apaccanīkapaṭipadāya</b>nti maggassa anulomapaṭipadāyaṃ saccānulomikāyaṃ vipassanāyaṃ.",
+     "<b>Acchandikā</b>ti ‘‘kattukamyatāchandarahitā’’ti <b>sammohavinodaniyaṃ</b> vuttaṃ, tampi nibbānādhigamatthameva kattukamyatāchandaṃ sandhāya vuttanti daṭṭhabbaṃ.",
+     "Uttarakurukāpi manussā mārādayo viya acchandikaṭṭhānaṃ paviṭṭhā nibbutichandarahitattā.",
+     "<b>Duppaññā</b>ti bhavaṅgapaññāya parihīnā. ‘‘Bhavaṅgapaññāya paripuṇṇāyapi yassa bhavaṅgaṃ lokuttarassa pādakaṃ na hoti, sopi duppaññoyevā’’ti <b>sammohavinodaniyaṃ</b> vuttaṃ.",
+     "Yasmiṃ hi bhavaṅge vattamāne taṃsantatiyaṃ lokuttaraṃ nibbattati, taṃ tassa pādakaṃ nāma hoti.",
+     "<b>Kusalesu dhammesū</b>ti anavajjadhammesu, sukhavipākadhammesu vā.",
+     "<b>Okkamitu</b>nti adhigantuṃ.",
+     "<b>Kasiṇeyevā</b>ti kasiṇakammaṭṭhāneyeva.",
+     "<b>Etesa</b>nti kammāvaraṇasamannāgatādīnaṃ.",
+     "<b>Tasmā</b>ti yasmā ete vipākantarāyādayo evaṃ atthajānikarā, anatthahetubhūtā ca, tasmā.",
+     "Tiṇṇameva cettha antarāyānaṃ gahaṇaṃ itarassa sappaṭikārattā, kammantarāyapakkhikattā vāti daṭṭhabbaṃ.",
+     "<b>Sappurisūpanissayādīhī</b>ti <b>ādi</b>-saddena tajjaṃ yonisomanasikārādiṃ saṅgaṇhāti.",
+     "<b>Saddha</b>nti kammaphalasaddhaṃ, ratanattayasaddhañca.",
+     "<b>Chanda</b>nti bhāvanānuyoge tibbakattukamyatāsaṅkhātaṃ kusalacchandaṃ.",
+     "<b>Pañña</b>nti pārihāriyapaññaṃ.",
+     "<b>Vaḍḍhetvā</b>ti yathā bhāvanā ijjhati, tathā paribrūhetvā.",
+     "Yaṃ panettha atthato na vibhattaṃ, taṃ suviññeyyattā, heṭṭhā vuttanayattā ca na vibhattaṃ.",
+     "Sesakasiṇaniddesavaṇṇanā niṭṭhitā.",
+     "Iti pañcamaparicchedavaṇṇanā."
+    ],
+    "lineRefs": [
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ],
+     [
+      "vism5:101"
+     ]
+    ]
+   }
+  ],
+  "wordLinks": [],
+  "before": [],
+  "after": []
+ },
  "tika2": null
 }

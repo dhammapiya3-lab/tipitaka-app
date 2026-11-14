@@ -226,9 +226,12 @@ export function SuttaView({
   /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
-  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">(
+  const [layerState, setLayer] = useState<"sutta" | "attha" | "tika">(
     initialLayer ?? "sutta",
   );
+  /** 주석 문헌(청정도론)은 경 칸 없이 주석서(본문)·복주석서만 — 처음부터 주석서 칸으로 연다 */
+  const commentaryOnly = /^vism\d/.test(suttaId);
+  const layer = commentaryOnly && layerState === "sutta" ? "attha" : layerState;
   /** 이어 붙인 주석서·복주석서 (작은 파일이라 경을 열 때 함께 받는다) */
   const [comm, setComm] = useState<
     Partial<Record<CommentaryLayer, SuttaCommentary>>
@@ -352,9 +355,15 @@ export function SuttaView({
       const [vol, page] = n.split(".");
       const pg = String(Number(page));
       // PTS 는 학계에서 쓰는 꼴로 (S v 421), 나머지는 판 이름 + 권.쪽
+      // 주석서·복주석서 줄(c:<책>:…)의 PTS 쪽은 그 주석서 이름으로 (Spk iii 296)
+      const commBook = key.startsWith("c:")
+        ? key.split(":")[1].replace(/-(?:i|ii|iii|iv|v|vi)$/, "")
+        : null;
       const label =
         ed === "P"
-          ? `PTS ${nikaya ? `${nikaya[0].toUpperCase()} ${roman[Number(vol)] ?? vol} ` : `${Number(vol)}.`}${pg}`
+          ? commBook
+            ? `PTS ${commBook} ${roman[Number(vol)] ?? vol} ${pg}`
+            : `PTS ${nikaya ? `${nikaya[0].toUpperCase()} ${roman[Number(vol)] ?? vol} ` : `${Number(vol)}.`}${pg}`
           : `${{ M: "Mya", T: "Thai", V: "VRI" }[ed] ?? ed} ${Number(vol)}.${pg}`;
       map.set(key, [...(map.get(key) ?? []), label]);
     }
@@ -964,6 +973,8 @@ export function SuttaView({
           bookBadge={bookLabel(comm[l]!, comm[l]!.paras[i].book)}
           picked={commPicked}
           editions={comm[l]!.editions}
+          bookId={comm[l]!.book}
+          pageMarksOf={(k) => pageMarksOf.get(k)}
         />
       ));
   /** 경 문단 하나와 그 주석을 한 줄에 (나란히 보기) */
@@ -1639,6 +1650,7 @@ export function SuttaView({
                 wordLinksNow && shown.some((e) => e.language === "pli"),
             }}
             commentary={commentary}
+            commentaryOnly={commentaryOnly}
             isDesktop={isDesktop}
             onChange={(next) => {
               setLayer(next.layer);
@@ -1669,6 +1681,7 @@ export function SuttaView({
               <div className="px-4 pt-2 pb-6">
                 <div className={cn("mx-auto w-full min-w-0", readWidth)}>
                   <CommentaryView
+                    pageMarksOf={(k) => pageMarksOf.get(k)}
                     suttaId={suttaId}
                     layer={layer}
                     available={commentary.includes(layer)}
@@ -1692,18 +1705,22 @@ export function SuttaView({
                         pali: "",
                       })
                     }
-                    onGoParagraph={(p) => {
-                      setLayer("sutta");
-                      if (focus) openParagraph(p);
-                      else
-                        requestAnimationFrame(() =>
-                          requestAnimationFrame(() =>
-                            document
-                              .getElementById(`section-${p}`)
-                              ?.scrollIntoView({ block: "start" }),
-                          ),
-                        );
-                    }}
+                    onGoParagraph={
+                      commentaryOnly
+                        ? undefined
+                        : (p) => {
+                            setLayer("sutta");
+                            if (focus) openParagraph(p);
+                            else
+                              requestAnimationFrame(() =>
+                                requestAnimationFrame(() =>
+                                  document
+                                    .getElementById(`section-${p}`)
+                                    ?.scrollIntoView({ block: "start" }),
+                                ),
+                              );
+                          }
+                    }
                   />
                 </div>
               </div>

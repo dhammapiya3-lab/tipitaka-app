@@ -8,6 +8,8 @@
   번호 바로 앞의 소제목은 <VRI 문단>.0 (소제목 줄), 문단 중간의 소제목·맺음 줄은 굵게 쓴 본문 줄.
 - 산문은 문장마다 한 줄, 게송은 VRI 의 줄 그대로.
 - 마하상기띠본·PTS 번역본에는 청정도론이 없어 VRI 원문만 있다 (이 경들은 VRI 원문이 곧 기준 원문).
+- 청정도론은 주석 문헌이라 화면에서는 '주석서' 칸에 본문을, '복주석서' 칸에 마하띠까(Visuddhimagga-mahāṭīkā,
+  Paramatthamañjūsā — e0103n·e0104n.att.xml)를 둔다. 마하띠까의 VRI 문단 번호는 청정도론의 같은 번호 문단을 풀이한다.
 """
 
 import json
@@ -84,10 +86,10 @@ def sentences(text: str) -> list[str]:
     return balance([p.strip() for p in pieces if p.strip()])
 
 
-def main() -> None:
-    xml_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/refs/vism")
+def read_chapters(xml_dir: Path, codes: list[str]) -> list[dict]:
+    """XML 파일들 → 장 23개 [{title, items: [(rend, VRI 번호, 글)], preface}] (1장 앞의 머리 부분은 1장 첫머리로)."""
     chapters: list[dict] = []
-    for code, _ in FILES:
+    for code in codes:
         raw = (xml_dir / f"{code}.xml").read_bytes().decode("utf-16")
         preface: list[str] = []
         chapter = None
@@ -99,20 +101,72 @@ def main() -> None:
                 preface = []
                 continue
             if chapter is None:
-                # 권 머리: 귀경게·책 이름·권 이름은 머리말로, 1장 앞의 문단(인연 이야기 1~5)은 1장에 넣는다
-                if num is None and rend in {"centre", "book", "subhead"} and not text.startswith("Nidāna"):
+                # 권 머리: 귀경게·책 이름·권 이름은 머리말로, 1장 앞의 문단(인연 이야기 1~5 등)은 1장에 넣는다
+                if num is None and rend in {"centre", "book", "subhead"} and not text.startswith("Nidāna") and not text.startswith("Ganthārambha"):
                     preface.append(text)
                     continue
                 chapter = {"title": None, "items": [], "preface": preface}
                 chapters.append(chapter)
                 preface = []
             chapter["items"].append((rend, num, text))
-    # 1장 앞 인연 이야기(Nidānādikathā)는 1장 첫머리로
     if chapters[0]["title"] is None:
         first = chapters.pop(0)
         chapters[0]["items"][:0] = first["items"]
         chapters[0]["preface"] = first["preface"]
     assert len(chapters) == 23, len(chapters)
+    return chapters
+
+
+def para_id(num: str) -> int:
+    return int(num.split("-")[0])
+
+
+def tika_paras(items: list, sid: str, root_paras: list[int]) -> list[dict]:
+    """마하띠까 한 장 → 복주석서 문단들. VRI 문단 번호가 청정도론의 같은 번호 문단을 풀이한다."""
+    paras: list[dict] = []
+    cur = None
+    pending: list[str] = []
+    for rend, num, text in items:
+        if num:
+            n = para_id(num)
+            # 이 장에 없는 번호면 그 앞의 가장 가까운 문단
+            target = max([r for r in root_paras if r <= n], default=root_paras[0])
+            cur = {"para": n, "vripara": num, "refs": [f"{sid}:{target}"], "lines": []}
+            paras.append(cur)
+            cur["lines"] += [f"<b>{h}</b>" for h in pending]
+            pending = []
+            if not text:
+                continue
+        if rend in HEADINGS:
+            pending.append(text)
+            continue
+        if cur is None:
+            n = root_paras[0]
+            cur = {"para": n, "vripara": None, "refs": [f"{sid}:{n}"], "lines": []}
+            paras.append(cur)
+        if pending:
+            cur["lines"] += [f"<b>{h}</b>" for h in pending]
+            pending = []
+        cur["lines"] += [text] if VERSE.match(rend) or rend == "centre" else sentences(text)
+    if pending and cur:
+        cur["lines"] += [f"<b>{h}</b>" for h in pending]
+    # 같은 VRI 번호가 두 번 나오면(드묾) 앞 문단에 합친다
+    merged: dict[int, dict] = {}
+    for p in paras:
+        if p["para"] in merged:
+            merged[p["para"]]["lines"] += p["lines"]
+        else:
+            merged[p["para"]] = p
+    out = list(merged.values())
+    for p in out:
+        p["lineRefs"] = [p["refs"]] * len(p["lines"])
+    return out
+
+
+def main() -> None:
+    xml_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/refs/vism")
+    chapters = read_chapters(xml_dir, [c for c, _ in FILES])
+    tika_chapters = read_chapters(xml_dir, ["e0103n.att", "e0104n.att"])
 
     report = []
     for c, ch in enumerate(chapters, start=1):
@@ -153,19 +207,64 @@ def main() -> None:
             for h in pending:
                 line += 1
                 segs[f"{sid}:{cur}.{line}"] = f"<b>{h}</b>"
+        # 주석서 칸: 청정도론 본문 (VRI 문단 하나 = 카드 하나). 경 칸은 쓰지 않는다 — 청정도론은 주석 문헌이라
+        root_paras: list[int] = []
+        attha_paras: list[dict] = []
+        for key, text in segs.items():
+            tail = key.split(":")[1]
+            if tail.startswith("0."):
+                continue
+            num, line_no = tail.rsplit(".", 1)
+            n = para_id(num)
+            if not attha_paras or attha_paras[-1]["vripara"] != num:
+                root_paras.append(n)
+                attha_paras.append({"para": n, "vripara": num, "refs": [f"{sid}:{num}"], "lines": []})
+            attha_paras[-1]["lines"].append(f"<b>{text}</b>" if line_no == "0" else text)
+        for p in attha_paras:
+            p["lineRefs"] = [p["refs"]] * len(p["lines"])
+        tch = tika_chapters[c - 1]
+        tika = tika_paras(tch["items"], sid, root_paras)
+        code = FILES[0 if c <= 11 else 1][0]
+        tcode = "e0103n.att" if c <= 11 else "e0104n.att"
         doc = {
             "suttaId": sid,
-            "source": {"db": "VRI Chaṭṭha Saṅgāyana (tipitaka.org XML)", "book": "Vism", "vriCode": FILES[0 if c <= 11 else 1][0]},
+            "source": {
+                "db": "VRI Chaṭṭha Saṅgāyana (tipitaka.org XML)",
+                "book": "Vism",
+                "vriCode": FILES[0 if c <= 11 else 1][0],
+                # VRI 문단 번호 범위 (쪽 번호 가져오기에서 장 차례를 맞추는 데 쓴다)
+                "paras": [int(first_num), int(cur)],
+            },
             "segments": segs,
             "unsure": [],
             "preface": ch["preface"],
-            "attha": None,
-            "tika": None,
+            "attha": {
+                "book": "Vism",
+                "bookName": "Visuddhimagga",
+                "vriCode": code,
+                "from": attha_paras[0]["para"],
+                "to": attha_paras[-1]["para"],
+                "paras": attha_paras,
+                "wordLinks": [],
+                "before": [],
+                "after": [],
+            },
+            "tika": {
+                "book": "Vism-mhṭ",
+                "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
+                "vriCode": tcode,
+                "from": tika[0]["para"] if tika else 0,
+                "to": tika[-1]["para"] if tika else 0,
+                "paras": tika,
+                "wordLinks": [],
+                "before": [],
+                "after": [],
+            },
             "tika2": None,
         }
         (OUT / f"{sid}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         paras = {k.split(":")[1].rsplit(".", 1)[0] for k in segs if not k.split(":")[1].startswith("0.")}
-        report.append(f"{sid} {title}: 문단 {len(paras)}개, 줄 {len(segs) - 2}개, 소제목 {heads}개")
+        report.append(f"{sid} {title}: 문단 {len(paras)}개, 줄 {len(segs) - 2}개, 소제목 {heads}개 · 마하띠까 문단 {len(tika)}개 ({tch['title']})")
         ch["name"] = title
 
     structure = [

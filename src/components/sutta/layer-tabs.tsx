@@ -31,6 +31,7 @@ const LABELS: [Layer, string][] = [
 export function LayerTabs({
   state,
   commentary,
+  commentaryOnly = false,
   isDesktop,
   className,
   onChange,
@@ -38,6 +39,8 @@ export function LayerTabs({
   state: LayerTabsState;
   /** 이 경에 있는 주석 층 */
   commentary: CommentaryLayer[];
+  /** 주석 문헌(청정도론) — 경 단추·주석 낱말·나란히 보기 없이 주석서·복주석서만 */
+  commentaryOnly?: boolean;
   isDesktop: boolean;
   className?: string;
   /** 바뀐 뒤의 상태 (화면 전체에 반영하는 일은 부모가 한다) */
@@ -68,38 +71,39 @@ export function LayerTabs({
     );
   return (
     <div className={className} role="tablist" aria-label="본문 종류">
-      {LABELS.map(([id, label]) =>
-        shown.parallel ? (
-          // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
-          <button
-            key={id}
-            type="button"
-            aria-pressed={shown.cols.includes(id)}
-            disabled={id !== "sutta" && !commentary.includes(id)}
-            title={`${label} 칸 ${shown.cols.includes(id) ? "끄기" : "켜기"}`}
-            onClick={() => act(toggleCol(id))}
-            className={cn(
-              tabClass(shown.cols.includes(id)),
-              "disabled:opacity-40",
-            )}
-          >
-            {shown.cols.includes(id) ? "✓ " : ""}
-            {label}
-          </button>
-        ) : (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={shown.layer === id}
-            onClick={() => act({ ...shown, layer: id })}
-            className={tabClass(shown.layer === id)}
-          >
-            {label}
-          </button>
-        ),
+      {LABELS.filter(([id]) => !commentaryOnly || id !== "sutta").map(
+        ([id, label]) =>
+          shown.parallel ? (
+            // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
+            <button
+              key={id}
+              type="button"
+              aria-pressed={shown.cols.includes(id)}
+              disabled={id !== "sutta" && !commentary.includes(id)}
+              title={`${label} 칸 ${shown.cols.includes(id) ? "끄기" : "켜기"}`}
+              onClick={() => act(toggleCol(id))}
+              className={cn(
+                tabClass(shown.cols.includes(id)),
+                "disabled:opacity-40",
+              )}
+            >
+              {shown.cols.includes(id) ? "✓ " : ""}
+              {label}
+            </button>
+          ) : (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={shown.layer === id}
+              onClick={() => act({ ...shown, layer: id })}
+              className={tabClass(shown.layer === id)}
+            >
+              {label}
+            </button>
+          ),
       )}
-      {isDesktop && commentary.length > 0 ? (
+      {isDesktop && commentary.length > 0 && !commentaryOnly ? (
         <button
           type="button"
           aria-pressed={shown.wordLinks}
@@ -116,7 +120,7 @@ export function LayerTabs({
           주석 낱말
         </button>
       ) : null}
-      {isDesktop && commentary.length > 0 ? (
+      {isDesktop && commentary.length > 0 && !commentaryOnly ? (
         <button
           type="button"
           aria-pressed={shown.parallel}

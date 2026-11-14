@@ -30,7 +30,15 @@ export function MemoDialog({
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? null : onClose())}>
       <DialogContent className="sm:max-w-lg">
-        {open ? <MemoForm key={label} label={label} initial={initial} onSave={onSave} onClose={onClose} /> : null}
+        {open ? (
+          <MemoForm
+            key={label}
+            label={label}
+            initial={initial}
+            onSave={onSave}
+            onClose={onClose}
+          />
+        ) : null}
       </DialogContent>
     </Dialog>
   );
@@ -59,7 +67,9 @@ function MemoForm({
     >
       <DialogHeader>
         <DialogTitle>메모 — {label}</DialogTitle>
-        <DialogDescription>이 기기에만 저장되고, 책갈피 화면에서 함께 볼 수 있습니다.</DialogDescription>
+        <DialogDescription>
+          이 기기에만 저장되고, 책갈피 화면에서 함께 볼 수 있습니다.
+        </DialogDescription>
       </DialogHeader>
       <Textarea
         autoFocus

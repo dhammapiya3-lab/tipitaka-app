@@ -27,7 +27,8 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   /** 경 목록에서 판본 하나를 골라 들어오면 (?ed=) 그 판본으로 연다 */
   const ed = params.get("ed");
   const layerParam = params.get("layer");
-  const layer = layerParam === "attha" || layerParam === "tika" ? layerParam : null;
+  const layer =
+    layerParam === "attha" || layerParam === "tika" ? layerParam : null;
   const router = useRouter();
   const [state, setState] = useState<State>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
@@ -57,7 +58,9 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   useEffect(() => {
     if (!sutta || (!ed && !layer)) return;
     // 주소에서 ?ed= 를 지운다 (고른 판본은 읽기 화면이 처음 한 번 받아 둔다)
-    router.replace(`/sutta/?id=${encodeURIComponent(sutta.id)}${window.location.hash}`);
+    router.replace(
+      `/sutta/?id=${encodeURIComponent(sutta.id)}${window.location.hash}`,
+    );
   }, [sutta, ed, layer, router]);
 
   if (state.status === "loading") {
@@ -72,30 +75,36 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   if (state.status === "error") {
     return (
       <>
-      <SubBar title="경 읽기" backHref="/suttas" />
-      <EmptyState
-        icon={CloudOff}
-        title="경 목록을 불러오지 못했습니다"
-        description="인터넷 연결을 확인한 뒤 다시 시도해 주세요."
-        action={<Button onClick={() => setAttempt((n) => n + 1)}>다시 시도</Button>}
-      />
+        <SubBar title="경 읽기" backHref="/suttas" />
+        <EmptyState
+          icon={CloudOff}
+          title="경 목록을 불러오지 못했습니다"
+          description="인터넷 연결을 확인한 뒤 다시 시도해 주세요."
+          action={
+            <Button onClick={() => setAttempt((n) => n + 1)}>다시 시도</Button>
+          }
+        />
       </>
     );
   }
   if (!sutta) {
     return (
       <>
-      <SubBar title="경 읽기" backHref="/suttas" />
-      <EmptyState
-        icon={BookX}
-        title="찾는 경이 없습니다"
-        description={id ? `"${id}" 경은 아직 본문이 없거나 번호가 다릅니다.` : "경을 고르지 않았습니다."}
-        action={
-          <Link href="/suttas" className={buttonVariants()}>
-            경전 목록으로
-          </Link>
-        }
-      />
+        <SubBar title="경 읽기" backHref="/suttas" />
+        <EmptyState
+          icon={BookX}
+          title="찾는 경이 없습니다"
+          description={
+            id
+              ? `"${id}" 경은 아직 본문이 없거나 번호가 다릅니다.`
+              : "경을 고르지 않았습니다."
+          }
+          action={
+            <Link href="/suttas" className={buttonVariants()}>
+              경전 목록으로
+            </Link>
+          }
+        />
       </>
     );
   }

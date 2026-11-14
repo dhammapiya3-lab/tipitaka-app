@@ -3,7 +3,11 @@
  "source": {
   "db": "VRI Chaṭṭha Saṅgāyana (tipitaka.org XML)",
   "book": "Vism",
-  "vriCode": "e0102n.mul"
+  "vriCode": "e0102n.mul",
+  "paras": [
+   662,
+   677
+  ]
  },
  "segments": {
   "vism18:0.1": "Visuddhimagga",
@@ -192,7 +196,2389 @@
  },
  "unsure": [],
  "preface": [],
- "attha": null,
- "tika": null,
+ "attha": {
+  "book": "Vism",
+  "bookName": "Visuddhimagga",
+  "vriCode": "e0102n.mul",
+  "from": 662,
+  "to": 677,
+  "paras": [
+   {
+    "para": 662,
+    "vripara": "662",
+    "refs": [
+     "vism18:662"
+    ],
+    "lines": [
+     "<b>Nāmarūpapariggahakathā</b>",
+     "Idāni yā ‘‘imesu bhūmibhūtesu dhammesu uggahaparipucchāvasena ñāṇaparicayaṃ katvā ‘sīlavisuddhi ceva cittavisuddhi cā’ti dve mūlabhūtā visuddhiyo sampādetabbā’’ti vuttā.",
+     "Tattha <b>sīlavisuddhi</b> nāma suparisuddhaṃ pātimokkhasaṃvarādicatubbidhaṃ sīlaṃ, tañca <b>sīlaniddese</b> vitthāritameva.",
+     "<b>Cittavisuddhi</b> nāma saupacārā aṭṭha samāpattiyo, tāpi cittasīsena vutta<b>samādhiniddese</b> sabbākārena vitthāritā eva.",
+     "Tasmā tā tattha vitthāritanayeneva veditabbā.",
+     "Yaṃ pana vuttaṃ ‘‘diṭṭhivisuddhi, kaṅkhāvitaraṇavisuddhi, maggāmaggañāṇadassanavisuddhi, paṭipadāñāṇadassanavisuddhi, ñāṇadassanavisuddhīti imā pana pañca visuddhiyo sarīra’’nti, tattha <b>nāmarūpānaṃ yāthāvadassanaṃ diṭṭhivisuddhi</b> nāma."
+    ],
+    "lineRefs": [
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ]
+    ]
+   },
+   {
+    "para": 663,
+    "vripara": "663",
+    "refs": [
+     "vism18:663"
+    ],
+    "lines": [
+     "Taṃ sampādetukāmena <b>samathayānikena</b> tāva ṭhapetvā nevasaññānāsaññāyatanaṃ avasesarūpārūpāvacarajjhānānaṃ aññatarato vuṭṭhāya vitakkādīni jhānaṅgāni, taṃsampayuttā ca dhammā <b>lakkhaṇarasādivasena</b> pariggahetabbā.",
+     "Pariggahetvā sabbampetaṃ ārammaṇābhimukhaṃ namanato namanaṭṭhena <b>nāma</b>nti vavatthapetabbaṃ.",
+     "Tato yathā nāma puriso antogehe sappaṃ disvā taṃ anubandhamāno tassa āsayaṃ passati, evameva ayampi yogāvacaro taṃ nāmaṃ upaparikkhanto ‘‘idaṃ nāmaṃ kiṃ nissāya pavattatī’’ti pariyesamāno tassa nissayaṃ hadayarūpaṃ passati.",
+     "Tato hadayarūpassa nissayabhūtāni, bhūtanissitāni ca sesupādāyarūpānīti rūpaṃ pariggaṇhāti.",
+     "So sabbampetaṃ ruppanato <b>rūpa</b>nti vavatthapeti.",
+     "Tato namanalakkhaṇaṃ nāmaṃ, ruppanalakkhaṇaṃ rūpanti <b>saṅkhepato nāmarūpaṃ vavatthapeti</b>."
+    ],
+    "lineRefs": [
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ]
+    ]
+   },
+   {
+    "para": 664,
+    "vripara": "664",
+    "refs": [
+     "vism18:664"
+    ],
+    "lines": [
+     "<b>Suddhavipassanāyāniko</b> pana ayameva vā <b>samathayāniko</b> catudhātuvavatthāne vuttānaṃ tesaṃ tesaṃ dhātupariggahamukhānaṃ aññataramukhavasena saṅkhepato vā vitthārato vā catasso dhātuyo pariggaṇhāti.",
+     "Athassa yāthāvasarasalakkhaṇato āvibhūtāsu dhātūsu kammasamuṭṭhānamhi tāva kese ‘‘catasso dhātuyo, vaṇṇo, gandho, raso, ojā, jīvitaṃ, kāyappasādo’’ti evaṃ kāyadasakavasena dasa rūpāni, tattheva bhāvassa atthitāya bhāvadasakavasena dasa, tattheva āhārasamuṭṭhānaṃ ojaṭṭhamakaṃ, utusamuṭṭhānaṃ, cittasamuṭṭhānanti aparānipi catuvīsatīti evaṃ catusamuṭṭhānesu catuvīsatikoṭṭhāsesu catucattālīsa catucattālīsa rūpāni, sedo, assu, kheḷo, siṅghāṇikāti imesu pana catūsu utucittasamuṭṭhānesu dvinnaṃ ojaṭṭhamakānaṃ vasena soḷasa soḷasa rūpāni, udariyaṃ, karīsaṃ, pubbo, muttanti imesu catūsu utusamuṭṭhānesu utusamuṭṭhānasseva ojaṭṭhamakassa vasena aṭṭha aṭṭha rūpāni pākaṭāni hontīti.",
+     "Esa tāva <b>dvattiṃsākāre</b> nayo.",
+     "Ye pana imasmiṃ dvattiṃsākāre āvibhūte apare dasa ākārā āvibhavanti.",
+     "Tattha asitādiparipācake tāva kammaje tejokoṭṭhāsamhi ojaṭṭhamakañceva jīvitañcāti nava rūpāni, tathā cittaje assāsapassāsakoṭṭhāsepi ojaṭṭhamakañceva saddo cāti nava, sesesu catusamuṭṭhānesu aṭṭhasu jīvitanavakañceva tīṇi ca ojaṭṭhamakānīti tettiṃsa rūpāni pākaṭāni honti.",
+     "Tassevaṃ vitthārato dvācattālīsākāravasena imesu bhūtupādāyarūpesu pākaṭesu jātesu vatthudvāravasena pañca cakkhudasakādayo, hadayavatthudasakañcāti aparānipi saṭṭhirūpāni pākaṭāni honti.",
+     "So sabbānipi tāni <b>ruppanalakkhaṇena</b> ekato katvā ‘‘etaṃ <b>rūpa’’</b>nti passati.",
+     "Tassevaṃ pariggahitarūpassa dvāravasena arūpadhammā pākaṭā honti.",
+     "Seyyathidaṃ – dvepañcaviññāṇāni, tisso manodhātuyo, aṭṭhasaṭṭhi manoviññāṇadhātuyoti ekāsīti lokiyacittāni, avisesena ca tehi cittehi sahajāto phasso, vedanā, saññā, cetanā, jīvitaṃ, cittaṭṭhiti, manasikāroti ime satta satta cetasikāti.",
+     "Lokuttaracittāni pana neva suddhavipassakassa, na samathayānikassa pariggahaṃ gacchanti anadhigatattāti.",
+     "So sabbepi te arūpadhamme <b>namanalakkhaṇena</b> ekato katvā ‘‘etaṃ <b>nāma’’</b>nti passati.",
+     "Evameko <b>catudhātuvavatthānamukhena vitthārato nāmarūpaṃ vavatthapeti</b>."
+    ],
+    "lineRefs": [
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ]
+    ]
+   },
+   {
+    "para": 665,
+    "vripara": "665",
+    "refs": [
+     "vism18:665"
+    ],
+    "lines": [
+     "Aparo <b>aṭṭhārasadhātuvasena</b>.",
+     "Kathaṃ?",
+     "Idha bhikkhu atthi imasmiṃ attabhāve cakkhudhātu…pe… manoviññāṇadhātūti dhātuyo āvajjitvā yaṃ loko setakaṇhamaṇḍalavicittaṃ āyatavitthataṃ akkhikūpake nhārusuttakena ābaddhaṃ maṃsapiṇḍaṃ ‘‘cakkhū’’ti sañjānāti, taṃ aggahetvā khandhaniddese upādārūpesu vuttappakāraṃ cakkhupasādaṃ ‘‘cakkhudhātū’’ti vavatthapeti.",
+     "Yāni panassa nissayabhūtā catasso dhātuyo, parivārakāni cattāri vaṇṇa-gandha-rasa-ojā-rūpāni, anupālakaṃ jīvitindriyanti nava sahajātarūpāni, tattheva ṭhitāni kāyadasakabhāvadasakavasena vīsati kammajarūpāni, āhārasamuṭṭhānādīnaṃ tiṇṇaṃ ojaṭṭhamakānaṃ vasena catuvīsati anupādinnarūpānīti evaṃ sesāni tepaṇṇāsa rūpāni honti, na tāni ca ‘‘cakkhudhātū’’ti vavatthapeti.",
+     "Esa nayo sotadhātuādīsupi.",
+     "Kāyadhātuyaṃ pana avasesāni tecattālīsa rūpāni honti.",
+     "Keci pana utucittasamuṭṭhānāni saddena saha nava nava katvā pañcacattālīsāti vadanti.",
+     "Iti ime pañca pasādā, tesañca visayā rūpasaddagandharasaphoṭṭhabbā pañcāti dasa rūpāni dasa dhātuyo honti.",
+     "Avasesarūpāni dhammadhātuyeva honti.",
+     "Cakkhuṃ pana nissāya rūpaṃ ārabbha pavattaṃ cittaṃ cakkhuviññāṇadhātu nāmāti evaṃ dvepañcaviññāṇāni pañca viññāṇadhātuyo honti.",
+     "Tīṇi manodhātucittāni ekā manodhātu, aṭṭhasaṭṭhi manoviññāṇadhātucittāni manoviññāṇadhātūti sabbānipi ekāsīti lokiyacittāni satta viññāṇadhātuyo.",
+     "Taṃsampayuttā phassādayo dhammadhātūti evamettha aḍḍhekādasa dhātuyo rūpaṃ, aḍḍhaṭṭhamā dhātuyo nāmanti evameko aṭṭhārasadhātuvasena nāmarūpaṃ vavatthapeti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ]
+    ]
+   },
+   {
+    "para": 666,
+    "vripara": "666",
+    "refs": [
+     "vism18:666"
+    ],
+    "lines": [
+     "Aparo <b>dvādasāyatanavasena</b>.",
+     "Kathaṃ?",
+     "Cakkhudhātuyaṃ vuttanayeneva ṭhapetvā tepaṇṇāsa rūpāni cakkhupasādamattaṃ ‘‘cakkhāyatana’’nti vavatthapeti.",
+     "Tattha vuttanayeneva ca sotaghānajivhākāyadhātuyo ‘‘sotaghānajivhākāyāyatanānī’’ti, tesaṃ visayabhūte pañcadhamme ‘‘rūpasaddagandharasaphoṭṭhabbāyatanānī’’ti, lokiyasattaviññāṇadhātuyo ‘‘manāyatana’’nti, taṃsampayuttā phassādayo sesarūpañca ‘‘dhammāyatana’’nti evamettha aḍḍhekādasa āyatanāni rūpaṃ, diyaḍḍhaāyatanāni nāmanti evameko dvādasāyatanavasena nāmarūpaṃ vavatthapeti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:666"
+     ],
+     [
+      "vism18:666"
+     ],
+     [
+      "vism18:666"
+     ],
+     [
+      "vism18:666"
+     ]
+    ]
+   },
+   {
+    "para": 667,
+    "vripara": "667",
+    "refs": [
+     "vism18:667"
+    ],
+    "lines": [
+     "Aparo tato saṃkhittataraṃ <b>khandhavasena</b> vavatthapeti.",
+     "Kathaṃ?",
+     "Idha bhikkhu imasmiṃ sarīre catusamuṭṭhānā catasso dhātuyo, taṃnissito vaṇṇo, gandho, raso, ojā, cakkhupasādādayo pañca pasādā, vatthurūpaṃ, bhāvo, jīvitindriyaṃ, dvisamuṭṭhāno saddoti imāni sattarasa rūpāni <b>sammasanupagāni</b> nipphannāni rūparūpāni.",
+     "Kāyaviññatti, vacīviññatti, ākāsadhātu, rūpassa lahutā, mudutā, kammaññatā, upacayo, santati, jaratā, aniccatāti imāni pana dasa rūpāni <b>na sammasanupagāni,</b> ākāravikāraantaraparicchedamattakāni, na nipphannarūpāni, na rūparūpāni.",
+     "Apica kho rūpānaṃ ākāravikāraantaraparicchedamattato rūpanti saṅkhaṃ gatāni.",
+     "Iti sabbāni petāni sattavīsati rūpāni rūpakkhandho, ekāsītiyā lokiyacittehi saddhiṃ uppannā vedanā vedanākkhandho, taṃsampayuttā saññā saññākkhandho, saṅkhārā saṅkhārakkhandho, viññāṇaṃ viññāṇakkhandhoti.",
+     "Iti rūpakkhandho rūpaṃ, cattāro arūpino khandhā nāmanti evameko pañcakkhandhavasena nāmarūpaṃ vavatthapeti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ]
+    ]
+   },
+   {
+    "para": 668,
+    "vripara": "668",
+    "refs": [
+     "vism18:668"
+    ],
+    "lines": [
+     "Aparo ‘‘yaṃkiñci rūpaṃ sabbaṃ rūpaṃ cattāri mahābhūtāni catunnañca mahābhūtānaṃ upādāyarūpa’’nti (ma. ni. 1.347; a. ni. 11.17) evaṃ saṃkhitteneva imasmiṃ attabhāve rūpaṃ pariggahetvā, tathā manāyatanañceva dhammāyatanekadesañca nāmanti pariggahetvā ‘‘iti idañca nāmaṃ idañca rūpaṃ, idaṃ vuccati nāmarūpa’’nti <b>saṅkhepato</b> nāmarūpaṃ vavatthapeti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:668"
+     ]
+    ]
+   },
+   {
+    "para": 669,
+    "vripara": "669",
+    "refs": [
+     "vism18:669"
+    ],
+    "lines": [
+     "Sace panassa tena tena mukhena rūpaṃ pariggahetvā arūpaṃ pariggaṇhato sukhumattā arūpaṃ na upaṭṭhāti, tena dhuranikkhepaṃ akatvā rūpameva punappunaṃ sammasitabbaṃ manasikātabbaṃ pariggahetabbaṃ vavatthapetabbaṃ.",
+     "Yathā yathā hissa rūpaṃ suvikkhālitaṃ hoti nijjaṭaṃ suparisuddhaṃ, tathā tathā tadārammaṇā arūpadhammā sayameva pākaṭā honti.",
+     "Yathā hi cakkhumato purisassa aparisuddhe ādāse mukhanimittaṃ olokentassa nimittaṃ na paññāyati, so ‘‘nimittaṃ na paññāyatī’’ti na ādāsaṃ chaḍḍeti, atha kho naṃ punappunaṃ parimajjati.",
+     "Tassa parisuddhe ādāse nimittaṃ sayameva pākaṭaṃ hoti.",
+     "Yathā ca telatthiko tilapiṭṭhaṃ doṇiyaṃ ākiritvā udakena paripphosetvā ekavāraṃ dvevāraṃ pīḷanamattena tele anikkhamante na tilapiṭṭhaṃ chaḍḍeti, atha kho naṃ punappunaṃ uṇhodakena paripphosetvā madditvā pīḷeti.",
+     "Tassevaṃ karoto vippasannaṃ tilatelaṃ nikkhamati.",
+     "Yathā vā pana udakaṃ pasādetukāmo katakaṭṭhiṃ gahetvā antoghaṭe hatthaṃ otāretvā ekadvevāre ghaṃsanamattena udake avippasīdante na katakaṭṭhiṃ chaḍḍeti, atha kho naṃ punappunaṃ ghaṃsati.",
+     "Tassevaṃ karontassa kalalakaddamaṃ sannisīdati.",
+     "Udakaṃ acchaṃ hoti vippasannaṃ, evamevaṃ tena bhikkhunā dhuranikkhepaṃ akatvā rūpameva punappunaṃ sammasitabbaṃ manasikātabbaṃ pariggahetabbaṃ vavatthapetabbaṃ.",
+     "Yathā yathā hissa rūpaṃ suvikkhālitaṃ hoti nijjaṭaṃ suparisuddhaṃ, tathā tathā tappaccanīkakilesā sannisīdanti, kaddamupari udakaṃ viya cittaṃ pasannaṃ hoti.",
+     "Tadārammaṇā arūpadhammā sayameva pākaṭā honti.",
+     "Evaṃ aññāhipi ucchucoragoṇadadhimacchādīhi upamāhi ayamattho pakāsetabbo."
+    ],
+    "lineRefs": [
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ]
+    ]
+   },
+   {
+    "para": 670,
+    "vripara": "670",
+    "refs": [
+     "vism18:670"
+    ],
+    "lines": [
+     "<b>Arūpadhammānaṃ upaṭṭhānākārakathā</b>",
+     "Evaṃ suvisuddharūpapariggahassa panassa arūpadhammā tīhi ākārehi upaṭṭhahanti phassavasena vā vedanāvasena vā viññāṇavasena vā.",
+     "Kathaṃ?",
+     "Ekassa tāva ‘‘pathavīdhātu kakkhaḷalakkhaṇā’’tiādinā nayena dhātuyo pariggaṇhantassa paṭhamābhinipāto phasso, taṃsampayuttā vedanā vedanākkhandho, saññā saññākkhandho, saddhiṃ phassena cetanā saṅkhārakkhandho, cittaṃ viññāṇakkhandhoti upaṭṭhāti.",
+     "Tathā ‘‘kese pathavīdhātu kakkhaḷalakkhaṇā…pe… assāsapassāse pathavīdhātu kakkhaḷalakkhaṇā’’ti (visuddhi. 1.307) paṭhamābhinipāto phasso, taṃsampayuttā vedanā vedanākkhandho…pe… cittaṃ viññāṇakkhandhoti upaṭṭhāti.",
+     "Evaṃ arūpadhammā <b>phassavasena</b> upaṭṭhahanti.",
+     "Ekassa ‘‘pathavīdhātu kakkhaḷalakkhaṇā’’ti tadārammaṇarasānubhavanakavedanā vedanākkhandho, taṃsampayuttā saññā saññākkhandho, taṃsampayutto phasso ca cetanā ca saṅkhārakkhandho, taṃsampayuttaṃ cittaṃ viññāṇakkhandhoti upaṭṭhāti.",
+     "Tathā ‘‘kese pathavīdhātu kakkhaḷalakkhaṇā …pe… assāsapassāse pathavīdhātu kakkhaḷalakkhaṇā’’ti tadārammaṇarasānubhavanakavedanā vedanākkhandho…pe… taṃsampayuttaṃ cittaṃ viññāṇakkhandhoti upaṭṭhāti.",
+     "Evaṃ <b>vedanāvasena</b> arūpadhammā upaṭṭhahanti.",
+     "Aparassa ‘‘pathavīdhātu kakkhaḷalakkhaṇā’’ti ārammaṇapaṭivijānanaṃ viññāṇaṃ viññāṇakkhandho, taṃsampayuttā vedanā vedanākkhandho, saññā saññākkhandho, phasso ca cetanā ca saṅkhārakkhandhoti upaṭṭhāti.",
+     "Tathā ‘‘kese pathavīdhātu kakkhaḷalakkhaṇā…pe… assāsapassāse pathavīdhātu kakkhaḷalakkhaṇā’’ti ārammaṇapaṭivijānanaṃ viññāṇaṃ viññāṇakkhandho, taṃsampayuttā vedanā vedanākkhandho, saññā saññākkhandho, phasso ca cetanā ca saṅkhārakkhandhoti upaṭṭhāti.",
+     "Evaṃ <b>viññāṇavasena</b> arūpadhammā upaṭṭhahanti.",
+     "Eteneva upāyena ‘‘kammasamuṭṭhāne kese pathavīdhātu kakkhaḷalakkhaṇā’’tiādinā nayena dvācattālīsāya dhātukoṭṭhāsesu catunnaṃ catunnaṃ dhātūnaṃ vasena, sesesu ca cakkhudhātuādīsu rūpapariggahamukhesu sabbaṃ nayabhedaṃ anugantvā yojanā kātabbā."
+    ],
+    "lineRefs": [
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ]
+    ]
+   },
+   {
+    "para": 671,
+    "vripara": "671",
+    "refs": [
+     "vism18:671"
+    ],
+    "lines": [
+     "Yasmā ca evaṃ suvisuddharūpapariggahasseva tassa arūpadhammā tīhākārehi pākaṭā honti.",
+     "Tasmā suvisuddharūpapariggaheneva arūpapariggahāya yogo kātabbo, na itarena.",
+     "Sace hi ekasmiṃ vā rūpadhamme upaṭṭhite dvīsu vā rūpaṃ pahāya arūpapariggahaṃ ārabhati kammaṭṭhānato parihāyati, pathavīkasiṇabhāvanāya vuttappakārā pabbateyyā gāvī viya.",
+     "Suvisuddharūpapariggahassa pana arūpapariggahāya yogaṃ karoto kammaṭṭhānaṃ vuddhiṃ virūḷhiṃ vepullaṃ pāpuṇāti.",
+     "So evaṃ phassādīnaṃ vasena upaṭṭhite cattāro arūpino khandhe nāmanti, tesaṃ ārammaṇabhūtāni cattāri mahābhūtāni, catunnañca mahābhūtānaṃ upādāyarūpaṃ rūpanti vavatthapeti.",
+     "Iti aṭṭhārasa dhātuyo dvādasāyatanāni pañcakkhandhāti sabbepi tebhūmake dhamme khaggena samuggaṃ vivaramāno viya yamakatālakandaṃ phālayamāno viya ca nāmañca rūpañcāti dvedhā vavatthapeti.",
+     "Nāmarūpamattato uddhaṃ añño satto vā puggalo vā devo vā brahmā vā natthīti niṭṭhaṃ gacchati."
+    ],
+    "lineRefs": [
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ]
+    ]
+   },
+   {
+    "para": 672,
+    "vripara": "672",
+    "refs": [
+     "vism18:672"
+    ],
+    "lines": [
+     "<b>Sambahulasuttantasaṃsandanā</b>",
+     "So evaṃ yāthāvasarasato nāmarūpaṃ vavatthapetvā suṭṭhutaraṃ ‘‘satto puggalo’’ti imissā lokasamaññāya pahānatthāya sattasammohassa samatikkamatthāya asammohabhūmiyaṃ cittaṃ ṭhapanatthāya sambahulasuttantavasena ‘‘nāmarūpamattamevidaṃ, na satto, na puggalo atthī’’ti etamatthaṃ saṃsandetvā vavatthapeti.",
+     "Vuttañhetaṃ –",
+     "‘‘Yathāpi aṅgasambhārā, hoti saddo ratho iti;",
+     "Evaṃ khandhesu santesu, hoti sattoti sammutī’’ti. (saṃ. ni. 1.171);",
+     "Aparampi vuttaṃ, ‘‘seyyathāpi, āvuso, kaṭṭhañca paṭicca valliñca paṭicca mattikañca paṭicca tiṇañca paṭicca ākāso parivārito agārantveva saṅkhaṃ gacchati, evameva kho, āvuso, aṭṭhiñca paṭicca nhāruñca paṭicca maṃsañca paṭicca cammañca paṭicca ākāso parivārito rūpantveva saṅkhaṃ gacchatī’’ti (ma. ni. 1.306).",
+     "Aparampi vuttaṃ –",
+     "‘‘Dukkhameva hi sambhoti, dukkhaṃ tiṭṭhati veti ca;",
+     "Nāññatra dukkhā sambhoti, nāññaṃ dukkhā nirujjhatī’’ti. (saṃ. ni. 1.171);"
+    ],
+    "lineRefs": [
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ]
+    ]
+   },
+   {
+    "para": 673,
+    "vripara": "673",
+    "refs": [
+     "vism18:673"
+    ],
+    "lines": [
+     "<b>Upamāhi nāmarūpavibhāvanā</b>",
+     "Evaṃ anekasatehi suttantehi nāmarūpameva dīpitaṃ, na satto na puggalo.",
+     "Tasmā yathā akkhacakkapañjaraīsādīsu aṅgasambhāresu ekenākārena saṇṭhitesu <b>ratho</b>ti vohāramattaṃ hoti, paramatthato ekekasmiṃ aṅge upaparikkhiyamāne ratho nāma natthi.",
+     "Yathā ca kaṭṭhādīsu gehasambhāresu ekenākārena ākāsaṃ parivāretvā ṭhitesu <b>geha</b>nti vohāramattaṃ hoti, paramatthato gehaṃ nāma natthi.",
+     "Yathā ca aṅguliaṅguṭṭhādīsu ekenākārena ṭhitesu <b>muṭṭhī</b>ti vohāramattaṃ hoti.",
+     "Doṇitantiādīsu <b>vīṇā</b>ti.",
+     "Hatthiassādīsu <b>senā</b>ti.",
+     "Pākāragehagopurādīsu <b>nagara</b>nti.",
+     "Khandhasākhāpalāsādīsu ekenākārena ṭhitesu <b>rukkho</b>ti vohāramattaṃ hoti, paramatthato ekekasmiṃ avayave upaparikkhiyamāne rukkho nāma natthi.",
+     "Evamevaṃ pañcasu upādānakkhandhesu sati <b>‘‘satto, puggalo’’</b>ti vohāramattaṃ hoti, paramatthato ekekasmiṃ dhamme upaparikkhiyamāne ‘‘asmīti vā ahanti vā’’ti gāhassa vatthubhūto satto nāma natthi.",
+     "Paramatthato pana nāmarūpamattameva atthīti.",
+     "Evaṃ passato hi dassanaṃ <b>yathābhūtadassanaṃ</b> nāma hoti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ]
+    ]
+   },
+   {
+    "para": 674,
+    "vripara": "674",
+    "refs": [
+     "vism18:674"
+    ],
+    "lines": [
+     "Yo panetaṃ yathābhūtadassanaṃ pahāya ‘‘satto atthī’’ti gaṇhāti.",
+     "So tassa vināsaṃ anujāneyya avināsaṃ vā.",
+     "Avināsaṃ anujānanto sassate patati.",
+     "Vināsaṃ anujānanto ucchede patati.",
+     "Kasmā?",
+     "Khīranvayassa dadhino viya tadanvayassa aññassa abhāvato.",
+     "So ‘‘sassato satto’’ti gaṇhanto olīyati nāma. ‘‘Ucchijjatī’’ti gaṇhanto atidhāvati nāma.",
+     "Tenāha bhagavā –",
+     "‘‘Dvīhi, bhikkhave, diṭṭhigatehi pariyuṭṭhitā devamanussā olīyanti eke, atidhāvanti eke, cakkhumanto ca passanti.",
+     "‘‘Kathañca, bhikkhave, olīyanti eke?",
+     "Bhavārāmā, bhikkhave, devamanussā bhavaratā bhavasamuditā.",
+     "Tesaṃ bhavanirodhāya dhamme desiyamāne cittaṃ na pakkhandati nappasīdati na santiṭṭhati nādhimuccati.",
+     "Evaṃ kho, bhikkhave, olīyanti eke.",
+     "‘‘Kathañca, bhikkhave, atidhāvanti eke?",
+     "Bhaveneva kho paneke aṭṭīyamānā harāyamānā jigucchamānā vibhavaṃ abhinandanti, yato kira bho ayaṃ attā kāyassa bhedā ucchijjati vinassati, na hoti paraṃmaraṇā, etaṃ santaṃ, etaṃ paṇītaṃ, etaṃ yāthāvanti.",
+     "Evaṃ kho, bhikkhave, atidhāvanti eke.",
+     "‘‘Kathañca, bhikkhave, cakkhumanto passanti?",
+     "Idha, bhikkhave, bhikkhu bhūtaṃ bhūtato passati, bhūtaṃ bhūtato disvā bhūtassa nibbidāya virāgāya nirodhāya paṭipanno hoti.",
+     "Evaṃ kho, bhikkhave, cakkhumanto passantī’’ti (itivu. 49)."
+    ],
+    "lineRefs": [
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ]
+    ]
+   },
+   {
+    "para": 675,
+    "vripara": "675",
+    "refs": [
+     "vism18:675"
+    ],
+    "lines": [
+     "Tasmā yathā dāruyantaṃ suññaṃ nijjīvaṃ nirīhakaṃ, atha ca pana dārurajjukasamāyogavasena gacchatipi tiṭṭhatipi.",
+     "Saīhakaṃ sabyāpāraṃ viya khāyati, evamidaṃ nāmarūpampi suññaṃ nijjīvaṃ nirīhakaṃ, atha ca pana aññamaññasamāyogavasena gacchatipi tiṭṭhatipi.",
+     "Saīhakaṃ sabyāpāraṃ viya khāyatīti daṭṭhabbaṃ.",
+     "Tenāhu porāṇā –",
+     "‘‘Nāmañca rūpañca idhatthi saccato,",
+     "Na hettha satto manujo ca vijjati;",
+     "Suññaṃ idaṃ yantamivābhisaṅkhataṃ,",
+     "Dukkhassa puñjo tiṇakaṭṭhasādiso’’ti.",
+     "Na kevalañcetaṃ dāruyantupamāya, aññāhipi naḷakalāpīādīhi upamāhi vibhāvetabbaṃ – yathā hi dvīsu naḷakalāpīsu aññamaññaṃ nissāya ṭhapitāsu ekā ekissā upatthambho hoti, ekissā patamānāya itarāpi patati, evamevaṃ pañcavokārabhave nāmarūpaṃ aññamaññaṃ nissāya pavattati, ekaṃ ekassa upatthambho hoti.",
+     "Maraṇavasena ekasmiṃ patamāne itarampi patati.",
+     "Tenāhu porāṇā –",
+     "‘‘Yamakaṃ nāmarūpañca, ubho aññoññanissitā;",
+     "Ekasmiṃ bhijjamānasmiṃ, ubho bhijjanti paccayā’’ti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ]
+    ]
+   },
+   {
+    "para": 676,
+    "vripara": "676",
+    "refs": [
+     "vism18:676"
+    ],
+    "lines": [
+     "Yathā ca daṇḍābhihataṃ bheriṃ nissāya sadde pavattamāne aññā bherī, añño saddo, bherisaddā asammissā, bherī saddena suññā, saddo bheriyā suñño, evamevaṃ vatthudvārārammaṇasaṅkhātaṃ rūpaṃ nissāya nāme pavattamāne aññaṃ rūpaṃ, aññaṃ nāmaṃ, nāmarūpā asammissā, nāmaṃ rūpena suññaṃ, rūpaṃ nāmena suññaṃ, apica kho bheriṃ paṭicca saddo viya rūpaṃ paṭicca nāmaṃ pavattati.",
+     "Tenāhu porāṇā –",
+     "‘‘Na cakkhuto jāyare phassapañcamā,",
+     "Na rūpato no ca ubhinnamantarā;",
+     "Hetuṃ paṭiccappabhavanti saṅkhatā,",
+     "Yathāpi saddo pahaṭāya bheriyā.",
+     "‘‘Na sotato jāyare phassapañcamā,",
+     "Na saddato no ca ubhinnamantarā…pe….",
+     "‘‘Na ghānato jāyare phassapañcamā,",
+     "Na gandhato no ca ubhinnamantarā…pe….",
+     "‘‘Na jivhāto jāyare phassapañcamā,",
+     "Na rasato no ca ubhinnamantarā…pe….",
+     "‘‘Na kāyato jāyare phassapañcamā,",
+     "Na phassato no ca ubhinnamantarā…pe….",
+     "‘‘Na vatthurūpā pabhavanti saṅkhatā,",
+     "Na cāpi dhammāyatanehi niggatā;",
+     "Hetuṃ paṭiccappabhavanti saṅkhatā,",
+     "Yathāpi saddo pahaṭāya bheriyā’’ti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ]
+    ]
+   },
+   {
+    "para": 677,
+    "vripara": "677",
+    "refs": [
+     "vism18:677"
+    ],
+    "lines": [
+     "Apicettha nāmaṃ nittejaṃ na sakena tejena pavattituṃ sakkoti, na khādati, na pivati, na byāharati, na iriyāpathaṃ kappeti.",
+     "Rūpampi nittejaṃ na sakena tejena pavattituṃ sakkoti.",
+     "Na hi tassā khāditukāmatā, nāpi pivitukāmatā, na byāharitukāmatā, na iriyāpathaṃ kappetukāmatā, atha kho nāmaṃ nissāya rūpaṃ pavattati, rūpaṃ nissāya nāmaṃ pavattati, nāmassa khāditukāmatāya pivitukāmatāya byāharitukāmatāya iriyāpathaṃ kappetukāmatāya sati rūpaṃ khādati, pivati, byāharati, iriyāpathaṃ kappeti.",
+     "Imassa panatthassa vibhāvanatthāya imaṃ upamaṃ udāharanti – yathā jaccandho ca pīṭhasappī ca disāpakkamitukāmā assu, jaccandho pīṭhasappiṃ evamāha ‘‘ahaṃ kho bhaṇe, sakkomi pādehi pādakaraṇīyaṃ kātuṃ, natthi ca me cakkhūni yehi samavisamaṃ passeyya’’nti.",
+     "Pīṭhasappīpi jaccandhaṃ evamāha ‘‘ahaṃ kho bhaṇe, sakkomi cakkhunā cakkhukaraṇīyaṃ kātuṃ, natthi ca me pādāni yehi abhikkameyyaṃ vā paṭikkameyyaṃ vā’’ti.",
+     "So tuṭṭhahaṭṭho jaccandho pīṭhasappiṃ aṃsakūṭaṃ āropesi.",
+     "Pīṭhasappī jaccandhassa aṃsakūṭe nisīditvā evamāha ‘‘vāmaṃ muñca dakkhiṇaṃ gaṇha, dakkhiṇaṃ muñca vāmaṃ gaṇhā’’ti.",
+     "Tattha jaccandhopi nittejo dubbalo na sakena tejena sakena balena gacchati, pīṭhasappīpi nittejo dubbalo na sakena tejena sakena balena gacchati, na ca tesaṃ aññamaññaṃ nissāya gamanaṃ nappavattati, evamevaṃ nāmampi nittejaṃ na sakena tejena uppajjati, na tāsu tāsu kiriyāsu pavattati.",
+     "Rūpampi nittejaṃ na sakena tejena uppajjati, na tāsu tāsu kiriyāsu pavattati, na ca tesaṃ aññamaññaṃ nissāya uppatti vā pavatti vā na hoti.",
+     "Tenetaṃ vuccati –",
+     "‘‘Na sakena balena jāyare,",
+     "Nopi sakena balena tiṭṭhare;",
+     "Paradhammavasānuvattino,",
+     "Jāyare saṅkhatā attadubbalā.",
+     "‘‘Parapaccayato ca jāyare,",
+     "Paraārammaṇato samuṭṭhitā;",
+     "Ārammaṇapaccayehi ca,",
+     "Paradhammehi cime pabhāvitā.",
+     "‘‘Yathāpi nāvaṃ nissāya, manussā yanti aṇṇave;",
+     "Evameva rūpaṃ nissāya, nāmakāyo pavattati.",
+     "‘‘Yathā ca manusse nissāya, nāvā gacchati aṇṇave;",
+     "Evameva nāmaṃ nissāya, rūpakāyo pavattati.",
+     "‘‘Ubho nissāya gacchanti, manussā nāvā ca aṇṇave;",
+     "Evaṃ nāmañca rūpañca, ubho aññoññanissitā’’ti.",
+     "Evaṃ nānānayehi nāmarūpaṃ vavatthāpayato sattasaññaṃ abhibhavitvā asammohabhūmiyaṃ ṭhitaṃ nāmarūpānaṃ yāthāvadassanaṃ <b>diṭṭhivisuddhī</b>ti veditabbaṃ.",
+     "<b>Nāmarūpavavatthāna</b>ntipi <b>saṅkhāraparicchedo</b>tipi etasseva adhivacanaṃ.",
+     "Iti sādhujanapāmojjatthāya kate visuddhimagge",
+     "Paññābhāvanādhikāre",
+     "Diṭṭhivisuddhiniddeso nāma",
+     "Aṭṭhārasamo paricchedo."
+    ],
+    "lineRefs": [
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ]
+    ]
+   }
+  ],
+  "wordLinks": [],
+  "before": [],
+  "after": []
+ },
+ "tika": {
+  "book": "Vism-mhṭ",
+  "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
+  "vriCode": "e0104n.att",
+  "from": 662,
+  "to": 677,
+  "paras": [
+   {
+    "para": 662,
+    "vripara": "662",
+    "refs": [
+     "vism18:662"
+    ],
+    "lines": [
+     "<b>Nāmarūpapariggahakathāvaṇṇanā</b>",
+     "Yā visuddhiyo sampādetabbāti sambandho.",
+     "<b>Imesu</b> yathāvicāritesu khandhādīsu vipassanāya <b>bhūmibhūtesu dhammesu</b>.",
+     "Ganthassa uggaṇhanaṃ vācuggatakaraṇaṃ <b>uggaho,</b> parito sabbathāpi atthassa ñātumicchā <b>paripucchā,</b> savanupaparikkhādivasena tadatthassa manasikāravidhi, tadubhayavasena yasmā tatthapi ñāṇaṃ svāsevitaṃ hoti, tasmā vuttaṃ <b>‘‘uggahaparipucchāvasena ñāṇaparicayaṃ katvā’’</b>ti, khandhādīsu sutamayaṃ ñāṇaṃ uppādetvāti attho.",
+     "<b>Vitthāritameva,</b> tasmā tattha vitthāritanayānusārena sīlavisuddhi sampādetabbāti adhippāyo.",
+     "Upacārasamādhipi appanāsamādhi viya vipassanāya adhiṭṭhānabhāvato cittavisuddhiyevāti āha <b>‘‘saupacārā’’</b>ti.",
+     "<b>Veditabbā</b>ti attano santāne nibbattanavaseneva veditabbā.",
+     "Evañhi tā paccakkhato viditā nāma honti, tasmā veditabbā sampādetabbāti vuttaṃ hoti.",
+     "<b>Veditabbā</b>ti vā samāpattisukhādhigamavasena anubhavitabbāti attho.",
+     "Na hi kevalena jānanamattena cittavisuddhiyaṃ patiṭṭhito nāma hoti, na ca tattha apatiṭṭhāya uparivisuddhiṃ sampādetuṃ sakkāti.",
+     "<b>Nāmarūpānaṃ yāthāvadassana</b>nti nāmassa, rūpassa ca vibhajja yathābhūtasabhāvadassanaṃ.",
+     "Nāmaggahaṇena cettha vedanādīnaṃ catunnaṃ tebhūmakānaṃ khandhānaṃ gahaṇaṃ, na ‘‘viññāṇapaccayā nāmarūpa’’nti ettha viya viññāṇaṃ vinā, nāpi ‘‘nāmañca rūpañcā’’ti (dī. ni. 3.304, 352; dha. sa. dukamātikā 109) ettha viya sanibbānehi lokuttarakkhandhehi saddhinti daṭṭhabbaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ],
+     [
+      "vism18:662"
+     ]
+    ]
+   },
+   {
+    "para": 663,
+    "vripara": "663",
+    "refs": [
+     "vism18:663"
+    ],
+    "lines": [
+     "Yāti pajjati etenāti yānaṃ, samathova yānaṃ samathayānaṃ, taṃ etassa atthīti samathayāniko.",
+     "Jhāne, jhānūpacāre vā patiṭṭhāya vipassanaṃ anuyuñjantassetaṃ nāmaṃ, tena <b>samathayānikena</b>. <b>‘‘Ṭhapetvā nevasaññānāsaññāyatana’’</b>nti idaṃ bhavaggadhammānaṃ ādikammikassa duppariggahatāya vuttaṃ.",
+     "<b>Lakkhaṇarasādivasena pariggahetabbā</b> ñāṇena paricchijja gahetabbā, pariggahavidhi pana <b>khandhaniddese</b> (visuddhi. 2.421 ādayo) vuttā evāti adhippāyo.",
+     "Ārammaṇābhimukhanamanaṃ ārammaṇena vinā appavatti, tena namanaṭṭhena, nāmakaraṇaṭṭhena vā.",
+     "Vedanādayo hi arūpadhammā sabbadāpi ca phassādināmakattā pathavīādayo viya kesakumbhādināmantarānāpajjanato attanāva katanāmatāya nāmakaraṇaṭṭhena <b>‘‘nāma’’</b>nti vuccanti.",
+     "Atha vā adhivacanasamphasso viya adhivacanaṃ nāmaṃ antarena anupacitasambhārānaṃ gahaṇaṃ na gacchantīti nāmāyattaggahaṇatāya vedanādayo <b>‘‘nāma’’</b>nti vuccanti, rūpaṃ pana vināpi nāmasavanaṃ attano ruppanasabhāveneva gahaṇaṃ gacchati.",
+     "<b>Vavatthāpetabba</b>nti asaṅkarato ṭhapetabbaṃ, aññamaññaṃ, rūpena ca amissitaṃ katvā citte ṭhapetabbanti attho.",
+     "Nāmarūpapariggaho ca nāma yāvadeva tassa paṭinissajjanatthanti tadanurūpameva nidassanaṃ dassento <b>‘‘yathā nāmā’’</b>tiādimāha.",
+     "<b>Ruppanato</b>ti ettha ruppanaṭṭho ‘‘sītādivirodhipaccayasannipāte visadisuppattī’’tiādinā (visuddhi. mahāṭī. 2.432) <b>khandhaniddesavaṇṇanāyaṃ</b> vuttoyeva.",
+     "Evaṃ visuṃ nāmapariggahaṃ, rūpapariggahañca dassetvā idāni ekajjhaṃ nāmarūpapariggahaṃ dassetuṃ <b>‘‘tato namanalakkhaṇa’’</b>ntiādi vuttaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ],
+     [
+      "vism18:663"
+     ]
+    ]
+   },
+   {
+    "para": 664,
+    "vripara": "664",
+    "refs": [
+     "vism18:664"
+    ],
+    "lines": [
+     "Iti arūpamukhena vipassanābhinivesaṃ dassetvā idāni rūpamukhena taṃ dassento <b>‘‘suddhavipassanāyāniko panā’’</b>tiādimāha.",
+     "Tattha samathayānikassa samathamukhena vipassanābhiniveso, vipassanāyānikassa pana samathaṃ anissāyāti āha <b>‘‘suddhavipassanāyāniko’’</b>ti, samathabhāvanāya amissitavipassanāyānavāti attho.",
+     "<b>Ayameva vā samathayāniko</b>ti yathāvutto samathayāniko eva vā.",
+     "Tena samathayānikassāpi rūpamukhena vipassanābhiniveso labbhati, na arūpamukhenevāti dasseti.",
+     "<b>Tesaṃ tesaṃ dhātupariggahamukhāna</b>nti ‘‘yaṃ thaddhalakkhaṇaṃ, ayaṃ pathavīdhātū’’tiādinā (visuddhi. 1.308) saṅkhepamanasikārādivasena vuttesu terasasu dhātupariggahamukhesu.",
+     "Kammasamuṭṭhāno nāma keso cammabbhantaragato.",
+     "<b>Tatthevā</b>ti tasmiṃyeva kammasamuṭṭhāne kese.",
+     "Kāyappasādassa viya bhāvassāpi sakalasarīrabyāpitāya <b>‘‘bhāvassa atthitāyā’’</b>ti vuttaṃ.",
+     "Puna <b>tatthevā</b>ti tasmiṃyeva kesasaññite rūpasamudāye.",
+     "<b>Aparānipī</b>ti pubbe vuttāni kammasamuṭṭhānāni vīsati, imāni āhārasamuṭṭhānādīni catuvīsati rūpānīti sabbānipi <b>catucattālīsa,</b> tañca kho tattha labbhamānasantatisīsasāmaññena veditabbaṃ. <b>‘‘Catucattālīsā’’</b>ti ca idaṃ saddassa aniyatattā vuttaṃ.",
+     "Na hi sabbakālaṃ utucittato rūpaṃ uppajjantaṃ sasaddameva uppajjatīti.",
+     "<b>Eva</b>nti yathā kese, evaṃ lomādīsu catusamuṭṭhānikesu.",
+     "<b>Catuvīsatikoṭṭhāsesū</b>ti dvattiṃsāya koṭṭhāsesu vakkhamāne aṭṭha koṭṭhāse apanetvā catuvīsatikoṭṭhāsesu.",
+     "Sedādīnaṃ ātapūpatāpādinā, cittavikārena ca uppajjanato te <b>utucittasamuṭṭhānā</b> vuttā.",
+     "Dvattiṃsakoṭṭhāsagatesu rūpesu pākaṭesu jātesu tadaññānipi pākaṭāni hontīti tānipi dassetuṃ <b>‘‘apare’’</b>tiādi vuttaṃ.",
+     "Tattha <b>apare dasa ākārā</b>ti tejovāyokoṭṭhāsavasena apare dasa ākārā.",
+     "<b>Kammaje</b>ti bhūtakathanaṃ, na visesanaṃ asitādiparipācakassa tejassa akammajassa abhāvato.",
+     "<b>Tathā cittaje</b>ti ca ekantacittasamuṭṭhānattā assāsapassāsānanti keci, taṃ na, acittajasantāne pavattānaṃ utujabhāvato.",
+     "Abbhantaraṭṭhā eva hi te cittajā, na bahiddhā, tasmā tattha <b>‘‘cittaje’’</b>ti idaṃ visesanameva, ayañca attho heṭṭhā ānāpānakathāyaṃ vuttoyeva.",
+     "<b>Sesesū</b>ti santappanādivasena ceva uddhaṅgamādivasena ca pavattesu tejovāyokoṭṭhāsesu.",
+     "Cakkhudasakādīsu padhānarūpaṃ cakkhādayoti tesu labbhamānaṃ vatthudvārabhāvaṃ avayavakiccaṃ samudāye āropetvā vuttaṃ <b>‘‘vatthudvāravasena pañca cakkhudasakādayo’’</b>ti.",
+     "Vatthuvasena hadayavatthudasakañcāti yojetabbaṃ, ekayoganiddiṭṭhānampi ekadeso anuvattatīti.",
+     "<b>Sabbānipī</b>ti yathāvuttagaṇanāyaṃ catunnavuticatusatādhikāni sahassarūparūpāni.",
+     "Koṭṭhāsāvayavānaṃ pana tadavayavakalāpānañca bhede gayhamāne ativiya tato bahutaro rūpabhedo hoti, so pana bhedo idha ādikammikassa duppariggahoti na gahetabbo.",
+     "Kāmaṃ vatthuvasenāpi arūpadhammā pākaṭā honti, dvāravasena pana pariggaho anākuloti katvā vuttaṃ <b>‘‘dvāravasena arūpadhammā pākaṭā hontī’’</b>ti.",
+     "Sabbasaṅgāhikavasena <b>‘‘ekāsīti lokiyacittānī’’</b>ti vuttaṃ, lābhino eva pana mahaggatacittāni supākaṭāni honti.",
+     "<b>Avisesenā</b>ti sādhāraṇato.",
+     "Phassādayo hi satta cetasikā cakkhuviññāṇādīhipi uppajjanato sabbacittuppādasādhāraṇā.",
+     "<b>Sabbepi te</b>ti ekāsīti lokiyacittāni, taṃsampayuttaphassādayoti sabbepi te arūpadhamme.",
+     "Ārammaṇādivibhāgena pana cittuppādabhede gayhamāne tato bahutaro eva hoti, so pana idha nādhippeto."
+    ],
+    "lineRefs": [
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ],
+     [
+      "vism18:664"
+     ]
+    ]
+   },
+   {
+    "para": 665,
+    "vripara": "665",
+    "refs": [
+     "vism18:665"
+    ],
+    "lines": [
+     "Assa cakkhupasādassa nissayabhūtā pana catasso dhātuyoti sambandho.",
+     "Sahajātarūpāni tassa cakkhupasādassa icceva sambandho.",
+     "<b>Tatthevā</b>ti tasmiṃyeva sasambhāracakkhupadese.",
+     "<b>Anupādinnarūpānī</b>ti pubbe vuttarūpānaṃ upādinnarūpattā vuttaṃ, akammajarūpānīti attho.",
+     "<b>Sesānī</b>ti paṭhamaṃ cakkhuno vuttattā tato sesāni, tena pana saddhiṃ catupaññāsa rūpāni honti.",
+     "Cakkhudasakādīsu ekassapi aggahetabbato <b>‘‘avasesāni tecattālīsa rūpānī’’</b>ti vuttaṃ.",
+     "Saddassa aniyatattā taṃ aggahetvā ‘‘tecattālīsa rūpānī’’ti vatvā puna utucittasamuṭṭhāne dve sadde gahetvā <b>‘‘pañcacattālīsā’’</b>ti kecivādo dassito.",
+     "<b>Avasesarūpānī</b>ti ‘‘dasa dhātuyo’’ti vutte dvādasa rūpadhamme ṭhapetvā avasesāni cha nipphannarūpāni.",
+     "Rūparūpāneva hi idha pariggayhanti, na rūpaparicchedavikāralakkhaṇāni.",
+     "Cakkhusannissayarūpārammaṇabhāvasāmaññena, cittabhāvasāmaññena ca kusalākusalavipākatāya duvidhampi cakkhuviññāṇaṃ cittantveva vuttaṃ.",
+     "<b>Eva</b>nti iminā ‘‘cakkhuṃ nissāyā’’tiādinā vuttaṃ, avuttañca ‘‘sotaṃ nissāyā’’tiādikaṃ saṅgaṇhāti.",
+     "<b>Manoviññāṇadhātū</b>ti etthapi ‘‘ekā’’ti padaṃ ānetvā sambandhitabbaṃ ‘‘ekā manoviññāṇadhātū’’ti.",
+     "Aḍḍhena ekādasa <b>aḍḍhekādasa,</b> aḍḍhaṃ vā ekādasamaṃ etāsanti <b>aḍḍhekādasa.</b>",
+     "<b>Aḍḍhaṭṭhamā</b>ti etthāpi eseva nayo."
+    ],
+    "lineRefs": [
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ],
+     [
+      "vism18:665"
+     ]
+    ]
+   },
+   {
+    "para": 666,
+    "vripara": "666",
+    "refs": [
+     "vism18:666"
+    ],
+    "lines": [
+     "<b>Cakkhudhātuyaṃ vuttanayenevā</b>ti ‘‘yaṃ loko setakaṇhamaṇḍalavicitta’’ntiādinā (visuddhi. 2.665) vuttanayena."
+    ],
+    "lineRefs": [
+     [
+      "vism18:666"
+     ]
+    ]
+   },
+   {
+    "para": 667,
+    "vripara": "667",
+    "refs": [
+     "vism18:667"
+    ],
+    "lines": [
+     "<b>Idha bhikkhu imasmiṃ sarīre</b>ti ajjhattaṃ vipassanābhinivesadassanavasena vuttaṃ.",
+     "Teneva hi ekasseva bhāvassa gahitattā <b>‘‘sattarasa rūpāni sammasanupagānī’’</b>ti āha.",
+     "Sammasituṃ sakkuṇeyyāni sammasanaṃ upagacchantīti <b>sammasanupagāni,</b> sammasanīyānīti attho.",
+     "<b>Ākāra</b>-ggahaṇena viññattidvayaṃ vuttaṃ, <b>vikāra</b>-ggahaṇena lahutādittayaṃ, itarena ākāsadhātūti vadanti.",
+     "<b>Ākāra</b>-ggahaṇena pana viññattidvayena saddhiṃ lakkhaṇarūpamāha.",
+     "Tampi hi rūpānaṃ uppajjanādiākāramattanti.",
+     "<b>Antaraparicchedo</b>ti taṃtaṃkalāpānaṃ asaṅkarakāraṇatāya antarabhūto paricchedo.",
+     "Yadi na sammasanupagāni, ākārādimattāni ca, kathaṃ rūpānīti āha <b>‘‘apica kho’’</b>tiādi."
+    ],
+    "lineRefs": [
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ],
+     [
+      "vism18:667"
+     ]
+    ]
+   },
+   {
+    "para": 668,
+    "vripara": "668",
+    "refs": [
+     "vism18:668"
+    ],
+    "lines": [
+     "Evaṃ dvācattālīsāya koṭṭhāsānaṃ vasena vitthārato rūpapariggahaṃ tadanusārena vitthārato eva nāmapariggahaṃ vibhāvetvā tato saṃkhittasaṃkhittatarasaṃkhittatamavasena, aṭṭhārasadhātuvasena, dvādasāyatanavasena, pañcakkhandhavasena ca rūpārūpapariggahaṃ dassetvā atisaṃkhittanayenāpi dassetuṃ <b>‘‘yaṃ kiñci rūpa’’</b>ntiādi vuttaṃ.",
+     "Yathā ca dhātuādivasena, evaṃ indriyasaccapaṭiccasamuppādavasenapi rūpārūpapariggaho veditabbo.",
+     "Kathaṃ?",
+     "Indriyavasena tāva cakkhādīni pañca, itthipurisindriyāni cāti satta indriyāni rūpaṃ, manindriyaṃ, pañca vedanindriyāni, saddhādīni pañca cāti ekādasa nāmaṃ, jīvitindriyaṃ nāmañca rūpañca, pacchimāni tīṇi idha anadhippetāni lokuttarattā.",
+     "Dukkhasaccaṃ nāmañca rūpañca, samudayasaccaṃ nāmaṃ, itarāni idha nādhippetāni lokuttarattā.",
+     "Paccayākāre ādito tīṇi aṅgāni nāmaṃ, catutthapañcamāni nāmañca rūpañca, chaṭṭhasattamaaṭṭhamanavamāni nāmaṃ, dasamaṃ nāmañceva nāmarūpañca, pacchimāni dve paccekaṃ nāmañca rūpañcāti evaṃ tattha tattha vuttanayānusārena indriyasaccapaccayākāravasenapi nāmarūpapariggaho kātabbo.",
+     "Evaṃ pana nāmarūpapariggahassa vibhāgena kathane payojanaṃ heṭṭhā vuttameva."
+    ],
+    "lineRefs": [
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ],
+     [
+      "vism18:668"
+     ]
+    ]
+   },
+   {
+    "para": 669,
+    "vripara": "669",
+    "refs": [
+     "vism18:669"
+    ],
+    "lines": [
+     "Kāmaṃ vedanādīsu arūpadhammesu na uttaruttarā viya purimapurimā sukhumā, tathāpi saṅghaṭṭanena vikāraāpajjanake rūpadhamme upādāya sabbepi te sukhumā evāti āha <b>‘‘sukhumattā arūpaṃ na upaṭṭhātī’’</b>ti.",
+     "<b>Sammasitabba</b>nti sammadeva lakkhaṇādito vīmaṃsitabbaṃ.",
+     "<b>Manasikātabba</b>nti tathā citte ṭhapetabbaṃ.",
+     "<b>Pariggahetabba</b>nti paricchedakārikāya paññāya paricchijja gahetabbaṃ.",
+     "<b>Vavatthapetabba</b>nti aññamaññaṃ asaṅkarato vinicchitabbaṃ.",
+     "<b>Assā</b>ti yogino.",
+     "<b>Suvikkhālita</b>nti suvisodhitaṃ.",
+     "Ādikammikassa hi kammaṭṭhānaṃ pariggaṇhantassa yāva dhammā suparibyattaṃ na upatiṭṭhanti, tāva te tappaṭicchādakasammohabalena abhibhūtā avisuddhā nāma honti, asaṅkarato upaṭṭhānābhāvato aññamaññañca jaṭitā.",
+     "Yadā pana sammasanādividhinā taṃ vibhūtaṃ hoti, tadā te suvikkhālitā, nijjaṭā ca nāma honti.",
+     "Tenāha <b>‘‘yathā yathā hī’’</b>tiādi.",
+     "Ādikammikassa arūpadhammā yebhuyyena rūpadhamme ārabbha pavattanākārena gahaṇaṃ gacchantīti katvā vuttaṃ <b>‘‘tadārammaṇā arūpadhammā’’</b>ti.",
+     "Teneva hi heṭṭhā ‘‘tassevaṃ pariggahitarūpassa dvāravasena arūpadhammā pākaṭā hontī’’ti vuttaṃ, na vatthuvasenāti.",
+     "Idāni rūpapariggaho arūpapariggahassa upāyo, upatthambho cāti yathāvuttamatthaṃ upamāhi pakāsetuṃ <b>‘‘yathā hī’’</b>tiādi vuttaṃ.",
+     "<b>Mukhanimitta</b>nti mukhassa paṭibimbaṃ.",
+     "Tatridaṃ upamāsaṃsandanaṃ – cakkhumā puriso viya yogāvacaro, tassa cakkhu viya yogino kammaṭṭhānapariggāhakañāṇaṃ, ādāsaṃ viya rūpapariggaho, mukhanimittaṃ viya arūpapariggaho, ādāsassa aparisuddhakālo viya rūpapariggahassa avikkhālitakālo, tadā mukhanimittassa apaññāyanaṃ viya rūpapariggahassa avisuddhatāya arūpadhammānaṃ anupaṭṭhānaṃ, ādāsassa punappunaṃ parimajjanaṃ viya rūpapariggahassa punappunaṃ visodhanaṃ, suparimajjite ādāse subyattaṃ mukhanimittassa paññāyanaṃ viya suvikkhālite nijjaṭe rūpapariggahe arūpadhammānaṃ suṭṭhu upaṭṭhānanti.",
+     "Iminā nayena <b>telatthikopamā</b>dīsupi yathārahaṃ upamāsaṃsandanaṃ veditabbaṃ.",
+     "<b>Tilapiṭṭha</b>nti tilacuṇṇaṃ.",
+     "<b>Katakaṭṭhi</b>nti katakabījaṃ.",
+     "<b>Kalalakaddama</b>nti tanukaddamaṃ.",
+     "<b>Tappaccanīkakilesā</b>ti tassa arūpadhammapariggāhakañāṇassa vibandhabhāvena paṭipakkhabhūtā sammohādikilesā.",
+     "<b>Ucchu</b>ādiupamāsu idaṃ mukhamattassa dassanaṃ – yathā ucchurasaṃ gahetukāmo ucchūni ucchuyante pakkhipitvā ekavāraṃ dvivāraṃ yantakkamanamattena ucchurase anikkhamante na ucchūni chaḍḍetvā gacchati, yathā vā core gahetvā tehi katakammaṃ jānitukāmo dvattippahāramattena tesu tamatthaṃ akathentesu na te muñcati, yathā vā pana godammako goṇaṃ dametukāmo dhure taṃ yojetvā ekavāraṃ dvivāraṃ tasmiṃ pathena agacchante na vissajjeti, yathā ca dadhiṃ manthetvā navanītaṃ gahetukāmo dadhikalasiyaṃ manthaṃ pakkhipitvā sakiṃ, dvikkhattuṃ vā manthassa bhamanamattena navanīte anuppajjante na dadhiṃ chaḍḍeti, yathā vā pana macche pacitvā khāditukāmo ekavāraṃ dvivāraṃ aggidānamattena macchesu apaccantesu na te chaḍḍeti. ‘‘Atha kho naṃ punappunaṃ parimajjatī’’ti ettha vuttanayānusārena ‘‘atha kho naṃ ucchuyante punappunaṃ uppīḷetī’’tiādinā sabbattha upamattho yojetabbo."
+    ],
+    "lineRefs": [
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ],
+     [
+      "vism18:669"
+     ]
+    ]
+   },
+   {
+    "para": 670,
+    "vripara": "670",
+    "refs": [
+     "vism18:670"
+    ],
+    "lines": [
+     "<b>Arūpadhammānaṃ upaṭṭhānākārakathāvaṇṇanā</b>",
+     "Ākirīyanti abhimukhā honti etehīti ākārā, arūpadhammānaṃ upaṭṭhānassa mukhabhūtā phusanānubhavanavijānanappakārāti āha <b>‘‘arūpadhammā tīhi ākārehi upaṭṭhahantī’’</b>tiādi.",
+     "Ārammaṇe pavattamānesu cittacetasikesu asatipi pubbāpariye phusanalakkhaṇo phasso, tattha sabbapaṭhamaṃ abhinipatanto viya hotīti vuttaṃ <b>‘‘paṭhamābhinipāto phasso’’</b>ti.",
+     "Tenassa phusanākārena supākaṭabhāvena upaṭṭhānaṃ dasseti.",
+     "Phasse pana upaṭṭhite yasmiṃ ārammaṇe so phasso, tassa anubhavanalakkhaṇā vedanā, sañjānanalakkhaṇā saññā, āyūhanalakkhaṇā cetanā, paṭivijānanalakkhaṇaṃ viññāṇanti imepi pākaṭā hontīti āha <b>‘‘taṃsampayuttā vedanā’’</b>tiādi.",
+     "Evaṃ salakkhaṇasaṅkhepato catudhātuvavatthānavasena phassamukhena arūpapariggahaṃ dassetvā idāni vitthārato catudhātuvavatthānavasena taṃ dassetuṃ <b>‘‘tathā kese’’</b>tiādi vuttaṃ.",
+     "Tattha <b>kese pathavīdhātū</b>ti kesasaṅkhāte pathavīkoṭṭhāse pathavīdhātu.",
+     "Lakkhaṇavibhattito hi dhātuvavatthānadassanametaṃ.",
+     "Punapi dvinnaṃ dhātuvavatthānānaṃ vasena vedanāmukhena arūpapariggahaṃ dassetuṃ <b>‘‘ekassā’’</b>tiādi vuttaṃ.",
+     "Tattha <b>tassa rasānubhavanakavedanā</b>ti thaddhabhāvasaṅkhātassa phoṭṭhabbasabhāvassa anubhavanavasena pavattavedanā.",
+     "<b>Aparassā</b>ti etthāpi vuttanayeneva sambandho veditabbo.",
+     "Tattha <b>ārammaṇapaṭivijānana</b>nti thaddhatāsaṅkhātaphoṭṭhabbārammaṇapaṭivijānanaṃ.",
+     "Kāyadvārābhinihataṃ, kevalaṃ vā manodvārikajavanaviññāṇamāha.",
+     "Tañhi ‘‘pathavīdhātu kakkhaḷalakkhaṇā’’ti paṭivijānāti, itaraṃ pana kakkhaḷalakkhaṇapaṭivijānanamattamevāti.",
+     "<b>Eteneva upāyenā</b>ti yvāyaṃ salakkhaṇasaṅkhepato, salakkhaṇavibhattito ca dhātuvavatthānavasena rūpapariggahaṃ dassetvā tattha ṭhitassa phassādimukhena arūpapariggaṇhanupāyo dassito, eteneva upāyena.",
+     "<b>Kammasamuṭṭhānakese</b>ti catusamuṭṭhānakesato niddhārite kammasamuṭṭhānakese.",
+     "<b>Kakkhaḷalakkhaṇātiādinā nayenā</b>ti <b>ādi</b>-saddena na kevalaṃ ‘‘paggharaṇalakkhaṇā āpodhātū’’tiādinā lakkhaṇavisesena saddhiṃ dhātvantarāniyeva, atha kho ekasamuṭṭhānādibhedāni koṭṭhāsantarānipīti daṭṭhabbaṃ.",
+     "Tenevāha <b>‘‘dvācattālīsāya dhātukoṭṭhāsesū’’</b>ti.",
+     "<b>Sabbaṃ nayabhedaṃ anugantvā</b>ti yvāyaṃ dvācattālīsāya dhātukoṭṭhāsesu pathavīdhātuādīnaṃ lakkhaṇādito vavatthāpanavasena nānāvidho rūpapariggahanayo vutto, taṃ sabbaṃ nayabhedaṃ nayavisesaṃ anugantvā, cakkhudhātuādīsu rūpapariggahamukhesu arūpapariggahadassanavasena yojanā kātabbāti adhippāyo.",
+     "Tatridaṃ yojanāmukhamattadassanaṃ – ekassa tāva ‘‘cakkhudhātu rūpābhighātārahabhūtappasādalakkhaṇā, daṭṭhukāmatānidānakammasamuṭṭhānabhūtappasādalakkhaṇā vā’’tiādinā (dha. sa. aṭṭha. 600) nayena dhātuyo pariggaṇhantassa ‘‘paṭhamābhinipāto phasso, taṃsampayuttā vedanā’’ti sabbaṃ yojetabbaṃ.",
+     "Tathā ‘‘yathāvuttalakkhaṇāya cakkhudhātuyā rasānubhavanakavedanā vedanākkhandho’’tiādi yojetabbaṃ.",
+     "Tathā ‘‘yathāvuttalakkhaṇā cakkhudhātū’’ti, ‘‘ārammaṇapaṭivijānanaṃ viññāṇaṃ viññāṇakkhandho’’tiādinā sabbaṃ yojetabbaṃ.",
+     "Āyatanādivasena rūpapariggahamukhesupi eseva nayo."
+    ],
+    "lineRefs": [
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ],
+     [
+      "vism18:670"
+     ]
+    ]
+   },
+   {
+    "para": 671,
+    "vripara": "671",
+    "refs": [
+     "vism18:671"
+    ],
+    "lines": [
+     "Yathā nāma heṭṭhimajhānaṃ subhāvitaṃ vasībhāvaṃ pāpitameva uparijhānassa pādakaṃ padaṭṭhānaṃ hoti, na paṭiladdhamattaṃ, evaṃ rūpapariggaho suvisuddho nijjaṭo niggumbo eva arūpapariggahassa pādakaṃ padaṭṭhānaṃ hoti, na avisuddho, tasmā rūpārūpassa ekadesepi anupaṭṭhite so avisuddho eva nāma hoti, pageva bahūsu anupaṭṭhitesūti dassento āha <b>‘‘sace hī’’</b>tiādi.",
+     "<b>Pabbateyyā gāvī viya</b> bālā abyattā akhettaññū.",
+     "<b>Khaggenā</b>ti khaggaggena.",
+     "<b>Samugga</b>nti mañjūsāsadisaṃ mahāsamuggaṃ.",
+     "Apariggahitakammaṭṭhānassa avibhattaṃ viya upaṭṭhahantampi nāmarūpaṃ vibhattasabhāvameva, tassa ca vibhāgo kammaṭṭhānapariggahesu pākaṭo hotīti ca dassanatthaṃ samuggavivaraṇaṃ, yamakatālakandaphālanañca nidassanabhāvena vuttaṃ.",
+     "Yamakatālakandañhi bhinnasantānampi abhinnaṃ viya upaṭṭhāti, evaṃ rūpārūpadhammāti.",
+     "<b>Sabbepi tebhūmake dhamme nāmañca rūpañcāti dvedhā vavatthapetī</b>ti ettha kiñcāpi sabba-saddo anavasesapariyādāyako, nāmarūpabhāvo pana aññamaññavidhuroti na tadubhayaṃ samudāyavasena parisamāpayetabbaṃ, tasmā ‘‘yadettha namanalakkhaṇaṃ, taṃ nāmaṃ.",
+     "Yaṃ ruppanalakkhaṇaṃ, taṃ rūpa’’nti evaṃ dvedhā vavatthapetīti attho.",
+     "Evaṃ vavatthapentoyeva ca tadubhayavinimuttassa tebhūmakadhammesu kassaci dhammassa abhāvato ‘‘sabbepi tebhūmakadhamme nāmañca rūpañcāti dvedhā vavatthapetī’’ti vuccati. ‘‘Nāmañca rūpañcā’’ti eteneva tassa duvidhabhāve siddhe ‘‘dvedhā vavatthapetī’’ti idaṃ nāmarūpavinimuttassa aññassa abhāvadassanatthaṃ.",
+     "Tenevāha <b>‘‘nāmarūpamattato uddha’’</b>ntiādi. ‘‘Sabbepi tebhūmake dhamme’’ti pana sabbaggahaṇañcettha sammasamanupagassa dhammassa anavasesetabbatāya vuttaṃ.",
+     "Tañhi anavasesato pariññeyyaṃ ekaṃsato virajjitabbaṃ, tato ca cittaṃ virājayaṃ pamocetabbaṃ.",
+     "Tenāha bhagavā –",
+     "‘‘Sabbaṃ, bhikkhave, anabhijānaṃ aparijānaṃ tattha cittaṃ avirājayaṃ appajahaṃ abhabbo dukkhakkhayāya.",
+     "Sabbañca kho, bhikkhave, abhijānaṃ parijānaṃ tattha cittaṃ virājayaṃ pajahaṃ bhabbo dukkhakkhayāyā’’ti (saṃ. ni. 4.26-27).",
+     "Yadi tebhūmakaṃ dhammajātaṃ anavasesato gahitaṃ ‘‘nāmarūpa’’nti, yaṃ ito bāhirakehi padatthabhāvena parikappitaṃ, seyyathidaṃ – pakatiādi drabyādi jīvādi kāyādi.",
+     "Tattha kathaṃ paṭipajjitabbanti?",
+     "Ummattakavipallāsasadise asammāsambuddhapavedite kā tattha aññā paṭipatti aññatra ajjhupekkhanato.",
+     "Atha vā tepi nāmarūpantogadhabhāvābhāvavasena nicchitā evāti veditabbā.",
+     "Kathaṃ?",
+     "Pakati, mahā, ahaṃkāro, tammattāni, indriyāni, bhūtāni, purisoti ete pakatiādayo.",
+     "Tattha samabhāvena pavattamānānaṃ sattarajatamasaṅkhātānaṃ sukhadukkhamohānaṃ samudāyo <b>pakati, padhāna</b>nti ca vuccati.",
+     "Sattamattasampavedanīyo <b>mahā,</b> buddhīti keci.",
+     "Sattarajādīsu abhimāno <b>ahaṃkāro,</b> asmimattāti keci.",
+     "Saddaphassarūparasagandhā <b>tammattāni</b> aññamaññavisiṭṭhānaṃ pathavīādīnaṃ ekuttaratādassanato ekuttarāni tammattānīti vijjhavāsiekalakkhaṇehi tammattehi ekalakkhaṇā visesā sajiyanti, sukhumabhāvena pana nesaṃ sampavesanato ekuttaratāti keci.",
+     "Sotādīni pañca savanādivuttikāni <b>buddhindriyāni,</b> vacanādānavicaraṇussaggānandakiccāni vācādīni pañca <b>kammindriyāni</b>.",
+     "Mano antokaraṇaṃ, itaraṃ bāhirakaraṇaṃ.",
+     "Gandhādīhi āraddhāni pathavīudakaaggivāyuākāsāni <b>bhūtāni,</b> cetanāsabhāvo <b>puriso</b>ti evaṃ pakatiādīni sarūpato veditabbāni.",
+     "Tattha hi <b>pakati</b> tāva sukhadukkhamohamattatāya nāmaṃ, samavisamabhāvāpattito aniccā, dukkhā, saṅkhatā ca āpannā.",
+     "<b>Mahā</b>pi ‘‘tasmā aliṅgato liṅgavisesāmatto mahā uppajjatī’’ti vacanato, buddhibhāvānujānanato ca nāmaṃ, aniccaṃ, saṅkhatameva ca āpannaṃ. ‘‘Tasmā mahato cha visesā sajiyantī’’ti sakkate vacanato ‘‘asmī’’ti gahaṇanimittabhāvānujānanena <b>ahaṃkāro</b> abhimānoti katvā nāmaṃ, tato eva aniccasaṅkhatabhāvāpatti cassa siddhā.",
+     "Itaraṃ <b>tammattapañcakaṃ</b> gandharasarūpaphassasaddabhāvānujānanato rūpaṃ, arūpanti pana kāpilānaṃ micchābhinivesamattaṃ.",
+     "Te hi soḷasa visesā pañca bhūtāni, ekādasindriyāni bhūtehi bhūtavisesānīti gandhāditammattehi tannissayāni pathavīāpotejovāyoākāsasaṅkhātāni bhūtāni icchitāni. ‘‘Tabbisesā ca nānājātikā ahaṃkārato ca indriyānī’’ti vacanato sotakāyacakkhujivhāghānavācāpāṇipādapāyūpatthāni ceva mano cāti <b>ekādasindriyāni</b>.",
+     "Tattha <b>mano</b> nāmaṃ, itarāni sabbāni rūpaṃ.",
+     "<b>Vācā</b>ti cettha atthāvajotakassa akkharasamudāyassa gahaṇaṃ.",
+     "Imesaṃ pana dhammino dhammassa anaññatthassa icchitattā siddhāva aniccatā pariṇāmapakkhe, abhibyattipakkhepi yadi tabbisayañāṇuppādena abhibyañjanaṃ siddhāva aniccatā, atha tato pubbepi ñāṇaṃ attheva.",
+     "Akkhabyattivādo pana siyāti idamettha disāmattaṃ.",
+     "Drabyaguṇakammasāmaññavisesasamavāyā <b>drabyādikā</b>.",
+     "Tattha pathavī āpo tejo vāyu ākāso kālo disā attā manoti nava <b>drabyāni</b>.",
+     "Sadda rūpa rasa gandha phassa saṅkhā parimāṇāni puthūtva saṃyoga viyoga paratvā paratva buddhi sukha dukkha icchā dosa payatta gurutva dravatva sneha vegā saṅkhārā diṭṭhā ceti evamete tevīsati <b>guṇā</b>.",
+     "Ukkhepanaṃ avakkhepanamākucanaṃ pasāraṇaṃ gamanamiti pañca <b>kammāni</b>.",
+     "Aññamaññavisiṭṭhesu avisiṭṭhamabhidhānaṃ paccayo hoti.",
+     "Saṃ-iti yato drabyaguṇakammesu sā atthi evāti etaṃ <b>mahāsāmaññaṃ</b>.",
+     "Pathavīādīsu anuvattibyāvuttibuddhinimittaṃ drabyatvādi, taṃ yathā drabyatva guṇatva kammatva ghaṭatvādi, eso <b>sāmaññaviseso</b>.",
+     "Iha tantesu paṭo, kapālesu ghaṭoti iheti yato hetuhetuphalānaṃ sambandho samavāyoti vutto, <b>samavāyo</b>ti evamete <b>drabyādikā</b>.",
+     "Tattha pathavī āpa teja vāyū bhūtarūpaṃ, ākāsaṃ tesaṃ abhāvamattaṃ, paricchedo vā, candasūriyādiparivattanaṃ, dhammappavattiñca upādāya paññattimattaṃ <b>kālo</b>.",
+     "Tathā <b>disā, attā</b> ca.",
+     "<b>Mano</b> nāmaṃ.",
+     "<b>Saddarūparasagandhā</b> rūpameva.",
+     "Tathā <b>phasso</b> bhūtattayasabhāvato.",
+     "<b>Saṅkhā</b> ekādikā taṃ taṃ upādāya paññattimattaṃ.",
+     "Tathā avayavasamudāye guṇavisesavasena, saṇṭhānavisesavasena vā mahantaṃ dīghaṃ, tabbipariyāyato aṇu rassanti bhinnalakkhaṇadesesu <b>puthutva</b>nti.",
+     "Bhinnadesajānaṃ sahabhāve <b>saṃyogo</b>ti.",
+     "Tadapāye <b>viyogo</b>ti.",
+     "Samānadisādesagatānaṃ rūpānaṃ mahadabbantarānaṃ vasena paramaparanti paññattimattaṃ.",
+     "<b>Buddhisukhadukkhaicchādosapayattā</b> nāmameva.",
+     "<b>Gurutva dravatva snehavegā</b> rūpadhammānaṃ pavattivisesato gahetabbākārā.",
+     "Itaro <b>saṅkhāro</b> ñāṇassa pavattiviseso.",
+     "<b>Adiṭṭho</b>pi dhammādhammabhāvato nāmameva.",
+     "<b>Ukkhepanaṃ avakkhepanaṃ ākucanaṃ pasāraṇaṃ gamana</b>nti rūpadhammānaṃ pavattimattaṃ.",
+     "Sadisāsadisatāyaṃ sāmaññavisesasaññā, ayuttasambandhe samavāyasamaññāti drabyādīnampi nāmarūpantogadhatā daṭṭhabbā.",
+     "Jīvājīvabandha puñña pāpāsava saṃvaranijjaravimokkhā <b>jīvādikā</b>.",
+     "Tattha <b>jīvo</b>ti attā.",
+     "Puggaladhammādhammākāsakālesu <b>ajīvasaññā</b>.",
+     "Tesu saddaphassarūparasagandhasaṇṭhānabandhabhedasukhumaparaaparāghātappabhācchāyojjākatamāni puggalalakkhaṇanti <b>puggalo</b> rūpaṃ rūpadhammānaṃ pavattiākāramattato.",
+     "<b>Dhammādhammā</b> jīvapuggalānaṃ gatiṭṭhitimattatāya tadavisiṭṭhā.",
+     "<b>Ākāsakālā</b> paññattimattaṃ.",
+     "<b>Bandho</b> ‘‘kammapuggalantarasaṃyogo’’ti vacanato tehi anañño.",
+     "<b>Puññapāpāni</b> nāmanti pākaṭameva. ‘‘Kammapuggalānamāsavo’’ti vacanato puññāpuññasambhave āsavasamaññāti tato avisiṭṭho <b>āsavo</b>. ‘‘Āsavanirodho saṃvaro’’ti vacanato paṭipakkhena puññāpuññanirodho <b>saṃvaro</b>. ‘‘Kammaphalappavattiyā pakatiyā appavatti nijjaro’’ti vacanato vipākanirodhanimittaṃ <b>nijjaro.</b>",
+     "<b>Mokkho</b>pi ‘‘sabbakammavimokkho’’ti vacanato kammapuggalajīvaviyogo.",
+     "Tattha <b>kammapuggalānaṃ</b> saddādilakkhaṇatāya rūpamattatā puññāpuññamattatāya arūpatā.",
+     "<b>Jīvo</b> ca arūpamattamevāti ayaṃ drabyamokkho.",
+     "Bhāvamokkho pana jīvassa rāgādibhāvāpariṇāmo rāgādayo nāmamevāti jīvādayopi nāmarūpantogadhā eva.",
+     "Kāyappavattigatijātibandhāpavaggā <b>kāyādikā</b>.",
+     "Tattha pathavīāpatejavāyuattasukhadukkhesu <b>kāyasamaññā</b>.",
+     "Tadavisiṭṭhā pavattigatijātibandhāpavaggā, ‘‘bhāvoti attho, kāyoti anatthantara’’nti vacanato kāyato aññaṃ kiñci natthi. ‘‘Pavattisaññā kiriyāsaṃyogavibhāgesū’’ti vacanato gatiādippakārena pavattā pathavīādayo eva <b>pavatti</b> upacāro. ‘‘Tasmiṃ anatthantara’’nti vacanato kāyato anaññā suramanujapetatiracchānanarakūpapattiyo <b>gatiyo</b>.",
+     "Tāsu purimāpurimāvisiṭṭho gatīsu jātassa nicchayopi pavattimattanti tato anaññā kaṇhanīlarattapītasukkaatisukkasaṅkhātā <b>jātiyo</b>.",
+     "Tā uttaruttaravisiṭṭhā aññāṇamoharāgadosatatvāsandassanappāyā <b>sukkajāti,</b> antā accantavimuttā avagāhitatvā cāti <b>sukkajāti</b>. ‘‘Dosesu bandhasamaññā’’ti vacanato aññāṇādilakkhaṇassa <b>bandhassa</b> jīvato anaññatā.",
+     "Aññāṇādidosābhāvato apavaggasiddhīti <b>kāyādayopi</b> nāmarūpamattameva.",
+     "Yopi tattha tattha ‘‘puriso attā jīvo’’tiādipariyāyehi vutto attapadattho, sopi yathārahaṃ nāmarūpamattaṃ upādāya paññatto, nāmarūpamattameva vā.",
+     "Tena vuttaṃ ‘‘tepi nāmarūpantogadhabhāvābhāvavasena nicchitā evā’’ti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ],
+     [
+      "vism18:671"
+     ]
+    ]
+   },
+   {
+    "para": 672,
+    "vripara": "672",
+    "refs": [
+     "vism18:672"
+    ],
+    "lines": [
+     "<b>Sambahulasuttantasaṃsandanākathāvaṇṇanā</b>",
+     "<b>So</b>ti so vipassanākammiko yogāvacaro.",
+     "<b>Eva</b>nti vuttappakāraparāmasanaṃ.",
+     "<b>Yāthāvasarasato</b>ti yathābhūtasabhāvato.",
+     "Nāmarūpaṃ vavatthapetvā etamatthaṃ saṃsandetvā vavatthapetīti sambandho.",
+     "<b>Lokasamaññāyapi pahānatthāya,</b> pageva ‘‘satto jīvo’’ti pavattanakamicchābhinivesassāti adhippāyo.",
+     "Nāmarūpamattatāya avinicchatattā, santānādighanabhedassa ca akatattā abhinivesena vinā samūhekattaggahaṇavasena ‘‘satto’’ti pavatto sammoho <b>sattasammoho</b>.",
+     "Tassa vikkhambhanā <b>asammohabhūmi.</b>",
+     "<b>Sambahulasuttantavasenā</b>ti ‘‘yathāpī’’tiādinā idha vuttānaṃ, avuttānañca ‘‘rūpañca hidaṃ, mahāli, attā abhavissa, nayidaṃ rūpaṃ ābādhāya saṃvatteyyā’’ti (saṃ. ni. 3.59; mahāva. 20) evamādinā sambahulānaṃ suttantānaṃ vasena. ‘‘Nāmarūpamattamevā’’tiādinā vuttamevatthaṃ sandhāyāha <b>‘‘etamattha’’</b>nti.",
+     "<b>Aṅgasambhārā</b>ti aṅgasambhārahetu.",
+     "Tannimittaṃ taṃ amuñcitvā sati eva tasmiṃ <b>‘‘satto’’</b>ti vohāro.",
+     "<b>Agārantvevā</b>ti yathā kaṭṭhādīni paṭicca upādāya tesaṃ nāmaṃ vissajjetvā agāramicceva saṅkhaṃ samaññaṃ gacchati, evaṃ aṭṭhiādīni paṭicca upādāya tesaṃ nāmaṃ vissajjetvā rūpaṃ sarīramicceva saṅkhaṃ gacchatīti yojanā.",
+     "<b>Dukkhameva sambhotī</b>ti dukkhadukkhatādibhedaṃ tividhaṃ dukkhameva sambhavati, yathāpaccayaṃ uppajjati, tadeva dukkhaṃ khaṇaṭṭhitipabandhaṭṭhitivasena tiṭṭhati ceva khaṇanirodhaāyukkhayanirodhādivasena nirujjhati cāti attho.",
+     "Idāni dukkhamevāti evakārena nivattitamatthaṃ dassetuṃ <b>‘‘nāññatrā’’</b>tiādi vuttaṃ.",
+     "Tassattho – yathāvuttaṃ dukkhaṃ ṭhapetvā tato aññaṃ kiñci dhammajātaṃ na sambhavati, yo ‘‘satto’’ti vā ‘‘jīvo’’ti vā vucceyya, sabbena sabbaṃ abhāvā kuto tassa nirodhoti."
+    ],
+    "lineRefs": [
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ],
+     [
+      "vism18:672"
+     ]
+    ]
+   },
+   {
+    "para": 673,
+    "vripara": "673",
+    "refs": [
+     "vism18:673"
+    ],
+    "lines": [
+     "<b>Upamāhināmarūpavibhāvanākathāvaṇṇanā</b>",
+     "<b>Ekenākārena saṇṭhitesū</b>ti yena pakārena akkhādīsu sanniviṭṭhesu rathasamaññā, tena ekena ākārena samavaṭṭhitesu ekajjhaṃ rāsikatesu.",
+     "<b>Evameva</b>nti sannivesavisiṭṭhe avayavasamudāye santānavasena pavattamāne yathā ‘‘ratho gehaṃ muṭṭhi vīṇā senā nagaraṃ rukkho’’ti vohāramattaṃ, paramatthato pana rathādi nāma kiñci natthi, evamevaṃ.",
+     "<b>Upādānakkhandhesū</b>ti upādānakkhandhasaññitesu rūpārūpadhammesu samuditesu santānavasena pavattamānesu ‘‘satto jīvo’’ti vohāramattaṃ, paramatthato pana satto vā jīvo vā natthīti yāthāvato jānanaṃ.",
+     "Idaṃ <b>yathābhūtadassanaṃ</b> ‘‘diṭṭhivisuddhī’’ti vuccati."
+    ],
+    "lineRefs": [
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ],
+     [
+      "vism18:673"
+     ]
+    ]
+   },
+   {
+    "para": 674,
+    "vripara": "674",
+    "refs": [
+     "vism18:674"
+    ],
+    "lines": [
+     "<b>Tassā</b>ti sattoti gahitassa attano.",
+     "<b>Vināsa</b>nti niruddhassa vināsaṃ.",
+     "<b>Avināsa</b>nti avinassanaṃ, niccatanti attho.",
+     "Dvayavaseneva hi attavādino ṭhitā, sassato attā, ucchijjatīti vā, ekaccasassatavādopi ettheva samavaruddhoti.",
+     "<b>Avināsaṃ anujānanto</b>ti buddhiādīnaṃ dhammānaṃ vināsaṃ icchantopi ‘‘dhammī nicco kūṭaṭṭho’’ti attano vināsābhāvaṃ anujānanto.",
+     "<b>Sassate</b>ti sassatagāhe.",
+     "<b>Patati</b> katavināsaakatabbhāgamādidosappasaṅgatoti adhippāyo.",
+     "<b>Khīranvayassā</b>ti khīrassa anvayabhūtassa, phalabhūtassāti attho.",
+     "<b>Tadanvayassā</b>ti tassa attano anvayabhūtassa <b>aññassa</b> kassaci <b>abhāvato.</b>",
+     "<b>Olīyati nāmā</b>ti ‘‘sassato attā’’ti abhinivesena bhavābhirato hutvā bhavanirodhato saṅkocanaṃ āpajjanto bhaveyeva nilīyati nāma.",
+     "<b>Atidhāvati nāmā</b>ti tattha tattheva hi bhave attā ucchijjatīti ucchedavādī ‘‘ucchijjati attā’’ti gaṇhanto paraṃ maraṇā santaṃ bhavaṃ ‘‘natthī’’ti atikkamanto atidhāvati nāmāti vadanti.",
+     "Kilesanirodhe pana kammassa avipaccanato bhavanirodhe icchitabbe tathā aggahetvā ‘‘taṃ taṃ bhavavisesaṃ āgamma attā ucchijjatīti evaṃ bhavanirodho hotī’’ti gaṇhanto taṃ atidhāvati nāma.",
+     "<b>Pariyuṭṭhitā</b>ti abhibhūtā.",
+     "<b>Cakkhumanto</b>ti yathābhūtadassanasaṅkhātena ñāṇacakkhunā cakkhumanto.",
+     "Kāmabhavādibhedo bhavo āramitabbaṭṭhena ārāmo etesanti <b>bhavārāmā</b>.",
+     "Tasmiṃ bhave ratā abhiratāti <b>bhavaratā</b>.",
+     "Bhave sammodaṃ āpannāti <b>bhavasammuditā</b>.",
+     "Tīhipi padehi bhavassādagadhitatāva vuttā.",
+     "<b>Cittaṃ na pakkhandatī</b>ti bhavassādagadhitattā eva bhavanirodhāvahe dhamme cittaṃ na anuppavisati.",
+     "<b>Nappasīdatī</b>ti na okappati.",
+     "<b>Na santiṭṭhatī</b>ti na patiṭṭhahati.",
+     "<b>Nādhimuccatī</b>ti na adhimuccati.",
+     "<b>Aṭṭīyamānā</b>ti dukkhāpiyamānā.",
+     "<b>Harāyamānā</b>ti lajjamānā.",
+     "<b>Jigucchamānā</b>ti hīḷentā.",
+     "<b>Vibhava</b>nti ucchedaṃ.",
+     "<b>Abhinandantī</b>ti vuttaabhinandanākāradassanaṃ <b>‘‘yato kira bho’’</b>tiādi.",
+     "<b>Bhūta</b>nti khandhapañcakaṃ.",
+     "Tañhi yathāsakaṃ paccayehi jātattā, paramatthato vijjamānattā ca bhūtanti vuccati.",
+     "<b>Bhūtato</b>ti yathābhūtasabhāvato, salakkhaṇato, sāmaññalakkhaṇato ca."
+    ],
+    "lineRefs": [
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ],
+     [
+      "vism18:674"
+     ]
+    ]
+   },
+   {
+    "para": 675,
+    "vripara": "675",
+    "refs": [
+     "vism18:675"
+    ],
+    "lines": [
+     "Evaṃ sattagāhato avalīyanātidhāvanadose, yathābhūtadassanato nibbidādiguṇe ca suttavaseneva dassetvā idāni nāmarūpamattepi gamanādiattakiccasiddhiṃ dassetuṃ <b>‘‘tasmā’’</b>tiādi vuttaṃ.",
+     "Tattha <b>tasmā</b>ti yasmā ‘‘asmī’’ti vā ‘‘aha’’nti vā gāhassa vatthubhūto satto nāma natthi, paramatthato nāmarūpamattameva, tasmā.",
+     "Sace koci attā nāma natthi, kathamidha nāmarūpamatte gamanādiattakiccasiddhīti codanaṃ sandhāyāha <b>‘‘dāruyanta’’</b>ntiādi. <b>‘‘Khāyatī’’</b>ti etena yathā nijjīve dārumayayante abbhantare vattamānassa jīvassa vasena saīhassa sabyāpārassa viya upaṭṭhānamattaṃ paccayavisesato, evaṃ nijjīve nāmarūpamatte paccayavisesato gamanādiattakiccasiddhīti saīhassa sabyāpārassa viya upaṭṭhānanti dasseti.",
+     "<b>Saccato</b>ti bhūtato, paramatthatoti attho.",
+     "Suññaṃ jīvena yantamiva abhisaṅkhataṃ paccayavasena pavattīti adhippāyo.",
+     "<b>Dukkhassa puñjo</b> niccāturatāya <b>tiṇakaṭṭhasadiso</b> attasuññatāyāti attho.",
+     "<b>Etaṃ</b> nāmarūpaṃ.",
+     "<b>Yamaka</b>nti yugaḷakaṃ.",
+     "So ca kho yamakabhāvo aññamaññasannissitabhāvenāti āha <b>‘‘ubho aññoññanissitā’’</b>ti.",
+     "Tato eva ca ekasmiṃ bhijjamānasmiṃ ubho bhijjanti.",
+     "Na hi kadāci pañcavokārabhave rūpe nirujjhante arūpaṃ anirujjhantaṃ, arūpe vā nirujjhante rūpaṃ anirujjhantaṃ atthi.",
+     "Svāyaṃ bhaṅgo <b>paccayā</b> paccayanirodheneva, nāmarūpanirodhoti attho.",
+     "<b>Paccayā</b>ti vā paccayabhūtā, aññamaññassa paccayā hontāpi ubho bhijjantiyevāti attho."
+    ],
+    "lineRefs": [
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ],
+     [
+      "vism18:675"
+     ]
+    ]
+   },
+   {
+    "para": 676,
+    "vripara": "676",
+    "refs": [
+     "vism18:676"
+    ],
+    "lines": [
+     "<b>Daṇḍābhihata</b>nti visesanena daṇḍaṃ, daṇḍābhighātassa paccayaṃ purisavāyāmañca dasseti, bheriyā pana visesitabbatā saddassa asādhāraṇakāraṇatāya.",
+     "Teneva hi ‘‘aññā bherī’’ti bherīyeva gahitā, na daṇḍādayo.",
+     "Adissamānarūpatāya saddaṃ nāmaṭṭhāniyaṃ katvā <b>‘‘evameva’’</b>ntiādinā upamāsaṃsandanaṃ karoti.",
+     "<b>Na cakkhuto jāyare</b>ti na cakkhāyatanato niggacchanavasena jāyanti.",
+     "Na hi cakkhāyatanassa paccayabhāvūpagamanato pubbe phassapañcamakā labbhanti, na ca padesavanto, yena te tato niggaccheyyuṃ.",
+     "Tenevāha ‘‘puñjo natthi anāgate’’ti (mahāni. 10).",
+     "<b>Na rūpato</b>ti etthāpi eseva nayo. <b>‘‘No ca ubhinnamantarā’’</b>ti idaṃ pana tesaṃ arūpadhammattā appadesatāya vuttaṃ.",
+     "Kevalaṃ pana yasmiṃ khaṇe paccayasamavāyo, tadā uppajjanamattamevāti āha <b>‘‘hetuṃ paṭicca pabhavanti saṅkhatā’’</b>ti, cakkhurūpālokamanasikārādibhedaṃ dhammajātaṃ nissāya paccayabhūtaṃ kāraṇaṃ labhitvā tehi samecca sambhūya katattā saṅkhatā phassādayo dhammā uppajjantīti attho.",
+     "Tassā pana dhammānaṃ uppattiyā pākaṭaṃ rūpadhammapavattiṃ dassento <b>‘‘yathāpi saddo pahaṭāya bheriyā’’</b>ti āha.",
+     "Phassapañcamaggahaṇañcettha pākaṭaarūpadhammānaṃ dassanaṃ.",
+     "Sesagāthāsupi eseva nayo.",
+     "<b>Vatthurūpā</b>ti hadayavatthuto.",
+     "Tannissayānaṃ arūpadhammānaṃ bahubhedattā sāmaññavohārena te dassetuṃ <b>‘‘saṅkhatā’’</b>ti vuttaṃ."
+    ],
+    "lineRefs": [
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ],
+     [
+      "vism18:676"
+     ]
+    ]
+   },
+   {
+    "para": 677,
+    "vripara": "677",
+    "refs": [
+     "vism18:677"
+    ],
+    "lines": [
+     "<b>Nitteja</b>nti tejahīnaṃ ānubhāvarahitaṃ.",
+     "Yathā pana taṃ nittejaṃ, taṃ dassetuṃ <b>‘‘na khādatī’’</b>tiādi vuttaṃ.",
+     "Na hi aññathā saddahanussahanādīsu nāmaṃ ‘‘nitteja’’nti sakkā vattuṃ, nāpi rūpaṃ sandhāraṇābandhanādīsu.",
+     "Teneva hi ‘‘rūpaṃ nitteja’’nti vatvā <b>‘‘na hi tassa khāditukāmatā’’</b>tiādi vuttaṃ. <b>‘‘Atha kho’’</b>tiādinā byatirekavasenāpi nāmarūpānaṃ nittejataṃyeva vibhāveti.",
+     "Aññamaññasannissayena hi nāmarūpassa attakiccasiddhipi paccekaṃ asamatthatāvibhāvanameva.",
+     "Tathā hi nāmarūpassa attasuññatā, nirīhatā, byāpāravirahatā ca suṭṭhutaraṃ pākaṭā honti.",
+     "Kathaṃ pana paccekaṃ asamatthānaṃ samuditabhāve samatthatā hoti?",
+     "Asāmaggiyaṃ ahetūnaṃ sāmaggiyampi ahetubhāvāpattito.",
+     "Na hi paccekaṃ daṭṭhuṃ asakkontānaṃ andhānaṃ satampi sahassampi samuditaṃ daṭṭhuṃ sakkotīti codanaṃ sandhāyāha <b>‘‘imassa panatthassā’’</b>tiādi.",
+     "<b>Imaṃ upamaṃ udāharanti</b> aṭṭhakathācariyā upamāyapi asiddhassa atthassa sādhetabbato.",
+     "Tenevāha ‘‘upamaṃ te karissāmi, upamāyapidhekacce viññū purisā bhāsitassa atthaṃ jānantī’’ti (saṃ. ni. 2.67).",
+     "<b>Tuṭṭhahaṭṭho</b>ti yadipāhaṃ cakkhukaraṇīyaṃ kātuṃ na sakkomi, pādakaraṇīyaṃ pana kātuṃ sakkomi, tvañca cakkhukaraṇīyaṃ, tasmā amhākaṃ ubhinnaṃ sahitānañca vasena icchitadesasampatti sijjhatīti tuṭṭhahaṭṭho <b>jaccandho.</b>",
+     "<b>Tattha jaccandho</b>tiādi upamopameyyasaṃsandanaṃ.",
+     "Dhammānaṃ attalābho parapaṭibaddhoti vattabbameva natthi tato pubbe avijjamānattā, paṭiladdhattalābhassāpi parapaṭibaddhameva atthakiccanti dassetuṃ <b>‘‘na sakena tejena uppajjati, na tāsu tāsu kiriyāsu pavattatī’’</b>ti vuttaṃ.",
+     "<b>Tesaṃ nāmarūpānaṃ aññamaññaṃ nissāya uppatti vā pavatti vā na ca na hotī</b>ti jaccandhapīṭhasappiupamāya sādhitamatthaṃ nigamento ‘‘asāmaggiyaṃ ahetūnaṃ sāmaggiyampi ahetukabhāvāpattito’’ti yathāvuttassa hetuno anekantikabhāvaṃ vibhāveti.",
+     "<b>Paradhammavasānuvattino</b>ti paresaṃ attato aññesaṃ hetupaccayasaṅkhātānaṃ dhammānaṃ vasena anuvattanasīlā.",
+     "<b>Attadubbalā</b>ti attanā dubbalā asamatthā.",
+     "<b>Parapaccayato</b>ti paresaṃ dhammānaṃ paccayabhāvato.",
+     "Etena janakapaccayaṃ vadati.",
+     "Tenevāha <b>‘‘jāyare’’</b>ti.",
+     "<b>Paraārammaṇato</b>ti paresaṃ dhammānaṃ ārammaṇabhāvato.",
+     "Etena upatthambhakapaccayaṃ vadati.",
+     "Paccayaggahaṇaṃ vā rūpāpekkhaṃ, ārammaṇaggahaṇaṃ nāmāpekkhaṃ. <b>‘‘Paradhammehī’’</b>ti idaṃ ārammaṇapaccayānaṃ visesanaṃ.",
+     "Purimatthena hi vuttamevatthaṃ pacchimatthena pākaṭaṃ karoti.",
+     "<b>Pabhāvitā</b>ti uppāditā.",
+     "Nāvāyantikūpamāyapi nāmarūpānaṃ avasavattitaṃ vibhāvetuṃ <b>‘‘yathāpī’’</b>tiādinā tisso gāthā vuttā.",
+     "<b>Nissāyā</b>ti patiṭṭhāya.",
+     "<b>Yantī</b>ti gacchanti.",
+     "<b>Manusse nissāyā</b>ti netubhūte niyāmakakammakārakādimanusse apassāya.",
+     "Na hi tesaṃ araṇaggahaṇalaṅkārasaṇṭhāpanaudakussiñcanādikiriyāya vinā nāvā icchitadesaṃ pāpuṇāti.",
+     "<b>Ubho</b>ti aññamaññaṃ nāvaṃ nissāya manussā, manusse nissāya nāvāti attho.",
+     "<b>Eva</b>nti vuttappakārena.",
+     "<b>Nānānayehī</b>ti paṭhamādīnaṃ sattannaṃ jhānānaṃ, tesaṃ upacārānañca vasena cuddasa arūpapariggahamukhāni, catudhātuvavatthāne vuttānaṃ terasannaṃ dhātupariggahamukhānaṃ dhātāyatanakhandhamahābhūtavasena, idha vuttānaṃ avuttānañca indriyasaccapaṭiccasamuppannānaṃ vasena samavīsati rūpapariggahamukhāni, tāni paccekaṃ ‘‘phasso vedanā citta’’nti imesaṃ sammukhabhāvena upaṭṭhitānaṃ tiṇṇaṃ arūpadhammānaṃ vasena tiguṇitāni samasaṭṭhi, cuddasa arūpapariggahamukhāni, tāni cāti catusattatiyā nāmarūpapariggahanayehi ceva sambahulasuttantarathagehamuṭṭhivīṇāsenārukkhadāruyantanaḷakalāpibherijaccandhapaṅguḷanāvāmanussūpamāhi ca nāmarūpapamattatāvavatthāpananayehi ca.",
+     "<b>Sattasaññaṃ abhibhavitvā</b>ti anādikālabhāvitaṃ khandhapañcake attagāhaṃ vikkhambhetvā.",
+     "<b>Nāmarūpānaṃ yāthāvadassana</b>nti ‘‘idaṃ nāmaṃ, ettakaṃ nāmaṃ, na ito bhiyyo.",
+     "Idaṃ rūpaṃ, ettakaṃ rūpaṃ, na ito bhiyyo’’ti ca tesaṃ lakkhaṇasallakkhaṇamukhena dhammamattabhāvadassanaṃ.",
+     "Attadiṭṭhimalavisodhanato <b>diṭṭhivisuddhī</b>ti veditabbaṃ.",
+     "<b>Etassevā</b>ti nāmarūpassa yāthāvadassanasseva.",
+     "Diṭṭhivisuddhiniddesavaṇṇanā niṭṭhitā.",
+     "Iti aṭṭhārasamaparicchedavaṇṇanā."
+    ],
+    "lineRefs": [
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ],
+     [
+      "vism18:677"
+     ]
+    ]
+   }
+  ],
+  "wordLinks": [],
+  "before": [],
+  "after": []
+ },
  "tika2": null
 }

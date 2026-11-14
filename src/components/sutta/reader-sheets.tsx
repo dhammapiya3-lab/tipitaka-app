@@ -697,8 +697,9 @@ function PageEditionsPicker() {
         </div>
       </div>
       <p className="mt-0.5 text-xs text-muted-foreground">
-        인쇄본의 쪽이 바뀌는 문장 옆에 쪽 번호를 작게 보입니다 (VRI 원문이 있는
-        경). 인용할 때 쓰세요.
+        인쇄본의 쪽이 바뀌는 곳에 쪽 번호를 작게 보입니다 — 경 · 주석서 ·
+        복주석서 · 청정도론 모두 (VRI 원문이 있는 곳). 글이 시작하는 쪽도 첫
+        줄에 보입니다. 인용할 때 쓰세요.
         {shown && " 아래에서 어느 인쇄본의 쪽 번호를 볼지 고르세요."}
       </p>
       <div className={cn("mt-2 flex flex-wrap gap-1.5", !shown && "hidden")}>

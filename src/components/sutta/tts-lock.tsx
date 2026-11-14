@@ -29,7 +29,9 @@ export function TtsLockOverlay({
   // 화면 꺼짐 막기 — 다른 앱에 갔다 오면 다시 건다
   useEffect(() => {
     let sentinel: WakeLockSentinelLike | null = null;
-    const nav = navigator as Navigator & { wakeLock?: { request: (type: "screen") => Promise<WakeLockSentinelLike> } };
+    const nav = navigator as Navigator & {
+      wakeLock?: { request: (type: "screen") => Promise<WakeLockSentinelLike> };
+    };
     const request = () => {
       nav.wakeLock
         ?.request("screen")
@@ -79,7 +81,10 @@ export function TtsLockOverlay({
         <Lock className="size-4" aria-hidden />
         화면 잠금 중 · {playing ? "소리는 계속 나와요" : "잠시 멈춤"}
       </p>
-      <p lang="pi" className="max-w-2xl text-center font-pali text-xl leading-relaxed text-white/90">
+      <p
+        lang="pi"
+        className="max-w-2xl text-center font-pali text-xl leading-relaxed text-white/90"
+      >
         {sentence}
       </p>
       <div className="flex flex-col items-center gap-2">
@@ -96,11 +101,16 @@ export function TtsLockOverlay({
           <span
             aria-hidden
             className="absolute inset-x-0 bottom-0 bg-primary/80"
-            style={{ height: holding ? "100%" : "0%", transition: holding ? "height 1s linear" : "height 0.15s" }}
+            style={{
+              height: holding ? "100%" : "0%",
+              transition: holding ? "height 1s linear" : "height 0.15s",
+            }}
           />
           <LockOpen className="relative size-7" aria-hidden />
         </button>
-        <span className="text-xs text-white/70">풀려면 1초 동안 누르고 있으세요</span>
+        <span className="text-xs text-white/70">
+          풀려면 1초 동안 누르고 있으세요
+        </span>
       </div>
     </div>
   );
