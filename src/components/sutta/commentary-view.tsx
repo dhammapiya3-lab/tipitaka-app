@@ -240,7 +240,13 @@ export function CommentaryView({
         lang="pi"
       >
         {para.lines.map((parts, j) => (
-          <p key={j}>
+          <p
+            key={j}
+            className={cn(
+              "relative",
+              pageMarksOf?.(`c:${data.book}:${para.para}:${j}`) && "pt-2.5",
+            )}
+          >
             <PageBadges
               marks={pageMarksOf?.(`c:${data.book}:${para.para}:${j}`)}
             />
@@ -504,7 +510,14 @@ export function CommentaryCard({
             (!showPali && !trs.some((e) => para.tr[e.id]![j])) ? null : (
               <div key={j}>
                 {showPali ? (
-                  <p>
+                  <p
+                    className={cn(
+                      "relative",
+                      pageMarksOf?.(
+                        `c:${para.book ?? bookId}:${para.para}:${j}`,
+                      ) && "pt-2.5",
+                    )}
+                  >
                     <PageBadges
                       marks={pageMarksOf?.(
                         `c:${para.book ?? bookId}:${para.para}:${j}`,
@@ -541,20 +554,20 @@ export function CommentaryCard({
   );
 }
 
-/** 인쇄본 쪽이 바뀌는 줄 — 줄 앞에 작게 (텍스트 설정의 '책 쪽 번호'를 켰을 때) */
+/** 인쇄본 쪽이 바뀌는 줄 — 경 화면처럼 그 줄 오른쪽 위에 작게 (텍스트 설정의 '책 쪽 번호'를 켰을 때) */
 function PageBadges({ marks }: { marks?: PageMark[] }) {
   if (!marks?.length) return null;
   return (
-    <>
+    <span className="pointer-events-none absolute -top-2.5 right-0 flex gap-1 font-sans text-[10px] leading-none text-faint select-none">
       {marks.map((m) => (
         <span
           key={m.label}
           title={m.title}
-          className="mr-1.5 inline-flex cursor-help rounded bg-gray-100 px-1 py-0.5 align-middle font-sans text-[10px] leading-none text-faint select-none dark:bg-muted"
+          className="pointer-events-auto cursor-help rounded bg-gray-100 px-1 py-0.5 dark:bg-muted"
         >
           {m.label}
         </span>
       ))}
-    </>
+    </span>
   );
 }
