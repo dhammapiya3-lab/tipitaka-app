@@ -245,7 +245,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="dictionaries" className="scroll-mt-20">
         <CardHeader>
           <CardTitle>사전</CardTitle>
         </CardHeader>
@@ -294,7 +294,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="sources" className="scroll-mt-20">
         <CardHeader>
           <CardTitle>출처</CardTitle>
         </CardHeader>
@@ -322,7 +322,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card id="settings" className="scroll-mt-20">
         <CardHeader>
           <CardTitle>읽기 설정</CardTitle>
         </CardHeader>

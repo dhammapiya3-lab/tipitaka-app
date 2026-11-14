@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { isActiveItem, NAV_TOOLS } from "@/components/layout/nav-items";
+import { SiteMap } from "@/components/layout/site-map";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { KeyboardShortcuts } from "@/components/shared/keyboard-shortcuts";
 import { cn } from "@/lib/utils";
@@ -22,7 +23,10 @@ export function TopBar({ title, pali }: { title: string; pali?: string }) {
         <h1 className="min-w-0 flex-1 truncate text-lg font-bold">
           {title}
           {pali ? (
-            <span lang="pi" className="ml-2 text-xs font-normal text-primary-foreground/70">
+            <span
+              lang="pi"
+              className="ml-2 text-xs font-normal text-primary-foreground/70"
+            >
               {pali}
             </span>
           ) : null}
@@ -40,6 +44,7 @@ export function TopBar({ title, pali }: { title: string; pali?: string }) {
               <item.icon className="size-5" aria-hidden />
             </Link>
           ))}
+          <SiteMap />
           <KeyboardShortcuts />
           <ThemeToggle />
         </div>
@@ -80,11 +85,26 @@ export function SubBar({
   const backClass =
     "-ml-2 flex shrink-0 rounded-full p-2 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50";
   return (
-    <div className={cn("bg-background pt-4 pb-4 print:px-0", widthClass ? "px-4" : "px-6")}>
-      <div className={cn("mx-auto", widthClass ?? (wide ? "max-w-[1280px] lg:px-4" : "max-w-3xl"))}>
+    <div
+      className={cn(
+        "bg-background pt-4 pb-4 print:px-0",
+        widthClass ? "px-4" : "px-6",
+      )}
+    >
+      <div
+        className={cn(
+          "mx-auto",
+          widthClass ?? (wide ? "max-w-[1280px] lg:px-4" : "max-w-3xl"),
+        )}
+      >
         <div className="flex items-center gap-3">
           {onBack ? (
-            <button type="button" aria-label="뒤로" className={backClass} onClick={onBack}>
+            <button
+              type="button"
+              aria-label="뒤로"
+              className={backClass}
+              onClick={onBack}
+            >
               <ArrowLeft className="size-5" aria-hidden />
             </button>
           ) : backHref ? (
@@ -92,7 +112,12 @@ export function SubBar({
               <ArrowLeft className="size-5" aria-hidden />
             </Link>
           ) : (
-            <button type="button" aria-label="뒤로" className={backClass} onClick={() => router.back()}>
+            <button
+              type="button"
+              aria-label="뒤로"
+              className={backClass}
+              onClick={() => router.back()}
+            >
               <ArrowLeft className="size-5" aria-hidden />
             </button>
           )}
@@ -100,9 +125,15 @@ export function SubBar({
             <h1 lang={titleLang} className="truncate text-lg font-bold">
               {title}
             </h1>
-            {subtitle ? <p className="mt-0.5 truncate text-xs text-faint">{subtitle}</p> : null}
+            {subtitle ? (
+              <p className="mt-0.5 truncate text-xs text-faint">{subtitle}</p>
+            ) : null}
           </div>
-          {actions ? <div className="flex items-center gap-1 print:hidden">{actions}</div> : null}
+          {actions ? (
+            <div className="flex items-center gap-1 print:hidden">
+              {actions}
+            </div>
+          ) : null}
         </div>
         {children}
       </div>
@@ -129,24 +160,46 @@ export function BarButton({
       {children}
     </Link>
   ) : (
-    <button type="button" aria-label={label} title={label} className={cls} onClick={onClick}>
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      className={cls}
+      onClick={onClick}
+    >
       {children}
     </button>
   );
 }
 
 /** 위치 줄 — 경 › 상윳따 니까야 › 대품 … (원래 앱과 같은 모양) */
-export function Breadcrumb({ items }: { items: { label: string; href?: string }[] }) {
+export function Breadcrumb({
+  items,
+}: {
+  items: { label: string; href?: string }[];
+}) {
   return (
     <nav aria-label="위치" className="mt-3 print:hidden">
       <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
         {items.map((item, i) => (
           <li key={`${i}-${item.label}`} className="flex items-center gap-1">
-            {i > 0 ? <span aria-hidden className="text-faint">›</span> : null}
+            {i > 0 ? (
+              <span aria-hidden className="text-faint">
+                ›
+              </span>
+            ) : null}
             {i === 0 && !item.href ? (
-              <span className="font-bold text-secondary-foreground">{item.label}</span>
+              <span className="font-bold text-secondary-foreground">
+                {item.label}
+              </span>
             ) : item.href ? (
-              <Link href={item.href} className={cn("hover:text-secondary-foreground", i === 0 && "font-bold text-secondary-foreground")}>
+              <Link
+                href={item.href}
+                className={cn(
+                  "hover:text-secondary-foreground",
+                  i === 0 && "font-bold text-secondary-foreground",
+                )}
+              >
                 {item.label}
               </Link>
             ) : (
@@ -160,9 +213,23 @@ export function Breadcrumb({ items }: { items: { label: string; href?: string }[
 }
 
 /** 화면 본문 칸 — 원래 앱처럼 좌우 여백 */
-export function Screen({ children, wide = false, className }: { children: ReactNode; wide?: boolean; className?: string }) {
+export function Screen({
+  children,
+  wide = false,
+  className,
+}: {
+  children: ReactNode;
+  wide?: boolean;
+  className?: string;
+}) {
   return (
-    <div className={cn("mx-auto w-full px-4 py-4", wide ? "max-w-[1200px]" : "max-w-3xl", className)}>
+    <div
+      className={cn(
+        "mx-auto w-full px-4 py-4",
+        wide ? "max-w-[1200px]" : "max-w-3xl",
+        className,
+      )}
+    >
       {children}
     </div>
   );
