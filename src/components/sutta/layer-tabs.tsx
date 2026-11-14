@@ -71,37 +71,43 @@ export function LayerTabs({
     );
   return (
     <div className={className} role="tablist" aria-label="본문 종류">
-      {LABELS.filter(([id]) => !commentaryOnly || id !== "sutta").map(
-        ([id, label]) =>
-          shown.parallel ? (
-            // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
-            <button
-              key={id}
-              type="button"
-              aria-pressed={shown.cols.includes(id)}
-              disabled={id !== "sutta" && !commentary.includes(id)}
-              title={`${label} 칸 ${shown.cols.includes(id) ? "끄기" : "켜기"}`}
-              onClick={() => act(toggleCol(id))}
-              className={cn(
-                tabClass(shown.cols.includes(id)),
-                "disabled:opacity-40",
-              )}
-            >
-              {shown.cols.includes(id) ? "✓ " : ""}
-              {label}
-            </button>
-          ) : (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={shown.layer === id}
-              onClick={() => act({ ...shown, layer: id })}
-              className={tabClass(shown.layer === id)}
-            >
-              {label}
-            </button>
-          ),
+      {(commentaryOnly
+        ? // 주석 문헌(청정도론): 본문 칸이 곧 주석서, 주석서 칸은 따로 없다
+          ([
+            ["sutta", "주석서"],
+            ["tika", "복주석서"],
+          ] as [Layer, string][])
+        : LABELS
+      ).map(([id, label]) =>
+        shown.parallel ? (
+          // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
+          <button
+            key={id}
+            type="button"
+            aria-pressed={shown.cols.includes(id)}
+            disabled={id !== "sutta" && !commentary.includes(id)}
+            title={`${label} 칸 ${shown.cols.includes(id) ? "끄기" : "켜기"}`}
+            onClick={() => act(toggleCol(id))}
+            className={cn(
+              tabClass(shown.cols.includes(id)),
+              "disabled:opacity-40",
+            )}
+          >
+            {shown.cols.includes(id) ? "✓ " : ""}
+            {label}
+          </button>
+        ) : (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={shown.layer === id}
+            onClick={() => act({ ...shown, layer: id })}
+            className={tabClass(shown.layer === id)}
+          >
+            {label}
+          </button>
+        ),
       )}
       {isDesktop && commentary.length > 0 ? (
         <button
