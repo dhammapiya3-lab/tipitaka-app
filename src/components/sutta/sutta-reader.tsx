@@ -136,7 +136,14 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   };
   const here = pathOf(sutta);
   const crumbs: CrumbItem[] = [
-    { label: "경", href: "/suttas" },
+    {
+      label: "경",
+      options: [
+        { label: "경장", href: "/suttas/", current: true },
+        { label: "율장", href: "/suttas/?p=vinaya" },
+        { label: "논장", href: "/suttas/?p=abhidhamma" },
+      ],
+    },
     {
       label: nikayaName,
       href: `/suttas/${sutta.nikaya}`,

@@ -1,7 +1,7 @@
 "use client";
 
 import { CircleAlert } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const PITAKAS = [
@@ -13,9 +13,17 @@ const PITAKAS = [
 /**
  * 경전 화면 — 원래 앱과 같은 안내 글과 경·율·논 단추.
  * 율장·논장은 번역이 생길 때까지 "준비 중" (원래 앱과 같다).
+ * 주소의 ?p=vinaya · ?p=abhidhamma 로 율장·논장 단추를 눌러 둔 채 연다 (경 화면 위치 줄의 '경' 목록에서 온다).
  */
 export function PitakaTabs({ children }: { children: ReactNode }) {
   const [tab, setTab] = useState<(typeof PITAKAS)[number]["id"]>("sutta");
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("p");
+    const found = PITAKAS.find((x) => x.id === p);
+    // 주소로 연 단추 — 처음 한 번만 (정적 페이지라 서버에서는 주소를 모른다)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (found) setTab(found.id);
+  }, []);
   return (
     <>
       <div className="flex items-start gap-2 px-3 pt-2">

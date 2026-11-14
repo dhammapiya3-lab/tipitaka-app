@@ -201,7 +201,10 @@ export function Breadcrumb({ items }: { items: CrumbItem[] }) {
             {item.options?.length ? (
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="inline-flex items-center gap-0.5 rounded px-0.5 hover:text-secondary-foreground data-popup-open:text-primary"
+                  className={cn(
+                    "inline-flex items-center gap-0.5 rounded px-0.5 hover:text-secondary-foreground data-popup-open:text-primary",
+                    i === 0 && "font-bold text-secondary-foreground",
+                  )}
                   title={`${item.label} — 같은 단계의 목록에서 고르기`}
                 >
                   {item.label}
