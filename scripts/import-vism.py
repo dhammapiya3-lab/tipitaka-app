@@ -288,6 +288,11 @@ def main() -> None:
             p["lineRefs"] = [p["refs"]] * len(p["lines"])
         tch = tika_chapters[c - 1]
         tika = tika_paras(tch["items"], sid, root_paras)
+        # 마하띠까의 권 머리(귀경게·책 이름)와 장 제목("1. Sīlaniddesavaṇṇanā")도 빠짐없이 — 장 첫 문단 맨 앞에 굵게
+        if tika:
+            head = [f"<b>{x}</b>" for x in tch["preface"] + [tch["title"]] if x]
+            tika[0]["lines"][:0] = head
+            tika[0]["lineRefs"] = [tika[0]["refs"]] * len(tika[0]["lines"])
         links = word_links(tika, segs, sid)
         code = FILES[0 if c <= 11 else 1][0]
         tcode = "e0103n.att" if c <= 11 else "e0104n.att"

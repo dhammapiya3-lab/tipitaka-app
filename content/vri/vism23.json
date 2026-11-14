@@ -337,6 +337,7 @@
      "vism23:854"
     ],
     "lines": [
+     "<b>23. Paññābhāvanānisaṃsaniddesavaṇṇanā</b>",
      "<b>Ānisaṃsapakāsanāvaṇṇanā</b>",
      "<b>Anekasatānisaṃsā</b> sāvakabodhiādivipulodātaguṇavisesāvahattā.",
      "<b>Vitthārato</b>ti nayadassanaṃ akatvā ‘‘ayampi paññābhāvanāya ānisaṃso, ayampī’’ti anupadadassanavasena vitthārato pakāsetuṃ na sukaraṃ atibahubhāvato.",
@@ -345,6 +346,9 @@
      "<b>Ariyaphalarasānubhavana</b>nti sotāpattiphalādiphalasukhapaṭisaṃvedanaṃ."
     ],
     "lineRefs": [
+     [
+      "vism23:854"
+     ],
      [
       "vism23:854"
      ],
@@ -2506,13 +2510,13 @@
     "vism23:854.2",
     "anekasatānisaṃsā",
     0,
-    1
+    2
    ],
    [
     "vism23:854.3",
     "vitthārato",
     0,
-    2
+    3
    ],
    [
     "vism23:855.2",

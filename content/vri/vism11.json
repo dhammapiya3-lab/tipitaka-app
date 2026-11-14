@@ -683,6 +683,7 @@
      "vism11:294"
     ],
     "lines": [
+     "<b>11. Samādhiniddesavaṇṇanā</b>",
      "<b>Āhārepaṭikkūlabhāvanāvaṇṇanā</b>",
      "Uddeso nāma niddesattho mudumajjhimapaññābāhullato, āgato ca bhāro avassaṃ vahitabboti āha <b>‘‘ekā saññāti evaṃ uddiṭṭhāya āhāre paṭikkūlasaññāya bhāvanāniddeso anuppatto’’</b>ti.",
      "Tatthāyaṃ <b>saññā</b>-saddo ‘‘rūpasaññā saddasaññā’’tiādīsu (mahāni. 14) sañjānanalakkhaṇe dhamme āgato, ‘‘aniccasaññā dukkhasaññā’’tiādīsu vipassanāyaṃ āgato, ‘‘uddhumātakasaññāti vā sopākarūpasaññāti vā ime dhammā ekatthā udāhu nānatthā’’tiādīsu samathe āgato.",
@@ -771,6 +772,9 @@
      "Taṃtaṃkiriyānipphattipaṭipāṭivasena cāyaṃ gamanatotiādikā anupubbī ṭhapitā, sammakkhanaṃ pana paribhogādīsu labbhamānampi nissandavasena visesato paṭikkūlanti sabbapacchā ṭhapitanti daṭṭhabbaṃ."
     ],
     "lineRefs": [
+     [
+      "vism11:294"
+     ],
      [
       "vism11:294"
      ],
@@ -5092,23 +5096,17 @@
     "vism11:294.1",
     "ekā saññāti evaṃ uddiṭṭhāya āhāre paṭikkūlasaññāya bhāvanāniddeso anuppatto",
     0,
-    1
+    2
    ],
    [
     "vism11:294.18",
     "saññā",
     0,
-    2
+    3
    ],
    [
     "vism11:294.2",
     "āharatī",
-    0,
-    6
-   ],
-   [
-    "vism11:294.3",
-    "kabaḷīkārāhāro",
     0,
     7
    ],
@@ -5116,41 +5114,41 @@
     "vism11:294.3",
     "kabaḷīkārāhāro",
     0,
-    19
+    8
+   ],
+   [
+    "vism11:294.3",
+    "kabaḷīkārāhāro",
+    0,
+    20
    ],
    [
     "vism11:294.9",
     "kabaḷīkārāhāre",
     0,
-    28
+    29
    ],
    [
     "vism11:294.9",
     "nikantibhayaṃ",
     0,
-    33
+    34
    ],
    [
     "vism11:294.13",
     "puttamaṃsūpamena",
     0,
-    43
+    44
    ],
    [
     "vism11:294.13",
     "dīpetabbo",
     0,
-    43
+    44
    ],
    [
     "vism11:294.17",
     "Imesu pana",
-    0,
-    49
-   ],
-   [
-    "vism11:294.17",
-    "asitapītakhāyitasāyitappabhedo",
     0,
     50
    ],
@@ -5162,105 +5160,111 @@
    ],
    [
     "vism11:294.17",
+    "asitapītakhāyitasāyitappabhedo",
+    0,
+    52
+   ],
+   [
+    "vism11:294.17",
     "imasmiṃ atthe",
     0,
-    55
+    56
    ],
    [
     "vism11:294.18",
     "uppannā saññā",
     0,
-    56
+    57
    ],
    [
     "vism11:294.19",
     "kammaṭṭhānaṃ uggahetvā",
     0,
-    58
+    59
    ],
    [
     "vism11:294.19",
     "uggahato ekapadampi avirajjhantena",
     0,
-    59
+    60
    ],
    [
     "vism11:294.19",
     "uggahato",
     0,
-    60
+    61
    ],
    [
     "vism11:294.19",
     "ekapadampi",
     0,
-    61
+    62
    ],
    [
     "vism11:294.19",
     "dasahākārehi",
     0,
-    62
+    63
    ],
    [
     "vism11:294.20",
     "gamanato",
     0,
-    71
+    72
    ],
    [
     "vism11:294.20",
     "gamanato",
-    0,
-    73
-   ],
-   [
-    "vism11:294.20",
-    "pariyesanato",
     0,
     74
    ],
    [
     "vism11:294.20",
-    "paribhogato",
+    "pariyesanato",
     0,
     75
    ],
    [
     "vism11:294.20",
-    "āsayato",
+    "paribhogato",
     0,
-    77
+    76
    ],
    [
     "vism11:294.20",
-    "nidhānato",
+    "āsayato",
     0,
     78
    ],
    [
     "vism11:294.20",
-    "aparipakkato",
+    "nidhānato",
     0,
     79
    ],
    [
     "vism11:294.20",
-    "paripakkato",
+    "aparipakkato",
     0,
     80
    ],
    [
     "vism11:294.20",
-    "phalato",
+    "paripakkato",
     0,
     81
    ],
    [
     "vism11:294.20",
-    "nissandato",
+    "phalato",
     0,
     82
+   ],
+   [
+    "vism11:294.20",
+    "nissandato",
+    0,
+    83
    ],
    [
     "vism11:295.1",

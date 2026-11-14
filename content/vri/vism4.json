@@ -860,6 +860,7 @@
      "vism4:51"
     ],
     "lines": [
+     "<b>4. Pathavīkasiṇaniddesavaṇṇanā</b>",
      "<b>Phāsu hotī</b>ti āvāsasappāyādilābhena manasikāraphāsutā bhāvanānukūlatā hoti.",
      "<b>Parisodhentenā</b>ti tesaṃ tesaṃ gaṇṭhiṭṭhānānaṃ chindanavasena visodhentena.",
      "<b>Akilamantoyevā</b>ti akilantakāyo eva.",
@@ -869,6 +870,9 @@
      "<b>Suvisuddha</b>nti suṭṭhu visuddhaṃ, nigumbaṃ nijjaṭanti attho."
     ],
     "lineRefs": [
+     [
+      "vism4:51"
+     ],
      [
       "vism4:51"
      ],
@@ -6455,25 +6459,25 @@
     "vism4:51.1",
     "phāsu hoti",
     0,
-    0
+    1
    ],
    [
     "vism4:51.1",
     "parisodhentena",
     0,
-    1
+    2
    ],
    [
     "vism4:51.3",
     "akilamantoyeva",
     0,
-    2
+    3
    ],
    [
     "vism4:51.4",
     "chinditvā",
     0,
-    5
+    6
    ],
    [
     "vism4:52.1",

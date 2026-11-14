@@ -267,6 +267,7 @@
      "vism10:275"
     ],
     "lines": [
+     "<b>10. Āruppaniddesavaṇṇanā</b>",
      "<b>Paṭhamāruppavaṇṇanā</b>",
      "<b>Uddiṭṭhesū</b>ti ‘‘cattāro āruppā’’ti evaṃ uddiṭṭhesu, niddhāraṇe cetaṃ bhummaṃ.",
      "Tenevāha <b>‘‘catūsu āruppesū’’</b>ti.",
@@ -318,6 +319,9 @@
      "Eko kira sunakho vane sūkarena pahaṭamatto palāto, so arūpadassanavelāya bhattapacanaukkhaliṃ dūrato disvā sūkarasaññāya bhīto uttasanto palāyi, pisācabhīruko puriso rattibhāge aparicite dese matthakacchinnaṃ tālakkhandhaṃ disvā pisācasaññāya bhīto uttasanto mucchito papati, taṃ sandhāya vuttaṃ <b>‘‘sūkarā…pe… veditabbā’’</b>ti."
     ],
     "lineRefs": [
+     [
+      "vism10:275"
+     ],
      [
       "vism10:275"
      ],
@@ -2003,83 +2007,77 @@
     "vism10:275.0",
     "Paṭhamāruppavaṇṇanā",
     0,
-    0
+    1
    ],
    [
     "vism10:275.1",
     "uddiṭṭhesu",
     0,
-    1
+    2
    ],
    [
     "vism10:275.1",
     "catūsu āruppesu",
     0,
-    2
+    3
    ],
    [
     "vism10:275.1",
     "sabbaso",
     0,
-    14
+    15
    ],
    [
     "vism10:275.2",
     "rūpānaṃyeva",
     0,
-    16
+    17
    ],
    [
     "vism10:275.2",
     "nibbidāya",
     0,
-    17
+    18
    ],
    [
     "vism10:275.2",
     "virāgāya",
     0,
-    18
+    19
    ],
    [
     "vism10:275.2",
     "nirodhāya",
     0,
-    19
+    20
    ],
    [
     "vism10:275.2",
     "karajarūpe",
     0,
-    22
+    23
    ],
    [
     "vism10:275.2",
     "tassa",
     0,
-    24
+    25
    ],
    [
     "vism10:275.2",
     "ṭhapetvā paricchinnākāsakasiṇaṃ navasu",
     0,
-    26
+    27
    ],
    [
     "vism10:275.3",
     "tappaṭibhāgameva",
     0,
-    32
+    33
    ],
    [
     "vism10:275.4",
     "Kathaṃ",
-    0,
-    33
-   ],
-   [
-    "vism10:275.5",
-    "Yathā",
     0,
     34
    ],
@@ -2087,31 +2085,37 @@
     "vism10:275.5",
     "Yathā",
     0,
-    36
+    35
+   ],
+   [
+    "vism10:275.5",
+    "Yathā",
+    0,
+    37
    ],
    [
     "vism10:275.2",
     "disvā",
     0,
-    39
+    40
    ],
    [
     "vism10:275.7",
     "ārammaṇavasena",
     0,
-    41
+    42
    ],
    [
     "vism10:275.7",
     "karajarūpasamaṅgikālo",
     0,
-    42
+    43
    ],
    [
     "vism10:275.3",
     "tampi",
     0,
-    43
+    44
    ],
    [
     "vism10:276.1",

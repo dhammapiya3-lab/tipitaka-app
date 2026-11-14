@@ -211,6 +211,7 @@
      "vism18:662"
     ],
     "lines": [
+     "<b>18. Diṭṭhivisuddhiniddesavaṇṇanā</b>",
      "<b>Nāmarūpapariggahakathāvaṇṇanā</b>",
      "Yā visuddhiyo sampādetabbāti sambandho.",
      "<b>Imesu</b> yathāvicāritesu khandhādīsu vipassanāya <b>bhūmibhūtesu dhammesu</b>.",
@@ -225,6 +226,9 @@
      "Nāmaggahaṇena cettha vedanādīnaṃ catunnaṃ tebhūmakānaṃ khandhānaṃ gahaṇaṃ, na ‘‘viññāṇapaccayā nāmarūpa’’nti ettha viya viññāṇaṃ vinā, nāpi ‘‘nāmañca rūpañcā’’ti (dī. ni. 3.304, 352; dha. sa. dukamātikā 109) ettha viya sanibbānehi lokuttarakkhandhehi saddhinti daṭṭhabbaṃ."
     ],
     "lineRefs": [
+     [
+      "vism18:662"
+     ],
      [
       "vism18:662"
      ],
@@ -1670,35 +1674,29 @@
     "vism18:662.1",
     "imesu",
     0,
-    2
+    3
    ],
    [
     "vism18:662.1",
     "bhūmibhūtesu dhammesu",
     0,
-    2
+    3
    ],
    [
     "vism18:662.1",
     "uggahaparipucchāvasena ñāṇaparicayaṃ katvā",
     0,
-    3
+    4
    ],
    [
     "vism18:662.2",
     "vitthāritameva",
     0,
-    4
+    5
    ],
    [
     "vism18:662.3",
     "saupacārā",
-    0,
-    5
-   ],
-   [
-    "vism18:662.4",
-    "veditabbā",
     0,
     6
    ],
@@ -1706,7 +1704,13 @@
     "vism18:662.4",
     "veditabbā",
     0,
-    8
+    7
+   ],
+   [
+    "vism18:662.4",
+    "veditabbā",
+    0,
+    9
    ],
    [
     "vism18:663.1",

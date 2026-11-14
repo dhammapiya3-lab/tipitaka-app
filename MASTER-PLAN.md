@@ -380,3 +380,9 @@ Firebase·recharts 는 쓰지 않는다.
 - 수따센따 참조 번호(CC0, bilara-data `reference/pli/ms/sutta`) — `python3 -I scripts/import-sc-refs.py <bilara-data>` → `content/sc-refs.json`: PTS 문단(pts-cs), 냐나몰리 문단(nya), 스리랑카 BJT, 태국 시암·쭐라쫌끌라오·마하쭐라·다이야랏타본, 인도 날란다본. 변환 때 vri-pages 와 합친다.
 - 판 이름·설명(마우스를 올리면 뜨는 글)은 `src/lib/page-marks.ts` 한 곳에. 텍스트 설정의 '책 쪽 번호'에서 켜고 끄고 판을 고른다.
 - 청정도론: 본문 칸(경 칸 자리)의 단추 이름을 "주석서"로, 복주석서 칸에 마하띠까(e0103n·e0104n.att.xml). 본문 칸을 그대로 써서 주석 낱말(마하띠까 굵은 표제어를 같은 번호 문단에서 찾아 이음)·주석 나란히 보기가 된다. 마하띠까의 VRI 문단 번호 = 청정도론의 같은 번호 문단.
+
+## VRI 원문 빠짐 없애기 (2026-11-15)
+
+- `pnpm import:vri` 는 VRI 줄을 마하상기띠 문장 번호에 맞추면서, 짝이 없는 줄(품 제목·소제목·"iti bhagavā"·반복 생략 묶음 등 3,034낱말)을 버렸다.
+- `python3 -I scripts/fill-vri-gaps.py <romn>` — VRI XML 과 낱말 단위로 대 보고 빠진 글을 다시 넣는다(경 안은 그 자리, 경 사이의 짧은 제목은 다음 경 머리말, 긴 글은 앞 경 끝). 주석서·복주석서도 같은 방법(24낱말). `--check` 로 남은 빠짐을 센다 — 지금 경 본문 0 · 주석 0.
+- import:vri 를 다시 돌리면 이 스크립트도 다시 돌려야 한다. 청정도론·마하띠까는 import-vism 이 XML 에서 바로 만들고, 마하띠까 권 머리·장 제목도 넣었다.

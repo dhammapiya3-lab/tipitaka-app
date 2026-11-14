@@ -646,6 +646,7 @@
      "vism20:692"
     ],
     "lines": [
+     "<b>20. Maggāmaggañāṇadassanavisuddhiniddesavaṇṇanā</b>",
      "<b>Sammasanañāṇakathāvaṇṇanā</b>",
      "<b>Evaṃ maggañca amaggañca ñatvā ṭhitaṃ ñāṇa</b>nti ayaṃ upakkilesavinimuttā vīthipaṭipannā vipassanāpaññā ariyamaggassa pubbabhāgamaggo, ayaṃ obhāsādibhedo dasavidho upakkileso na maggoti evaṃ maggañca amaggañca yāthāvato vavatthapetvā ṭhitaṃ ñāṇaṃ.",
      "Atītādivasena anekabhedabhinne dhamme kalāpato saṅkhipitvā sammasanaṃ <b>kalāpasammasanaṃ,</b> ayaṃ kira jambudīpavāsīnaṃ abhilāpo. ‘‘Yaṃ kiñci rūpa’’ntiādinā (ma. ni. 1.361; 2.113; 3.86; a. ni. 4.181) nayena hi dhammānaṃ vipassanā <b>nayavipassanā,</b> ayaṃ kira tambapaṇṇidīpavāsīnaṃ abhilāpo.",
@@ -670,6 +671,9 @@
      "Vipassantassa ca obhāsādīsu uppannesu maggāmaggañāṇasambhavo, tasmā ‘‘taṃ sampādetukāmenā’’tiādinā ayaṃ vicāro katoti daṭṭhabbaṃ."
     ],
     "lineRefs": [
+     [
+      "vism20:692"
+     ],
      [
       "vism20:692"
      ],
@@ -5292,37 +5296,31 @@
     "vism20:692.5",
     "kalāpasammasanaṃ",
     0,
-    2
+    3
    ],
    [
     "vism20:692.2",
     "tāva",
     0,
-    4
+    5
    ],
    [
     "vism20:692.3",
     "Kasmā",
     0,
-    6
+    7
    ],
    [
     "vism20:692.4",
     "Āraddhavipassakassa",
     0,
-    8
+    9
    ],
    [
     "vism20:692.5",
     "vipassanāya ca kalāpasammasanaṃ ādi",
     0,
-    10
-   ],
-   [
-    "vism20:692.6",
-    "Tasmā",
-    0,
-    12
+    11
    ],
    [
     "vism20:692.6",
@@ -5331,22 +5329,28 @@
     13
    ],
    [
-    "vism20:692.7",
-    "Apica",
+    "vism20:692.6",
+    "Tasmā",
     0,
-    15
+    14
    ],
    [
     "vism20:692.7",
-    "tīraṇapariññāya vattamānāya",
+    "Apica",
     0,
     16
    ],
    [
     "vism20:692.7",
-    "kalāpasammasane tāva yogo kātabbo",
+    "tīraṇapariññāya vattamānāya",
     0,
     17
+   ],
+   [
+    "vism20:692.7",
+    "kalāpasammasane tāva yogo kātabbo",
+    0,
+    18
    ],
    [
     "vism20:693.1",
