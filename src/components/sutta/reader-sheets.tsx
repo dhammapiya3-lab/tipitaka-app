@@ -214,8 +214,19 @@ function EditionInfoBody({
   if (!state || state.id !== editionId)
     return <p className="text-sm text-faint">불러오는 중…</p>;
   if (!state.info) return null;
+  return <EditionInfoView info={state.info} kind={kind} />;
+}
+
+/** 판본 소개 글을 그린다 — 경 화면의 판본 창과 정보 화면이 함께 쓴다 */
+export function EditionInfoView({
+  info,
+  kind = "text",
+}: {
+  info: EditionInfo;
+  kind?: "text" | AnalysisKind;
+}) {
   // 고른 쪽(본문·대역·문법분석) 소개를 맨 앞에. 소개가 여러 묶음이면 묶음 이름을 단다.
-  const groups = [...state.info.groups].sort(
+  const groups = [...info.groups].sort(
     (a, b) => Number(b.kind === kind) - Number(a.kind === kind),
   );
   return (

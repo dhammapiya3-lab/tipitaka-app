@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { TopLevelPage } from "@/components/layout/page-header";
+import { EditionDetails } from "@/components/about/edition-details";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LANGUAGE_LABELS, LICENSE_UNKNOWN } from "@/lib/constants";
 import { allSuttas, editions } from "@/lib/data";
@@ -49,7 +50,12 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      {e.source ?? e.label}
+                      <a
+                        href={`#edition-${e.id}`}
+                        className="underline-offset-4 hover:underline"
+                      >
+                        {e.source ?? e.label}
+                      </a>
                     </td>
                     <td className="px-3 py-3">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
@@ -108,7 +114,12 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      {e.source ?? e.label}
+                      <a
+                        href={`#edition-${e.id}`}
+                        className="underline-offset-4 hover:underline"
+                      >
+                        {e.source ?? e.label}
+                      </a>
                     </td>
                     <td className="px-3 py-3">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
@@ -144,6 +155,33 @@ export default function AboutPage() {
                 ))}
             </tbody>
           </table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>판본별 상세 정보</CardTitle>
+          <p className="t-sub text-sm">
+            판본 표에서 이름을 누르거나 아래 항목을 누르면 번역자 소개·출처·이용
+            조건 같은 자세한 안내가 펼쳐집니다.
+          </p>
+        </CardHeader>
+        <CardContent className="px-0">
+          {[
+            ...editions.filter((e) => e.language === "pli"),
+            ...editions.filter((e) => e.language !== "pli"),
+          ].map((e) => (
+            <EditionDetails
+              key={e.id}
+              id={e.id}
+              title={e.source ?? e.label}
+              subtitle={
+                e.translator && e.translator !== (e.source ?? e.label)
+                  ? `번역 ${e.translator}`
+                  : undefined
+              }
+            />
+          ))}
         </CardContent>
       </Card>
 
