@@ -117,7 +117,10 @@ export function CommentaryView({
   prev,
   next,
   pageMarksOf,
+  rootName = "경",
 }: {
+  /** 본문 칸의 이름 — 경, 또는 주석 문헌(청정도론)이면 주석서 */
+  rootName?: string;
   /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
   pageMarksOf?: (key: string) => PageMark[] | undefined;
   /** 앞뒤 경 — 주석에서 앞뒤로 넘겨 읽는다 (Digital Pāḷi Reader 처럼) */
@@ -131,7 +134,7 @@ export function CommentaryView({
   suttaId: string;
   layer: CommentaryLayer;
   available: boolean;
-  /** 없으면 카드 머리에 "경 문단" 단추를 두지 않는다 (경 칸이 없는 주석 문헌) */
+  /** 없으면 카드 머리에 "경 문단" 단추를 두지 않는다 */
   onGoParagraph?: (paragraph: string) => void;
   onWord: (word: string) => void;
   fontStyle?: React.CSSProperties;
@@ -321,7 +324,7 @@ export function CommentaryView({
         —{" "}
         {only
           ? `${paragraphLabel ?? "이"} 문단을 풀이한 곳 ${only.length}개`
-          : `이 경을 풀이한 문단 ${data.paras.length}개`}
+          : `이 ${rootName === "경" ? "경" : "본문"}을 풀이한 문단 ${data.paras.length}개`}
       </p>
       {only && only.length === 0 ? (
         <p className="px-6 py-10 text-center text-sm text-faint">
@@ -382,6 +385,7 @@ export function CommentaryView({
               onlyLines={lines}
               bookId={data.book}
               pageMarksOf={pageMarksOf}
+              rootName={rootName}
             />
           </Fragment>
         ))}
@@ -419,7 +423,9 @@ export function CommentaryCard({
   bookBadge,
   bookId,
   pageMarksOf,
+  rootName = "경",
 }: {
+  rootName?: string;
   /** 이 문단이 든 책 (쪽 번호 찾기용 — 예: Spk-v) */
   bookId?: string;
   /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
@@ -467,14 +473,14 @@ export function CommentaryCard({
           ) : null}
         </h3>
         {para.refs.length && onGoParagraph ? (
-          <span className="text-xs text-faint">경 문단</span>
+          <span className="text-xs text-faint">{rootName} 문단</span>
         ) : null}
         {onGoParagraph
           ? para.refs.map((ref) => (
               <button
                 key={ref}
                 type="button"
-                title="경의 이 문단으로 가기"
+                title={`${rootName}의 이 문단으로 가기`}
                 onClick={() => onGoParagraph(ref)}
                 className="rounded-md bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-300"
               >

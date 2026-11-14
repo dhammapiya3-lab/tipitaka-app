@@ -8,8 +8,9 @@
   번호 바로 앞의 소제목은 <VRI 문단>.0 (소제목 줄), 문단 중간의 소제목·맺음 줄은 굵게 쓴 본문 줄.
 - 산문은 문장마다 한 줄, 게송은 VRI 의 줄 그대로.
 - 마하상기띠본·PTS 번역본에는 청정도론이 없어 VRI 원문만 있다 (이 경들은 VRI 원문이 곧 기준 원문).
-- 청정도론은 주석 문헌이라 화면에서는 '주석서' 칸에 본문을, '복주석서' 칸에 마하띠까(Visuddhimagga-mahāṭīkā,
+- 청정도론은 주석 문헌이라 화면에서는 본문 칸(경 칸 자리)의 이름을 '주석서'로 하고, '복주석서' 칸에 마하띠까(Visuddhimagga-mahāṭīkā,
   Paramatthamañjūsā — e0103n·e0104n.att.xml)를 둔다. 마하띠까의 VRI 문단 번호는 청정도론의 같은 번호 문단을 풀이한다.
+  본문 칸을 그대로 쓰므로 '주석 낱말'(마하띠까 표제어 밑줄)·'주석 나란히 보기'가 경과 똑같이 된다.
 """
 
 import json
@@ -163,6 +164,68 @@ def tika_paras(items: list, sid: str, root_paras: list[int]) -> list[dict]:
     return out
 
 
+LETTERS = "a-zāīūṃṅñṭḍṇḷ"
+FOLD = str.maketrans("āīūṃṅñṭḍṇḷ", "aiumnntdnl")
+
+
+def fold(word: str) -> str:
+    w = re.sub(f"[^{LETTERS}]", "", word.lower().replace("ṁ", "ṃ"))
+    return w.translate(FOLD)
+
+
+def lemma_forms(lemma: str) -> list[list[str]]:
+    """마하띠까의 표제어("Evanti", "Anekaguṇasaṅgāhakenāti") → 청정도론에서 찾을 낱말들 후보 (끝의 -ti 를 뗀 꼴)."""
+    words = re.findall(f"[{LETTERS}A-ZĀĪŪṀṂṄÑṬḌṆḶṁ]+", lemma)
+    if not words:
+        return []
+    *head, last = words
+    out = []
+    low = last
+    if low.endswith("nti"):
+        out += [low[:-3] + "ṃ", low[:-3] + "n", low[:-3]]
+    for long_, short in (("āti", "a"), ("īti", "i"), ("ūti", "u")):
+        if low.endswith(long_):
+            out.append(low[:-3] + short)
+    if low.endswith("ti"):
+        out.append(low[:-2])
+    out.append(low)
+    return [head + [w] for w in out if w]
+
+
+def word_links(tika: list[dict], segs: dict[str, str], sid: str) -> list[list]:
+    """마하띠까가 굵게 쓴 표제어를 청정도론의 같은 번호 문단에서 찾아 '주석 낱말' 밑줄로 잇는다.
+    [청정도론 문장 번호, 그 문장 속 낱말(들), 마하띠까 문단 순번, 줄 차례]"""
+    by_para: dict[str, list[tuple[str, list[str]]]] = {}
+    for key, text in segs.items():
+        tail = key.split(":")[1]
+        if tail.startswith("0."):
+            continue
+        para = tail.rsplit(".", 1)[0]
+        words = re.findall(f"[{LETTERS}A-ZĀĪŪṀṂṄÑṬḌṆḶṁ]+", re.sub(r"<[^>]+>", " ", text))
+        by_para.setdefault(para, []).append((key, words))
+    links = []
+    for pi, p in enumerate(tika):
+        para = p["refs"][0].split(":")[1]
+        rows = by_para.get(para, [])
+        for li, line in enumerate(p["lines"]):
+            for lemma in re.findall(r"<b>(.*?)</b>", line):
+                for cand in lemma_forms(lemma):
+                    want = [fold(w) for w in cand]
+                    hit = None
+                    for key, words in rows:
+                        f = [fold(w) for w in words]
+                        for i in range(len(f) - len(want) + 1):
+                            if f[i : i + len(want)] == want:
+                                hit = (key, " ".join(words[i : i + len(want)]))
+                                break
+                        if hit:
+                            break
+                    if hit:
+                        links.append([hit[0], hit[1], pi, li])
+                        break
+    return links
+
+
 def main() -> None:
     xml_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/refs/vism")
     chapters = read_chapters(xml_dir, [c for c, _ in FILES])
@@ -224,6 +287,7 @@ def main() -> None:
             p["lineRefs"] = [p["refs"]] * len(p["lines"])
         tch = tika_chapters[c - 1]
         tika = tika_paras(tch["items"], sid, root_paras)
+        links = word_links(tika, segs, sid)
         code = FILES[0 if c <= 11 else 1][0]
         tcode = "e0103n.att" if c <= 11 else "e0104n.att"
         doc = {
@@ -238,17 +302,7 @@ def main() -> None:
             "segments": segs,
             "unsure": [],
             "preface": ch["preface"],
-            "attha": {
-                "book": "Vism",
-                "bookName": "Visuddhimagga",
-                "vriCode": code,
-                "from": attha_paras[0]["para"],
-                "to": attha_paras[-1]["para"],
-                "paras": attha_paras,
-                "wordLinks": [],
-                "before": [],
-                "after": [],
-            },
+            "attha": None,
             "tika": {
                 "book": "Vism-mhṭ",
                 "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
@@ -256,7 +310,7 @@ def main() -> None:
                 "from": tika[0]["para"] if tika else 0,
                 "to": tika[-1]["para"] if tika else 0,
                 "paras": tika,
-                "wordLinks": [],
+                "wordLinks": links,
                 "before": [],
                 "after": [],
             },
@@ -264,7 +318,7 @@ def main() -> None:
         }
         (OUT / f"{sid}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         paras = {k.split(":")[1].rsplit(".", 1)[0] for k in segs if not k.split(":")[1].startswith("0.")}
-        report.append(f"{sid} {title}: 문단 {len(paras)}개, 줄 {len(segs) - 2}개, 소제목 {heads}개 · 마하띠까 문단 {len(tika)}개 ({tch['title']})")
+        report.append(f"{sid} {title}: 문단 {len(paras)}개, 줄 {len(segs) - 2}개, 소제목 {heads}개 · 마하띠까 문단 {len(tika)}개 · 주석 낱말 {len(links)}개")
         ch["name"] = title
 
     structure = [

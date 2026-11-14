@@ -198,915 +198,7 @@
  },
  "unsure": [],
  "preface": [],
- "attha": {
-  "book": "Vism",
-  "bookName": "Visuddhimagga",
-  "vriCode": "e0102n.mul",
-  "from": 510,
-  "to": 524,
-  "paras": [
-   {
-    "para": 510,
-    "vripara": "510",
-    "refs": [
-     "vism15:510"
-    ],
-    "lines": [
-     "<b>Āyatanavitthārakathā</b>",
-     "<b>Āyatanānī</b>ti dvādasāyatanāni – cakkhāyatanaṃ, rūpāyatanaṃ, sotāyatanaṃ, saddāyatanaṃ, ghānāyatanaṃ, gandhāyatanaṃ, jivhāyatanaṃ, rasāyatanaṃ, kāyāyatanaṃ, phoṭṭhabbāyatanaṃ, manāyatanaṃ, dhammāyatananti.",
-     "Tattha –",
-     "Attha lakkhaṇa tāvatva, kama saṅkhepa vitthārā;",
-     "Tathā daṭṭhabbato ceva, viññātabbo vinicchayo.",
-     "Tattha visesato tāva cakkhatīti <b>cakkhu,</b> rūpaṃ assādeti vibhāveti cāti attho.",
-     "Rūpayatīti <b>rūpaṃ,</b> vaṇṇavikāraṃ āpajjamānaṃ hadayaṅgatabhāvaṃ pakāsetīti attho.",
-     "Suṇātīti <b>sotaṃ</b>.",
-     "Sappatīti <b>saddo,</b> udāhariyatīti attho.",
-     "Ghāyatīti <b>ghānaṃ</b>.",
-     "Gandhayatīti <b>gandho</b>.",
-     "Attano vatthuṃ sūcayatīti attho.",
-     "Jīvitaṃ avhayatīti <b>jivhā</b>.",
-     "Rasanti taṃ sattāti <b>raso,</b> assādentīti attho.",
-     "Kucchitānaṃ sāsavadhammānaṃ āyoti <b>kāyo.</b>",
-     "<b>Āyo</b>ti uppattideso.",
-     "Phusiyatīti <b>phoṭṭhabbaṃ</b>.",
-     "Munātīti <b>mano</b>.",
-     "Attano lakkhaṇaṃ dhārentīti <b>dhammā</b>."
-    ],
-    "lineRefs": [
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ],
-     [
-      "vism15:510"
-     ]
-    ]
-   },
-   {
-    "para": 511,
-    "vripara": "511",
-    "refs": [
-     "vism15:511"
-    ],
-    "lines": [
-     "Avisesato pana āyatanato, āyānaṃ tananato, āyatassa ca nayanato <b>āyatana</b>nti veditabbaṃ.",
-     "Cakkhurūpādīsu hi taṃtaṃdvārārammaṇā cittacetasikā dhammā sena sena anubhavanādinā kiccena āyatanti uṭṭhahanti ghaṭanti, vāyamantīti vuttaṃ hoti.",
-     "Te ca āyabhūte dhamme etāni tanonti, vitthārentīti vuttaṃ hoti, idañca anamatagge saṃsāre pavattaṃ atīva āyataṃ saṃsāradukkhaṃ yāva na nivattati, tāva nayanteva, pavattayantīti vuttaṃ hoti.",
-     "Iti sabbepime dhammā āyatanato, āyānaṃ tananato, āyatassa ca nayanato āyatanaṃ āyatananti vuccanti."
-    ],
-    "lineRefs": [
-     [
-      "vism15:511"
-     ],
-     [
-      "vism15:511"
-     ],
-     [
-      "vism15:511"
-     ],
-     [
-      "vism15:511"
-     ]
-    ]
-   },
-   {
-    "para": 512,
-    "vripara": "512",
-    "refs": [
-     "vism15:512"
-    ],
-    "lines": [
-     "Apica nivāsaṭṭhānaṭṭhena ākaraṭṭhena samosaraṇaṭṭhānaṭṭhena sañjātidesaṭṭhena kāraṇaṭṭhena ca <b>āyatanaṃ</b> veditabbaṃ.",
-     "Tathā hi loke ‘‘issarāyatanaṃ vāsudevāyatana’’ntiādīsu nivāsaṭṭhānaṃ āyatananti vuccati. ‘‘Suvaṇṇāyatanaṃ rajatāyatana’’ntiādīsu ākaro.",
-     "Sāsane pana ‘‘manoramme āyatane sevanti naṃ vihaṅgamā’’tiādīsu (a. ni. 5.38) samosaraṇaṭṭhānaṃ. ‘‘Dakkhiṇāpatho gunnaṃ āyatana’’ntiādīsu sañjātideso. ‘‘Tatra tatreva sakkhibhabbataṃ pāpuṇāti sati satiāyatane’’tiādīsu (a. ni. 3.102) kāraṇaṃ.",
-     "Cakkhuādīsu cāpi te te cittacetasikā dhammā nivasanti tadāyattavuttitāyāti cakkhādayo ca nesaṃ nivāsaṭṭhānaṃ.",
-     "Cakkhādīsu ca te ākiṇṇā tannissitattā tadārammaṇattā cāti cakkhādayo nesaṃ ākaro.",
-     "Cakkhādayo ca nesaṃ samosaraṇaṭṭhānaṃ, tattha tattha vatthudvārārammaṇavasena samosaraṇato.",
-     "Cakkhādayo ca nesaṃ sañjātideso, tannissayārammaṇabhāvena tattheva uppattito.",
-     "Cakkhādayo ca nesaṃ kāraṇaṃ, tesaṃ abhāve abhāvatoti.",
-     "Iti nivāsaṭṭhānaṭṭhena, ākaraṭṭhena, samosaraṇaṭṭhānaṭṭhena, sañjātidesaṭṭhena, kāraṇaṭṭhenacāti imehipi kāraṇehi ete dhammā āyatanaṃ āyatananti vuccanti.",
-     "Tasmā yathāvuttena atthena cakkhu ca taṃ āyatanañcāti <b>cakkhāyatanaṃ</b>…pe… dhammā ca te āyatanañcāti <b>dhammāyatana</b>nti evaṃ tāvettha <b>atthato</b> viññātabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ],
-     [
-      "vism15:512"
-     ]
-    ]
-   },
-   {
-    "para": 513,
-    "vripara": "513",
-    "refs": [
-     "vism15:513"
-    ],
-    "lines": [
-     "<b>Lakkhaṇā</b>ti cakkhādīnaṃ lakkhaṇatopettha viññātabbo vinicchayo.",
-     "Tāni ca pana tesaṃ lakkhaṇāni khandhaniddese vuttanayeneva veditabbāni.",
-     "<b>Tāvatvato</b>ti tāvabhāvato.",
-     "Idaṃ vuttaṃ hoti – cakkhādayopi hi dhammā eva, evaṃ sati dhammāyatanamicceva avatvā kasmā dvādasāyatanānīti vuttānīti ce.",
-     "Chaviññāṇakāyuppattidvārārammaṇavavatthānato idha channaṃ viññāṇakāyānaṃ dvārabhāvena ārammaṇabhāvena ca vavatthānato ayametesaṃ bhedo hotīti dvādasa vuttāni, cakkhuviññāṇavīthipariyāpannassa hi viññāṇakāyassa cakkhāyatanameva uppattidvāraṃ, rūpāyatanameva cārammaṇaṃ, tathā itarāni itaresaṃ.",
-     "Chaṭṭhassa pana bhavaṅgamanasaṅkhāto manāyatanekadesova uppattidvāraṃ, asādhāraṇameva ca dhammāyatanaṃ ārammaṇanti.",
-     "Iti channaṃ viññāṇakāyānaṃ uppattidvārārammaṇavavatthānato dvādasa vuttānīti evamettha tāvatvato viññātabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ],
-     [
-      "vism15:513"
-     ]
-    ]
-   },
-   {
-    "para": 514,
-    "vripara": "514",
-    "refs": [
-     "vism15:514"
-    ],
-    "lines": [
-     "<b>Kamato</b>ti idhāpi pubbe vuttesu uppattikkamādīsu desanākkamova yujjati.",
-     "Ajjhattikesu hi āyatanesu sanidassanasappaṭighavisayattā cakkhāyatanaṃ pākaṭanti paṭhamaṃ desitaṃ, tato anidassanasappaṭighavisayāni sotāyatanādīni.",
-     "Atha vā dassanānuttariyasavanānuttariyahetubhāvena bahūpakārattā ajjhattikesu cakkhāyatanasotāyatanāni paṭhamaṃ desitāni, tato ghānāyatanādīni tīṇi, pañcannampi gocaravisayattā ante manāyatanaṃ, cakkhāyatanādīnaṃ pana gocarattā tassa tassa antarantarāni bāhiresu rūpāyatanādīni.",
-     "Apica viññāṇuppattikāraṇavavatthānatopi ayametesaṃ kamo veditabbo.",
-     "Vuttañhetaṃ ‘‘cakkhuñca paṭicca rūpe ca uppajjati cakkhuviññāṇaṃ…pe… manañca paṭicca dhamme ca uppajjati manoviññāṇa’’nti (ma. ni. 3.421; saṃ. ni. 2.43).",
-     "Evaṃ kamatopettha viññātabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:514"
-     ],
-     [
-      "vism15:514"
-     ],
-     [
-      "vism15:514"
-     ],
-     [
-      "vism15:514"
-     ],
-     [
-      "vism15:514"
-     ],
-     [
-      "vism15:514"
-     ]
-    ]
-   },
-   {
-    "para": 515,
-    "vripara": "515",
-    "refs": [
-     "vism15:515"
-    ],
-    "lines": [
-     "<b>Saṅkhepavitthārā</b>ti saṅkhepato hi manāyatanassa ceva dhammāyatanekadesassa ca nāmena tadavasesānañca āyatanānaṃ rūpena saṅgahitattā dvādasāpi āyatanāni nāmarūpamattameva honti.",
-     "<b>Vitthārato</b> pana ajjhattikesu tāva cakkhāyatanaṃ jātivasena cakkhupasādamattameva, paccayagatinikāyapuggalabhedato pana anantappabhedaṃ.",
-     "Tathā sotāyatanādīni cattāri.",
-     "Manāyatanaṃ kusalākusalavipākakiriyaviññāṇabhedena ekūnanavutippabhedaṃ ekavīsuttarasatappabhedañca.",
-     "Vatthupaṭipadādibhedato pana anantappabhedaṃ.",
-     "Rūpasaddagandharasāyatanāni visabhāgapaccayādibhedato anantappabhedāni.",
-     "Phoṭṭhabbāyatanaṃ pathavīdhātutejodhātuvāyodhātuvasena tippabhedaṃ.",
-     "Paccayādibhedato anekappabhedaṃ.",
-     "Dhammāyatanaṃ vedanāsaññāsaṅkhārakkhandhasukhumarūpanibbānānaṃ sabhāvanānattabhedato anekappabhedanti.",
-     "Evaṃ saṅkhepavitthārā viññātabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ],
-     [
-      "vism15:515"
-     ]
-    ]
-   },
-   {
-    "para": 516,
-    "vripara": "516",
-    "refs": [
-     "vism15:516"
-    ],
-    "lines": [
-     "<b>Daṭṭhabbato</b>ti ettha pana sabbāneva saṅkhatāni āyatanāni anāgamanato aniggamanato ca daṭṭhabbāni.",
-     "Na hi tāni pubbe udayā kutoci āgacchanti, napi uddhaṃ vayā kuhiñci gacchanti, atha kho pubbe udayā appaṭiladdhasabhāvāni, uddhaṃ vayā paribhinnasabhāvāni, pubbantāparantavemajjhe paccayāyattavuttitāya avasāni pavattanti.",
-     "Tasmā anāgamanato aniggamanato ca daṭṭhabbāni.",
-     "Tathā nirīhakato abyāpārato ca.",
-     "Na hi cakkhurūpādīnaṃ evaṃ hoti ‘‘aho vata amhākaṃ sāmaggiyaṃ viññāṇaṃ nāma uppajjeyyā’’ti, na ca tāni viññāṇuppādanatthaṃ dvārabhāvena vatthubhāvena ārammaṇabhāvena vā īhanti, na byāpāramāpajjanti, atha kho dhammatāvesā, yaṃ cakkhurūpādisāmaggiyaṃ cakkhuviññāṇādīni sambhavantīti.",
-     "Tasmā nirīhakato abyāpārato ca daṭṭhabbāni.",
-     "Apica ajjhattikāni suññagāmo viya daṭṭhabbāni, dhuvasubhasukhattabhāvavirahitattā.",
-     "Bāhirāni gāmaghātakacorā viya, ajjhattikānaṃ abhighātakattā.",
-     "Vuttañhetaṃ ‘‘cakkhu, bhikkhave, haññati manāpāmanāpehi rūpehī’’ti vitthāro.",
-     "Apica ajjhattikāni cha pāṇakā viya daṭṭhabbāni, bāhirāni tesaṃ gocarā viyāti.",
-     "Evamettha daṭṭhabbato viññātabbo vinicchayo.",
-     "Idaṃ tāva āyatanānaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ],
-     [
-      "vism15:516"
-     ]
-    ]
-   },
-   {
-    "para": 517,
-    "vripara": "517",
-    "refs": [
-     "vism15:517"
-    ],
-    "lines": [
-     "<b>Dhātuvitthārakathā</b>",
-     "Tadanantarā pana <b>dhātuyo</b>ti aṭṭhārasa dhātuyo – cakkhudhātu, rūpadhātu, cakkhuviññāṇadhātu, sotadhātu, saddadhātu, sotaviññāṇadhātu, ghānadhātu, gandhadhātu, ghānaviññāṇadhātu, jivhādhātu, rasadhātu, jivhāviññāṇadhātu, kāyadhātu, phoṭṭhabbadhātu, kāyaviññāṇadhātu, manodhātu, dhammadhātu, manoviññāṇadhātūti.",
-     "Tattha –",
-     "Atthato lakkhaṇādīhi, kama tāvatvasaṅkhato;",
-     "Paccayā atha daṭṭhabbā, veditabbo vinicchayo.",
-     "Tattha <b>atthato</b>ti cakkhatīti cakkhu.",
-     "Rūpayatīti rūpaṃ.",
-     "Cakkhussa viññāṇaṃ cakkhuviññāṇanti evamādinā tāva nayena cakkhādīnaṃ visesatthato veditabbo vinicchayo.",
-     "Avisesena pana vidahati, dhīyate, vidhānaṃ, vidhīyate etāya, ettha vā dhīyatīti dhātu.",
-     "Lokiyā hi dhātuyo kāraṇabhāvena vavatthitā hutvā suvaṇṇarajatādidhātuyo viya suvaṇṇarajatādiṃ, anekappakāraṃ saṃsāradukkhaṃ vidahanti.",
-     "Bhārahārehi ca bhāro viya, sattehi dhīyante, dhāriyantīti attho.",
-     "Dukkhavidhānamattameva cesā, avasavattanato.",
-     "Etāhi ca karaṇabhūtāhi saṃsāradukkhaṃ sattehi anuvidhīyati.",
-     "Tathāvihitañca taṃ etāsveva dhīyati, ṭhapiyatīti attho.",
-     "Iti cakkhādīsu ekeko dhammo yathāsambhavaṃ vidahati, dhīyatītiādinā atthavasena dhātūti vuccati."
-    ],
-    "lineRefs": [
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ],
-     [
-      "vism15:517"
-     ]
-    ]
-   },
-   {
-    "para": 518,
-    "vripara": "518",
-    "refs": [
-     "vism15:518"
-    ],
-    "lines": [
-     "Apica yathā titthiyānaṃ attā nāma sabhāvato natthi, na evametā, etā pana attano sabhāvaṃ dhārentīti dhātuyo.",
-     "Yathā loke vicittā haritālamanosilādayo selāvayavā dhātuyoti vuccanti, evametāpi dhātuyo viya dhātuyo.",
-     "Vicittā hete ñāṇañeyyāvayavāti.",
-     "Yathā vā sarīrasaṅkhātassa samudāyassa avayavabhūtesu rasasoṇitādīsu aññamaññavisabhāgalakkhaṇaparicchinnesu dhātusamaññā, evametesupi pañcakkhandhasaṅkhātassa attabhāvassa avayavesu dhātusamaññā veditabbā.",
-     "Aññamaññavisabhāgalakkhaṇaparicchinnā hete cakkhādayoti.",
-     "Apica dhātūti nijjīvamattassevetaṃ adhivacanaṃ.",
-     "Tathā hi bhagavā ‘‘cha dhāturo ayaṃ bhikkhu puriso’’tiādīsu (ma. ni. 3.344) jīvasaññāsamūhananatthaṃ dhātudesanaṃ akāsīti.",
-     "Tasmā yathāvuttena atthena cakkhu ca taṃ dhātu ca cakkhudhātu…pe… manoviññāṇañca taṃ dhātu ca manoviññāṇadhātūti.",
-     "Evaṃ tāvettha atthato veditabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ],
-     [
-      "vism15:518"
-     ]
-    ]
-   },
-   {
-    "para": 519,
-    "vripara": "519",
-    "refs": [
-     "vism15:519"
-    ],
-    "lines": [
-     "<b>Lakkhaṇādito</b>ti cakkhādīnaṃ lakkhaṇāditopettha veditabbo vinicchayo.",
-     "Tāni ca pana nesaṃ lakkhaṇādīni khandhaniddese vuttanayeneva veditabbāni.",
-     "<b>Kamato</b>ti idhāpi pubbe vuttesu uppattikkamādīsu desanākkamova yujjati.",
-     "So ca panāyaṃ hetuphalānupubbavavatthānavasena vutto.",
-     "Cakkhudhātu rūpadhātūti idañhi dvayaṃ hetu, cakkhuviññāṇadhātūti phalaṃ.",
-     "Evaṃ sabbattha."
-    ],
-    "lineRefs": [
-     [
-      "vism15:519"
-     ],
-     [
-      "vism15:519"
-     ],
-     [
-      "vism15:519"
-     ],
-     [
-      "vism15:519"
-     ],
-     [
-      "vism15:519"
-     ],
-     [
-      "vism15:519"
-     ]
-    ]
-   },
-   {
-    "para": 520,
-    "vripara": "520",
-    "refs": [
-     "vism15:520"
-    ],
-    "lines": [
-     "<b>Tāvatvato</b>ti tāvabhāvato.",
-     "Idaṃ vuttaṃ hoti – tesu tesu hi suttābhidhammappadesesu ‘‘ābhādhātu, subhadhātu, ākāsānañcāyatanadhātu, viññāṇañcāyatanadhātu, ākiñcaññāyatanadhātu, nevasaññānāsaññāyatanadhātu, saññāvedayitanirodhadhātu’’ (saṃ. ni. 2.95), ‘‘kāmadhātu, byāpādadhātu, vihiṃsādhātu, nekkhammadhātu, abyāpādadhātu, avihiṃsādhātu’’ (vibha. 182; dī. ni. 3.305; ma. ni. 3.125), ‘‘sukhadhātu, dukkhadhātu, somanassadhātu, domanassadhātu, upekkhādhātu, avijjādhātu’’ (vibha. 180; ma. ni. 3.125), ‘‘ārambhadhātu, nikkamadhātu, parakkamadhātu’’ (saṃ. ni. 5.183), ‘‘hīnadhātu, majjhimadhātu, paṇītadhātu’’ (dī. ni. 3.305), ‘‘pathavīdhātu, āpodhātu, tejodhātu, vāyodhātu (dī. ni. 3.311), ākāsadhātu, viññāṇadhātu’’ (ma. ni. 3.125; vibha. 172), ‘‘saṅkhatadhātu, asaṅkhatadhātu’’ (ma. ni. 3.125), ‘‘anekadhātu nānādhātu loko’’ti (dī. ni. 2.366; ma. ni. 1.148) evamādayo aññāpi dhātuyo dissanti.",
-     "Evaṃ sati sabbāsaṃ vasena paricchedaṃ akatvā kasmā aṭṭhārasāti ayameva paricchedo katoti ce.",
-     "Sabhāvato vijjamānānaṃ sabbadhātūnaṃ tadantogadhattā.",
-     "Rūpadhātuyeva hi ābhādhātu, subhadhātu pana rūpādipaṭibaddhā.",
-     "Kasmā, subhanimittattā.",
-     "Subhanimittañhi subhadhātu.",
-     "Tañca rūpādivinimuttaṃ na vijjati.",
-     "Kusalavipākārammaṇā vā rūpādayo eva subhadhātūti rūpādimattamevesā.",
-     "Ākāsānañcāyatanadhātuādīsu cittaṃ manoviññāṇadhātuyeva, sesā dhammadhātu.",
-     "Saññāvedayitanirodhadhātu pana sabhāvato natthi.",
-     "Dhātudvayanirodhamattameva hi sā.",
-     "Kāmadhātu dhammadhātumattaṃ vā hoti.",
-     "Yathāha – ‘‘tattha katamā kāmadhātu?",
-     "Kāmapaṭisaṃyutto takko vitakko micchāsaṅkappo’’ti (vibha. 182).",
-     "Aṭṭhārasāpi vā dhātuyo.",
-     "Yathāha – ‘‘heṭṭhato avīcinirayaṃ pariyantaṃ karitvā uparito paranimmitavasavattī deve antokaritvā yaṃ etasmiṃ antare etthāvacarā ettha pariyāpannā khandhadhātuāyatanā rūpā vedanā saññā saṅkhārā viññāṇaṃ, ayaṃ vuccati kāmadhātū’’ti (vibha. 182).",
-     "Nekkhammadhātu dhammadhātu eva, ‘‘sabbepi kusalā dhammā nekkhammadhātū’’ti (vibha. 182) vacanato manoviññāṇadhātupi hotiyeva.",
-     "Byāpādavihiṃsā-abyāpāda-avihiṃsāsukha-dukkha-somanassa-domanassupekkhā-avijjāārambha-nikkama-parakkamadhātuyo dhammadhātuyeva.",
-     "Hīnamajjhimapaṇītadhātuyo aṭṭhārasa dhātumattameva.",
-     "Hīnā hi cakkhādayo hīnā dhātu, majjhimapaṇītā majjhimā ceva paṇītā ca.",
-     "Nippariyāyena pana akusalā dhammadhātumanoviññāṇadhātuyo hīnadhātu, lokiyā kusalābyākatā ubhopi cakkhudhātuādayo ca majjhimadhātu, lokuttarā pana dhammadhātumanoviññāṇadhātuyo paṇītadhātu.",
-     "Pathavītejovāyodhātuyo phoṭṭhabbadhātuyeva, āpodhātu ākāsadhātu ca dhammadhātuyeva.",
-     "Viññāṇadhātu cakkhuviññāṇādisattaviññāṇadhātusaṅkhepoyeva.",
-     "Sattarasa dhātuyo dhammadhātuekadeso ca saṅkhatadhātu, asaṅkhatā pana dhātu dhammadhātuekadesova.",
-     "Anekadhātunānādhātuloko pana aṭṭhārasa dhātuppabhedamattamevāti.",
-     "Iti sabhāvato vijjamānānaṃ sabbadhātūnaṃ tadantogadhattā aṭṭhāraseva vuttāti."
-    ],
-    "lineRefs": [
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ],
-     [
-      "vism15:520"
-     ]
-    ]
-   },
-   {
-    "para": 521,
-    "vripara": "521",
-    "refs": [
-     "vism15:521"
-    ],
-    "lines": [
-     "Apica vijānanasabhāve viññāṇe jīvasaññīnaṃ saññāsamūhananatthampi aṭṭhāraseva vuttā.",
-     "Santi hi sattā vijānanasabhāve viññāṇe jīvasaññino, tesaṃ cakkhusotaghānajivhākāyamanodhātumanoviññāṇadhātubhedena tassa anekataṃ cakkhurūpādipaccayāyattavuttitāya aniccatañca pakāsetvā dīgharattānusayitaṃ jīvasaññaṃ samūhanitukāmena bhagavatā aṭṭhārasa dhātuyo pakāsitā.",
-     "Kiñca bhiyyo tathā veneyyajjhāsayavasena ca.",
-     "Ye ca imāya anatisaṅkhepavitthārāya desanāya veneyyasattā, tadajjhāsayavasena ca aṭṭhāraseva pakāsitā.",
-     "Saṅkhepavitthāranayena tathā tathā hi,",
-     "Dhammaṃ pakāsayati esa yathā yathāssa;",
-     "Saddhammatejavihataṃ vilayaṃ khaṇena,",
-     "Veneyyasattahadayesu tamo payātīti.",
-     "Evamettha tāvatvato veditabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ],
-     [
-      "vism15:521"
-     ]
-    ]
-   },
-   {
-    "para": 522,
-    "vripara": "522",
-    "refs": [
-     "vism15:522"
-    ],
-    "lines": [
-     "<b>Saṅkhato</b>ti cakkhudhātu tāva jātito eko dhammotveva saṅkhaṃ gacchati cakkhupasādavasena, tathā sotaghānajivhākāyarūpasaddagandharasadhātuyo sotappasādādivasena, phoṭṭhabbadhātu pana pathavītejovāyovasena tayo dhammāti saṅkhaṃ gacchati.",
-     "Cakkhuviññāṇadhātu kusalākusalavipākavasena dve dhammāti saṅkhaṃ gacchati, tathā sotaghānajivhākāyaviññāṇadhātuyo.",
-     "Manodhātu pana pañcadvārāvajjanakusalākusalavipākasampaṭicchanavasena tayo dhammāti saṅkhaṃ gacchati.",
-     "Dhammadhātu tiṇṇaṃ arūpakkhandhānaṃ soḷasannaṃ sukhumarūpānaṃ asaṅkhatāya ca dhātuyā vasena vīsati dhammāti saṅkhaṃ gacchati.",
-     "Manoviññāṇadhātu sesakusalākusalābyākataviññāṇavasena chasattati dhammāti saṅkhaṃ gacchati.",
-     "Evamettha saṅkhatopi veditabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:522"
-     ],
-     [
-      "vism15:522"
-     ],
-     [
-      "vism15:522"
-     ],
-     [
-      "vism15:522"
-     ],
-     [
-      "vism15:522"
-     ],
-     [
-      "vism15:522"
-     ]
-    ]
-   },
-   {
-    "para": 523,
-    "vripara": "523",
-    "refs": [
-     "vism15:523"
-    ],
-    "lines": [
-     "<b>Paccayā</b>ti ettha ca cakkhudhātu tāva cakkhuviññāṇadhātuyā vippayuttapurejātaatthiavigatanissayindriyapaccayānaṃ vasena chahi paccayehi paccayo hoti, rūpadhātu purejātaatthiavigatārammaṇapaccayānaṃ vasena catūhi paccayehi paccayo hoti.",
-     "Evaṃ sotaviññāṇadhātuādīnaṃ sotadhātusaddadhātuādayo.",
-     "Pañcannaṃ pana nesaṃ āvajjanamanodhātu anantarasamanantaranatthivigatānantarūpanissayavasena pañcahi paccayehi paccayo hoti, tā ca pañcapi sampaṭicchanamanodhātuyā.",
-     "Tathā sampaṭicchanamanodhātu santīraṇamanoviññāṇadhātuyā, sā ca voṭṭhabbanamanoviññāṇadhātuyā, voṭṭhabbanamanoviññāṇadhātu ca javanamanoviññāṇadhātuyā.",
-     "Javanamanoviññāṇadhātu pana anantarāya javanamanoviññāṇadhātuyā tehi ceva pañcahi āsevanapaccayena cāti chahi paccayehi paccayo hoti.",
-     "Esa tāva pañcadvāre nayo.",
-     "Manodvāre pana bhavaṅgamanoviññāṇadhātu āvajjanamanoviññāṇadhātuyā.",
-     "Āvajjanamanoviññāṇadhātu ca javanamanoviññāṇadhātuyā purimehi pañcahi paccayehi paccayo hoti.",
-     "Dhammadhātu pana sattannampi viññāṇadhātūnaṃ sahajātaaññamaññanissayasampayuttaatthiavigatādīhi bahudhā paccayo hoti.",
-     "Cakkhudhātuādayo pana ekaccā ca dhammadhātu ekaccāya manoviññāṇadhātuyā ārammaṇapaccayādīhipi paccayā honti.",
-     "Cakkhuviññāṇadhātuādīnañca na kevalaṃ cakkhurūpādayo paccayā honti, atha kho ālokādayopi.",
-     "Tenāhu pubbācariyā –",
-     "‘‘Cakkhurūpālokamanasikāre paṭicca uppajjati cakkhuviññāṇaṃ.",
-     "Sotasaddavivaramanasikāre paṭicca uppajjati sotaviññāṇaṃ.",
-     "Ghānagandhavāyumanasikāre paṭicca uppajjati ghānaviññāṇaṃ.",
-     "Jivhārasaāpamanasikāre paṭicca uppajjati jivhāviññāṇaṃ.",
-     "Kāyaphoṭṭhabbapathavīmanasikāre paṭicca uppajjati kāyaviññāṇaṃ.",
-     "Bhavaṅgamanadhammamanasikāre paṭicca uppajjati manoviññāṇa’’nti.",
-     "Ayamettha saṅkhepo.",
-     "Vitthārato pana paccayappabhedo paṭiccasamuppādaniddese āvibhavissatīti evamettha paccayatopi veditabbo vinicchayo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ],
-     [
-      "vism15:523"
-     ]
-    ]
-   },
-   {
-    "para": 524,
-    "vripara": "524",
-    "refs": [
-     "vism15:524"
-    ],
-    "lines": [
-     "<b>Daṭṭhabbato</b>ti daṭṭhabbatopettha vinicchayo veditabboti attho.",
-     "Sabbā eva hi saṅkhatadhātuyo pubbantāparantavivittato dhuvasubhasukhattabhāvasuññato paccayāyattavuttito ca daṭṭhabbā.",
-     "Visesato panettha bheritalaṃ viya cakkhudhātu daṭṭhabbā, daṇḍo viya rūpadhātu, saddo viya cakkhuviññāṇadhātu.",
-     "Tathā ādāsatalaṃ viya cakkhudhātu, mukhaṃ viya rūpadhātu, mukhanimittaṃ viya cakkhuviññāṇadhātu.",
-     "Atha vā ucchutilā viya cakkhudhātu, yantacakkayaṭṭhi viya rūpadhātu, ucchurasatelāni viya cakkhuviññāṇadhātu.",
-     "Tathā adharāraṇī viya cakkhudhātu, uttarāraṇī viya rūpadhātu, aggi viya cakkhuviññāṇadhātu.",
-     "Esa nayo sotadhātuādīsu.",
-     "Manodhātu pana yathāsambhavato cakkhuviññāṇadhātuādīnaṃ purecarānucarā viya daṭṭhabbā.",
-     "Dhammadhātuyā vedanākkhandho sallamiva sūlamiva ca daṭṭhabbo.",
-     "Saññāsaṅkhārakkhandhā vedanāsallasūlayogāāturā viya, puthujjanānaṃ vā saññā āsādukkhajananato rittamuṭṭhi viya.",
-     "Ayathābhuccanimittagāhakato vanamigo viya.",
-     "Saṅkhārā paṭisandhiyaṃ pakkhipanato aṅgārakāsuyaṃ khipanakapurisā viya.",
-     "Jāti dukkhānubandhato rājapurisānubandhacorā viya.",
-     "Sabbānatthāvahassa khandhasantānassa hetuto visarukkhabījāni viya.",
-     "Rūpaṃ nānāvidhupaddavanimittato khuracakkaṃ viya daṭṭhabbaṃ.",
-     "Asaṅkhatā pana dhātu amatato santato khemato ca daṭṭhabbā.",
-     "Kasmā?",
-     "Sabbānatthāvahassa paṭipakkhabhūtattā.",
-     "Manoviññāṇadhātu ārammaṇesu vavatthānābhāvato araññamakkaṭo viya, duddamanato assakhaḷuṅko viya, yatthakāmanipātito vehāsakkhittadaṇḍo viya, lobhadosādinānappakārakilesavesayogato raṅganaṭo viya daṭṭhabbāti.",
-     "Iti sādhujanapāmojjatthāya kate visuddhimagge",
-     "Paññābhāvanādhikāre",
-     "Āyatanadhātuniddeso nāma",
-     "Pannarasamo paricchedo."
-    ],
-    "lineRefs": [
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ],
-     [
-      "vism15:524"
-     ]
-    ]
-   }
-  ],
-  "wordLinks": [],
-  "before": [],
-  "after": []
- },
+ "attha": null,
  "tika": {
   "book": "Vism-mhṭ",
   "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
@@ -2360,7 +1452,620 @@
     ]
    }
   ],
-  "wordLinks": [],
+  "wordLinks": [
+   [
+    "vism15:510.1",
+    "dvādasāyatanāni",
+    0,
+    1
+   ],
+   [
+    "vism15:510.5",
+    "attho",
+    0,
+    4
+   ],
+   [
+    "vism15:510.5",
+    "visesato tāva",
+    0,
+    7
+   ],
+   [
+    "vism15:510.5",
+    "visesato",
+    0,
+    8
+   ],
+   [
+    "vism15:510.5",
+    "assādeti",
+    0,
+    9
+   ],
+   [
+    "vism15:510.5",
+    "rūpaṃ assādeti",
+    0,
+    9
+   ],
+   [
+    "vism15:510.5",
+    "vibhāveti cāti attho",
+    0,
+    13
+   ],
+   [
+    "vism15:510.6",
+    "pakāsetīti attho",
+    0,
+    15
+   ],
+   [
+    "vism15:510.12",
+    "Jīvitaṃ avhayatīti jivhā",
+    0,
+    21
+   ],
+   [
+    "vism15:510.14",
+    "kāyo",
+    0,
+    22
+   ],
+   [
+    "vism15:510.15",
+    "uppattideso",
+    0,
+    24
+   ],
+   [
+    "vism15:510.17",
+    "mano",
+    0,
+    26
+   ],
+   [
+    "vism15:510.18",
+    "dhammā",
+    0,
+    29
+   ],
+   [
+    "vism15:511.2",
+    "sena sena",
+    1,
+    0
+   ],
+   [
+    "vism15:511.2",
+    "uṭṭhahanti",
+    1,
+    1
+   ],
+   [
+    "vism15:511.3",
+    "Te ca",
+    1,
+    4
+   ],
+   [
+    "vism15:511.3",
+    "idañca",
+    1,
+    7
+   ],
+   [
+    "vism15:511.3",
+    "na nivattati",
+    1,
+    8
+   ],
+   [
+    "vism15:512.1",
+    "Apica",
+    2,
+    0
+   ],
+   [
+    "vism15:512.3",
+    "manoramme",
+    2,
+    1
+   ],
+   [
+    "vism15:512.4",
+    "nivasanti",
+    2,
+    2
+   ],
+   [
+    "vism15:512.2",
+    "ākaro",
+    2,
+    4
+   ],
+   [
+    "vism15:512.5",
+    "tannissitattā",
+    2,
+    5
+   ],
+   [
+    "vism15:512.6",
+    "vatthudvārārammaṇavasena samosaraṇato",
+    2,
+    6
+   ],
+   [
+    "vism15:512.7",
+    "tattheva uppattito",
+    2,
+    9
+   ],
+   [
+    "vism15:512.3",
+    "sañjātideso",
+    2,
+    12
+   ],
+   [
+    "vism15:513.3",
+    "tāvabhāvato",
+    3,
+    1
+   ],
+   [
+    "vism15:513.4",
+    "cakkhādayopi hi",
+    3,
+    2
+   ],
+   [
+    "vism15:513.6",
+    "bhavaṅgamanasaṅkhāto",
+    3,
+    3
+   ],
+   [
+    "vism15:514.2",
+    "Ajjhattikesu hi",
+    4,
+    3
+   ],
+   [
+    "vism15:514.3",
+    "tato ghānāyatanādīni",
+    4,
+    4
+   ],
+   [
+    "vism15:515.1",
+    "saṅgahitattā",
+    5,
+    0
+   ],
+   [
+    "vism15:515.2",
+    "jātivasena",
+    5,
+    1
+   ],
+   [
+    "vism15:515.4",
+    "ekavīsuttarasatappabhedañca",
+    5,
+    9
+   ],
+   [
+    "vism15:515.2",
+    "anantappabhedaṃ",
+    5,
+    11
+   ],
+   [
+    "vism15:515.9",
+    "sabhāvanānattabhedato",
+    5,
+    18
+   ],
+   [
+    "vism15:516.2",
+    "Na hi",
+    6,
+    0
+   ],
+   [
+    "vism15:516.2",
+    "atha kho",
+    6,
+    2
+   ],
+   [
+    "vism15:516.5",
+    "Na hi cakkhurūpādīnaṃ evaṃ hoti",
+    6,
+    3
+   ],
+   [
+    "vism15:516.5",
+    "na ca tāni",
+    6,
+    4
+   ],
+   [
+    "vism15:516.7",
+    "suññagāmo viya daṭṭhabbāni",
+    6,
+    8
+   ],
+   [
+    "vism15:516.7",
+    "dhuvasubhasukhattabhāvavirahitattā",
+    6,
+    10
+   ],
+   [
+    "vism15:516.10",
+    "cha pāṇakā",
+    6,
+    12
+   ],
+   [
+    "vism15:516.10",
+    "tesaṃ gocarā",
+    6,
+    13
+   ],
+   [
+    "vism15:517.8",
+    "vidahati",
+    7,
+    4
+   ],
+   [
+    "vism15:517.8",
+    "vidahati",
+    7,
+    5
+   ],
+   [
+    "vism15:517.8",
+    "dhātu",
+    7,
+    5
+   ],
+   [
+    "vism15:517.9",
+    "Lokiyā",
+    7,
+    7
+   ],
+   [
+    "vism15:517.9",
+    "vavatthitā",
+    7,
+    8
+   ],
+   [
+    "vism15:517.9",
+    "suvaṇṇarajatādidhātuyo",
+    7,
+    9
+   ],
+   [
+    "vism15:517.14",
+    "Iti cakkhādīsu",
+    7,
+    15
+   ],
+   [
+    "vism15:518.1",
+    "attano sabhāvaṃ dhārentīti dhātuyo",
+    8,
+    0
+   ],
+   [
+    "vism15:518.2",
+    "dhātuyo viya dhātuyo",
+    8,
+    3
+   ],
+   [
+    "vism15:519.4",
+    "hetuphalānupubbavavatthānavasena",
+    9,
+    0
+   ],
+   [
+    "vism15:519.5",
+    "hetu",
+    9,
+    4
+   ],
+   [
+    "vism15:519.5",
+    "Cakkhudhātu",
+    9,
+    4
+   ],
+   [
+    "vism15:520.3",
+    "sabbāsaṃ vasena",
+    10,
+    0
+   ],
+   [
+    "vism15:520.5",
+    "Rūpadhātuyeva hi ābhādhātu",
+    10,
+    2
+   ],
+   [
+    "vism15:520.5",
+    "rūpādipaṭibaddhā",
+    10,
+    3
+   ],
+   [
+    "vism15:520.2",
+    "subhadhātu",
+    10,
+    4
+   ],
+   [
+    "vism15:520.10",
+    "sesā",
+    10,
+    5
+   ],
+   [
+    "vism15:520.15",
+    "Kāmapaṭisaṃyutto",
+    10,
+    9
+   ],
+   [
+    "vism15:520.17",
+    "yaṃ etasmiṃ antare",
+    10,
+    10
+   ],
+   [
+    "vism15:520.17",
+    "etthāvacarā",
+    10,
+    11
+   ],
+   [
+    "vism15:520.17",
+    "ettha pariyāpannā",
+    10,
+    12
+   ],
+   [
+    "vism15:520.18",
+    "Nekkhammadhātu dhammadhātu eva",
+    10,
+    13
+   ],
+   [
+    "vism15:520.18",
+    "sabbepi kusalā dhammā",
+    10,
+    14
+   ],
+   [
+    "vism15:520.2",
+    "vihiṃsādhātu",
+    10,
+    15
+   ],
+   [
+    "vism15:520.21",
+    "Hīnā",
+    10,
+    17
+   ],
+   [
+    "vism15:520.21",
+    "paṇītā",
+    10,
+    18
+   ],
+   [
+    "vism15:520.21",
+    "majjhimā",
+    10,
+    18
+   ],
+   [
+    "vism15:520.22",
+    "ubhopi",
+    10,
+    19
+   ],
+   [
+    "vism15:520.2",
+    "anekadhātu nānādhātu loko",
+    10,
+    21
+   ],
+   [
+    "vism15:521.2",
+    "cakkhusotaghānajivhākāyamanodhātumanoviññāṇadhātubhedena",
+    11,
+    0
+   ],
+   [
+    "vism15:521.2",
+    "tassa",
+    11,
+    6
+   ],
+   [
+    "vism15:521.7",
+    "Saddhammatejavihataṃ",
+    11,
+    10
+   ],
+   [
+    "vism15:522.1",
+    "Saṅkhato",
+    12,
+    0
+   ],
+   [
+    "vism15:522.1",
+    "jātito",
+    12,
+    1
+   ],
+   [
+    "vism15:522.1",
+    "jātito",
+    12,
+    2
+   ],
+   [
+    "vism15:522.4",
+    "vīsati dhammāti saṅkhaṃ gacchati",
+    12,
+    4
+   ],
+   [
+    "vism15:522.5",
+    "sesakusalākusalābyākataviññāṇavasena",
+    12,
+    5
+   ],
+   [
+    "vism15:523.3",
+    "tā ca",
+    13,
+    0
+   ],
+   [
+    "vism15:523.3",
+    "pañcapi",
+    13,
+    0
+   ],
+   [
+    "vism15:523.9",
+    "Dhammadhātu",
+    13,
+    3
+   ],
+   [
+    "vism15:523.9",
+    "bahudhā paccayo hoti",
+    13,
+    6
+   ],
+   [
+    "vism15:523.10",
+    "ekaccā ca dhammadhātu",
+    13,
+    7
+   ],
+   [
+    "vism15:523.10",
+    "ekaccāya manoviññāṇadhātuyā",
+    13,
+    8
+   ],
+   [
+    "vism15:523.10",
+    "ekaccāya manoviññāṇadhātuyā",
+    13,
+    9
+   ],
+   [
+    "vism15:524.2",
+    "Sabbā eva",
+    14,
+    0
+   ],
+   [
+    "vism15:524.2",
+    "pubbantāparantavivittato",
+    14,
+    2
+   ],
+   [
+    "vism15:524.2",
+    "pubbantāparantavivittato",
+    14,
+    6
+   ],
+   [
+    "vism15:524.8",
+    "purecarānucarā viya",
+    14,
+    14
+   ],
+   [
+    "vism15:524.8",
+    "Manodhātu",
+    14,
+    28
+   ],
+   [
+    "vism15:524.8",
+    "Manodhātu",
+    14,
+    34
+   ],
+   [
+    "vism15:524.19",
+    "Manoviññāṇadhātu",
+    14,
+    37
+   ],
+   [
+    "vism15:524.9",
+    "sallamiva sūlamiva",
+    14,
+    40
+   ],
+   [
+    "vism15:524.9",
+    "daṭṭhabbo",
+    14,
+    40
+   ],
+   [
+    "vism15:524.11",
+    "vanamigo viya",
+    14,
+    45
+   ],
+   [
+    "vism15:524.12",
+    "paṭisandhiyaṃ pakkhipanato",
+    14,
+    46
+   ],
+   [
+    "vism15:524.19",
+    "assakhaḷuṅko",
+    14,
+    53
+   ],
+   [
+    "vism15:524.19",
+    "yatthakāmanipātito",
+    14,
+    54
+   ],
+   [
+    "vism15:524.19",
+    "raṅganaṭo",
+    14,
+    55
+   ]
+  ],
   "before": [],
   "after": []
  },

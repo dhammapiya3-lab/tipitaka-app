@@ -232,12 +232,18 @@ export function SuttaView({
   /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
-  const [layerState, setLayer] = useState<"sutta" | "attha" | "tika">(
-    initialLayer ?? "sutta",
+  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">(
+    // 청정도론은 주석서 칸이 따로 없다 (본문 칸이 곧 주석서) — 주소의 layer=attha 는 본문 칸으로
+    initialLayer === "attha" && /^vism\d/.test(suttaId)
+      ? "sutta"
+      : (initialLayer ?? "sutta"),
   );
-  /** 주석 문헌(청정도론)은 경 칸 없이 주석서(본문)·복주석서만 — 처음부터 주석서 칸으로 연다 */
+  /**
+   * 주석 문헌(청정도론) — 본문 칸(경 칸 자리)이 곧 주석서라 단추 이름을 '주석서'로, 복주석서 칸에 마하띠까.
+   * 본문 칸을 그대로 쓰므로 주석 낱말·주석 나란히 보기·문단별로 보기가 경과 똑같이 된다.
+   */
   const commentaryOnly = /^vism\d/.test(suttaId);
-  const layer = commentaryOnly && layerState === "sutta" ? "attha" : layerState;
+  const rootName = commentaryOnly ? "주석서" : "경";
   /** 이어 붙인 주석서·복주석서 (작은 파일이라 경을 열 때 함께 받는다) */
   const [comm, setComm] = useState<
     Partial<Record<CommentaryLayer, SuttaCommentary>>
@@ -954,6 +960,7 @@ export function SuttaView({
           editions={comm[l]!.editions}
           bookId={comm[l]!.book}
           pageMarksOf={(k) => pageMarksOf.get(k)}
+          rootName={rootName}
         />
       ));
   /** 경 문단 하나와 그 주석을 한 줄에 (나란히 보기) */
@@ -998,7 +1005,7 @@ export function SuttaView({
     >
       {withSutta ? (
         <span className="truncate">
-          경{" "}
+          {rootName}{" "}
           {paliTitle ? (
             <span className="font-pali text-xs font-medium text-faint">
               {paliTitle}
@@ -1684,22 +1691,19 @@ export function SuttaView({
                         pali: "",
                       })
                     }
-                    onGoParagraph={
-                      commentaryOnly
-                        ? undefined
-                        : (p) => {
-                            setLayer("sutta");
-                            if (focus) openParagraph(p);
-                            else
-                              requestAnimationFrame(() =>
-                                requestAnimationFrame(() =>
-                                  document
-                                    .getElementById(`section-${p}`)
-                                    ?.scrollIntoView({ block: "start" }),
-                                ),
-                              );
-                          }
-                    }
+                    rootName={rootName}
+                    onGoParagraph={(p) => {
+                      setLayer("sutta");
+                      if (focus) openParagraph(p);
+                      else
+                        requestAnimationFrame(() =>
+                          requestAnimationFrame(() =>
+                            document
+                              .getElementById(`section-${p}`)
+                              ?.scrollIntoView({ block: "start" }),
+                          ),
+                        );
+                    }}
                   />
                 </div>
               </div>

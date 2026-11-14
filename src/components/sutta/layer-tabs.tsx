@@ -39,7 +39,7 @@ export function LayerTabs({
   state: LayerTabsState;
   /** 이 경에 있는 주석 층 */
   commentary: CommentaryLayer[];
-  /** 주석 문헌(청정도론) — 경 단추·주석 낱말·나란히 보기 없이 주석서·복주석서만 */
+  /** 주석 문헌(청정도론) — 본문 칸 단추를 '주석서'로 부르고, 따로 없는 주석서 칸 단추는 뺀다 */
   commentaryOnly?: boolean;
   isDesktop: boolean;
   className?: string;
@@ -103,7 +103,7 @@ export function LayerTabs({
             </button>
           ),
       )}
-      {isDesktop && commentary.length > 0 && !commentaryOnly ? (
+      {isDesktop && commentary.length > 0 ? (
         <button
           type="button"
           aria-pressed={shown.wordLinks}
@@ -120,7 +120,7 @@ export function LayerTabs({
           주석 낱말
         </button>
       ) : null}
-      {isDesktop && commentary.length > 0 && !commentaryOnly ? (
+      {isDesktop && commentary.length > 0 ? (
         <button
           type="button"
           aria-pressed={shown.parallel}

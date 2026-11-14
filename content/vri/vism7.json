@@ -567,2710 +567,7 @@
  },
  "unsure": [],
  "preface": [],
- "attha": {
-  "book": "Vism",
-  "bookName": "Visuddhimagga",
-  "vriCode": "e0101n.mul",
-  "from": 123,
-  "to": 166,
-  "paras": [
-   {
-    "para": 123,
-    "vripara": "123",
-    "refs": [
-     "vism7:123"
-    ],
-    "lines": [
-     "<b>1. Buddhānussatikathā</b>",
-     "Asubhānantaraṃ uddiṭṭhāsu pana dasasu anussatīsu punappunaṃ uppajjanato satiyeva anussati, pavattitabbaṭṭhānamhiyeva vā pavattattā saddhāpabbajitassa kulaputtassa anurūpā satītipi anussati, buddhaṃ ārabbha uppannā anussati <b>buddhānussati,</b> buddhaguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Dhammaṃ ārabbha uppannā anussati <b>dhammānussati,</b> svākkhātatādidhammaguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Saṅghaṃ ārabbha uppannā anussati <b>saṅghānussati,</b> suppaṭipannatādisaṅghaguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Sīlaṃ ārabbha uppannā anussati <b>sīlānussati,</b> akhaṇḍatādisīlaguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Cāgaṃ ārabbha uppannā anussati <b>cāgānussati,</b> muttacāgatādicāgaguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Devatā ārabbha uppannā anussati <b>devatānussati,</b> devatā sakkhiṭṭhāne ṭhapetvā attano saddhādiguṇārammaṇāya satiyā etamadhivacanaṃ.",
-     "Maraṇaṃ ārabbha uppannā anussati <b>maraṇānussati,</b> jīvitindriyupacchedārammaṇāya satiyā etamadhivacanaṃ.",
-     "Kesādibhedaṃ rūpakāyaṃ gatā, kāye vā gatāti kāyagatā, kāyagatā ca sā sati cāti kāyagatasatīti vattabbe rassaṃ akatvā <b>kāyagatāsatī</b>ti vuttā, kesādikāyakoṭṭhāsanimittārammaṇāya satiyā etamadhivacanaṃ.",
-     "Ānāpāne ārabbha uppannā sati <b>ānāpānassati,</b> assāsapassāsanimittārammaṇāya satiyā etamadhivacanaṃ.",
-     "Upasamaṃ ārabbha uppannā anussati <b>upasamānussati,</b> sabbadukkhūpasamārammaṇāya satiyā etamadhivacanaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ],
-     [
-      "vism7:123"
-     ]
-    ]
-   },
-   {
-    "para": 124,
-    "vripara": "124",
-    "refs": [
-     "vism7:124"
-    ],
-    "lines": [
-     "Iti imāsu dasasu anussatīsu buddhānussatiṃ tāva bhāvetukāmena aveccappasādasamannāgatena yoginā patirūpasenāsane rahogatena paṭisallīnena ‘‘itipi so bhagavā arahaṃ sammāsambuddho vijjācaraṇasampanno sugato lokavidū anuttaro purisadammasārathi satthā devamanussānaṃ buddho bhagavā’’ti (a. ni. 6.10) evaṃ buddhassa bhagavato guṇā anussaritabbā.",
-     "Tatrāyaṃ anussaraṇanayo – so bhagavā itipi arahaṃ, itipi sammāsambuddho…pe… itipi bhagavāti anussarati.",
-     "Iminā ca iminā ca kāraṇenāti vuttaṃ hoti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:124"
-     ],
-     [
-      "vism7:124"
-     ],
-     [
-      "vism7:124"
-     ]
-    ]
-   },
-   {
-    "para": 125,
-    "vripara": "125",
-    "refs": [
-     "vism7:125"
-    ],
-    "lines": [
-     "Tattha ārakattā arīnaṃ arānañca hatattā paccayādīnaṃ arahattā pāpakaraṇe rahābhāvāti imehi tāva kāraṇehi so bhagavā <b>araha</b>nti anussarati.",
-     "Ārakā hi so sabbakilesehi suvidūravidūre ṭhito maggena savāsanānaṃ kilesānaṃ viddhaṃsitattāti <b>ārakattā arahaṃ</b>.",
-     "So tato ārakā nāma, yassa yenāsamaṅgitā;",
-     "Asamaṅgī ca dosehi, nātho tenā<b>rahaṃ</b> matoti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:125"
-     ],
-     [
-      "vism7:125"
-     ],
-     [
-      "vism7:125"
-     ],
-     [
-      "vism7:125"
-     ]
-    ]
-   },
-   {
-    "para": 126,
-    "vripara": "126",
-    "refs": [
-     "vism7:126"
-    ],
-    "lines": [
-     "Te cānena kilesārayo maggena hatāti <b>arīnaṃ hatattāpi arahaṃ</b>.",
-     "Yasmā rāgādisaṅkhātā, sabbepi arayo hatā;",
-     "Paññāsatthena nāthena, tasmāpi <b>arahaṃ</b> matoti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:126"
-     ],
-     [
-      "vism7:126"
-     ],
-     [
-      "vism7:126"
-     ]
-    ]
-   },
-   {
-    "para": 127,
-    "vripara": "127",
-    "refs": [
-     "vism7:127"
-    ],
-    "lines": [
-     "Yañcetaṃ avijjābhavataṇhāmayanābhi puññādiabhisaṅkhārāraṃ jarāmaraṇanemi āsavasamudayamayena akkhena vijjhitvā tibhavarathe samāyojitaṃ anādikālappavattaṃ saṃsāracakkaṃ, tassānena bodhimaṇḍe vīriyapādehi sīlapathaviyaṃ patiṭṭhāya saddhāhatthena kammakkhayakaraṃ ñāṇapharasuṃ gahetvā sabbe arā hatāti <b>arānaṃ hatattāpi arahaṃ</b>."
-    ],
-    "lineRefs": [
-     [
-      "vism7:127"
-     ]
-    ]
-   },
-   {
-    "para": 128,
-    "vripara": "128",
-    "refs": [
-     "vism7:128"
-    ],
-    "lines": [
-     "Atha vā saṃsāracakkanti anamataggaṃ saṃsāravaṭṭaṃ vuccati.",
-     "Tassa ca avijjā nābhi, mūlattā.",
-     "Jarāmaraṇaṃ nemi, pariyosānattā.",
-     "Sesā dasa dhammā arā, avijjāmūlakattā jarāmaraṇapariyantattā ca, tattha dukkhādīsu aññāṇaṃ avijjā.",
-     "Kāmabhave ca avijjā kāmabhave saṅkhārānaṃ paccayo hoti, rūpabhave avijjā rūpabhave saṅkhārānaṃ paccayo hoti, arūpabhave avijjā arūpabhave saṅkhārānaṃ paccayo hoti.",
-     "Kāmabhave saṅkhārā kāmabhave paṭisandhiviññāṇassa paccayā honti, esa nayo itaresu.",
-     "Kāmabhave paṭisandhiviññāṇaṃ kāmabhave nāmarūpassa paccayo hoti, tathā rūpabhave.",
-     "Arūpabhave nāmasseva paccayo hoti.",
-     "Kāmabhave nāmarūpaṃ kāmabhave saḷāyatanassa paccayo hoti, rūpabhave nāmarūpaṃ rūpabhave tiṇṇaṃ āyatanānaṃ paccayo hoti, arūpabhave nāmaṃ arūpabhave ekassa āyatanassa paccayo hoti.",
-     "Kāmabhave saḷāyatanaṃ kāmabhave chabbidhassa phassassa paccayo hoti, rūpabhave tīṇi āyatanāni rūpabhave tiṇṇaṃ phassānaṃ paccayā honti, arūpabhave ekaṃ āyatanaṃ arūpabhave ekassa phassassa paccayo hoti.",
-     "Kāmabhave cha phassā kāmabhave channaṃ vedanānaṃ paccayā honti, rūpabhave tayo phassā tattheva tissannaṃ, arūpabhave eko tattheva ekissā vedanāya paccayo hoti.",
-     "Kāmabhave cha vedanā kāmabhave channaṃ taṇhākāyānaṃ paccayā honti, rūpabhave tisso tattheva tiṇṇaṃ, arūpabhave ekā vedanā arūpabhave ekassa taṇhākāyassa paccayo hoti.",
-     "Tattha tattha sā sā taṇhā tassa tassa upādānassa, upādānādayo bhavādīnaṃ.",
-     "Kathaṃ?",
-     "Idhekacco kāme paribhuñjissāmīti kāmupādānapaccayā kāyena duccaritaṃ carati, vācāya duccaritaṃ carati, manasā duccaritaṃ carati, duccaritapāripūriyā apāye upapajjati.",
-     "Tatthassa upapattihetubhūtaṃ kammaṃ kammabhavo, kammanibbattā khandhā upapattibhavo, khandhānaṃ nibbatti jāti, paripāko jarā, bhedo maraṇaṃ.",
-     "Aparo saggasampattiṃ anubhavissāmīti tatheva sucaritaṃ carati, sucaritapāripūriyā sagge upapajjati.",
-     "Tatthassa upapattihetubhūtaṃ kammaṃ kammabhavoti so eva nayo.",
-     "Aparo pana brahmalokasampattiṃ anubhavissāmīti kāmupādānapaccayāeva mettaṃ bhāveti, karuṇaṃ, muditaṃ, upekkhaṃ bhāveti, bhāvanāpāripūriyā brahmaloke nibbattati.",
-     "Tatthassa nibbattihetubhūtaṃ kammaṃ kammabhavoti so eva nayo.",
-     "Aparo arūpabhave sampattiṃ anubhavissāmīti tatheva ākāsānañcāyatanādisamāpattiyo bhāveti, bhāvanāpāripūriyā tattha tattha nibbattati.",
-     "Tatthassa nibbattihetubhūtaṃ kammaṃ kammabhavo, kammanibbattā khandhā upapattibhavo, khandhānaṃ nibbatti jāti, paripāko jarā, bhedo maraṇanti.",
-     "Esa nayo sesupādānamūlikāsupi yojanāsu.",
-     "Evaṃ ayaṃ avijjā hetu, saṅkhārā hetusamuppannā, ubhopete hetusamuppannāti paccayapariggahe paññā dhammaṭṭhitiñāṇaṃ.",
-     "Atītampi addhānaṃ anāgatampi addhānaṃ avijjā hetu, saṅkhārā hetusamuppannā, ubhopete hetusamuppannāti paccayapariggahe paññā dhammaṭṭhitiñāṇanti eteneva nayena sabbapadāni vitthāretabbāni.",
-     "Tattha avijjāsaṅkhārā eko saṅkhepo, viññāṇanāmarūpasaḷāyatanaphassavedanā eko, taṇhupādānabhavā eko, jātijarāmaraṇaṃ eko.",
-     "Purimasaṅkhepo cettha atīto addhā, dve majjhimā paccuppanno, jātijarāmaraṇaṃ anāgato.",
-     "Avijjāsaṅkhāraggahaṇena cettha taṇhupādānabhavā gahitāva hontīti ime pañca dhammā atīte kammavaṭṭaṃ, viññāṇādayo pañca etarahi vipākavaṭṭaṃ, taṇhupādānabhavaggahaṇena avijjāsaṅkhārā gahitāva hontīti ime pañca dhammā etarahi kammavaṭṭaṃ, jātijarāmaraṇāpadesena viññāṇādīnaṃ niddiṭṭhattā ime pañca dhammā āyatiṃ vipākavaṭṭaṃ.",
-     "Te ākārato vīsatividhā honti.",
-     "Saṅkhāraviññāṇānañcettha antarā eko sandhi, vedanātaṇhānamantarā eko, bhavajātīnamantarā ekoti, iti bhagavā etaṃ catusaṅkhepaṃ tiyaddhaṃ vīsatākāraṃ tisandhiṃ paṭiccasamuppādaṃ sabbākārato jānāti passati aññāti paṭivijjhati.",
-     "Taṃ ñātaṭṭhena ñāṇaṃ, pajānanaṭṭhena paññā, tena vuccati paccayapariggahe paññā dhammaṭṭhitiñāṇanti.",
-     "Iminā dhammaṭṭhitiñāṇena bhagavā te dhamme yathābhūtaṃ ñatvā tesu nibbindanto virajjanto vimuccanto vuttappakārassa imassa saṃsāracakkassa are hani vihani viddhaṃsesi.",
-     "Evampi <b>arānaṃ hatattā arahaṃ</b>.",
-     "Arā saṃsāracakkassa, hatā ñāṇāsinā yato;",
-     "Lokanāthena tenesa, <b>araha</b>nti pavuccati."
-    ],
-    "lineRefs": [
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ],
-     [
-      "vism7:128"
-     ]
-    ]
-   },
-   {
-    "para": 129,
-    "vripara": "129",
-    "refs": [
-     "vism7:129"
-    ],
-    "lines": [
-     "Aggadakkhiṇeyyattā ca cīvarādipaccaye arahati pūjāvisesañca.",
-     "Teneva ca uppanne tathāgate yekeci mahesakkhā devamanussā, na te aññattha pūjaṃ karonti.",
-     "Tathā hi brahmā sahampati sinerumattena ratanadāmena tathāgataṃ pūjesi.",
-     "Yathābalañca aññe devā manussā ca bimbisārakosalarājādayo.",
-     "Parinibbutampi ca bhagavantaṃ uddissa channavutikoṭidhanaṃ vissajjetvā asokamahārājā sakalajambudīpe caturāsītivihārasahassāni patiṭṭhāpesi.",
-     "Ko pana vādo aññesaṃ pūjāvisesānanti <b>paccayādīnaṃ arahattāpi arahaṃ</b>.",
-     "Pūjāvisesaṃ saha paccayehi,",
-     "Yasmā ayaṃ arahati lokanātho;",
-     "Atthānurūpaṃ <b>araha</b>nti loke,",
-     "Tasmā jino arahati nāmametaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ],
-     [
-      "vism7:129"
-     ]
-    ]
-   },
-   {
-    "para": 130,
-    "vripara": "130",
-    "refs": [
-     "vism7:130"
-    ],
-    "lines": [
-     "Yathā ca loke yekeci paṇḍitamānino bālā asilokabhayena raho pāpaṃ karonti, evamesa na kadāci karotīti <b>pāpakaraṇe rahābhāvatopi arahaṃ</b>.",
-     "Yasmā natthi raho nāma, pāpakammesu tādino;",
-     "Rahābhāvena tenesa, <b>arahaṃ</b> iti vissuto.",
-     "Evaṃ sabbathāpi –",
-     "Ārakattā hatattā ca, kilesārīna so muni;",
-     "Hatasaṃsāracakkāro, paccayādīna cāraho;",
-     "Na raho karoti pāpāni, <b>arahaṃ</b> tena vuccatīti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ],
-     [
-      "vism7:130"
-     ]
-    ]
-   },
-   {
-    "para": 131,
-    "vripara": "131",
-    "refs": [
-     "vism7:131"
-    ],
-    "lines": [
-     "Sammā sāmañca sabbadhammānaṃ buddhattā pana <b>sammāsambuddho</b>.",
-     "Tathāhi esa sabbadhamme sammā sāmañca buddho, abhiññeyye dhamme abhiññeyyato buddho, pariññeyye dhamme pariññeyyato, pahātabbe dhamme pahātabbato, sacchikātabbe dhamme sacchikātabbato, bhāvetabbe dhamme bhāvetabbato.",
-     "Teneva cāha –",
-     "Abhiññeyyaṃ abhiññātaṃ, bhāvetabbañca bhāvitaṃ;",
-     "Pahātabbaṃ pahīnaṃ me, tasmā buddhosmi brāhmaṇāti. (ma. ni. 2.399; su. ni. 563);"
-    ],
-    "lineRefs": [
-     [
-      "vism7:131"
-     ],
-     [
-      "vism7:131"
-     ],
-     [
-      "vism7:131"
-     ],
-     [
-      "vism7:131"
-     ],
-     [
-      "vism7:131"
-     ]
-    ]
-   },
-   {
-    "para": 132,
-    "vripara": "132",
-    "refs": [
-     "vism7:132"
-    ],
-    "lines": [
-     "Apica cakkhuṃ dukkhasaccaṃ, tassa mūlakāraṇabhāvena samuṭṭhāpikā purimataṇhā samudayasaccaṃ, ubhinnaṃ appavatti nirodhasaccaṃ, nirodhapajānanā paṭipadā maggasaccanti evaṃ ekekapaduddhārenāpi sabbadhamme sammā sāmañca buddho, esa nayo sotaghānajivhākāyamanesu.",
-     "Eteneva nayena rūpādīni cha āyatanāni, cakkhuviññāṇādayo chaviññāṇakāyā, cakkhusamphassādayo cha phassā, cakkhusamphassajādayo cha vedanā, rūpasaññādayo cha saññā, rūpasañcetanādayo cha cetanā, rūpataṇhādayo cha taṇhākāyā, rūpavitakkādayo cha vitakkā, rūpavicārādayo cha vicārā, rūpakkhandhādayo pañcakkhandhā, dasa kasiṇāni, dasa anussatiyo, uddhumātakasaññādivasena dasa saññā, kesādayo dvattiṃsākārā, dvādasāyatanāni, aṭṭhārasa dhātuyo, kāmabhavādayo nava bhavā, paṭhamādīni cattāri jhānāni, mettābhāvanādayo catasso appamaññā, catasso arūpasamāpattiyo, paṭilomato jarāmaraṇādīni, anulomato avijjādīni paṭiccasamuppādaṅgāni ca yojetabbāni.",
-     "Tatrāyaṃ ekapadayojanā, jarāmaraṇaṃ dukkhasaccaṃ, jāti samudayasaccaṃ, ubhinnampi nissaraṇaṃ nirodhasaccaṃ, nirodhapajānanā paṭipadā maggasaccanti evamekekapaduddhārena sabbadhamme sammā sāmañca buddho anubuddho paṭibuddho.",
-     "Tena vuttaṃ – ‘‘sammā sāmañca sabbadhammānaṃ buddhattā pana sammāsambuddho’’ti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:132"
-     ],
-     [
-      "vism7:132"
-     ],
-     [
-      "vism7:132"
-     ],
-     [
-      "vism7:132"
-     ]
-    ]
-   },
-   {
-    "para": 133,
-    "vripara": "133",
-    "refs": [
-     "vism7:133"
-    ],
-    "lines": [
-     "Vijjāhi pana caraṇena ca sampannattā <b>vijjācaraṇasampanno</b>.",
-     "Tattha <b>vijjā</b>ti tissopi vijjā aṭṭhapi vijjā.",
-     "Tisso vijjā bhayabheravasutte (ma. ni. 1.52 ādayo) vuttanayeneva veditabbā, aṭṭha ambaṭṭhasutte (dī. ni. 1.278 ādayo).",
-     "Tatra hi vipassanāñāṇena manomayiddhiyā ca saha cha abhiññā pariggahetvā aṭṭha vijjā vuttā.",
-     "<b>Caraṇa</b>nti sīlasaṃvaro, indriyesu guttadvāratā, bhojane mattaññutā, jāgariyānuyogo, satta saddhammā, cattāri rūpāvacarajjhānānīti ime pannarasa dhammā veditabbā.",
-     "Imeyeva hi pannarasa dhammā yasmā etehi carati ariyasāvako gacchati amataṃ disaṃ, tasmā caraṇanti vuttā.",
-     "Yathāha – ‘‘idha, mahānāma, ariyasāvako sīlavā hotī’’ti (ma. ni. 2.24) sabbaṃ majjhimapaṇṇāsake vuttanayeneva veditabbaṃ.",
-     "Bhagavā imāhi vijjāhi iminā ca caraṇena samannāgato.",
-     "Tena vuccati vijjācaraṇasampannoti.",
-     "Tattha vijjāsampadā bhagavato sabbaññutaṃ pūretvā ṭhitā.",
-     "Caraṇasampadā mahākāruṇikataṃ.",
-     "So sabbaññutāya sabbasattānaṃ atthānatthaṃ ñatvā mahākāruṇikatāya anatthaṃ parivajjetvā atthe niyojeti.",
-     "Yathā taṃ vijjācaraṇasampanno.",
-     "Tenassa sāvakā suppaṭipannā honti, no duppaṭipannā vijjācaraṇavipannānaṃ sāvakā attantapādayo viya."
-    ],
-    "lineRefs": [
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ],
-     [
-      "vism7:133"
-     ]
-    ]
-   },
-   {
-    "para": 134,
-    "vripara": "134",
-    "refs": [
-     "vism7:134"
-    ],
-    "lines": [
-     "Sobhanagamanattā, sundaraṃ ṭhānaṃ gatattā, sammā gatattā, sammā ca gadattā <b>sugato</b>.",
-     "Gamanampi hi gatanti vuccati.",
-     "Tañca bhagavato sobhanaṃ parisuddhamanavajjaṃ.",
-     "Kiṃ pana tanti?",
-     "Ariyamaggo.",
-     "Tena hesa gamanena khemaṃ disaṃ asajjamāno gatoti <b>sobhanagamanattā sugato</b>.",
-     "Sundarañcesa ṭhānaṃ gato amataṃ nibbānanti <b>sundaraṃ ṭhānaṃ gatattāpi sugato</b>.",
-     "Sammā ca gato tena tena maggena pahīne kilese puna apaccāgacchanto.",
-     "Vuttañhetaṃ – ‘‘sotāpattimaggena ye kilesā pahīnā, te kilese na puneti na pacceti na paccāgacchatīti sugato…pe… arahattamaggena ye kilesā pahīnā, te kilese na puneti na pacceti na paccāgacchatīti sugato’’ti, sammā vā gato dīpaṅkarapādamūlato pabhuti yāva bodhimaṇḍā tāva samatiṃsapāramīpūrikāya sammāpaṭipattiyā sabbalokassa hitasukhameva karonto sassataṃ, ucchedaṃ, kāmasukhaṃ, attakilamathanti ime ca ante anupagacchanto gatoti <b>sammā gatattāpi sugato</b>.",
-     "Sammā cesa gadati yuttaṭṭhāne yuttameva vācaṃ bhāsatīti <b>sammā gadattāpi sugato</b>.",
-     "Tatridaṃ sādhakasuttaṃ ‘‘yaṃ tathāgato vācaṃ jānāti abhūtaṃ atacchaṃ anatthasañhitaṃ, sā ca paresaṃ appiyā amanāpā, na taṃ tathāgato vācaṃ bhāsati.",
-     "Yampi tathāgato vācaṃ jānāti bhūtaṃ tacchaṃ anatthasañhitaṃ, sā ca paresaṃ appiyā amanāpā, tampi tathāgato vācaṃ na bhāsati.",
-     "Yañca kho tathāgato vācaṃ jānāti bhūtaṃ tacchaṃ atthasañhitaṃ, sā ca paresaṃ appiyā amanāpā, tatra kālaññū tathāgato hoti tassā vācāya veyyākaraṇāya.",
-     "Yaṃ tathāgato vācaṃ jānāti abhūtaṃ atacchaṃ anatthasañhitaṃ, sā ca paresaṃ piyā manāpā, na taṃ tathāgato vācaṃ bhāsati.",
-     "Yampi tathāgato vācaṃ jānāti bhūtaṃ tacchaṃ anatthasañhitaṃ, sā ca paresaṃ piyā manāpā, tampi tathāgato vācaṃ na bhāsati.",
-     "Yañca kho tathāgato vācaṃ jānāti bhūtaṃ tacchaṃ atthasañhitaṃ, sā ca paresaṃ piyā manāpā, tatra kālaññū tathāgato hoti tassā vācāya veyyākaraṇāyā’’ti (ma. ni. 2.86).",
-     "Evaṃ <b>sammā gadattāpi sugato</b>ti veditabbo."
-    ],
-    "lineRefs": [
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ],
-     [
-      "vism7:134"
-     ]
-    ]
-   },
-   {
-    "para": 135,
-    "vripara": "135",
-    "refs": [
-     "vism7:135"
-    ],
-    "lines": [
-     "Sabbathāpi viditalokattā pana <b>lokavidū</b>.",
-     "So hi bhagavā sabhāvato samudayato nirodhato nirodhūpāyatoti sabbathā lokaṃ avedi aññāsi paṭivijjhi.",
-     "Yathāha – ‘‘yattha kho, āvuso, na jāyati na jīyati na mīyati na cavati na upapajjati, nāhaṃ taṃ gamanena lokassa antaṃ ñāteyyaṃ daṭṭheyyaṃ patteyyanti vadāmi, na cāhaṃ, āvuso, apatvāva lokassa antaṃ dukkhassa antakiriyaṃ vadāmi.",
-     "Api cāhaṃ, āvuso, imasmiññeva byāmamatte kaḷevare sasaññimhi samanake lokañca paññapemi lokasamudayañca lokanirodhañca lokanirodhagāminiñca paṭipadaṃ.",
-     "Gamanena na pattabbo, lokassanto kudācanaṃ;",
-     "Na ca apatvā lokantaṃ, dukkhā atthi pamocanaṃ.",
-     "Tasmā have lokavidū sumedho,",
-     "Lokantagū vūsitabrahmacariyo;",
-     "Lokassa antaṃ samitāvi ñatvā,",
-     "Nāsīsati lokamimaṃ parañcāti. (saṃ. ni. 1.107; a. ni. 4.45);"
-    ],
-    "lineRefs": [
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ],
-     [
-      "vism7:135"
-     ]
-    ]
-   },
-   {
-    "para": 136,
-    "vripara": "136",
-    "refs": [
-     "vism7:136"
-    ],
-    "lines": [
-     "Apica tayo lokā saṅkhāraloko sattaloko okāsalokoti.",
-     "Tattha eko loko sabbe sattā āhāraṭṭhitikāti (paṭi. ma. 1.112) āgataṭṭhāne saṅkhāraloko veditabbo.",
-     "Sassato lokoti vā asassato lokoti vāti (dī. ni. 1.421) āgataṭṭhāne sattaloko.",
-     "Yāvatā candimasūriyā pariharanti, disā bhanti virocamānā;",
-     "Tāva sahassadhā loko, ettha te vattatī vasoti. (ma. ni. 1.503) –",
-     "Āgataṭṭhāne okāsaloko.",
-     "Tampi bhagavā sabbathā avedi.",
-     "Tathā hissa ‘‘eko loko sabbe sattā āhāraṭṭhitikā.",
-     "Dve lokā nāmañca rūpañca.",
-     "Tayo lokā tisso vedanā.",
-     "Cattāro lokā cattāro āhārā.",
-     "Pañca lokā pañcupādānakkhandhā.",
-     "Cha lokā cha ajjhattikāni āyatanāni.",
-     "Satta lokā satta viññāṇaṭṭhitiyo.",
-     "Aṭṭha lokā aṭṭha lokadhammā.",
-     "Nava lokā nava sattāvāsā.",
-     "Dasa lokā dasāyatanāni.",
-     "Dvādasa lokā dvādasāyatanāni.",
-     "Aṭṭhārasa lokā aṭṭhārasa dhātuyo’’ti (paṭi. ma. 1.112) ayaṃ saṅkhāralokopi sabbathā vidito.",
-     "Yasmā panesa sabbesampi sattānaṃ āsayaṃ jānāti, anusayaṃ jānāti, caritaṃ jānāti, adhimuttiṃ jānāti, apparajakkhe mahārajakkhe, tikkhindriye mudindriye, svākāre dvākāre, suviññāpaye duviññāpaye, bhabbe abhabbe satte jānāti.",
-     "Tasmāssa sattalokopi sabbathā vidito."
-    ],
-    "lineRefs": [
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ],
-     [
-      "vism7:136"
-     ]
-    ]
-   },
-   {
-    "para": 137,
-    "vripara": "137",
-    "refs": [
-     "vism7:137"
-    ],
-    "lines": [
-     "Yathā ca sattaloko, evaṃ okāsalokopi.",
-     "Tathā hesa ekaṃ cakkavāḷaṃ āyāmato ca vitthārato ca yojanānaṃ dvādasasatasahassāni catutiṃsasatāni ca paññāsañca yojanāni.",
-     "Parikkhepato pana –",
-     "Sabbaṃ satasahassāni, chattiṃsaparimaṇḍalaṃ;",
-     "Dasa ceva sahassāni, aḍḍhuḍḍhāni satāni ca.",
-     "Tattha –",
-     "Duve satasahassāni, cattāri nahutāni ca;",
-     "Ettakaṃ bahalattena, saṅkhātāyaṃ vasundharā.",
-     "Tassāyeva sandhārakaṃ –",
-     "Cattāri satasahassāni, aṭṭheva nahutāni ca;",
-     "Ettakaṃ bahalattena, jalaṃ vāte patiṭṭhitaṃ.",
-     "Tassāpi sandhārako –",
-     "Nava satasahassāni, māluto nabhamuggato;",
-     "Saṭṭhiñceva sahassāni, esā lokassa saṇṭhiti.",
-     "Evaṃ saṇṭhite cettha yojanānaṃ –",
-     "Caturāsīti sahassāni, ajjhogāḷho mahaṇṇave;",
-     "Accuggato tāvadeva, sineru pabbatuttamo.",
-     "Tato upaḍḍhupaḍḍhena, pamāṇena yathākkamaṃ;",
-     "Ajjhogāḷhuggatā dibbā, nānāratanacittitā.",
-     "Yugandharo īsadharo, karavīko sudassano;",
-     "Nemindharo vinatako, assakaṇṇo giri brahā.",
-     "Ete satta mahāselā, sinerussa samantato;",
-     "Mahārājānamāvāsā, devayakkhanisevitā.",
-     "Yojanānaṃ satānucco, himavā pañca pabbato;",
-     "Yojanānaṃ sahassāni, tīṇi āyatavitthato.",
-     "Caturāsītisahassehi, kūṭehi paṭimaṇḍito;",
-     "Tipañcayojanakkhandha-parikkhepā nagavhayā.",
-     "Paññāsayojanakkhandha-sākhāyāmā samantato;",
-     "Satayojanavitthiṇṇā, tāvadeva ca uggatā;",
-     "Jambū yassānubhāvena, jambudīpo pakāsito.",
-     "Yañcetaṃ jambuyā pamāṇaṃ, etadeva asurānaṃ citrapāṭaliyā, garuḷānaṃ simbalirukkhassa, aparagoyāne kadambassa, uttarakurūsu kapparukkhassa, pubbavidehe sirīsassa, tāvatiṃsesu pāricchattakassāti.",
-     "Tenāhu porāṇā –",
-     "‘‘Pāṭalī simbalī jambū, devānaṃ pāricchattako;",
-     "Kadambo kapparukkho ca, sirīsena bhavati sattamanti.",
-     "‘‘Dveasīti sahassāni, ajjhogāḷho mahaṇṇave;",
-     "Accuggato tāvadeva, cakkavāḷasiluccayo;",
-     "Parikkhipitvā taṃ sabbaṃ, lokadhātumayaṃ ṭhito’’ti.",
-     "Tattha candamaṇḍalaṃ ekūnapaññāsayojanaṃ.",
-     "Sūriyamaṇḍalaṃ paññāsayojanaṃ.",
-     "Tāvatiṃsabhavanaṃ dasasahassayojanaṃ.",
-     "Tathā asurabhavanaṃ avīcimahānirayo jambudīpo ca.",
-     "Aparagoyānaṃ sattasahassayojanaṃ.",
-     "Tathā pubbavidehaṃ.",
-     "Uttarakuru aṭṭhasahassayojanaṃ.",
-     "Ekameko cettha mahādīpo pañcasatapañcasataparittadīpaparivāro.",
-     "Taṃ sabbampi ekaṃ cakkavāḷaṃ ekā lokadhātu.",
-     "Tadantaresu lokantarikanirayā.",
-     "Evaṃ anantāni cakkavāḷāni anantā lokadhātuyo bhagavā anantena buddhañāṇena avedi aññāsi paṭivijjhi.",
-     "Evamassa okāsalokopi sabbathā vidito.",
-     "Evampi <b>sabbathā viditalokattā lokavidū</b>."
-    ],
-    "lineRefs": [
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ],
-     [
-      "vism7:137"
-     ]
-    ]
-   },
-   {
-    "para": 138,
-    "vripara": "138",
-    "refs": [
-     "vism7:138"
-    ],
-    "lines": [
-     "Attanā pana guṇehi visiṭṭhatarassa kassaci abhāvato natthi etassa uttaroti <b>anuttaro</b>.",
-     "Tathā hesa sīlaguṇenāpi sabbaṃ lokamabhibhavati, samādhipaññāvimuttivimuttiñāṇadassanaguṇenāpi.",
-     "Sīlaguṇenāpi asamo asamasamo appaṭimo appaṭibhāgo appaṭipuggalo…pe… vimuttiñāṇadassanaguṇenāpi.",
-     "Yathāha – ‘‘na kho panāhaṃ samanupassāmi sadevake loke samārake…pe… sadevamanussāya pajāya attanā sīlasampannatara’’nti vitthāro.",
-     "Evaṃ aggapasādasuttādīni (a. ni. 4.34; itivu. 90) ‘‘na me ācariyo atthī’’tiādikā (ma. ni. 1.285; mahāva. 11) gāthāyo ca vitthāretabbā."
-    ],
-    "lineRefs": [
-     [
-      "vism7:138"
-     ],
-     [
-      "vism7:138"
-     ],
-     [
-      "vism7:138"
-     ],
-     [
-      "vism7:138"
-     ],
-     [
-      "vism7:138"
-     ]
-    ]
-   },
-   {
-    "para": 139,
-    "vripara": "139",
-    "refs": [
-     "vism7:139"
-    ],
-    "lines": [
-     "Purisadamme sāretīti <b>purisadammasārathi</b>.",
-     "Dameti vinetīti vuttaṃ hoti.",
-     "Tattha <b>purisadammā</b>ti adantā dametuṃ yuttā tiracchānapurisāpi manussapurisāpi amanussapurisāpi.",
-     "Tathā hi bhagavatā tiracchānapurisāpi apalālo nāgarājā, cūḷodaro, mahodaro, aggisikho, dhūmasikho, aravāḷo nāgarājā, dhanapālako hatthīti evamādayo damitā nibbisā katā saraṇesu ca sīlesu ca patiṭṭhāpitā, manussapurisāpi saccakanigaṇṭhaputtaambaṭṭhamāṇavapokkharasāti soṇadantakūṭadantādayo, amanussapurisāpi āḷavakasūcilomakharalomayakkhasakkadevarājādayo damitā vinītā vicitrehi vinayanūpāyehi. ‘‘Ahaṃ kho, kesi, purisadamme saṇhenapi vinemi, pharusenapi vinemi, saṇhapharusenapi vinemī’’ti (a. ni. 4.11) idañcettha suttaṃ vitthāretabbaṃ.",
-     "Apica bhagavā visuddhasīlādīnaṃ paṭhamajjhānādīni sotāpannādīnañca uttari maggapaṭipadaṃ ācikkhanto dantepi dametiyeva.",
-     "Atha vā anuttaro purisadammasārathīti ekamevidaṃ atthapadaṃ.",
-     "Bhagavā hi tathā purisadamme sāreti, yathā ekapallaṅkeneva nisinnā aṭṭha disā asajjamānā dhāvanti.",
-     "Tasmā <b>anuttaro purisadammasārathī</b>ti vuccati. ‘‘Hatthidamakena, bhikkhave, hatthidammo sārito ekaṃyeva disaṃ dhāvatī’’ti idañcettha suttaṃ (ma. ni. 3.312) vitthāretabbaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ],
-     [
-      "vism7:139"
-     ]
-    ]
-   },
-   {
-    "para": 140,
-    "vripara": "140",
-    "refs": [
-     "vism7:140"
-    ],
-    "lines": [
-     "Diṭṭhadhammikasamparāyikaparamatthehi yathārahaṃ anusāsatīti <b>satthā</b>.",
-     "Apica satthā viyāti <b>satthā,</b> bhagavā satthavāho.",
-     "Yathā satthavāho satthe kantāraṃ tāreti corakantāraṃ tāreti vāḷakantāraṃ tāreti dubbhikkhakantāraṃ tāreti nirudakakantāraṃ tāreti uttāreti nittāreti patāreti khemantabhūmiṃ sampāpeti, evameva bhagavā satthā satthavāho satte kantāraṃ tāreti, jātikantāraṃ tāretītiādinā niddesanayenapettha attho veditabbo.",
-     "<b>Devamanussāna</b>nti devānañca manussānañca.",
-     "Ukkaṭṭhaparicchedavasena, bhabbapuggalaparicchedavasena cetaṃ vuttaṃ.",
-     "Bhagavā pana tiracchānagatānampi anusāsanippadānena satthāyeva.",
-     "Tepi hi bhagavato dhammassavanena upanissayasampattiṃ patvā tāya eva upanissayasampattiyā dutiye vā tatiye vā attabhāve maggaphalabhāgino honti.",
-     "Maṇḍūkadevaputtādayo cettha nidassanaṃ.",
-     "Bhagavati kira gaggarāya pokkharaṇiyā tīre campānagaravāsīnaṃ dhammaṃ desiyamāne eko maṇḍūko bhagavato sare nimittaṃ aggahesi, taṃ eko vacchapālako daṇḍaṃ olubbha tiṭṭhanto sīse sannirumbhitvā aṭṭhāsi.",
-     "So tāvadeva kālaṅkatvā tāvatiṃsabhavane dvādasayojanike kanakavimāne nibbatti.",
-     "Suttappabuddho viya ca tattha accharāsaṅghaparivutaṃ attānaṃ disvā ‘‘are ahampi nāma idha nibbatto, kiṃ nu kho kammamakāsi’’nti āvajjento na aññaṃ kiñci addasa aññatra bhagavato sare nimittaggāhā.",
-     "So tāvadeva saha vimānena āgantvā bhagavato pāde sirasā vandi.",
-     "Bhagavā jānantova pucchi –",
-     "‘‘Ko me vandati pādāni, iddhiyā yasasā jalaṃ;",
-     "Abhikkantena vaṇṇena, sabbā obhāsayaṃ disā’’ti.",
-     "Maṇḍūkohaṃ pure āsiṃ, udake vārigocaro;",
-     "Tava dhammaṃ suṇantassa, avadhi vacchapālakoti.",
-     "Bhagavā tassa dhammaṃ desesi.",
-     "Caturāsītiyā pāṇasahassānaṃ dhammābhisamayo ahosi.",
-     "Devaputtopi sotāpattiphale patiṭṭhāya sitaṃ katvā pakkamīti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ],
-     [
-      "vism7:140"
-     ]
-    ]
-   },
-   {
-    "para": 141,
-    "vripara": "141",
-    "refs": [
-     "vism7:141"
-    ],
-    "lines": [
-     "Yaṃ pana kiñci atthi ñeyyaṃ nāma, sabbasseva buddhattā vimokkhantikaññāṇavasena <b>buddho</b>.",
-     "Yasmā vā cattāri saccāni attanāpi bujjhi, aññepi satte bodhesi, tasmā evamādīhipi kāraṇehi <b>buddho</b>.",
-     "Imassa ca panatthassa viññāpanatthaṃ ‘‘bujjhitā saccānīti buddho.",
-     "Bodhetā pajāyāti buddho’’ti evaṃ pavatto sabbopi niddesanayo (mahāni. 192) paṭisambhidānayo (paṭi. ma. 1.162) vā vitthāretabbo."
-    ],
-    "lineRefs": [
-     [
-      "vism7:141"
-     ],
-     [
-      "vism7:141"
-     ],
-     [
-      "vism7:141"
-     ],
-     [
-      "vism7:141"
-     ]
-    ]
-   },
-   {
-    "para": 142,
-    "vripara": "142",
-    "refs": [
-     "vism7:142"
-    ],
-    "lines": [
-     "<b>Bhagavā</b>ti idaṃ panassa guṇavisiṭṭhasabbasattuttamagarugāravādhivacanaṃ.",
-     "Tenāhu porāṇā –",
-     "‘‘Bhagavāti vacanaṃ seṭṭhaṃ, bhagavāti vacanamuttamaṃ;",
-     "Garugāravayutto so, <b>bhagavā</b> tena vuccatī’’ti.",
-     "Catubbidhaṃ vā nāmaṃ āvatthikaṃ liṅgikaṃ nemittikaṃ adhiccasamuppannanti.",
-     "Adhiccasamuppannaṃ nāma lokiyavohārena yadicchakanti vuttaṃ hoti.",
-     "Tattha vaccho dammo balībaddoti evamādi <b>āvatthikaṃ</b>.",
-     "Daṇḍī chattī sikhī karīti evamādi <b>liṅgikaṃ</b>.",
-     "Tevijjo chaḷabhiññoti evamādi <b>nemittikaṃ</b>.",
-     "Sirivaḍḍhako dhanavaḍḍhakoti evamādi vacanatthaṃ anapekkhitvā pavattaṃ <b>adhiccasamuppannaṃ</b>.",
-     "Idaṃ pana <b>bhagavā</b>ti nāmaṃ nemittikaṃ, na mahāmāyāya, na suddhodanamahārājena, na asītiyā ñātisahassehi kataṃ, na sakkasantusitādīhi devatāvisesehi.",
-     "Vuttampi cetaṃ dhammasenāpatinā ‘‘bhagavāti netaṃ nāmaṃ mātarā kataṃ…pe… vimokkhantikametaṃ buddhānaṃ bhagavantānaṃ bodhiyā mūle saha sabbaññutaññāṇassa paṭilābhā sacchikā paññatti yadidaṃ bhagavā’’ti (mahāni. 84)."
-    ],
-    "lineRefs": [
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ],
-     [
-      "vism7:142"
-     ]
-    ]
-   },
-   {
-    "para": 143,
-    "vripara": "143",
-    "refs": [
-     "vism7:143"
-    ],
-    "lines": [
-     "Yaṃguṇanemittikañcetaṃ nāmaṃ, tesaṃ guṇānaṃ pakāsanatthaṃ imaṃ gāthaṃ vadanti –",
-     "‘‘Bhagī bhajī bhāgi vibhattavā iti,",
-     "Akāsi bhagganti garūti bhāgyavā;",
-     "Bahūhi ñāyehi subhāvitattano,",
-     "Bhavantago so <b>bhagavā</b>ti vuccatī’’ti. –",
-     "Niddese (mahāni. 84) vuttanayeneva cettha tesaṃ tesaṃ padānaṃ attho daṭṭhabbo."
-    ],
-    "lineRefs": [
-     [
-      "vism7:143"
-     ],
-     [
-      "vism7:143"
-     ],
-     [
-      "vism7:143"
-     ],
-     [
-      "vism7:143"
-     ],
-     [
-      "vism7:143"
-     ],
-     [
-      "vism7:143"
-     ]
-    ]
-   },
-   {
-    "para": 144,
-    "vripara": "144",
-    "refs": [
-     "vism7:144"
-    ],
-    "lines": [
-     "Ayaṃ pana aparo nayo.",
-     "Bhāgyavā bhaggavā yutto, bhagehi ca vibhattavā;",
-     "Bhattavā vantagamano, bhavesu <b>bhagavā</b> tatoti.",
-     "Tattha vaṇṇāgamo vaṇṇavipariyayotiādikaṃ niruttilakkhaṇaṃ gahetvā saddanayena vā pisodarādipakkhepalakkhaṇaṃ gahetvā yasmā lokiyalokuttarasukhābhinibbattakaṃ dānasīlādipārappattaṃ bhāgyamassa atthi, tasmā bhāgyavāti vattabbe <b>bhagavā</b>ti vuccatīti ñātabbaṃ.",
-     "Yasmā pana ahirikānottappakodhūpanāhamakkhapaḷāsaissāmacchariyamāyāsāṭheyyathambhasārambhamānātimānamadapamādataṇhāavijjā- tividhākusalamūladuccaritasaṃkilesamalavisamasaññāvitakkapapañcacatubbidhavipariyesa- āsavaganthaoghayogaagatitaṇhuppādupādānapañcacetokhīlavinibandhanīvaraṇābhinandanā- chavivādamūlataṇhākāyasattānusayaaṭṭhamicchattanavataṇhāmūlakadasākusalakammapathadvāsaṭṭhidiṭṭhigata- aṭṭhasatataṇhāvicaritappabhedasabbadarathapariḷāhakilesasatasahassāni, saṅkhepato vā pañca kilesakhandhaabhisaṅkhāradevaputtamaccumāre abhañji.",
-     "Tasmā bhaggattā etesaṃ parissayānaṃ bhaggavāti vattabbe <b>bhagavā</b>ti vuccati.",
-     "Āha cettha –",
-     "‘‘Bhaggarāgo bhaggadoso, bhaggamoho anāsavo;",
-     "Bhaggāssa pāpakā dhammā, <b>bhagavā</b> tena vuccatī’’ti.",
-     "Bhāgyavatāya cassa satapuññalakkhaṇadharassa rūpakāyasampatti dīpitā hoti.",
-     "Bhaggadosatāya dhammakāyasampatti.",
-     "Tathā lokiyasarikkhakānaṃ bahumatabhāvo, gahaṭṭhapabbajitehi abhigamanīyatā, abhigatānañca nesaṃ kāyacittadukkhāpanayane paṭibalabhāvo, āmisadānadhammadānehi upakāritā, lokiyalokuttarasukhehi ca saṃyojanasamatthatā dīpitā hoti.",
-     "Yasmā ca loke issariyadhammayasasirikāmapayattesu chasu dhammesu bhagasaddo pavattati, paramañcassa sakacitte issariyaṃ, aṇimālaṅghimādikaṃ vā lokiyasammataṃ sabbākāraparipūraṃ atthi.",
-     "Tathā lokuttaro dhammo.",
-     "Lokattayabyāpako yathābhuccaguṇādhigato ativiya parisuddho yaso.",
-     "Rūpakāyadassanabyāvaṭajananayanappasādajananasamatthā sabbākāraparipūrā sabbaṅgapaccaṅgasirī.",
-     "Yaṃ yaṃ etena icchitaṃ patthitaṃ attahitaṃ parahitaṃ vā, tassa tassa tatheva abhinipphannattā icchitatthanibbattisaññito kāmo.",
-     "Sabbalokagarubhāvappattihetubhūto sammāvāyāmasaṅkhāto payatto ca atthi.",
-     "Tasmā imehi bhagehi yuttattāpi bhagā assa santīti iminā atthena <b>bhagavā</b>ti vuccati.",
-     "Yasmā pana kusalādīhi bhedehi sabbadhamme, khandhāyatanadhātusaccaindriyapaṭiccasamuppādādīhi vā kusalādidhamme, pīḷanasaṅkhatasantāpavipariṇāmaṭṭhena vā dukkhaṃ ariyasaccaṃ, āyūhananidānasaṃyogapalibodhaṭṭhena samudayaṃ, nissaraṇavivekāsaṅkhataamataṭṭhena nirodhaṃ, niyyānikahetudassanādhipateyyaṭṭhena maggaṃ vibhattavā, vibhajitvā vivaritvā desitavāti vuttaṃ hoti.",
-     "Tasmā vibhattavāti vattabbe <b>bhagavā</b>ti vuccati.",
-     "Yasmā ca esa dibbabrahmaariyavihāre kāyacittaupadhiviveke suññatappaṇihitānimittavimokkhe aññe ca lokiyalokuttare uttarimanussadhamme bhaji sevi bahulaṃ akāsi, tasmā bhattavāti vattabbe <b>bhagavā</b>ti vuccati.",
-     "Yasmā pana tīsu bhavesu taṇhāsaṅkhātaṃ gamanaṃ anena vantaṃ, tasmā bhavesu vantagamanoti vattabbe bhavasaddato bhakāraṃ gamanasaddato gakāraṃ vantasaddato vakārañca dīghaṃ katvā ādāya <b>bhagavā</b>ti vuccati yathā loke mehanassa khassa mālāti vattabbe mekhalāti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ],
-     [
-      "vism7:144"
-     ]
-    ]
-   },
-   {
-    "para": 145,
-    "vripara": "145",
-    "refs": [
-     "vism7:145"
-    ],
-    "lines": [
-     "Tassevaṃ iminā ca iminā ca kāraṇena so bhagavā arahaṃ…pe… iminā ca iminā ca kāraṇena bhagavāti buddhaguṇe anussarato neva tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti, na dosapariyuṭṭhitaṃ, na mohapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Ujugatamevassa tasmiṃ samaye cittaṃ hoti tathāgatamārabbha (a. ni. 6.10).",
-     "Iccassa evaṃ rāgādipariyuṭṭhānābhāvena vikkhambhitanīvaraṇassa kammaṭṭhānābhimukhatāya ujugatacittassa buddhaguṇapoṇā vitakkavicārā pavattanti.",
-     "Buddhaguṇe anuvitakkayato anuvicārayato pīti uppajjati.",
-     "Pītimanassa pītipadaṭṭhānāya passaddhiyā kāyacittadarathā paṭippassambhanti.",
-     "Passaddhadarathassa kāyikampi cetasikampi sukhaṃ uppajjati.",
-     "Sukhino buddhaguṇārammaṇaṃ hutvā cittaṃ samādhiyatīti anukkamena ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Buddhaguṇānaṃ pana gambhīratāya nānappakāraguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ buddhaguṇānussaraṇavasena uppannattā buddhānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana buddhānussatiṃ anuyutto bhikkhu satthari sagāravo hoti sappatisso, saddhāvepullaṃ sativepullaṃ paññāvepullaṃ puññavepullañca adhigacchati, pītipāmojjabahulo hoti, bhayabheravasaho dukkhādhivāsanasamattho, satthārā saṃvāsasaññaṃ paṭilabhati.",
-     "Buddhaguṇānussatiyā ajjhāvutthañcassa sarīrampi cetiyagharamiva pūjārahaṃ hoti.",
-     "Buddhabhūmiyaṃ cittaṃ namati.",
-     "Vītikkamitabbavatthusamāyoge cassa sammukhā satthāraṃ passato viya hirottappaṃ paccupaṭṭhāti.",
-     "Uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, buddhānussatiyā sadāti.",
-     "Idaṃ tāva buddhānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ],
-     [
-      "vism7:145"
-     ]
-    ]
-   },
-   {
-    "para": 146,
-    "vripara": "146",
-    "refs": [
-     "vism7:146"
-    ],
-    "lines": [
-     "<b>2. Dhammānussatikathā</b>",
-     "Dhammānussatiṃ bhāvetukāmenāpi rahogatena paṭisallīnena ‘‘svākkhāto bhagavatā dhammo sandiṭṭhiko akāliko ehipassiko opaneyyiko paccattaṃ veditabbo viññūhī’’ti (a. ni. 6.10) evaṃ pariyattidhammassa ceva navavidhassa ca lokuttaradhammassa guṇā anussaritabbā."
-    ],
-    "lineRefs": [
-     [
-      "vism7:146"
-     ],
-     [
-      "vism7:146"
-     ]
-    ]
-   },
-   {
-    "para": 147,
-    "vripara": "147",
-    "refs": [
-     "vism7:147"
-    ],
-    "lines": [
-     "<b>Svākkhāto</b>ti imasmiṃ hi pade pariyattidhammopi saṅgahaṃ gacchati, itaresu lokuttaradhammova.",
-     "Tattha pariyattidhammo tāva svākkhāto ādimajjhapariyosānakalyāṇattā sātthasabyañjanakevalaparipuṇṇaparisuddhabrahmacariyappakāsanattā ca.",
-     "Yañhi bhagavā ekagāthampi deseti, sā samantabhaddakattā dhammassa paṭhamapādena ādikalyāṇā, dutiyatatiyapādehi majjhekalyāṇā, pacchimapādena pariyosānakalyāṇā.",
-     "Ekānusandhikaṃ suttaṃ nidānena ādikalyāṇaṃ, nigamanena pariyosānakalyāṇaṃ, sesena majjhekalyāṇaṃ.",
-     "Nānānusandhikaṃ suttaṃ paṭhamānusandhinā ādikalyāṇaṃ, pacchimena pariyosānakalyāṇaṃ, sesehi majjhekalyāṇaṃ.",
-     "Apica sanidānasauppattikattā ādikalyāṇaṃ, veneyyānaṃ anurūpato atthassa aviparītatāya ca hetudāharaṇayuttato ca majjhekalyāṇaṃ, sotūnaṃ saddhāpaṭilābhajananena nigamanena ca pariyosānakalyāṇaṃ.",
-     "Sakalopi sāsanadhammo attano atthabhūtena sīlena ādikalyāṇo, samathavipassanāmaggaphalehi majjhekalyāṇo, nibbānena pariyosānakalyāṇo.",
-     "Sīlasamādhīhi vā ādikalyāṇo, vipassanāmaggehi majjhekalyāṇo, phalanibbānehi pariyosānakalyāṇo.",
-     "Buddhasubodhitāya vā ādikalyāṇo, dhammasudhammatāya majjhekalyāṇo, saṅghasuppaṭippattiyā pariyosānakalyāṇo.",
-     "Taṃ sutvā tathatthāya paṭipannena adhigantabbāya abhisambodhiyā vā ādikalyāṇo, paccekabodhiyā majjhekalyāṇo, sāvakabodhiyā pariyosānakalyāṇo.",
-     "Suyyamāno cesa nīvaraṇavikkhambhanato savanenapi kalyāṇameva āvahatīti ādikalyāṇo, paṭipajjiyamāno samathavipassanāsukhāvahanato paṭipattiyāpi kalyāṇaṃ āvahatīti majjhekalyāṇo, tathāpaṭipanno ca paṭipattiphale niṭṭhite tādibhāvāvahanato paṭipattiphalenapi kalyāṇaṃ āvahatīti pariyosānakalyāṇoti evaṃ ādimajjhapariyosānakalyāṇattā svākkhāto.",
-     "Yaṃ panesa bhagavā dhammaṃ desento sāsanabrahmacariyaṃ maggabrahmacariyañca pakāseti nānānayehi dīpeti, taṃ yathānurūpaṃ atthasampattiyā sātthaṃ, byañjanasampattiyā sabyañjanaṃ.",
-     "Saṅkāsanapakāsanavivaraṇavibhajanauttānīkaraṇapaññattiatthapadasamāyogato sātthaṃ, akkharapadabyañjanākāraniruttiniddesasampattiyā sabyañjanaṃ.",
-     "Atthagambhīratāpaṭivedhagambhīratāhi sātthaṃ, dhammagambhīratādesanāgambhīratāhi sabyañjanaṃ.",
-     "Atthapaṭibhānapaṭisambhidāvisayato sātthaṃ, dhammaniruttipaṭisambhidāvisayato sabyañjanaṃ.",
-     "Paṇḍitavedanīyato parikkhakajanappasādakanti sātthaṃ, saddheyyato lokiyajanappasādakanti sabyañjanaṃ.",
-     "Gambhīrādhippāyato sātthaṃ, uttānapadato sabyañjanaṃ.",
-     "Upanetabbassa abhāvato sakalaparipuṇṇabhāvena kevalaparipuṇṇaṃ.",
-     "Apanetabbassa abhāvato niddosabhāvena parisuddhaṃ.",
-     "Apica paṭipattiyā adhigamabyattito sātthaṃ, pariyattiyā āgamabyattito sabyañjanaṃ, sīlādipañcadhammakkhandhayuttato kevalaparipuṇṇaṃ, nirupakkilesato nittaraṇatthāya pavattito lokāmisanirapekkhato ca parisuddhanti evaṃ sātthasabyañjanakevalaparipuṇṇaparisuddhabrahmacariyappakāsanato svākkhāto.",
-     "Atthavipallāsābhāvato vā suṭṭhu akkhātoti svākkhāto.",
-     "Yathā hi aññatitthiyānaṃ dhammassa attho vipallāsamāpajjati, antarāyikāti vuttadhammānaṃ antarāyikattābhāvato, niyyānikāti vuttadhammānaṃ niyyānikattābhāvato.",
-     "Tena te durakkhātadhammāyeva honti, na tathā bhagavato dhammassa attho vipallāsamāpajjati.",
-     "Ime dhammā antarāyikā, ime dhammā niyyānikāti evaṃ vuttadhammānaṃ tathābhāvānatikkamanatoti.",
-     "Evaṃ tāva pariyattidhammo svākkhāto.",
-     "Lokuttaradhammo pana nibbānānurūpāya paṭipattiyā paṭipadānurūpassa ca nibbānassa akkhātattā svākkhāto.",
-     "Yathāha – ‘‘supaññattā kho pana tena bhagavatā sāvakānaṃ nibbānagāminī paṭipadā saṃsandati nibbānañca paṭipadā ca.",
-     "Seyyathāpi nāma gaṅgodakaṃ yamunodakena saṃsandati sameti, evameva supaññattā (dī. ni. 2.296) tena bhagavatā sāvakānaṃ nibbānagāminī paṭipadā saṃsandati nibbānañca paṭipadā cā’’ti.",
-     "Ariyamaggo cettha antadvayaṃ anupagamma majjhimā paṭipadābhūtova ‘‘majjhimā paṭipadā’’ti akkhātattā svākkhāto.",
-     "Sāmaññaphalāni paṭipassaddhakilesāneva ‘‘paṭipassaddhakilesānī’’ti akkhātattā svākkhātāni.",
-     "Nibbānaṃ sassatāmatatāṇaleṇādisabhāvameva sassatādisabhāvavasena akkhātattā svākkhātanti evaṃ lokuttaradhammopi svākkhāto."
-    ],
-    "lineRefs": [
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ],
-     [
-      "vism7:147"
-     ]
-    ]
-   },
-   {
-    "para": 148,
-    "vripara": "148",
-    "refs": [
-     "vism7:148"
-    ],
-    "lines": [
-     "<b>Sandiṭṭhiko</b>ti ettha pana ariyamaggo tāva attano santāne rāgādīnaṃ abhāvaṃ karontena ariyapuggalena sāmaṃ daṭṭhabboti sandiṭṭhiko.",
-     "Yathāha –‘‘ratto kho, brāhmaṇa, rāgena abhibhūto pariyādiṇṇacitto attabyābādhāyapi ceteti, parabyābādhāyapi ceteti, ubhayabyābādhāyapi ceteti.",
-     "Cetasikaṃ dukkhaṃ domanassaṃ paṭisaṃvedeti.",
-     "Rāge pahīne neva attabyābādhāya ceteti, na parabyābādhāya ceteti, na ubhayabyābādhāya ceteti, na cetasikaṃ dukkhaṃ domanassaṃ paṭisaṃvedeti.",
-     "Evampi kho, brāhmaṇa, sandiṭṭhiko dhammo hotī’’ti(a. ni. 3.54).",
-     "Apica navavidhopi lokuttaradhammo yena yena adhigato hoti, tena tena parasaddhāya gantabbataṃ hitvā paccavekkhaṇañāṇena sayaṃ daṭṭhabboti sandiṭṭhiko.",
-     "Atha vā pasatthā diṭṭhi sandiṭṭhi, sandiṭṭhiyā jayatīti sandiṭṭhiko.",
-     "Tathā hettha ariyamaggo sampayuttāya, ariyaphalaṃ kāraṇabhūtāya, nibbānaṃ visayibhūtāya sandiṭṭhiyā kilese jayati.",
-     "Tasmā yathā rathena jayatīti rathiko, evaṃ navavidhopi lokuttaradhammo sandiṭṭhiyā jayatīti sandiṭṭhiko.",
-     "Atha vā diṭṭhanti dassanaṃ vuccati.",
-     "Diṭṭhameva sandiṭṭhaṃ, dassananti attho.",
-     "Sandiṭṭhaṃ arahatīti sandiṭṭhiko.",
-     "Lokuttaradhammo hi bhāvanābhisamayavasena sacchikiriyābhisamayavasena ca dissamānoyeva vaṭṭabhayaṃ nivatteti.",
-     "Tasmā yathā vatthaṃ arahatīti vatthiko, evaṃ sandiṭṭhaṃ arahatīti sandiṭṭhiko."
-    ],
-    "lineRefs": [
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ],
-     [
-      "vism7:148"
-     ]
-    ]
-   },
-   {
-    "para": 149,
-    "vripara": "149",
-    "refs": [
-     "vism7:149"
-    ],
-    "lines": [
-     "Attano phaladānaṃ sandhāya nāssa kāloti akālo.",
-     "Akāloyeva <b>akāliko</b>.",
-     "Na pañcāhasattāhādibhedaṃ kālaṃ khepetvā phalaṃ deti, attano pana pavattisamanantarameva phaladoti vuttaṃ hoti.",
-     "Atha vā attano phaladāne pakaṭṭho kālo patto assāti kāliko.",
-     "Ko so?",
-     "Lokiyo kusaladhammo.",
-     "Ayaṃ pana samanantaraphalattā na kālikoti akāliko.",
-     "Idaṃ maggameva sandhāya vuttaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ],
-     [
-      "vism7:149"
-     ]
-    ]
-   },
-   {
-    "para": 150,
-    "vripara": "150",
-    "refs": [
-     "vism7:150"
-    ],
-    "lines": [
-     "‘‘Ehi passa imaṃ dhamma’’nti evaṃ pavattaṃ ehipassavidhiṃ arahatīti <b>ehipassiko</b>.",
-     "Kasmā panesa taṃ vidhiṃ arahatīti?",
-     "Vijjamānattā parisuddhattā ca.",
-     "Rittamuṭṭhiyaṃ hi hiraññaṃ vā suvaṇṇaṃ vā atthīti vatvāpi ‘‘ehi passa ima’’nti na sakkā vattuṃ.",
-     "Kasmā?",
-     "Avijjamānattā.",
-     "Vijjamānampi ca gūthaṃ vā muttaṃ vā manuññabhāvappakāsanena cittasampahaṃsanatthaṃ ‘‘ehi passa ima’’nti na sakkā vattuṃ.",
-     "Apica kho pana tiṇehi vā paṇṇehi vā paṭicchādetabbameva hoti.",
-     "Kasmā?",
-     "Aparisuddhattā.",
-     "Ayaṃ pana navavidhopi lokuttaradhammo sabhāvatova vijjamāno vigatavalāhake ākāse sampuṇṇacandamaṇḍalaṃ viya paṇḍukambale nikkhittajātimaṇi viya ca parisuddho.",
-     "Tasmā vijjamānattā parisuddhattā ca ehipassavidhiṃ arahatīti ehipassiko."
-    ],
-    "lineRefs": [
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ],
-     [
-      "vism7:150"
-     ]
-    ]
-   },
-   {
-    "para": 151,
-    "vripara": "151",
-    "refs": [
-     "vism7:151"
-    ],
-    "lines": [
-     "Upanetabboti <b>opaneyyiko</b>.",
-     "Ayaṃ panettha vinicchayo, upanayanaṃ upanayo, ādittaṃ celaṃ vā sīsaṃ vā ajjhupekkhitvāpi bhāvanāvasena attano citte upanayanaṃ arahatīti opanayiko.",
-     "Opanayikova opaneyyiko.",
-     "Idaṃ saṅkhate lokuttaradhamme yujjati.",
-     "Asaṅkhate pana attano cittena upanayanaṃ arahatīti opaneyyiko.",
-     "Sacchikiriyāvasena allīyanaṃ arahatīti attho.",
-     "Atha vā nibbānaṃ upanetīti ariyamaggo upaneyyo.",
-     "Sacchikātabbataṃ upanetabboti phalanibbānadhammo upaneyyo.",
-     "Upaneyyo eva opaneyyiko."
-    ],
-    "lineRefs": [
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ],
-     [
-      "vism7:151"
-     ]
-    ]
-   },
-   {
-    "para": 152,
-    "vripara": "152",
-    "refs": [
-     "vism7:152"
-    ],
-    "lines": [
-     "<b>Paccattaṃ veditabbo viññūhī</b>ti sabbehipi ugghaṭitaññūādīhi viññūhi attani attani veditabbo ‘‘bhāvito me maggo, adhigataṃ phalaṃ, sacchikato nirodho’’ti.",
-     "Na hi upajjhāyena bhāvitena maggena saddhivihārikassa kilesā pahīyanti, na so tassa phalasamāpattiyā phāsuviharati, na tena sacchikataṃ nibbānaṃ sacchikaroti.",
-     "Tasmā na esa parassa sīse ābharaṇaṃ viya daṭṭhabbo, attano pana citteyeva daṭṭhabbo, anubhavitabbo viññūhīti vuttaṃ hoti.",
-     "Bālānaṃ pana avisayo cesa.",
-     "Apica svākkhāto ayaṃ dhammo.",
-     "Kasmā?",
-     "Sandiṭṭhikattā.",
-     "Sandiṭṭhiko, akālikattā.",
-     "Akāliko, ehipassikattā.",
-     "Yo ca ehipassiko, so nāma opaneyyiko hotīti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ],
-     [
-      "vism7:152"
-     ]
-    ]
-   },
-   {
-    "para": 153,
-    "vripara": "153",
-    "refs": [
-     "vism7:153"
-    ],
-    "lines": [
-     "Tassevaṃ svākkhātatādibhede dhammaguṇe anussarato neva tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Na dosa…pe… na mohapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Ujugatamevassa tasmiṃ samaye cittaṃ hoti dhammaṃ ārabbhāti (a. ni. 6.10) purimanayeneva vikkhambhitanīvaraṇassa ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Dhammaguṇānaṃ pana gambhīratāya nānappakāraguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ dhammaguṇānussaraṇavasena uppannattā dhammānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana dhammānussatiṃ anuyutto bhikkhu evaṃ opaneyyikassa dhammassa desetāraṃ imināpaṅgena samannāgataṃ satthāraṃ neva atītaṃse samanupassāmi, na panetarahi aññatra tena bhagavatāti evaṃ dhammaguṇadassaneneva satthari sagāravo hoti sappatisso.",
-     "Dhamme garucittīkāro saddhādivepullaṃ adhigacchati, pītipāmojjabahulo hoti, bhayabheravasaho, dukkhādhivāsanasamattho, dhammena saṃvāsasaññaṃ paṭilabhati, dhammaguṇānussatiyā ajjhāvutthañcassa sarīrampi cetiyagharamiva pūjārahaṃ hoti, anuttaradhammādhigamāya cittaṃ namati, vītikkamitabbavatthusamāyoge cassa dhammasudhammataṃ samanussarato hirottappaṃ paccupaṭṭhāti.",
-     "Uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, dhammānussatiyā sadāti.",
-     "Idaṃ dhammānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ],
-     [
-      "vism7:153"
-     ]
-    ]
-   },
-   {
-    "para": 154,
-    "vripara": "154",
-    "refs": [
-     "vism7:154"
-    ],
-    "lines": [
-     "<b>3. Saṅghānussatikathā</b>",
-     "Saṅghānussatiṃ bhāvetukāmenāpi rahogatena paṭisallīnena ‘‘suppaṭipanno bhagavato sāvakasaṅgho, ujuppaṭipanno bhagavato sāvakasaṅgho, ñāyappaṭipanno bhagavato sāvakasaṅgho, sāmīcippaṭipanno bhagavato sāvakasaṅgho, yadidaṃ cattāri purisayugāni aṭṭha purisapuggalā, esa bhagavato sāvakasaṅgho āhuneyyo, pāhuneyyo, dakkhiṇeyyo, añjalikaraṇīyo, anuttaraṃ puññakkhettaṃ lokassā’’ti (a. ni. 6.10) evaṃ ariyasaṅghaguṇā anussaritabbā."
-    ],
-    "lineRefs": [
-     [
-      "vism7:154"
-     ],
-     [
-      "vism7:154"
-     ]
-    ]
-   },
-   {
-    "para": 155,
-    "vripara": "155",
-    "refs": [
-     "vism7:155"
-    ],
-    "lines": [
-     "Tattha <b>suppaṭipanno</b>ti suṭṭhu paṭipanno, sammāpaṭipadaṃ anivattipaṭipadaṃ anulomapaṭipadaṃ apaccanīkapaṭipadaṃ dhammānudhammapaṭipadaṃ paṭipannoti vuttaṃ hoti.",
-     "Bhagavato ovādānusāsaniṃ sakkaccaṃ suṇantīti sāvakā.",
-     "Sāvakānaṃ saṅgho <b>sāvakasaṅgho,</b> sīladiṭṭhisāmaññatāya saṅghātabhāvamāpanno sāvakasamūhoti attho.",
-     "Yasmā pana sā sammāpaṭipadā uju avaṅkā akuṭilā ajimhā, ariyo ca ñāyotipi vuccati, anucchavikattā ca sāmīcītipi saṅkhaṃ gatā.",
-     "Tasmā tampaṭipanno ariyasaṅgho <b>ujuppaṭipanno ñāyappaṭipanno sāmīcippaṭipanno</b>tipi vutto.",
-     "Ettha ca ye maggaṭṭhā, te sammāpaṭipattisamaṅgitāya suppaṭipannā.",
-     "Ye phalaṭṭhā, te sammāpaṭipadāya adhigantabbassa adhigatattā atītaṃ paṭipadaṃ sandhāya suppaṭipannāti veditabbā.",
-     "Apica svākkhāte dhammavinaye yathānusiṭṭhaṃ paṭipannattāpi apaṇṇakapaṭipadaṃ paṭipannattāpi <b>suppaṭipanno</b>.",
-     "Majjhimāya paṭipadāya antadvayamanupagamma paṭipannattā kāyavacīmanovaṅkakuṭilajimhadosappahānāya paṭipannattā ca ujuppaṭipannattā ca <b>ujuppaṭipanno</b>.",
-     "Ñāyo vuccati nibbānaṃ.",
-     "Tadatthāya paṭipannattā <b>ñāyappaṭipanno</b>.",
-     "Yathā paṭipannā sāmīcippaṭipannārahā honti, tathā paṭipannattā <b>sāmīcippaṭipanno</b>."
-    ],
-    "lineRefs": [
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ],
-     [
-      "vism7:155"
-     ]
-    ]
-   },
-   {
-    "para": 156,
-    "vripara": "156",
-    "refs": [
-     "vism7:156"
-    ],
-    "lines": [
-     "<b>Yadida</b>nti yāni imāni.",
-     "<b>Cattāri purisayugānī</b>ti yugaḷavasena paṭhamamaggaṭṭho phalaṭṭhoti idamekaṃ yugaḷanti evaṃ cattāri purisayugaḷāni honti.",
-     "<b>Aṭṭha purisapuggalā</b>ti purisapuggalavasena eko paṭhamamaggaṭṭho eko phalaṭṭhoti iminā nayena aṭṭheva purisapuggalā honti.",
-     "Ettha ca purisoti vā puggaloti vā ekatthāni etāni padāni.",
-     "Veneyyavasena panetaṃ vuttaṃ.",
-     "<b>Esa bhagavato sāvakasaṅgho</b>ti yānimāni yugavasena cattāri purisayugāni, pāṭiekkato aṭṭha purisapuggalā, esa bhagavato sāvakasaṅgho, āhuneyyotiādīsu ānetvā hunitabbanti āhunaṃ, dūratopi ānetvā sīlavantesu dātabbanti attho.",
-     "Catunnaṃ paccayānametamadhivacanaṃ.",
-     "Taṃ āhunaṃ paṭiggahetuṃ yutto tassa mahapphalakaraṇatoti <b>āhuneyyo</b>.",
-     "Atha vā dūratopi āgantvā sabbasāpateyyampi ettha hunitabbanti āhavanīyo.",
-     "Sakkādīnampi vā āhavanaṃ arahatīti āhavanīyo.",
-     "Yo cāyaṃ brāhmaṇānaṃ āhavanīyo nāma aggi, yattha hutaṃ mahapphalanti tesaṃ laddhi.",
-     "Sace hutassa mahapphalatāya āhavanīyo, saṅghova āhavanīyo.",
-     "Saṅghe hutañhi mahapphalaṃ hoti.",
-     "Yathāha –",
-     "‘‘Yo ca vassasataṃ jantu, aggiṃ paricare vane;",
-     "Ekañca bhāvitattānaṃ, muhuttamapi pūjaye;",
-     "Sāyeva pūjanā seyyo, yañce vassasataṃ huta’’nti. (dha. pa. 107);",
-     "Tadetaṃ nikāyantare āhavanīyoti padaṃ idha āhuneyyoti iminā padena atthato ekaṃ.",
-     "Byañjanato panettha kiñcimattameva nānaṃ.",
-     "Iti <b>āhuneyyo</b>.",
-     "<b>Pāhuneyyo</b>ti ettha pana pāhunaṃ vuccati disāvidisato āgatānaṃ piyamanāpānaṃ ñātimittānamatthāya sakkārena paṭiyattaṃ āgantukadānaṃ.",
-     "Tampi ṭhapetvā te tathārūpe pāhunake saṅghasseva dātuṃ yuttaṃ, saṅghova taṃ paṭiggahetuṃ yutto.",
-     "Saṅghasadiso hi pāhunako natthi.",
-     "Tathā hesa ekabuddhantare ca dissati, abbokiṇṇañca piyamanāpattakarehi dhammehi samannāgatoti.",
-     "Evaṃ pāhunamassa dātuṃ yuttaṃ pāhunañca paṭiggahetuṃ yuttoti pāhuneyyo.",
-     "Yesaṃ pana pāhavanīyoti pāḷi, tesaṃ yasmā saṅgho pubbakāramarahati, tasmā sabbapaṭhamaṃ ānetvā ettha hunitabbanti pāhavanīyo.",
-     "Sabbappakārena vā āhavanamarahatīti pāhavanīyo.",
-     "Svāyamidha teneva atthena pāhuneyyoti vuccati.",
-     "Dakkhiṇāti pana paralokaṃ saddahitvā dātabbadānaṃ vuccati.",
-     "Taṃ dakkhiṇaṃ arahati, dakkhiṇāya vā hito yasmā naṃ mahapphalakaraṇatāya visodhetīti <b>dakkhiṇeyyo</b>.",
-     "Ubho hatthe sirasmiṃ patiṭṭhapetvā sabbalokena kayiramānaṃ añjalikammaṃ arahatīti <b>añjalikaraṇīyo</b>.",
-     "<b>Anuttaraṃ puññakkhettaṃ lokassā</b>ti sabbalokassa asadisaṃ puññavirūhanaṭṭhānaṃ.",
-     "Yathā hi rañño vā amaccassa vā sālīnaṃ vā yavānaṃ vā virūhanaṭṭhānaṃ rañño sālikkhettaṃ rañño yavakkhettanti vuccati, evaṃ saṅgho sabbalokassa puññānaṃ virūhanaṭṭhānaṃ.",
-     "Saṅghaṃ nissāya hi lokassa nānappakārahitasukhasaṃvattanikāni puññāni virūhanti.",
-     "Tasmā saṅgho anuttaraṃ puññakkhettaṃ lokassāti."
-    ],
-    "lineRefs": [
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ],
-     [
-      "vism7:156"
-     ]
-    ]
-   },
-   {
-    "para": 157,
-    "vripara": "157",
-    "refs": [
-     "vism7:157"
-    ],
-    "lines": [
-     "Evaṃ suppaṭipannatādibhede saṅghaguṇe anussarato neva tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Na dosa…pe… na mohapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Ujugatamevassa tasmiṃ samaye cittaṃ hoti saṅghaṃ ārabbhāti (a. ni. 6.10) purimanayeneva vikkhambhitanīvaraṇassa ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Saṅghaguṇānaṃ pana gambhīratāya nānappakāraguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ saṅghaguṇānussaraṇavasena uppannattā saṅghānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana saṅghānussatiṃ anuyutto bhikkhu saṅghe sagāravo hoti sappatisso.",
-     "Saddhādivepullaṃ adhigacchati, pītipāmojjabahulo hoti, bhayabheravasaho, dukkhādhivāsanasamattho, saṅghena saṃvāsasaññaṃ paṭilabhati.",
-     "Saṅghaguṇānussatiyā ajjhāvutthañcassa sarīraṃ sannipatitasaṅghamiva uposathāgāraṃ pūjārahaṃ hoti, saṅghaguṇādhigamāya cittaṃ namati, vītikkamitabbavatthusamāyoge cassa sammukhā saṅghaṃ passato viya hirottappaṃ paccupaṭṭhāti, uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, saṅghānussatiyā sadāti.",
-     "Idaṃ saṅghānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ],
-     [
-      "vism7:157"
-     ]
-    ]
-   },
-   {
-    "para": 158,
-    "vripara": "158",
-    "refs": [
-     "vism7:158"
-    ],
-    "lines": [
-     "<b>4. Sīlānussatikathā</b>",
-     "Sīlānussatiṃ bhāvetukāmena pana rahogatena paṭisallīnena ‘‘aho vata me sīlāni akhaṇḍāni acchiddāni asabalāni akammāsāni bhujissāni viññuppasatthāni aparāmaṭṭhāni samādhisaṃvattanikānī’’ti (a. ni. 6.10) evaṃ akhaṇḍatādiguṇavasena attano sīlāni anussaritabbāni.",
-     "Tāni ca gahaṭṭhena gahaṭṭhasīlāni, pabbajitena pabbajitasīlāni.",
-     "Gahaṭṭhasīlāni vā hontu pabbajitasīlāni vā, yesaṃ ādimhi vā ante vā ekampi na bhinnaṃ, tāni pariyante chinnasāṭako viya na khaṇḍānīti <b>akhaṇḍāni</b>.",
-     "Yesaṃ vemajjhe ekampi na bhinnaṃ, tāni majjhe vinividdhasāṭako viya na chiddānīti <b>acchiddāni</b>.",
-     "Yesaṃ paṭipāṭiyā dve vā tīṇi vā na bhinnāni, tāni piṭṭhiyā vā kucchiyā vā uṭṭhitena dīghavaṭṭādisaṇṭhānena visabhāgavaṇṇena kāḷarattādīnaṃ aññatarasarīravaṇṇā gāvī viya na sabalānīti <b>asabalāni</b>.",
-     "Yāni antarantarā na bhinnāni, tāni visabhāgabinduvicitrā gāvī viya na kammāsānīti <b>akammāsāni</b>.",
-     "Avisesena vā sabbānipi sattavidhena methunasaṃyogena kodhupanāhādīhi ca pāpadhammehi anupahatattā akhaṇḍāni acchiddāni asabalāni akammāsāni.",
-     "Tāniyeva taṇhādāsabyato mocetvā bhujissabhāvakaraṇena <b>bhujissāni</b>.",
-     "Buddhādīhi viññūhi pasatthattā <b>viññuppasatthāni</b>.",
-     "Taṇhādiṭṭhīhi aparāmaṭṭhatāya kenaci vā ayaṃ te sīlesu dosoti evaṃ parāmaṭṭhuṃ asakkuṇeyyatāya <b>aparāmaṭṭhāni</b>.",
-     "Upacārasamādhiṃ appanāsamādhiṃ vā, atha vā pana maggasamādhiṃ phalasamādhiñcāpi saṃvattentīti <b>samādhisaṃvattanikāni</b>."
-    ],
-    "lineRefs": [
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ],
-     [
-      "vism7:158"
-     ]
-    ]
-   },
-   {
-    "para": 159,
-    "vripara": "159",
-    "refs": [
-     "vism7:159"
-    ],
-    "lines": [
-     "Evaṃ akhaṇḍatādiguṇavasena attano sīlāni anussarato nevassa tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Na dosa…pe… na mohapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Ujugatamevassa tasmiṃ samaye cittaṃ hoti, sīlaṃ ārabbhāti purimanayeneva vikkhambhitanīvaraṇassa ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Sīlaguṇānaṃ pana gambhīratāya nānappakāraguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ sīlaguṇānussaraṇavasena uppannattā sīlānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana sīlānussatiṃ anuyutto bhikkhu sikkhāya sagāravo hoti sabhāgavutti, paṭisanthāre appamatto, attānuvādādibhayavirahito, aṇumattesu vajjesu bhayadassāvī, saddhādivepullaṃ adhigacchati, pītipāmojjabahulo hoti.",
-     "Uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, sīlānussatiyā sadāti.",
-     "Idaṃ sīlānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ],
-     [
-      "vism7:159"
-     ]
-    ]
-   },
-   {
-    "para": 160,
-    "vripara": "160",
-    "refs": [
-     "vism7:160"
-    ],
-    "lines": [
-     "<b>5. Cāgānussatikathā</b>",
-     "Cāgānussatiṃ bhāvetukāmena pana pakatiyā cāgādhimuttena niccappavattadānasaṃvibhāgena bhavitabbaṃ.",
-     "Atha vā pana bhāvanaṃ ārabhantena ito dāni pabhuti sati paṭiggāhake antamaso ekālopamattampi dānaṃ adatvā na bhuñjissāmīti samādānaṃ katvā taṃdivasaṃ guṇavisiṭṭhesu paṭiggāhakesu yathāsatti yathābalaṃ dānaṃ datvā tattha nimittaṃ gaṇhitvā rahogatena paṭisallīnena ‘‘lābhā vata me suladdhaṃ vata me, yohaṃ maccheramalapariyuṭṭhitāya pajāya vigatamalamaccherena cetasā viharāmi muttacāgo payatapāṇi vossaggarato yācayogo dānasaṃvibhāgarato’’ti evaṃ vigatamalamaccheratādiguṇavasena attano cāgo anussaritabbo.",
-     "Tattha <b>lābhā vata me</b>ti mayhaṃ vata lābhā, ye ime ‘‘āyuṃ kho pana datvā āyussa bhāgī hoti dibbassa vā mānusassa vā’’ iti (a. ni. 5.37) ca, ‘‘dadaṃ piyo hoti bhajanti naṃ bahū’’ iti (a. ni. 5.34) ca, ‘‘dadamāno piyo hoti, sataṃ dhammaṃ anukkamaṃ’’ iti (a. ni. 5.35) ca evamādīhi nayehi bhagavatā dāyakassa lābhā saṃvaṇṇitā, te mayhaṃ avassaṃ bhāginoti adhippāyo.",
-     "<b>Suladdhaṃ vata me</b>ti yaṃ mayā idaṃ sāsanaṃ manussattaṃ vā laddhaṃ, taṃ suladdhaṃ vata me.",
-     "Kasmā?",
-     "Yohaṃ maccheramalapariyuṭṭhitāya pajāya…pe… dānasaṃvibhāgaratoti.",
-     "Tattha <b>maccheramalapariyuṭṭhitāyā</b>ti maccheramalena abhibhūtāya.",
-     "<b>Pajāyā</b>ti pajāyanavasena sattā vuccanti.",
-     "Tasmā attano sampattīnaṃ parasādhāraṇabhāvamasahanalakkhaṇena cittassa pabhassarabhāvadūsakānaṃ kaṇhadhammānaṃ aññatarena maccheramalena abhibhūtesu sattesūti ayamettha attho.",
-     "<b>Vigatamalamaccherenā</b>ti aññesampi rāgadosādimalānañceva maccherassa ca vigatattā vigatamalamaccherena.",
-     "<b>Cetasā viharāmī</b>ti yathāvuttappakāracitto hutvā vasāmīti attho.",
-     "Suttesu pana mahānāmasakkassa sotāpannassa sato nissayavihāraṃ pucchato nissayavihāravasena desitattā agāraṃ ajjhāvasāmīti vuttaṃ.",
-     "Tattha abhibhavitvā vasāmīti attho.",
-     "<b>Muttacāgo</b>ti vissaṭṭhacāgo.",
-     "<b>Payatapāṇī</b>ti parisuddhahattho.",
-     "Sakkaccaṃ sahatthā deyyadhammaṃ dātuṃ sadā dhotahatthoyevāti vuttaṃ hoti.",
-     "<b>Vossaggarato</b>ti vossajjanaṃ vossaggo, pariccāgoti attho.",
-     "Tasmiṃ vossagge satatābhiyogavasena ratoti vossaggarato.",
-     "<b>Yācayogo</b>ti yaṃ yaṃ pare yācanti, tassa tassa dānato yācanayogoti attho.",
-     "Yājayogotipi pāṭho.",
-     "Yajanasaṅkhātena yājena yuttoti attho.",
-     "<b>Dānasaṃvibhāgarato</b>ti dāne ca saṃvibhāge ca rato.",
-     "Ahañhi dānañca demi, attanā paribhuñjitabbatopi ca saṃvibhāgaṃ karomi, ettheva casmi ubhaye ratoti evaṃ anussaratīti attho."
-    ],
-    "lineRefs": [
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ],
-     [
-      "vism7:160"
-     ]
-    ]
-   },
-   {
-    "para": 161,
-    "vripara": "161",
-    "refs": [
-     "vism7:161"
-    ],
-    "lines": [
-     "Tassevaṃ vigatamalamaccheratādiguṇavasena attano cāgaṃ anussarato neva tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Na dosa…pe… na mohapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Ujugatamevassa tasmiṃ samaye cittaṃ hoti cāgaṃ ārabbhāti (a. ni. 5.10) purimanayeneva vikkhambhitanīvaraṇassa ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Cāgaguṇānaṃ pana gambhīratāya nānappakāracāgaguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ cāgaguṇānussaraṇavasena uppannattā cāgānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana cāgānussatiṃ anuyutto bhikkhu bhiyyoso mattāya cāgādhimutto hoti, alobhajjhāsayo, mettāya anulomakārī, visārado, pītipāmojjabahulo, uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, cāgānussatiyā sadāti.",
-     "Idaṃ cāgānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ],
-     [
-      "vism7:161"
-     ]
-    ]
-   },
-   {
-    "para": 162,
-    "vripara": "162",
-    "refs": [
-     "vism7:162"
-    ],
-    "lines": [
-     "<b>6. Devatānussatikathā</b>",
-     "Devatānussatiṃ bhāvetukāmena pana ariyamaggavasena samudāgatehi saddhādīhi guṇehi samannāgatena bhavitabbaṃ.",
-     "Tato rahogatena paṭisallīnena ‘‘santi devā cātumahārājikā, santi devā tāvatiṃsā, yāmā, tusitā, nimmānaratino, paranimmitavasavattino, santi devā brahmakāyikā, santi devā tatuttari, yathārūpāya saddhāya samannāgatā tā devatā ito cutā tattha upapannā, mayhampi tathārūpā saddhā saṃvijjati.",
-     "Yathārūpena sīlena.",
-     "Yathārūpena sutena.",
-     "Yathārūpena cāgena.",
-     "Yathārūpāya paññāya samannāgatā tā devatā ito cutā tattha upapannā, mayhampi tathārūpā paññā saṃvijjatī’’ti (a. ni. 6.10) evaṃ devatā sakkhiṭṭhāne ṭhapetvā attano saddhādiguṇā anussaritabbā.",
-     "Sutte pana yasmiṃ mahānāma samaye ariyasāvako attano ca tāsañca devatānaṃ saddhañca sīlañca sutañca cāgañca paññañca anussarati, nevassa tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hotīti vuttaṃ.",
-     "Kiñcāpi vuttaṃ, atha kho taṃ sakkhiṭṭhāne ṭhapetabbadevatānaṃ attano saddhādīhi samānaguṇadīpanatthaṃ vuttanti veditabbaṃ.",
-     "Aṭṭhakathāyañhi devatā sakkhiṭṭhāne ṭhapetvā attano guṇe anussaratīti daḷhaṃ katvā vuttaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ],
-     [
-      "vism7:162"
-     ]
-    ]
-   },
-   {
-    "para": 163,
-    "vripara": "163",
-    "refs": [
-     "vism7:163"
-    ],
-    "lines": [
-     "Tasmā pubbabhāge devatānaṃ guṇe anussaritvā aparabhāge attano saṃvijjamāne saddhādiguṇe anussarato cassa neva tasmiṃ samaye rāgapariyuṭṭhitaṃ cittaṃ hoti.",
-     "Na dosa…pe… na mohapariyuṭṭhitaṃ cittaṃ hoti, ujugatamevassa tasmiṃ samaye cittaṃ hoti devatā ārabbhāti (a. ni. 6.10) purimanayeneva vikkhambhitanīvaraṇassa ekakkhaṇe jhānaṅgāni uppajjanti.",
-     "Saddhādiguṇānaṃ pana gambhīratāya nānappakāraguṇānussaraṇādhimuttatāya vā appanaṃ appatvā upacārappattameva jhānaṃ hoti.",
-     "Tadetaṃ devatānaṃ guṇasadisasaddhādiguṇānussaraṇavasena devatānussaticceva saṅkhaṃ gacchati.",
-     "Imañca pana devatānussatiṃ anuyutto bhikkhu devatānaṃ piyo hoti manāpo, bhiyyoso mattāya saddhādivepullaṃ adhigacchati, pītipāmojjabahulo viharati.",
-     "Uttari appaṭivijjhanto pana sugatiparāyano hoti.",
-     "Tasmā have appamādaṃ, kayirātha sumedhaso;",
-     "Evaṃ mahānubhāvāya, devatānussatiyā sadāti.",
-     "Idaṃ devatānussatiyaṃ vitthārakathāmukhaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ],
-     [
-      "vism7:163"
-     ]
-    ]
-   },
-   {
-    "para": 164,
-    "vripara": "164",
-    "refs": [
-     "vism7:164"
-    ],
-    "lines": [
-     "<b>Pakiṇṇakakathā</b>",
-     "Yaṃ pana etāsaṃ vitthāradesanāyaṃ ‘‘ujugatamevassa tasmiṃ samaye cittaṃ hoti tathāgataṃ ārabbhā’’tiādīni vatvā ‘‘ujugatacitto kho pana, mahānāma, ariyasāvako labhati atthavedaṃ, labhati dhammavedaṃ, labhati dhammūpasaṃhitaṃ pāmojjaṃ, pamuditassa pīti jāyatī’’ti (a. ni. 6.10) vuttaṃ, tattha itipi so bhagavātiādīnaṃ atthaṃ nissāya uppannaṃ tuṭṭhiṃ sandhāya <b>labhati atthaveda</b>nti vuttaṃ.",
-     "Pāḷiṃ nissāya uppannaṃ tuṭṭhiṃ sandhāya <b>labhati dhammavedaṃ</b>.",
-     "Ubhayavasena <b>labhati dhammūpasaṃhitaṃ pāmojja</b>nti vuttanti veditabbaṃ.",
-     "Yañca devatānussatiyaṃ devatā ārabbhāti vuttaṃ, taṃ pubbabhāge devatā ārabbha pavattacittavasena devatāguṇasadise vā devatābhāvanipphādake guṇe ārabbha pavattacittavasena vuttanti veditabbaṃ."
-    ],
-    "lineRefs": [
-     [
-      "vism7:164"
-     ],
-     [
-      "vism7:164"
-     ],
-     [
-      "vism7:164"
-     ],
-     [
-      "vism7:164"
-     ],
-     [
-      "vism7:164"
-     ]
-    ]
-   },
-   {
-    "para": 165,
-    "vripara": "165",
-    "refs": [
-     "vism7:165"
-    ],
-    "lines": [
-     "Imā pana cha anussatiyo ariyasāvakānaññeva ijjhanti.",
-     "Tesaṃ hi buddhadhammasaṅghaguṇā pākaṭā honti.",
-     "Te ca akhaṇḍatādiguṇehi sīlehi, vigatamalamaccherena cāgena, mahānubhāvānaṃ devatānaṃ guṇasadisehi saddhādiguṇehi samannāgatā.",
-     "Mahānāmasutte (a. ni. 6.10) ca sotāpannassa nissayavihāraṃ puṭṭhena bhagavatā sotāpannassa nissayavihāradassanatthameva etā vitthārato kathitā.",
-     "Gedhasuttepi ‘‘idha, bhikkhave, ariyasāvako tathāgataṃ anussarati, itipi so bhagavā…pe… ujugatamevassa tasmiṃ samaye cittaṃ hoti nikkhantaṃ muttaṃ vuṭṭhitaṃ gedhamhā.",
-     "Gedhoti kho, bhikkhave, pañcannetaṃ kāmaguṇānamadhivacanaṃ.",
-     "Idampi kho, bhikkhave, ārammaṇaṃ karitvā evamidhekacce sattā visujjhantī’’ti (a. ni. 6.25) evaṃ ariyasāvakassa anussativasena cittaṃ visodhetvā uttari paramatthavisuddhiadhigamatthāya kathitā.",
-     "Āyasmatā mahākaccānena desite sambādhokāsasuttepi ‘‘acchariyaṃ, āvuso, abbhutaṃ, āvuso, yāvañcidaṃ tena bhagavatā jānatā passatā arahatā sammāsambuddhena sambādhe okāsādhigamo anubuddho sattānaṃ visuddhiyā…pe… nibbānassa sacchikiriyāya yadidaṃ cha anussatiṭṭhānāni.",
-     "Katamāni cha?",
-     "Idhāvuso, ariyasāvako tathāgataṃ anussarati…pe… evamidhekacce sattā visuddhidhammā bhavantī’’ti (a. ni. 6.26) evaṃ ariyasāvakasseva paramatthavisuddhidhammatāya okāsādhigamavasena kathitā.",
-     "Uposathasuttepi ‘‘kathañca, visākhe, ariyūposatho hoti?",
-     "Upakkiliṭṭhassa, visākhe, cittassa upakkamena pariyodapanā hoti.",
-     "Kathañca, visākhe, upakkiliṭṭhassa cittassa upakkamena pariyodapanā hoti?",
-     "Idha, visākhe, ariyasāvako tathāgataṃ anussaratī’’ti (a. ni. 3.71) evaṃ ariyasāvakasseva uposathaṃ upavasato cittavisodhanakammaṭṭhānavasena uposathassa mahapphalabhāvadassanatthaṃ kathitā.",
-     "Ekādasanipātepi ‘‘saddho kho, mahānāma, ārādhako hoti, no assaddho.",
-     "Āraddhavīriyo, upaṭṭhitasati, samāhito, paññavā, mahānāma, ārādhako hoti, no duppañño.",
-     "Imesu kho tvaṃ, mahānāma, pañcasu dhammesu patiṭṭhāya cha dhamme uttari bhāveyyāsi.",
-     "Idha tvaṃ, mahānāma, tathāgataṃ anussareyyāsi itipi so bhagavā’’ti (a. ni. 11.11) evaṃ ariyasāvakasseva ‘‘tesaṃ no, bhante, nānāvihārena viharataṃ kenassa vihārena viharitabba’’nti pucchato vihāradassanatthaṃ kathitā."
-    ],
-    "lineRefs": [
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ],
-     [
-      "vism7:165"
-     ]
-    ]
-   },
-   {
-    "para": 166,
-    "vripara": "166",
-    "refs": [
-     "vism7:166"
-    ],
-    "lines": [
-     "Evaṃ santepi parisuddhasīlādiguṇasamannāgatena puthujjanenāpi manasi kātabbā.",
-     "Anussavavasenāpi hi buddhādīnaṃ guṇe anussarato cittaṃ pasīdatiyeva.",
-     "Yassānubhāvena nīvaraṇāni vikkhambhetvā uḷārapāmojjo vipassanaṃ ārabhitvā arahattaṃyeva sacchikareyya kaṭaandhakāravāsī <b>phussadevatthero</b> viya.",
-     "So kirāyasmā mārena nimmitaṃ buddharūpaṃ disvā ‘‘ayaṃ tāva sarāgadosamoho evaṃ sobhati, kathaṃ nu kho bhagavā na sobhati, so hi sabbaso vītarāgadosamoho’’ti buddhārammaṇaṃ pītiṃ paṭilabhitvā vipassanaṃ vaḍḍhetvā arahattaṃ pāpuṇīti.",
-     "Iti sādhujanapāmojjatthāya kate visuddhimagge",
-     "Samādhibhāvanādhikāre",
-     "Chaanussatiniddeso nāma",
-     "Sattamo paricchedo."
-    ],
-    "lineRefs": [
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ],
-     [
-      "vism7:166"
-     ]
-    ]
-   }
-  ],
-  "wordLinks": [],
-  "before": [],
-  "after": []
- },
+ "attha": null,
  "tika": {
   "book": "Vism-mhṭ",
   "bookName": "Visuddhimagga-mahāṭīkā (Paramatthamañjūsā)",
@@ -9396,7 +6693,3518 @@
     ]
    }
   ],
-  "wordLinks": [],
+  "wordLinks": [
+   [
+    "vism7:123.1",
+    "anussatīsu",
+    0,
+    2
+   ],
+   [
+    "vism7:123.1",
+    "punappunaṃ uppajjanato",
+    0,
+    2
+   ],
+   [
+    "vism7:123.1",
+    "satiyeva anussati",
+    0,
+    2
+   ],
+   [
+    "vism7:123.1",
+    "kulaputtassa anurūpā",
+    0,
+    3
+   ],
+   [
+    "vism7:123.1",
+    "anurūpā",
+    0,
+    5
+   ],
+   [
+    "vism7:123.1",
+    "ārabbha",
+    0,
+    8
+   ],
+   [
+    "vism7:123.4",
+    "sīlānussati",
+    0,
+    12
+   ],
+   [
+    "vism7:123.8",
+    "rūpakāyaṃ gatā",
+    0,
+    13
+   ],
+   [
+    "vism7:123.8",
+    "kāye",
+    0,
+    14
+   ],
+   [
+    "vism7:123.9",
+    "assāsapassāsanimittārammaṇāya",
+    0,
+    17
+   ],
+   [
+    "vism7:124.1",
+    "patirūpasenāsane",
+    1,
+    2
+   ],
+   [
+    "vism7:124.1",
+    "rahogatena",
+    1,
+    3
+   ],
+   [
+    "vism7:124.1",
+    "paṭisallīnena",
+    1,
+    5
+   ],
+   [
+    "vism7:124.1",
+    "so bhagavā",
+    1,
+    7
+   ],
+   [
+    "vism7:124.1",
+    "so",
+    1,
+    7
+   ],
+   [
+    "vism7:124.1",
+    "bhagavā",
+    1,
+    8
+   ],
+   [
+    "vism7:124.1",
+    "bhagavā",
+    1,
+    10
+   ],
+   [
+    "vism7:124.1",
+    "Iti",
+    1,
+    11
+   ],
+   [
+    "vism7:124.3",
+    "Iminā ca iminā ca kāraṇenāti vuttaṃ hoti",
+    1,
+    12
+   ],
+   [
+    "vism7:125.2",
+    "suvidūravidūre",
+    2,
+    0
+   ],
+   [
+    "vism7:125.2",
+    "Ārakā",
+    2,
+    8
+   ],
+   [
+    "vism7:125.1",
+    "araha",
+    2,
+    8
+   ],
+   [
+    "vism7:125.3",
+    "So tato ārakā nāma",
+    2,
+    9
+   ],
+   [
+    "vism7:126.1",
+    "kilesārayo",
+    3,
+    0
+   ],
+   [
+    "vism7:127.1",
+    "avijjābhavataṇhāmayanābhi",
+    4,
+    1
+   ],
+   [
+    "vism7:127.1",
+    "jarāmaraṇanemi",
+    4,
+    3
+   ],
+   [
+    "vism7:127.1",
+    "āsavasamudayamayena akkhena vijjhitvā",
+    4,
+    4
+   ],
+   [
+    "vism7:127.1",
+    "tibhavarathe",
+    4,
+    7
+   ],
+   [
+    "vism7:127.1",
+    "samāyojitaṃ",
+    4,
+    8
+   ],
+   [
+    "vism7:127.1",
+    "anādikālappavattaṃ",
+    4,
+    9
+   ],
+   [
+    "vism7:127.1",
+    "saṃsāracakkaṃ",
+    4,
+    12
+   ],
+   [
+    "vism7:127.1",
+    "bodhimaṇḍe",
+    4,
+    14
+   ],
+   [
+    "vism7:127.1",
+    "vīriyapādehi",
+    4,
+    15
+   ],
+   [
+    "vism7:127.1",
+    "patiṭṭhāya",
+    4,
+    17
+   ],
+   [
+    "vism7:127.1",
+    "saddhāhatthena",
+    4,
+    18
+   ],
+   [
+    "vism7:128.1",
+    "Atha vā",
+    5,
+    0
+   ],
+   [
+    "vism7:128.4",
+    "Sesā dasa dhammā",
+    5,
+    2
+   ],
+   [
+    "vism7:128.4",
+    "arā",
+    5,
+    2
+   ],
+   [
+    "vism7:128.4",
+    "avijjāmūlakattā jarāmaraṇapariyantattā ca",
+    5,
+    4
+   ],
+   [
+    "vism7:128.4",
+    "dukkhādīsu",
+    5,
+    5
+   ],
+   [
+    "vism7:128.4",
+    "aññāṇaṃ",
+    5,
+    6
+   ],
+   [
+    "vism7:128.5",
+    "Kāmabhave ca avijjā",
+    5,
+    7
+   ],
+   [
+    "vism7:128.5",
+    "paccayo hoti",
+    5,
+    11
+   ],
+   [
+    "vism7:128.5",
+    "paccayo hoti",
+    5,
+    14
+   ],
+   [
+    "vism7:128.13",
+    "Tattha tattha sā sā taṇhā",
+    5,
+    19
+   ],
+   [
+    "vism7:128.15",
+    "kāmupādānapaccayā",
+    5,
+    23
+   ],
+   [
+    "vism7:128.17",
+    "tatheva",
+    5,
+    24
+   ],
+   [
+    "vism7:128.23",
+    "sesupādānamūlikāsupi",
+    5,
+    26
+   ],
+   [
+    "vism7:128.19",
+    "bhāvanāpāripūriyā",
+    5,
+    29
+   ],
+   [
+    "vism7:128.19",
+    "bhāvanāpāripūriyā",
+    5,
+    31
+   ],
+   [
+    "vism7:128.24",
+    "paccayapariggahe",
+    5,
+    37
+   ],
+   [
+    "vism7:128.24",
+    "paññā",
+    5,
+    38
+   ],
+   [
+    "vism7:128.25",
+    "eteneva nayena",
+    5,
+    41
+   ],
+   [
+    "vism7:128.25",
+    "sabbapadāni vitthāretabbāni",
+    5,
+    41
+   ],
+   [
+    "vism7:128.26",
+    "saṅkhepo",
+    5,
+    42
+   ],
+   [
+    "vism7:128.26",
+    "saṅkhepo",
+    5,
+    43
+   ],
+   [
+    "vism7:128.27",
+    "Purimasaṅkhepo cettha atīto addhā",
+    5,
+    46
+   ],
+   [
+    "vism7:128.28",
+    "kammavaṭṭaṃ",
+    5,
+    50
+   ],
+   [
+    "vism7:128.28",
+    "jātijarāmaraṇāpadesena viññāṇādīnaṃ niddiṭṭhattā",
+    5,
+    51
+   ],
+   [
+    "vism7:128.28",
+    "ime",
+    5,
+    52
+   ],
+   [
+    "vism7:128.28",
+    "āyatiṃ vipākavaṭṭaṃ",
+    5,
+    53
+   ],
+   [
+    "vism7:128.29",
+    "Te",
+    5,
+    54
+   ],
+   [
+    "vism7:128.29",
+    "ākārato",
+    5,
+    55
+   ],
+   [
+    "vism7:128.29",
+    "vīsatividhā honti",
+    5,
+    56
+   ],
+   [
+    "vism7:128.30",
+    "bhavajātīnamantarā",
+    5,
+    58
+   ],
+   [
+    "vism7:128.30",
+    "vedanātaṇhānamantarā",
+    5,
+    59
+   ],
+   [
+    "vism7:128.30",
+    "iti",
+    5,
+    61
+   ],
+   [
+    "vism7:128.30",
+    "sabbākārato",
+    5,
+    63
+   ],
+   [
+    "vism7:128.30",
+    "jānāti",
+    5,
+    64
+   ],
+   [
+    "vism7:128.30",
+    "passati",
+    5,
+    65
+   ],
+   [
+    "vism7:128.30",
+    "aññāti paṭivijjhati",
+    5,
+    66
+   ],
+   [
+    "vism7:128.31",
+    "ñātaṭṭhena",
+    5,
+    68
+   ],
+   [
+    "vism7:128.31",
+    "pajānanaṭṭhena",
+    5,
+    69
+   ],
+   [
+    "vism7:128.32",
+    "Iminā",
+    5,
+    70
+   ],
+   [
+    "vism7:128.32",
+    "te dhamme",
+    5,
+    71
+   ],
+   [
+    "vism7:128.32",
+    "yathābhūtaṃ ñatvā",
+    5,
+    72
+   ],
+   [
+    "vism7:128.32",
+    "nibbindanto",
+    5,
+    73
+   ],
+   [
+    "vism7:128.32",
+    "virajjanto vimuccanto",
+    5,
+    73
+   ],
+   [
+    "vism7:128.32",
+    "are hani",
+    5,
+    73
+   ],
+   [
+    "vism7:128.32",
+    "hani vihani viddhaṃsesi",
+    5,
+    75
+   ],
+   [
+    "vism7:129.2",
+    "uppanne tathāgate",
+    6,
+    0
+   ],
+   [
+    "vism7:130.1",
+    "asilokabhayena",
+    7,
+    0
+   ],
+   [
+    "vism7:130.1",
+    "raho pāpaṃ karonti",
+    7,
+    1
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    2
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    11
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    14
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    23
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    25
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    32
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    33
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    48
+   ],
+   [
+    "vism7:130.1",
+    "raho",
+    7,
+    51
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    56
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    58
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    59
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    63
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    65
+   ],
+   [
+    "vism7:130.1",
+    "arahaṃ",
+    7,
+    69
+   ],
+   [
+    "vism7:131.1",
+    "Sammā",
+    8,
+    0
+   ],
+   [
+    "vism7:131.2",
+    "abhiññeyye dhamme",
+    8,
+    9
+   ],
+   [
+    "vism7:131.2",
+    "abhiññeyye",
+    8,
+    10
+   ],
+   [
+    "vism7:131.2",
+    "abhiññeyyato buddho",
+    8,
+    13
+   ],
+   [
+    "vism7:131.2",
+    "pariññeyye dhamme",
+    8,
+    16
+   ],
+   [
+    "vism7:131.2",
+    "pahātabbe",
+    8,
+    17
+   ],
+   [
+    "vism7:131.2",
+    "sacchikātabbe",
+    8,
+    18
+   ],
+   [
+    "vism7:131.2",
+    "sacchikātabbe",
+    8,
+    23
+   ],
+   [
+    "vism7:131.2",
+    "bhāvetabbe",
+    8,
+    24
+   ],
+   [
+    "vism7:131.4",
+    "bhāvetabbañca",
+    8,
+    25
+   ],
+   [
+    "vism7:131.5",
+    "tasmā buddhosmi",
+    8,
+    26
+   ],
+   [
+    "vism7:132.1",
+    "mūlakāraṇabhāvena",
+    9,
+    1
+   ],
+   [
+    "vism7:132.1",
+    "samuṭṭhāpikā",
+    9,
+    3
+   ],
+   [
+    "vism7:132.1",
+    "purimataṇhā",
+    9,
+    4
+   ],
+   [
+    "vism7:132.1",
+    "appavatti",
+    9,
+    6
+   ],
+   [
+    "vism7:132.1",
+    "nirodhapajānanā",
+    9,
+    7
+   ],
+   [
+    "vism7:132.2",
+    "rūpataṇhādayo cha taṇhākāyā",
+    9,
+    9
+   ],
+   [
+    "vism7:132.2",
+    "kasiṇāni",
+    9,
+    10
+   ],
+   [
+    "vism7:132.2",
+    "dvattiṃsākārā",
+    9,
+    11
+   ],
+   [
+    "vism7:132.2",
+    "nava bhavā",
+    9,
+    12
+   ],
+   [
+    "vism7:132.2",
+    "cattāri jhānāni",
+    9,
+    13
+   ],
+   [
+    "vism7:132.3",
+    "anubuddho",
+    9,
+    16
+   ],
+   [
+    "vism7:132.4",
+    "Tena",
+    9,
+    17
+   ],
+   [
+    "vism7:132.4",
+    "sammā sāmañca sabbadhammānaṃ buddhattā",
+    9,
+    19
+   ],
+   [
+    "vism7:133.1",
+    "Vijjāhi",
+    10,
+    0
+   ],
+   [
+    "vism7:133.1",
+    "sampannattā",
+    10,
+    3
+   ],
+   [
+    "vism7:133.5",
+    "satta saddhammā",
+    10,
+    5
+   ],
+   [
+    "vism7:133.6",
+    "Imeyeva hi",
+    10,
+    8
+   ],
+   [
+    "vism7:133.7",
+    "Yathāha",
+    10,
+    10
+   ],
+   [
+    "vism7:133.8",
+    "Bhagavā",
+    10,
+    11
+   ],
+   [
+    "vism7:133.10",
+    "Tattha vijjāsampadā",
+    10,
+    13
+   ],
+   [
+    "vism7:133.12",
+    "So sabbaññutāya",
+    10,
+    16
+   ],
+   [
+    "vism7:133.13",
+    "Yathā taṃ vijjācaraṇasampanno",
+    10,
+    17
+   ],
+   [
+    "vism7:133.14",
+    "Tenassa",
+    10,
+    18
+   ],
+   [
+    "vism7:134.2",
+    "Gamanampi hi gatanti vuccati",
+    11,
+    0
+   ],
+   [
+    "vism7:134.5",
+    "Ariyamaggo",
+    11,
+    3
+   ],
+   [
+    "vism7:134.6",
+    "Tena hesa",
+    11,
+    5
+   ],
+   [
+    "vism7:134.6",
+    "asajjamāno",
+    11,
+    7
+   ],
+   [
+    "vism7:134.1",
+    "sammā",
+    11,
+    13
+   ],
+   [
+    "vism7:134.8",
+    "pahīne kilese puna apaccāgacchanto",
+    11,
+    14
+   ],
+   [
+    "vism7:134.9",
+    "sammā vā gato",
+    11,
+    15
+   ],
+   [
+    "vism7:134.9",
+    "sammāpaṭipattiyā",
+    11,
+    16
+   ],
+   [
+    "vism7:134.9",
+    "sabbalokassa hitasukhameva karonto",
+    11,
+    16
+   ],
+   [
+    "vism7:134.13",
+    "tatra",
+    11,
+    17
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    32
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    34
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    37
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    38
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    39
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    40
+   ],
+   [
+    "vism7:134.1",
+    "sugato",
+    11,
+    41
+   ],
+   [
+    "vism7:135.2",
+    "sabbathā",
+    12,
+    0
+   ],
+   [
+    "vism7:135.2",
+    "sabhāvato",
+    12,
+    2
+   ],
+   [
+    "vism7:135.2",
+    "sabhāvato",
+    12,
+    3
+   ],
+   [
+    "vism7:135.2",
+    "samudayato",
+    12,
+    6
+   ],
+   [
+    "vism7:135.2",
+    "nirodhato",
+    12,
+    7
+   ],
+   [
+    "vism7:135.3",
+    "yattha kho āvuso",
+    12,
+    9
+   ],
+   [
+    "vism7:135.3",
+    "na jāyati",
+    12,
+    10
+   ],
+   [
+    "vism7:135.3",
+    "na cavati na upapajjati",
+    12,
+    10
+   ],
+   [
+    "vism7:135.3",
+    "gamanena",
+    12,
+    13
+   ],
+   [
+    "vism7:135.4",
+    "sasaññimhi",
+    12,
+    16
+   ],
+   [
+    "vism7:135.4",
+    "samanake",
+    12,
+    17
+   ],
+   [
+    "vism7:135.3",
+    "gamanena",
+    12,
+    22
+   ],
+   [
+    "vism7:135.5",
+    "lokassanto",
+    12,
+    23
+   ],
+   [
+    "vism7:135.6",
+    "apatvā",
+    12,
+    25
+   ],
+   [
+    "vism7:135.7",
+    "Tasmā",
+    12,
+    27
+   ],
+   [
+    "vism7:135.7",
+    "have",
+    12,
+    28
+   ],
+   [
+    "vism7:135.1",
+    "lokavidū",
+    12,
+    29
+   ],
+   [
+    "vism7:135.7",
+    "sumedho",
+    12,
+    30
+   ],
+   [
+    "vism7:135.8",
+    "Lokantagū",
+    12,
+    31
+   ],
+   [
+    "vism7:135.8",
+    "vūsitabrahmacariyo",
+    12,
+    32
+   ],
+   [
+    "vism7:135.9",
+    "samitāvi",
+    12,
+    33
+   ],
+   [
+    "vism7:135.10",
+    "Nāsīsati",
+    12,
+    34
+   ],
+   [
+    "vism7:136.1",
+    "Apica tayo lokā",
+    13,
+    0
+   ],
+   [
+    "vism7:136.1",
+    "sattaloko",
+    13,
+    1
+   ],
+   [
+    "vism7:136.6",
+    "okāsaloko",
+    13,
+    3
+   ],
+   [
+    "vism7:136.1",
+    "saṅkhāraloko",
+    13,
+    5
+   ],
+   [
+    "vism7:136.8",
+    "āhāraṭṭhitikā",
+    13,
+    6
+   ],
+   [
+    "vism7:136.11",
+    "āhārā",
+    13,
+    7
+   ],
+   [
+    "vism7:136.4",
+    "Yāvatā candimasūriyā pariharanti",
+    13,
+    16
+   ],
+   [
+    "vism7:136.4",
+    "disā bhanti virocamānā",
+    13,
+    17
+   ],
+   [
+    "vism7:136.5",
+    "Tāva sahassadhā loko",
+    13,
+    18
+   ],
+   [
+    "vism7:136.7",
+    "Tampi",
+    13,
+    19
+   ],
+   [
+    "vism7:136.2",
+    "eko loko",
+    13,
+    21
+   ],
+   [
+    "vism7:136.9",
+    "Dve lokā",
+    13,
+    22
+   ],
+   [
+    "vism7:136.17",
+    "dasāyatanāni",
+    13,
+    28
+   ],
+   [
+    "vism7:136.20",
+    "āsayaṃ jānāti",
+    13,
+    46
+   ],
+   [
+    "vism7:136.20",
+    "jānāti",
+    13,
+    61
+   ],
+   [
+    "vism7:136.20",
+    "adhimuttiṃ jānāti",
+    13,
+    66
+   ],
+   [
+    "vism7:136.20",
+    "apparajakkhe",
+    13,
+    69
+   ],
+   [
+    "vism7:136.20",
+    "mahārajakkhe",
+    13,
+    70
+   ],
+   [
+    "vism7:136.20",
+    "tikkhindriye",
+    13,
+    72
+   ],
+   [
+    "vism7:136.20",
+    "mudindriye",
+    13,
+    73
+   ],
+   [
+    "vism7:136.20",
+    "svākāre",
+    13,
+    75
+   ],
+   [
+    "vism7:136.20",
+    "suviññāpaye",
+    13,
+    76
+   ],
+   [
+    "vism7:136.20",
+    "bhabbe abhabbe",
+    13,
+    77
+   ],
+   [
+    "vism7:136.20",
+    "bhabbe",
+    13,
+    77
+   ],
+   [
+    "vism7:137.2",
+    "catutiṃsasatāni ca",
+    14,
+    3
+   ],
+   [
+    "vism7:137.5",
+    "aḍḍhuḍḍhāni",
+    14,
+    4
+   ],
+   [
+    "vism7:137.7",
+    "nahutāni",
+    14,
+    5
+   ],
+   [
+    "vism7:137.14",
+    "saṇṭhiti",
+    14,
+    7
+   ],
+   [
+    "vism7:137.15",
+    "Evaṃ saṇṭhite",
+    14,
+    8
+   ],
+   [
+    "vism7:137.17",
+    "Accuggato tāvadeva",
+    14,
+    10
+   ],
+   [
+    "vism7:137.18",
+    "Tato",
+    14,
+    14
+   ],
+   [
+    "vism7:137.18",
+    "upaḍḍhupaḍḍhena",
+    14,
+    15
+   ],
+   [
+    "vism7:137.20",
+    "īsadharo",
+    14,
+    16
+   ],
+   [
+    "vism7:137.21",
+    "brahā",
+    14,
+    21
+   ],
+   [
+    "vism7:137.22",
+    "sinerussa samantato",
+    14,
+    22
+   ],
+   [
+    "vism7:137.24",
+    "Yojanānaṃ satānucco himavā pañca pabbato",
+    14,
+    25
+   ],
+   [
+    "vism7:137.27",
+    "nagavhayā",
+    14,
+    26
+   ],
+   [
+    "vism7:137.22",
+    "samantato",
+    14,
+    27
+   ],
+   [
+    "vism7:137.29",
+    "Satayojanavitthiṇṇā tāvadeva ca uggatā",
+    14,
+    28
+   ],
+   [
+    "vism7:137.30",
+    "yassānubhāvena",
+    14,
+    29
+   ],
+   [
+    "vism7:137.34",
+    "sirīsena",
+    14,
+    31
+   ],
+   [
+    "vism7:137.38",
+    "candamaṇḍalaṃ",
+    14,
+    33
+   ],
+   [
+    "vism7:137.39",
+    "Sūriyamaṇḍalaṃ",
+    14,
+    33
+   ],
+   [
+    "vism7:137.41",
+    "asurabhavanaṃ",
+    14,
+    36
+   ],
+   [
+    "vism7:137.30",
+    "jambudīpo",
+    14,
+    38
+   ],
+   [
+    "vism7:137.42",
+    "Aparagoyānaṃ",
+    14,
+    39
+   ],
+   [
+    "vism7:137.44",
+    "Uttarakuru",
+    14,
+    41
+   ],
+   [
+    "vism7:137.47",
+    "Tadantaresu",
+    14,
+    43
+   ],
+   [
+    "vism7:137.48",
+    "anantāni",
+    14,
+    45
+   ],
+   [
+    "vism7:137.48",
+    "bhagavā anantena buddhañāṇena avedi",
+    14,
+    46
+   ],
+   [
+    "vism7:138.1",
+    "Attanā",
+    15,
+    0
+   ],
+   [
+    "vism7:138.1",
+    "anuttaro",
+    15,
+    2
+   ],
+   [
+    "vism7:138.1",
+    "kassaci",
+    15,
+    5
+   ],
+   [
+    "vism7:138.3",
+    "asamo",
+    15,
+    15
+   ],
+   [
+    "vism7:138.3",
+    "asamo",
+    15,
+    16
+   ],
+   [
+    "vism7:138.3",
+    "asamasamo",
+    15,
+    17
+   ],
+   [
+    "vism7:138.3",
+    "appaṭimo",
+    15,
+    18
+   ],
+   [
+    "vism7:138.4",
+    "na kho panāhaṃ samanupassāmi",
+    15,
+    21
+   ],
+   [
+    "vism7:138.5",
+    "vitthāretabbā",
+    15,
+    39
+   ],
+   [
+    "vism7:139.2",
+    "Dameti",
+    16,
+    0
+   ],
+   [
+    "vism7:139.2",
+    "vinetīti vuttaṃ hoti",
+    16,
+    1
+   ],
+   [
+    "vism7:139.3",
+    "dametuṃ yuttā",
+    16,
+    2
+   ],
+   [
+    "vism7:139.4",
+    "apalālo",
+    16,
+    6
+   ],
+   [
+    "vism7:139.4",
+    "nibbisā katā",
+    16,
+    9
+   ],
+   [
+    "vism7:139.4",
+    "saraṇesu ca sīlesu ca patiṭṭhāpitā",
+    16,
+    10
+   ],
+   [
+    "vism7:139.4",
+    "vinītā vicitrehi vinayanūpāyehi",
+    16,
+    14
+   ],
+   [
+    "vism7:139.5",
+    "visuddhasīlādīnaṃ paṭhamajjhānādīni",
+    16,
+    15
+   ],
+   [
+    "vism7:139.5",
+    "dantepi dametiyeva",
+    16,
+    16
+   ],
+   [
+    "vism7:139.7",
+    "Bhagavā hi",
+    16,
+    22
+   ],
+   [
+    "vism7:139.7",
+    "aṭṭha disā",
+    16,
+    23
+   ],
+   [
+    "vism7:139.7",
+    "disā",
+    16,
+    24
+   ],
+   [
+    "vism7:139.7",
+    "disā",
+    16,
+    24
+   ],
+   [
+    "vism7:139.7",
+    "asajjamānā",
+    16,
+    25
+   ],
+   [
+    "vism7:139.7",
+    "dhāvanti",
+    16,
+    26
+   ],
+   [
+    "vism7:139.8",
+    "ekaṃyeva disaṃ dhāvatī",
+    16,
+    27
+   ],
+   [
+    "vism7:139.7",
+    "ekapallaṅkeneva nisinnā",
+    16,
+    29
+   ],
+   [
+    "vism7:139.7",
+    "aṭṭha disā",
+    16,
+    30
+   ],
+   [
+    "vism7:140.1",
+    "Diṭṭhadhammikasamparāyikaparamatthehi",
+    17,
+    3
+   ],
+   [
+    "vism7:140.1",
+    "satthā",
+    17,
+    7
+   ],
+   [
+    "vism7:140.2",
+    "satthā viyāti satthā bhagavā satthavāho",
+    17,
+    8
+   ],
+   [
+    "vism7:140.3",
+    "Yathā satthavāho",
+    17,
+    9
+   ],
+   [
+    "vism7:140.3",
+    "satthe",
+    17,
+    10
+   ],
+   [
+    "vism7:140.3",
+    "vāḷakantāraṃ",
+    17,
+    14
+   ],
+   [
+    "vism7:140.3",
+    "tāreti",
+    17,
+    16
+   ],
+   [
+    "vism7:140.3",
+    "uttāreti",
+    17,
+    17
+   ],
+   [
+    "vism7:140.3",
+    "uttāreti",
+    17,
+    18
+   ],
+   [
+    "vism7:140.3",
+    "nittāreti",
+    17,
+    19
+   ],
+   [
+    "vism7:140.3",
+    "patāreti",
+    17,
+    20
+   ],
+   [
+    "vism7:140.3",
+    "khemantabhūmiṃ sampāpeti",
+    17,
+    21
+   ],
+   [
+    "vism7:140.3",
+    "satte",
+    17,
+    22
+   ],
+   [
+    "vism7:140.3",
+    "jātikantāraṃ",
+    17,
+    23
+   ],
+   [
+    "vism7:140.5",
+    "Ukkaṭṭhaparicchedavasena",
+    17,
+    24
+   ],
+   [
+    "vism7:140.5",
+    "bhabbapuggalaparicchedavasena",
+    17,
+    26
+   ],
+   [
+    "vism7:140.7",
+    "bhagavato",
+    17,
+    28
+   ],
+   [
+    "vism7:140.9",
+    "gaggarāya",
+    17,
+    30
+   ],
+   [
+    "vism7:140.9",
+    "sare nimittaṃ aggahesi",
+    17,
+    31
+   ],
+   [
+    "vism7:140.9",
+    "sannirumbhitvā aṭṭhāsi",
+    17,
+    32
+   ],
+   [
+    "vism7:140.11",
+    "are ahampi nāma idha nibbatto",
+    17,
+    35
+   ],
+   [
+    "vism7:140.13",
+    "Bhagavā jānantova",
+    17,
+    37
+   ],
+   [
+    "vism7:140.13",
+    "pucchi",
+    17,
+    37
+   ],
+   [
+    "vism7:140.14",
+    "Ko",
+    17,
+    38
+   ],
+   [
+    "vism7:140.14",
+    "me",
+    17,
+    39
+   ],
+   [
+    "vism7:140.14",
+    "pādāni",
+    17,
+    40
+   ],
+   [
+    "vism7:140.14",
+    "iddhiyā",
+    17,
+    41
+   ],
+   [
+    "vism7:140.14",
+    "yasasā",
+    17,
+    41
+   ],
+   [
+    "vism7:140.15",
+    "Abhikkantena",
+    17,
+    43
+   ],
+   [
+    "vism7:140.15",
+    "vaṇṇena",
+    17,
+    44
+   ],
+   [
+    "vism7:140.15",
+    "sabbā obhāsayaṃ disā",
+    17,
+    45
+   ],
+   [
+    "vism7:140.16",
+    "pure",
+    17,
+    47
+   ],
+   [
+    "vism7:140.16",
+    "udake",
+    17,
+    47
+   ],
+   [
+    "vism7:140.16",
+    "vārigocaro",
+    17,
+    49
+   ],
+   [
+    "vism7:140.17",
+    "Tava dhammaṃ suṇantassa",
+    17,
+    51
+   ],
+   [
+    "vism7:140.20",
+    "sitaṃ katvā",
+    17,
+    54
+   ],
+   [
+    "vism7:141.1",
+    "Yaṃ pana kiñci",
+    18,
+    0
+   ],
+   [
+    "vism7:141.1",
+    "kiñci",
+    18,
+    1
+   ],
+   [
+    "vism7:141.1",
+    "pana",
+    18,
+    2
+   ],
+   [
+    "vism7:141.1",
+    "pana",
+    18,
+    4
+   ],
+   [
+    "vism7:141.4",
+    "evaṃ pavatto",
+    18,
+    10
+   ],
+   [
+    "vism7:141.2",
+    "vā",
+    18,
+    15
+   ],
+   [
+    "vism7:141.3",
+    "bujjhitā saccānīti buddho",
+    18,
+    16
+   ],
+   [
+    "vism7:141.4",
+    "Bodhetā pajāyāti buddho",
+    18,
+    17
+   ],
+   [
+    "vism7:142.5",
+    "liṅgikaṃ",
+    19,
+    10
+   ],
+   [
+    "vism7:142.11",
+    "na mahāmāyāya",
+    19,
+    13
+   ],
+   [
+    "vism7:142.12",
+    "saha sabbaññutaññāṇassa paṭilābhā",
+    19,
+    14
+   ],
+   [
+    "vism7:142.12",
+    "sacchikā paññatti",
+    19,
+    17
+   ],
+   [
+    "vism7:142.12",
+    "sacchikā paññatti",
+    19,
+    18
+   ],
+   [
+    "vism7:143.1",
+    "vadanti",
+    20,
+    0
+   ],
+   [
+    "vism7:143.2",
+    "Bhagī",
+    20,
+    1
+   ],
+   [
+    "vism7:143.4",
+    "Bahūhi ñāyehi",
+    20,
+    3
+   ],
+   [
+    "vism7:143.4",
+    "subhāvitattano",
+    20,
+    4
+   ],
+   [
+    "vism7:143.2",
+    "bhajī",
+    20,
+    11
+   ],
+   [
+    "vism7:143.2",
+    "bhajī",
+    20,
+    14
+   ],
+   [
+    "vism7:143.2",
+    "Bhagī",
+    20,
+    15
+   ],
+   [
+    "vism7:143.2",
+    "Bhagī",
+    20,
+    16
+   ],
+   [
+    "vism7:144.1",
+    "Ayaṃ pana aparo nayo",
+    21,
+    0
+   ],
+   [
+    "vism7:144.4",
+    "saddanayena",
+    21,
+    2
+   ],
+   [
+    "vism7:144.4",
+    "pisodarādipakkhepalakkhaṇaṃ gahetvā",
+    21,
+    3
+   ],
+   [
+    "vism7:144.5",
+    "saṅkhepato",
+    21,
+    25
+   ],
+   [
+    "vism7:144.5",
+    "abhañji",
+    21,
+    25
+   ],
+   [
+    "vism7:144.10",
+    "satapuññalakkhaṇadharassa",
+    21,
+    33
+   ],
+   [
+    "vism7:144.10",
+    "rūpakāyasampatti dīpitā hoti",
+    21,
+    33
+   ],
+   [
+    "vism7:144.11",
+    "dhammakāyasampatti",
+    21,
+    34
+   ],
+   [
+    "vism7:144.12",
+    "bahumatabhāvo",
+    21,
+    35
+   ],
+   [
+    "vism7:144.12",
+    "abhigatānañca nesaṃ kāyacittadukkhāpanayane paṭibalabhāvo āmisadānadhammadānehi",
+    21,
+    39
+   ],
+   [
+    "vism7:144.12",
+    "upakāritā",
+    21,
+    40
+   ],
+   [
+    "vism7:144.13",
+    "sakacitte issariyaṃ",
+    21,
+    41
+   ],
+   [
+    "vism7:144.13",
+    "lokiyasammataṃ",
+    21,
+    51
+   ],
+   [
+    "vism7:144.13",
+    "sabbākāraparipūraṃ atthi",
+    21,
+    52
+   ],
+   [
+    "vism7:144.15",
+    "Lokattayabyāpako",
+    21,
+    53
+   ],
+   [
+    "vism7:144.15",
+    "ativiya parisuddho",
+    21,
+    55
+   ],
+   [
+    "vism7:144.16",
+    "sabbākāraparipūrā",
+    21,
+    56
+   ],
+   [
+    "vism7:144.16",
+    "sabbaṅgapaccaṅgasirī",
+    21,
+    57
+   ],
+   [
+    "vism7:144.17",
+    "Yaṃ yaṃ etena",
+    21,
+    57
+   ],
+   [
+    "vism7:144.17",
+    "icchitaṃ",
+    21,
+    57
+   ],
+   [
+    "vism7:144.17",
+    "patthitaṃ",
+    21,
+    57
+   ],
+   [
+    "vism7:144.17",
+    "tatheva",
+    21,
+    58
+   ],
+   [
+    "vism7:144.18",
+    "sammāvāyāmasaṅkhāto payatto",
+    21,
+    59
+   ],
+   [
+    "vism7:144.20",
+    "bhedehi",
+    21,
+    60
+   ],
+   [
+    "vism7:144.22",
+    "aññe",
+    21,
+    89
+   ],
+   [
+    "vism7:144.3",
+    "bhagavā",
+    21,
+    171
+   ],
+   [
+    "vism7:145.1",
+    "tasmiṃ samaye",
+    22,
+    2
+   ],
+   [
+    "vism7:145.3",
+    "Iccassa",
+    22,
+    9
+   ],
+   [
+    "vism7:145.3",
+    "buddhaguṇapoṇā",
+    22,
+    11
+   ],
+   [
+    "vism7:145.3",
+    "vitakkavicārā pavattanti",
+    22,
+    11
+   ],
+   [
+    "vism7:145.4",
+    "pīti uppajjati",
+    22,
+    12
+   ],
+   [
+    "vism7:145.5",
+    "Pītimanassa",
+    22,
+    13
+   ],
+   [
+    "vism7:145.5",
+    "kāyacittadarathā",
+    22,
+    14
+   ],
+   [
+    "vism7:145.5",
+    "paṭippassambhanti",
+    22,
+    15
+   ],
+   [
+    "vism7:145.7",
+    "anukkamena ekakkhaṇe",
+    22,
+    16
+   ],
+   [
+    "vism7:145.7",
+    "jhānaṅgāni uppajjanti",
+    22,
+    17
+   ],
+   [
+    "vism7:145.8",
+    "Buddhaguṇānaṃ pana gambhīratāya",
+    22,
+    20
+   ],
+   [
+    "vism7:145.8",
+    "nānappakāraguṇānussaraṇādhimuttatāya",
+    22,
+    26
+   ],
+   [
+    "vism7:145.10",
+    "sagāravo hoti sappatisso",
+    22,
+    32
+   ],
+   [
+    "vism7:145.10",
+    "saddhāvepullaṃ",
+    22,
+    33
+   ],
+   [
+    "vism7:145.10",
+    "sativepullaṃ",
+    22,
+    34
+   ],
+   [
+    "vism7:145.10",
+    "paññāvepullaṃ",
+    22,
+    35
+   ],
+   [
+    "vism7:145.10",
+    "puññavepullañca adhigacchati",
+    22,
+    36
+   ],
+   [
+    "vism7:145.10",
+    "pītipāmojjabahulo hoti",
+    22,
+    37
+   ],
+   [
+    "vism7:145.10",
+    "bhayabheravasaho",
+    22,
+    38
+   ],
+   [
+    "vism7:145.10",
+    "dukkhādhivāsanasamattho",
+    22,
+    40
+   ],
+   [
+    "vism7:145.12",
+    "Buddhabhūmiyaṃ cittaṃ namati",
+    22,
+    42
+   ],
+   [
+    "vism7:145.13",
+    "sammukhā satthāraṃ passato viya",
+    22,
+    43
+   ],
+   [
+    "vism7:145.14",
+    "Uttari appaṭivijjhanto",
+    22,
+    44
+   ],
+   [
+    "vism7:145.14",
+    "sugatiparāyano",
+    22,
+    45
+   ],
+   [
+    "vism7:145.15",
+    "kayirātha",
+    22,
+    47
+   ],
+   [
+    "vism7:145.15",
+    "sumedhaso",
+    22,
+    48
+   ],
+   [
+    "vism7:145.16",
+    "Evaṃ mahānubhāvāya",
+    22,
+    49
+   ],
+   [
+    "vism7:146.1",
+    "Dhammānussatiṃ bhāvetukāmenāpi",
+    23,
+    1
+   ],
+   [
+    "vism7:147.1",
+    "pariyattidhammopi",
+    24,
+    0
+   ],
+   [
+    "vism7:147.1",
+    "itaresu",
+    24,
+    1
+   ],
+   [
+    "vism7:147.1",
+    "lokuttaradhammova",
+    24,
+    2
+   ],
+   [
+    "vism7:147.2",
+    "pariyattidhammo",
+    24,
+    3
+   ],
+   [
+    "vism7:147.3",
+    "sā",
+    24,
+    13
+   ],
+   [
+    "vism7:147.3",
+    "dhammassa",
+    24,
+    15
+   ],
+   [
+    "vism7:147.4",
+    "nidānena",
+    24,
+    17
+   ],
+   [
+    "vism7:147.4",
+    "nigamanena",
+    24,
+    18
+   ],
+   [
+    "vism7:147.6",
+    "sanidānasauppattikattā",
+    24,
+    19
+   ],
+   [
+    "vism7:147.6",
+    "sanidānasauppattikattā",
+    24,
+    20
+   ],
+   [
+    "vism7:147.6",
+    "veneyyānaṃ anurūpato",
+    24,
+    21
+   ],
+   [
+    "vism7:147.6",
+    "atthassa",
+    24,
+    22
+   ],
+   [
+    "vism7:147.6",
+    "hetudāharaṇayuttato",
+    24,
+    23
+   ],
+   [
+    "vism7:147.7",
+    "Sakalopi",
+    24,
+    24
+   ],
+   [
+    "vism7:147.7",
+    "sāsanadhammo",
+    24,
+    25
+   ],
+   [
+    "vism7:147.7",
+    "sīlena ādikalyāṇo",
+    24,
+    29
+   ],
+   [
+    "vism7:147.7",
+    "majjhekalyāṇo",
+    24,
+    30
+   ],
+   [
+    "vism7:147.7",
+    "nibbānena pariyosānakalyāṇo",
+    24,
+    31
+   ],
+   [
+    "vism7:147.8",
+    "vipassanāmaggehi majjhekalyāṇo",
+    24,
+    33
+   ],
+   [
+    "vism7:147.8",
+    "phalanibbānehi pariyosānakalyāṇo",
+    24,
+    34
+   ],
+   [
+    "vism7:147.8",
+    "phalanibbānehi pariyosānakalyāṇo",
+    24,
+    35
+   ],
+   [
+    "vism7:147.7",
+    "ādikalyāṇo",
+    24,
+    36
+   ],
+   [
+    "vism7:147.7",
+    "majjhekalyāṇo",
+    24,
+    37
+   ],
+   [
+    "vism7:147.7",
+    "pariyosānakalyāṇo",
+    24,
+    38
+   ],
+   [
+    "vism7:147.11",
+    "nīvaraṇavikkhambhanato",
+    24,
+    44
+   ],
+   [
+    "vism7:147.11",
+    "samathavipassanāsukhāvahanato",
+    24,
+    49
+   ],
+   [
+    "vism7:147.11",
+    "tathāpaṭipanno",
+    24,
+    56
+   ],
+   [
+    "vism7:147.11",
+    "tādibhāvāvahanato",
+    24,
+    57
+   ],
+   [
+    "vism7:147.12",
+    "sāsanabrahmacariyaṃ",
+    24,
+    59
+   ],
+   [
+    "vism7:147.12",
+    "sātthaṃ",
+    24,
+    64
+   ],
+   [
+    "vism7:147.12",
+    "atthasampattiyā",
+    24,
+    66
+   ],
+   [
+    "vism7:147.12",
+    "sātthaṃ",
+    24,
+    69
+   ],
+   [
+    "vism7:147.12",
+    "sātthaṃ",
+    24,
+    104
+   ],
+   [
+    "vism7:147.13",
+    "akkharapadabyañjanākāraniruttiniddesasampattiyā",
+    24,
+    105
+   ],
+   [
+    "vism7:147.12",
+    "sabyañjanaṃ",
+    24,
+    111
+   ],
+   [
+    "vism7:147.22",
+    "attho",
+    24,
+    117
+   ],
+   [
+    "vism7:147.22",
+    "attho",
+    24,
+    122
+   ],
+   [
+    "vism7:147.12",
+    "sātthaṃ",
+    24,
+    135
+   ],
+   [
+    "vism7:147.12",
+    "sabyañjanaṃ",
+    24,
+    139
+   ],
+   [
+    "vism7:147.18",
+    "Upanetabbassa",
+    24,
+    148
+   ],
+   [
+    "vism7:147.18",
+    "abhāvato",
+    24,
+    148
+   ],
+   [
+    "vism7:147.18",
+    "sakalaparipuṇṇabhāvena",
+    24,
+    149
+   ],
+   [
+    "vism7:147.19",
+    "Apanetabbassa",
+    24,
+    150
+   ],
+   [
+    "vism7:147.20",
+    "paṭipattiyā",
+    24,
+    151
+   ],
+   [
+    "vism7:147.20",
+    "adhigamabyattito",
+    24,
+    152
+   ],
+   [
+    "vism7:147.12",
+    "sātthaṃ",
+    24,
+    152
+   ],
+   [
+    "vism7:147.20",
+    "pariyattiyā",
+    24,
+    153
+   ],
+   [
+    "vism7:147.20",
+    "āgamabyattito",
+    24,
+    154
+   ],
+   [
+    "vism7:147.20",
+    "sīlādipañcadhammakkhandhayuttato",
+    24,
+    156
+   ],
+   [
+    "vism7:147.18",
+    "kevalaparipuṇṇaṃ",
+    24,
+    157
+   ],
+   [
+    "vism7:147.20",
+    "nirupakkilesato",
+    24,
+    158
+   ],
+   [
+    "vism7:147.20",
+    "lokāmisanirapekkhato",
+    24,
+    160
+   ],
+   [
+    "vism7:147.21",
+    "Atthavipallāsābhāvato vā suṭṭhu akkhātoti svākkhāto",
+    24,
+    161
+   ],
+   [
+    "vism7:147.22",
+    "Yathā hi",
+    24,
+    161
+   ],
+   [
+    "vism7:147.22",
+    "vipallāsamāpajjati",
+    24,
+    162
+   ],
+   [
+    "vism7:147.22",
+    "niyyānikattābhāvato",
+    24,
+    163
+   ],
+   [
+    "vism7:147.23",
+    "Tena",
+    24,
+    164
+   ],
+   [
+    "vism7:147.23",
+    "te",
+    24,
+    165
+   ],
+   [
+    "vism7:147.26",
+    "nibbānānurūpāya paṭipattiyā",
+    24,
+    167
+   ],
+   [
+    "vism7:147.26",
+    "paṭipadānurūpassa",
+    24,
+    168
+   ],
+   [
+    "vism7:147.27",
+    "supaññattā",
+    24,
+    169
+   ],
+   [
+    "vism7:147.27",
+    "saṃsandati",
+    24,
+    170
+   ],
+   [
+    "vism7:147.28",
+    "sameti",
+    24,
+    170
+   ],
+   [
+    "vism7:147.29",
+    "Ariyamaggo cettha",
+    24,
+    171
+   ],
+   [
+    "vism7:147.29",
+    "anupagamma",
+    24,
+    173
+   ],
+   [
+    "vism7:147.30",
+    "paṭipassaddhakilesānī",
+    24,
+    174
+   ],
+   [
+    "vism7:147.31",
+    "sassatādisabhāvavasena",
+    24,
+    175
+   ],
+   [
+    "vism7:148.1",
+    "Sandiṭṭhiko",
+    25,
+    0
+   ],
+   [
+    "vism7:148.6",
+    "tena tena",
+    25,
+    1
+   ],
+   [
+    "vism7:148.6",
+    "parasaddhāya",
+    25,
+    1
+   ],
+   [
+    "vism7:148.6",
+    "gantabbataṃ hitvā",
+    25,
+    1
+   ],
+   [
+    "vism7:148.6",
+    "paccavekkhaṇañāṇena",
+    25,
+    1
+   ],
+   [
+    "vism7:148.7",
+    "pasatthā diṭṭhi sandiṭṭhi",
+    25,
+    2
+   ],
+   [
+    "vism7:148.13",
+    "bhāvanābhisamayavasena",
+    25,
+    4
+   ],
+   [
+    "vism7:148.13",
+    "sacchikiriyābhisamayavasena",
+    25,
+    5
+   ],
+   [
+    "vism7:149.4",
+    "pakaṭṭho",
+    26,
+    3
+   ],
+   [
+    "vism7:149.4",
+    "kāliko",
+    26,
+    4
+   ],
+   [
+    "vism7:149.4",
+    "attano phaladāne",
+    26,
+    5
+   ],
+   [
+    "vism7:149.4",
+    "patto",
+    26,
+    6
+   ],
+   [
+    "vism7:150.3",
+    "Vijjamānattā",
+    27,
+    1
+   ],
+   [
+    "vism7:150.3",
+    "parisuddhattā",
+    27,
+    2
+   ],
+   [
+    "vism7:150.7",
+    "manuññabhāvappakāsanena",
+    27,
+    3
+   ],
+   [
+    "vism7:151.1",
+    "Upanetabboti opaneyyiko",
+    28,
+    0
+   ],
+   [
+    "vism7:151.4",
+    "Idaṃ saṅkhate lokuttaradhamme yujjati",
+    28,
+    1
+   ],
+   [
+    "vism7:151.5",
+    "upanayanaṃ arahatīti opaneyyiko",
+    28,
+    2
+   ],
+   [
+    "vism7:152.1",
+    "viññūhī",
+    29,
+    0
+   ],
+   [
+    "vism7:152.1",
+    "ugghaṭitaññūādīhi",
+    29,
+    1
+   ],
+   [
+    "vism7:152.1",
+    "attani attani",
+    29,
+    1
+   ],
+   [
+    "vism7:152.1",
+    "veditabbo",
+    29,
+    2
+   ],
+   [
+    "vism7:152.1",
+    "bhāvito me",
+    29,
+    2
+   ],
+   [
+    "vism7:152.1",
+    "me",
+    29,
+    3
+   ],
+   [
+    "vism7:152.2",
+    "Na hi",
+    29,
+    3
+   ],
+   [
+    "vism7:152.1",
+    "viññūhī",
+    29,
+    3
+   ],
+   [
+    "vism7:152.4",
+    "Bālānaṃ pana avisayo cesa",
+    29,
+    3
+   ],
+   [
+    "vism7:152.5",
+    "Apica",
+    29,
+    4
+   ],
+   [
+    "vism7:152.7",
+    "Sandiṭṭhikattā",
+    29,
+    5
+   ],
+   [
+    "vism7:152.5",
+    "svākkhāto",
+    29,
+    5
+   ],
+   [
+    "vism7:154.1",
+    "ariyasaṅghaguṇā",
+    31,
+    1
+   ],
+   [
+    "vism7:155.4",
+    "ca",
+    32,
+    2
+   ],
+   [
+    "vism7:155.1",
+    "suṭṭhu paṭipanno",
+    32,
+    2
+   ],
+   [
+    "vism7:155.4",
+    "Yasmā pana",
+    32,
+    7
+   ],
+   [
+    "vism7:155.2",
+    "sakkaccaṃ suṇantīti sāvakā",
+    32,
+    8
+   ],
+   [
+    "vism7:155.3",
+    "sīladiṭṭhisāmaññatāya",
+    32,
+    9
+   ],
+   [
+    "vism7:155.3",
+    "saṅghātabhāvamāpanno",
+    32,
+    12
+   ],
+   [
+    "vism7:155.4",
+    "uju",
+    32,
+    13
+   ],
+   [
+    "vism7:155.4",
+    "avaṅkā",
+    32,
+    14
+   ],
+   [
+    "vism7:155.4",
+    "akuṭilā",
+    32,
+    15
+   ],
+   [
+    "vism7:155.4",
+    "ajimhā",
+    32,
+    16
+   ],
+   [
+    "vism7:155.4",
+    "uju",
+    32,
+    17
+   ],
+   [
+    "vism7:155.10",
+    "Ñāyo",
+    32,
+    19
+   ],
+   [
+    "vism7:155.4",
+    "anucchavikattā",
+    32,
+    20
+   ],
+   [
+    "vism7:155.4",
+    "saṅkhaṃ",
+    32,
+    21
+   ],
+   [
+    "vism7:155.4",
+    "gatā",
+    32,
+    21
+   ],
+   [
+    "vism7:155.6",
+    "suppaṭipannā",
+    32,
+    21
+   ],
+   [
+    "vism7:155.12",
+    "paṭipannā",
+    32,
+    22
+   ],
+   [
+    "vism7:155.8",
+    "Apica",
+    32,
+    25
+   ],
+   [
+    "vism7:156.1",
+    "Yadida",
+    33,
+    0
+   ],
+   [
+    "vism7:156.2",
+    "evaṃ cattāri purisayugaḷāni honti",
+    33,
+    2
+   ],
+   [
+    "vism7:156.3",
+    "purisapuggalā",
+    33,
+    4
+   ],
+   [
+    "vism7:156.8",
+    "āhuneyyo",
+    33,
+    9
+   ],
+   [
+    "vism7:156.11",
+    "tesaṃ",
+    33,
+    11
+   ],
+   [
+    "vism7:156.11",
+    "laddhi",
+    33,
+    11
+   ],
+   [
+    "vism7:156.17",
+    "huta",
+    33,
+    12
+   ],
+   [
+    "vism7:156.18",
+    "nikāyantare",
+    33,
+    13
+   ],
+   [
+    "vism7:156.22",
+    "ṭhapetvā",
+    33,
+    14
+   ],
+   [
+    "vism7:156.22",
+    "te",
+    33,
+    14
+   ],
+   [
+    "vism7:156.6",
+    "Esa",
+    33,
+    15
+   ],
+   [
+    "vism7:156.24",
+    "ekabuddhantare ca dissati",
+    33,
+    16
+   ],
+   [
+    "vism7:156.4",
+    "ca",
+    33,
+    17
+   ],
+   [
+    "vism7:156.21",
+    "Pāhuneyyo",
+    33,
+    21
+   ],
+   [
+    "vism7:156.27",
+    "Sabbappakārena",
+    33,
+    23
+   ],
+   [
+    "vism7:156.30",
+    "dakkhiṇaṃ arahati",
+    33,
+    26
+   ],
+   [
+    "vism7:156.31",
+    "añjalikaraṇīyo",
+    33,
+    28
+   ],
+   [
+    "vism7:156.32",
+    "Anuttaraṃ",
+    33,
+    30
+   ],
+   [
+    "vism7:156.32",
+    "puññakkhettaṃ",
+    33,
+    32
+   ],
+   [
+    "vism7:158.1",
+    "aho vata",
+    34,
+    2
+   ],
+   [
+    "vism7:158.1",
+    "akhaṇḍatādiguṇavasena",
+    34,
+    3
+   ],
+   [
+    "vism7:158.1",
+    "attano sīlāni anussaritabbāni",
+    34,
+    5
+   ],
+   [
+    "vism7:158.3",
+    "pariyante chinnasāṭako viya",
+    34,
+    9
+   ],
+   [
+    "vism7:158.4",
+    "vinividdhasāṭako",
+    34,
+    11
+   ],
+   [
+    "vism7:158.1",
+    "asabalāni",
+    34,
+    13
+   ],
+   [
+    "vism7:158.1",
+    "akammāsāni",
+    34,
+    14
+   ],
+   [
+    "vism7:158.7",
+    "kodhupanāhādīhi",
+    34,
+    16
+   ],
+   [
+    "vism7:158.8",
+    "Tāniyeva",
+    34,
+    17
+   ],
+   [
+    "vism7:158.8",
+    "taṇhādāsabyato",
+    34,
+    18
+   ],
+   [
+    "vism7:158.8",
+    "bhujissabhāvakaraṇena bhujissāni",
+    34,
+    20
+   ],
+   [
+    "vism7:158.10",
+    "Taṇhādiṭṭhīhi",
+    34,
+    20
+   ],
+   [
+    "vism7:158.10",
+    "parāmaṭṭhuṃ",
+    34,
+    20
+   ],
+   [
+    "vism7:158.1",
+    "samādhisaṃvattanikānī",
+    34,
+    21
+   ],
+   [
+    "vism7:159.6",
+    "sikkhāya sagāravo",
+    35,
+    0
+   ],
+   [
+    "vism7:159.6",
+    "sabhāgavutti",
+    35,
+    1
+   ],
+   [
+    "vism7:159.6",
+    "appamatto",
+    35,
+    4
+   ],
+   [
+    "vism7:159.6",
+    "attānuvādādibhayavirahito",
+    35,
+    5
+   ],
+   [
+    "vism7:160.1",
+    "pakatiyā",
+    36,
+    1
+   ],
+   [
+    "vism7:160.1",
+    "cāgādhimuttena",
+    36,
+    2
+   ],
+   [
+    "vism7:160.2",
+    "dānaṃ",
+    36,
+    5
+   ],
+   [
+    "vism7:160.2",
+    "ito dāni pabhuti",
+    36,
+    7
+   ],
+   [
+    "vism7:160.2",
+    "adatvā na bhuñjissāmīti",
+    36,
+    8
+   ],
+   [
+    "vism7:160.2",
+    "samādānaṃ",
+    36,
+    8
+   ],
+   [
+    "vism7:160.2",
+    "nimittaṃ gaṇhitvā",
+    36,
+    10
+   ],
+   [
+    "vism7:160.2",
+    "vigatamalamaccheratādiguṇavasena",
+    36,
+    11
+   ],
+   [
+    "vism7:160.3",
+    "dāyakassa lābhā",
+    36,
+    14
+   ],
+   [
+    "vism7:160.3",
+    "saṃvaṇṇitā",
+    36,
+    14
+   ],
+   [
+    "vism7:160.4",
+    "manussattaṃ vā",
+    36,
+    15
+   ],
+   [
+    "vism7:160.2",
+    "vā",
+    36,
+    15
+   ],
+   [
+    "vism7:160.7",
+    "maccheramalena",
+    36,
+    16
+   ],
+   [
+    "vism7:160.8",
+    "pajāyanavasena",
+    36,
+    18
+   ],
+   [
+    "vism7:160.10",
+    "vigatattā",
+    36,
+    20
+   ],
+   [
+    "vism7:160.2",
+    "vigatamalamaccherena cetasā",
+    36,
+    21
+   ],
+   [
+    "vism7:160.12",
+    "sotāpannassa sato",
+    36,
+    22
+   ],
+   [
+    "vism7:160.13",
+    "abhibhavitvā",
+    36,
+    24
+   ],
+   [
+    "vism7:160.2",
+    "muttacāgo",
+    36,
+    25
+   ],
+   [
+    "vism7:160.14",
+    "vissaṭṭhacāgo",
+    36,
+    26
+   ],
+   [
+    "vism7:160.16",
+    "sadā",
+    36,
+    28
+   ],
+   [
+    "vism7:160.19",
+    "yaṃ yaṃ",
+    36,
+    30
+   ],
+   [
+    "vism7:160.19",
+    "pare",
+    36,
+    30
+   ],
+   [
+    "vism7:160.23",
+    "ubhaye",
+    36,
+    33
+   ],
+   [
+    "vism7:160.22",
+    "rato",
+    36,
+    33
+   ],
+   [
+    "vism7:161.1",
+    "vigatamalamaccheratādiguṇavasena",
+    37,
+    0
+   ],
+   [
+    "vism7:161.6",
+    "bhiyyoso",
+    37,
+    1
+   ],
+   [
+    "vism7:161.6",
+    "mattāya",
+    37,
+    2
+   ],
+   [
+    "vism7:161.6",
+    "cāgādhimutto",
+    37,
+    3
+   ],
+   [
+    "vism7:161.6",
+    "alobhajjhāsayo",
+    37,
+    4
+   ],
+   [
+    "vism7:161.6",
+    "mettāya",
+    37,
+    5
+   ],
+   [
+    "vism7:161.6",
+    "anulomakārī",
+    37,
+    5
+   ],
+   [
+    "vism7:161.6",
+    "visārado",
+    37,
+    6
+   ],
+   [
+    "vism7:162.1",
+    "ariyamaggavasena",
+    38,
+    1
+   ],
+   [
+    "vism7:162.1",
+    "samudāgatehi",
+    38,
+    2
+   ],
+   [
+    "vism7:162.2",
+    "devā",
+    38,
+    4
+   ],
+   [
+    "vism7:162.2",
+    "cātumahārājikā",
+    38,
+    5
+   ],
+   [
+    "vism7:162.2",
+    "tāvatiṃsā",
+    38,
+    6
+   ],
+   [
+    "vism7:162.2",
+    "yāmā",
+    38,
+    7
+   ],
+   [
+    "vism7:162.2",
+    "tusitā",
+    38,
+    8
+   ],
+   [
+    "vism7:162.2",
+    "nimmānaratino",
+    38,
+    9
+   ],
+   [
+    "vism7:162.2",
+    "paranimmitavasavattino",
+    38,
+    10
+   ],
+   [
+    "vism7:162.2",
+    "brahmakāyikā",
+    38,
+    11
+   ],
+   [
+    "vism7:162.2",
+    "tatuttari",
+    38,
+    12
+   ],
+   [
+    "vism7:162.6",
+    "devatā sakkhiṭṭhāne ṭhapetvā",
+    38,
+    13
+   ],
+   [
+    "vism7:162.6",
+    "attano saddhādiguṇā anussaritabbā",
+    38,
+    13
+   ],
+   [
+    "vism7:162.7",
+    "Sutte",
+    38,
+    14
+   ],
+   [
+    "vism7:162.7",
+    "Sutte pana",
+    38,
+    14
+   ],
+   [
+    "vism7:162.7",
+    "Sutte",
+    38,
+    15
+   ],
+   [
+    "vism7:162.8",
+    "taṃ",
+    38,
+    16
+   ],
+   [
+    "vism7:162.9",
+    "Aṭṭhakathāyañhi",
+    38,
+    19
+   ],
+   [
+    "vism7:163.1",
+    "Tasmā",
+    39,
+    0
+   ],
+   [
+    "vism7:163.1",
+    "pubbabhāge",
+    39,
+    1
+   ],
+   [
+    "vism7:163.1",
+    "aparabhāge",
+    39,
+    2
+   ],
+   [
+    "vism7:163.4",
+    "devatānaṃ guṇasadisasaddhādiguṇānussaraṇavasena",
+    39,
+    3
+   ],
+   [
+    "vism7:164.1",
+    "atthaveda",
+    40,
+    4
+   ],
+   [
+    "vism7:164.4",
+    "guṇe",
+    40,
+    11
+   ],
+   [
+    "vism7:165.1",
+    "ariyasāvakānaññeva ijjhanti",
+    41,
+    0
+   ],
+   [
+    "vism7:165.2",
+    "Tesaṃ hi",
+    41,
+    1
+   ],
+   [
+    "vism7:165.5",
+    "gedhamhā",
+    41,
+    10
+   ],
+   [
+    "vism7:165.7",
+    "Idampi",
+    41,
+    11
+   ],
+   [
+    "vism7:165.7",
+    "ārammaṇaṃ karitvā",
+    41,
+    12
+   ],
+   [
+    "vism7:165.7",
+    "visujjhantī",
+    41,
+    13
+   ],
+   [
+    "vism7:165.8",
+    "sambādhe",
+    41,
+    14
+   ],
+   [
+    "vism7:165.8",
+    "okāsādhigamo",
+    41,
+    15
+   ],
+   [
+    "vism7:165.8",
+    "anussatiṭṭhānāni",
+    41,
+    16
+   ],
+   [
+    "vism7:165.10",
+    "visuddhidhammā",
+    41,
+    17
+   ],
+   [
+    "vism7:165.10",
+    "paramatthavisuddhidhammatāya",
+    41,
+    18
+   ],
+   [
+    "vism7:165.12",
+    "upakkamena",
+    41,
+    19
+   ],
+   [
+    "vism7:165.12",
+    "pariyodapanā",
+    41,
+    20
+   ],
+   [
+    "vism7:166.1",
+    "Evaṃ santepi",
+    42,
+    0
+   ],
+   [
+    "vism7:166.3",
+    "Yassānubhāvena",
+    42,
+    1
+   ],
+   [
+    "vism7:166.4",
+    "pītiṃ paṭilabhitvā",
+    42,
+    2
+   ]
+  ],
   "before": [],
   "after": []
  },
