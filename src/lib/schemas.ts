@@ -29,6 +29,8 @@ export const editionSchema: z.ZodType<Edition> = z.object({
   translator: z.string().nullable(),
   license: z.string().nullable(),
   allowCopy: z.boolean(),
+  source: z.string().optional(),
+  sourceLanguage: z.string().optional(),
 });
 
 export const editionsSchema = z.array(editionSchema);

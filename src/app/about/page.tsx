@@ -49,9 +49,11 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      {e.label}
+                      {e.source ?? e.label}
                     </td>
-                    <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
+                    <td className="px-3 py-3">
+                      {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
+                    </td>
                     <td className="px-3 py-3">{e.translator ?? "—"}</td>
                     <td className="px-3 py-3">
                       {[
@@ -106,9 +108,11 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      {e.label}
+                      {e.source ?? e.label}
                     </td>
-                    <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
+                    <td className="px-3 py-3">
+                      {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
+                    </td>
                     <td className="px-3 py-3">{e.translator ?? "—"}</td>
                     <td className="px-3 py-3">
                       {[

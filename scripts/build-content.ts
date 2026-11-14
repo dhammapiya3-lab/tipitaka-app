@@ -249,6 +249,10 @@ const registrySchema = z.record(
     badge: z.string().optional(),
     language: z.string(),
     allowCopy: z.boolean().optional(),
+    // 정보 화면 판본 표에만 쓰는 칸 (없으면 label·language 를 그대로 쓴다)
+    source: z.string().optional(), // 판본 칸 — 원문을 낸 분 (예: 한국마하시 사야도)
+    sourceLanguage: z.string().optional(), // 언어 칸 — 원문의 언어 (예: 미얀마어)
+    translator: z.string().optional(), // 번역 칸 (예: 담마간다 스님)
   }),
 );
 type EditionList = z.infer<typeof rawEditionListSchema>;
@@ -402,9 +406,11 @@ const editionById = new Map<string, Edition>(
         badge:
           (e.badge ?? "").replace(/\)\s*$/, "").trim() || e.label.slice(0, 2),
         language: language ?? "ko",
-        translator: language === "pli" ? null : e.label,
+        translator: e.translator ?? (language === "pli" ? null : e.label),
         license: null,
         allowCopy: e.allowCopy ?? true,
+        ...(e.source ? { source: e.source } : {}),
+        ...(e.sourceLanguage ? { sourceLanguage: e.sourceLanguage } : {}),
       },
     ];
   }),

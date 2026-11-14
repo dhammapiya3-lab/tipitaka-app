@@ -12,6 +12,10 @@ export interface Edition {
   license: string | null;
   /** 원래 앱이 복사를 막은 판본이면 false (화면에서 글자 선택을 막는다) */
   allowCopy: boolean;
+  /** 정보 화면 판본 표의 "판본" 칸 — 원문을 낸 분 (없으면 label) */
+  source?: string;
+  /** 정보 화면 판본 표의 "언어" 칸 — 원문의 언어, 예: 미얀마어 (없으면 language) */
+  sourceLanguage?: string;
 }
 
 /**
@@ -114,9 +118,19 @@ export interface SuttaCommentary {
   /** 이 층에 든 책들 (디가 복주석서는 옛·새 두 권). 첫째가 book */
   books: { id: string; name: string }[];
   /** 이 경 앞의, 어느 경에도 붙지 않은 주석 문단들 (책·품 머리말, 이야기 등) — "앞 부분"으로 본다 */
-  before: { para: number; vripara: string | null; title?: string | null; lines: InlinePart[][] }[];
+  before: {
+    para: number;
+    vripara: string | null;
+    title?: string | null;
+    lines: InlinePart[][];
+  }[];
   /** 책 맨 끝의 맺음말 등 (마지막 경에만) */
-  after: { para: number; vripara: string | null; title?: string | null; lines: InlinePart[][] }[];
+  after: {
+    para: number;
+    vripara: string | null;
+    title?: string | null;
+    lines: InlinePart[][];
+  }[];
   /** 낱말 연결: 경 문장(key)의 낱말(word) → 이 주석의 문단 순번(para)·줄 순번(line) */
   links: { key: string; word: string; para: number; line: number }[];
   paras: {

@@ -4,8 +4,8 @@
 
   "kor-koreatheravada": { "label": "한국테라와다불교 교단", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어"},
 
-  "kor-koreamahasi-dhammagandha" : { "label": "한국마하시 사야도 (담)", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어"},
-  "kor-mingun-dhammagandha": { "label": "밍군 사야도 (담)", "badge": "밍)", "badgeColor": "bg-amber-700", "language": "한국어"},
+  "kor-koreamahasi-dhammagandha" : { "label": "한국마하시 사야도 (담)", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어", "source": "한국마하시 사야도", "sourceLanguage": "미얀마어", "translator": "담마간다 스님"},
+  "kor-mingun-dhammagandha": { "label": "밍군 사야도 (담)", "badge": "밍)", "badgeColor": "bg-amber-700", "language": "한국어", "source": "삼장법사 밍군 사야도", "sourceLanguage": "미얀마어", "translator": "담마간다 스님"},
   "kor-dhammagandha": { "label": "담마간다 스님", "badge": "담)", "badgeColor": "bg-amber-700", "language": "한국어"},
   "kor-kavissara": { "label": "까윗사라 스님", "badge": "까)", "badgeColor": "bg-amber-700", "language": "한국어"},
   "kor-sangharakkhita": { "label": "상가락키따 스님", "badge": "상)", "badgeColor": "bg-amber-700", "language": "한국어"},
