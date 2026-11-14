@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { TopLevelPage } from "@/components/layout/page-header";
-import { EditionDetails } from "@/components/about/edition-details";
+import { EditionInfoDialog } from "@/components/about/edition-details";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LANGUAGE_LABELS, LICENSE_UNKNOWN } from "@/lib/constants";
 import { allSuttas, editions } from "@/lib/data";
@@ -50,17 +50,26 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      <a
-                        href={`#edition-${e.id}`}
-                        className="underline-offset-4 hover:underline"
-                      >
-                        {e.source ?? e.label}
-                      </a>
+                      <EditionInfoDialog
+                        id={e.id}
+                        title={e.source ?? e.label}
+                        label={e.source ?? e.label}
+                      />
                     </td>
                     <td className="px-3 py-3">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
                     </td>
-                    <td className="px-3 py-3">{e.translator ?? "—"}</td>
+                    <td className="px-3 py-3">
+                      {e.translator ? (
+                        <EditionInfoDialog
+                          id={e.id}
+                          title={e.source ?? e.label}
+                          label={e.translator}
+                        />
+                      ) : (
+                        "—"
+                      )}
+                    </td>
                     <td className="px-3 py-3">
                       {[
                         summarize(
@@ -91,14 +100,75 @@ export default function AboutPage() {
                 ))}
               <tr className="border-t">
                 <td className="px-5 py-3 font-semibold text-foreground">
-                  <a
-                    href="#jataka-tika"
-                    className="underline-offset-4 hover:underline"
+                  <EditionInfoDialog
+                    title={
+                      <>
+                        자따까 새 복주석서 (
+                        <span lang="pi">Jātaka-abhinavaṭīkā</span>)
+                      </>
+                    }
+                    label={
+                      <>
+                        <span lang="pi">Jātaka-abhinavaṭīkā</span>
+                        <br />
+                        (자따까 새 복주석서)
+                      </>
+                    }
                   >
-                    <span lang="pi">Jātaka-abhinavaṭīkā</span>
-                    <br />
-                    (자따까 새 복주석서)
-                  </a>
+                    <div className="flex flex-col gap-3 text-[15px] leading-7 text-gray-600 dark:text-muted-foreground">
+                      <p>
+                        자따까의 &ldquo;복주석서&rdquo; 탭에는 VRI 공식 원문에
+                        들어 있지 않은 자따까 새 복주석서를 따로 실었습니다.
+                      </p>
+                      <p>
+                        <span className="font-semibold text-foreground">
+                          지은이와 때
+                        </span>{" "}
+                        — 미얀마 만달레이의 빤냐사미(
+                        <span lang="pi">Paññāsāmī</span>) 스님이 미얀마력
+                        1230년(서기 1868년)에 지은 복주석서입니다. 자따까
+                        주석서(
+                        <span lang="pi">Jātaka-aṭṭhakathā</span>)의 낱말과
+                        구절을 풀이합니다.
+                      </p>
+                      <p>
+                        <span className="font-semibold text-foreground">
+                          실은 범위
+                        </span>{" "}
+                        — 다섯 권(<span lang="pi">Jātaka-abhinavaṭīkā</span>
+                        -1~5) 전체를 실었습니다. 자따까 547개 가운데 복주석서가
+                        풀이한 519개에 붙어 있고, 나머지 28개는 복주석서가 따로
+                        풀이하지 않은 자따까입니다. 책 머리말은 자따까 1번
+                        복주석서의 &ldquo;앞 부분&rdquo;에 있습니다.
+                      </p>
+                      <p>
+                        <span className="font-semibold text-foreground">
+                          자리를 정한 방법
+                        </span>{" "}
+                        — 복주석서 안의 자따까 제목(예:
+                        &ldquo;1-apaṇṇakajātakavaṇṇanā (1)&rdquo;)에 적힌 번호로
+                        자리를 찾았습니다. 번호가 잘못 적힌 한 곳(53번 자따까가
+                        &ldquo;(43)&rdquo;으로 적힘)은 앞뒤 차례에 맞춰
+                        바로잡았습니다.
+                      </p>
+                      <p>
+                        <span className="font-semibold text-foreground">
+                          글에 대해
+                        </span>{" "}
+                        — 내용은 바꾸지 않고 표기만 다듬었습니다. 문장 끝의
+                        &ldquo;..&rdquo;을 &ldquo;.&rdquo;로, &ldquo;l̤&rdquo;를
+                        같은 글자인 &ldquo;ḷ&rdquo;로 바꾸었고, 내용 없이 번호만
+                        남은 인쇄본 각주 번호를 지웠습니다.
+                      </p>
+                      <p>
+                        <span className="font-semibold text-foreground">
+                          출처와 이용 조건
+                        </span>{" "}
+                        — E-Piṭaka (github.com/dhammanana/epitaka_app), CC BY-NC
+                        4.0 (비영리, 출처 표시)
+                      </p>
+                    </div>
+                  </EditionInfoDialog>
                 </td>
                 <td className="px-3 py-3">빠알리어</td>
                 <td className="px-3 py-3">—</td>
@@ -114,17 +184,26 @@ export default function AboutPage() {
                 .map((e) => (
                   <tr key={e.id} className="border-t">
                     <td className="px-5 py-3 font-semibold text-foreground">
-                      <a
-                        href={`#edition-${e.id}`}
-                        className="underline-offset-4 hover:underline"
-                      >
-                        {e.source ?? e.label}
-                      </a>
+                      <EditionInfoDialog
+                        id={e.id}
+                        title={e.source ?? e.label}
+                        label={e.source ?? e.label}
+                      />
                     </td>
                     <td className="px-3 py-3">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
                     </td>
-                    <td className="px-3 py-3">{e.translator ?? "—"}</td>
+                    <td className="px-3 py-3">
+                      {e.translator ? (
+                        <EditionInfoDialog
+                          id={e.id}
+                          title={e.source ?? e.label}
+                          label={e.translator}
+                        />
+                      ) : (
+                        "—"
+                      )}
+                    </td>
                     <td className="px-3 py-3">
                       {[
                         summarize(
@@ -155,84 +234,6 @@ export default function AboutPage() {
                 ))}
             </tbody>
           </table>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>판본별 상세 정보</CardTitle>
-          <p className="t-sub text-sm">
-            판본 표에서 이름을 누르거나 아래 항목을 누르면 번역자 소개·출처·이용
-            조건 같은 자세한 안내가 펼쳐집니다.
-          </p>
-        </CardHeader>
-        <CardContent className="px-0">
-          {[
-            ...editions.filter((e) => e.language === "pli"),
-            ...editions.filter((e) => e.language !== "pli"),
-          ].map((e) => (
-            <EditionDetails
-              key={e.id}
-              id={e.id}
-              title={e.source ?? e.label}
-              subtitle={
-                e.translator && e.translator !== (e.source ?? e.label)
-                  ? `번역 ${e.translator}`
-                  : undefined
-              }
-            />
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card id="jataka-tika" className="scroll-mt-20">
-        <CardHeader>
-          <CardTitle>
-            자따까 복주석서 (<span lang="pi">Jātaka-abhinavaṭīkā</span>)
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="t-sub flex flex-col gap-3">
-          <p>
-            자따까의 &ldquo;복주석서&rdquo; 탭에는 VRI 공식 원문에 들어 있지
-            않은 자따까 새 복주석서를 따로 실었습니다.
-          </p>
-          <p>
-            <span className="font-semibold text-foreground">지은이와 때</span> —
-            미얀마 만달레이의 빤냐사미(
-            <span lang="pi">Paññāsāmī</span>) 스님이 미얀마력 1230년(서기
-            1868년)에 지은 복주석서입니다. 자따까 주석서(
-            <span lang="pi">Jātaka-aṭṭhakathā</span>)의 낱말과 구절을
-            풀이합니다.
-          </p>
-          <p>
-            <span className="font-semibold text-foreground">실은 범위</span> —
-            다섯 권(<span lang="pi">Jātaka-abhinavaṭīkā</span>-1~5) 전체를
-            실었습니다. 자따까 547개 가운데 복주석서가 풀이한 519개에 붙어 있고,
-            나머지 28개는 복주석서가 따로 풀이하지 않은 자따까입니다. 책
-            머리말은 자따까 1번 복주석서의 &ldquo;앞 부분&rdquo;에 있습니다.
-          </p>
-          <p>
-            <span className="font-semibold text-foreground">
-              자리를 정한 방법
-            </span>{" "}
-            — 복주석서 안의 자따까 제목(예: &ldquo;1-apaṇṇakajātakavaṇṇanā
-            (1)&rdquo;)에 적힌 번호로 자리를 찾았습니다. 번호가 잘못 적힌 한
-            곳(53번 자따까가 &ldquo;(43)&rdquo;으로 적힘)은 앞뒤 차례에 맞춰
-            바로잡았습니다.
-          </p>
-          <p>
-            <span className="font-semibold text-foreground">글에 대해</span> —
-            내용은 바꾸지 않고 표기만 다듬었습니다. 문장 끝의 &ldquo;..&rdquo;을
-            &ldquo;.&rdquo;로, &ldquo;l̤&rdquo;를 같은 글자인 &ldquo;ḷ&rdquo;로
-            바꾸었고, 내용 없이 번호만 남은 인쇄본 각주 번호를 지웠습니다.
-          </p>
-          <p>
-            <span className="font-semibold text-foreground">
-              출처와 이용 조건
-            </span>{" "}
-            — E-Piṭaka (github.com/dhammanana/epitaka_app), CC BY-NC 4.0
-            (비영리, 출처 표시)
-          </p>
         </CardContent>
       </Card>
 

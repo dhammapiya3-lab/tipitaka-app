@@ -53,6 +53,7 @@ HAND_MADE = {"sn22.59", "sn56.11"} | {
 }
 
 OUTDIR = os.environ.get("PTS_OUT", "/tmp/pts-auto")
+REJECT_ROWS = []
 PURITY = float(os.environ.get("PTS_PURITY", "0.6"))
 
 REF = re.compile(
@@ -269,6 +270,7 @@ def main():
                 groups.append([pk, s_, starts[s_], starts[s_] + len(seg_chars[s_])])
         spans = [None] * len(segs)
         rejected = 0
+        rejects = {}  # 뺀 문단 → (문단, 찾았던 PTS 글 범위, 맞은 비율) — PTS_REJECTS 로 목록을 남길 때
         for gi, (pk, s_, st, en) in enumerate(groups):
             idx = [t for t in range(st, en) if 0 <= m[t] < len(powner)]
             sutta_end = gi + 1 == len(groups) or segs[groups[gi + 1][1]][0] != segs[s_][0]
@@ -281,6 +283,7 @@ def main():
                     spans[s_] = [powner[a0], powner[a1]]
                 else:
                     rejected += 1
+                    rejects[s_] = (pk, powner[a0], powner[a1], len(idx) / (a1 - a0 + 1))
         # 비어 있는 문단 하나가 채워진 두 문단 사이에 끼어 있으면, 두 문단 사이의 PTS 글을 그 문단 것으로 본다
         # (PTS 가 경 첫머리 등을 줄여 적어 글자가 덜 맞은 곳 — 예: "Bārāṇasiyaṃ nidānaṃ Migadāye")
         gapfilled = 0
@@ -331,6 +334,20 @@ def main():
                     spans[s][0] += 1
                     spans[prev][1] += 1
             prev = s
+        # 뺀 문단 목록 (사이 글로 다시 채워지지 않은 것만)
+        if os.environ.get("PTS_REJECTS"):
+            ms_text = {}
+            for sid in ids:
+                ms_text.update(json.load(open(ms_files[sid], encoding="utf-8")))
+            for s_, (pk, w0, w1, ratio) in rejects.items():
+                if spans[s_] is not None:
+                    continue
+                keys = [k for (sid, k) in segs if para_of(k) == pk and not re.search(r":0\.\d+$", k)]
+                REJECT_ROWS.append({
+                    "book": prefix, "sutta": pk.split(":")[0], "paragraph": pk.split(":", 1)[1] if ":" in pk else "",
+                    "ratio": round(ratio * 100), "ms": " ".join(ms_text.get(k, "").strip() for k in keys).strip(),
+                    "pts": " ".join(pts[w0 : w1 + 1]),
+                })
         # 경마다 파일
         by_sutta = defaultdict(dict)
         for s, (sid, key) in enumerate(segs):
@@ -362,6 +379,9 @@ def main():
         print(f"  ({prefix}) 자리가 의심스러워 뺀 문단 {rejected}개 · 사이 글로 채운 문단 {gapfilled}개")
         report.append(f"{prefix}: 경 {len(ids)}개 중 {written}개 · 문단 {total}개 중 PTS 글이 붙은 문단 {filled}개 ({filled * 100 // max(1, total)}%)")
         print(report[-1], flush=True)
+    if os.environ.get("PTS_REJECTS"):
+        with open(os.environ["PTS_REJECTS"], "w", encoding="utf-8") as fh:
+            json.dump(REJECT_ROWS, fh, ensure_ascii=False)
     if not dry:
         with open(os.path.join(ROOT, "content", "pts-import-report.txt"), "w", encoding="utf-8") as fh:
             fh.write("\n".join(report) + "\n")

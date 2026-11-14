@@ -1,44 +1,59 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { EditionInfoView } from "@/components/sutta/reader-sheets";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { fetchEditionInfo } from "@/lib/content";
 import type { EditionInfo } from "@/types";
 
 /**
- * 정보 화면 — 판본 하나의 상세 정보(번역자 소개·출처·저작권 안내 …).
- * 접혀 있다가 누르거나, 판본 표의 이름을 눌러 주소가 #edition-<판본> 이 되면 펼쳐진다.
- * 소개 글은 경 화면의 판본 창과 같은 자료(public/data/edition-info)를 펼칠 때 받는다.
+ * 정보 화면 판본 표 — 판본·번역자 이름을 누르면 상세 정보(번역자 소개·출처·이용 조건 …)를 창으로 띄운다.
+ * id 가 있으면 경 화면의 판본 창과 같은 소개 자료(public/data/edition-info)를 열 때 받고,
+ * 없으면 children 을 그대로 보인다 (자따까 새 복주석서처럼 이 화면에서 쓴 소개).
  */
-export function EditionDetails({
+export function EditionInfoDialog({
   id,
   title,
-  subtitle,
+  label,
+  children,
 }: {
-  id: string;
-  title: string;
-  subtitle?: string;
+  id?: string;
+  /** 창 제목 */
+  title: ReactNode;
+  /** 표에 보이는 누를 글자 */
+  label: ReactNode;
+  children?: ReactNode;
 }) {
-  const ref = useRef<HTMLDetailsElement>(null);
   const [open, setOpen] = useState(false);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <button
+            type="button"
+            title="누르면 상세 정보"
+            className="cursor-pointer text-left underline decoration-dotted decoration-1 underline-offset-4 outline-none hover:text-primary hover:decoration-solid focus-visible:ring-3 focus-visible:ring-ring/50"
+          />
+        }
+      >
+        {label}
+      </DialogTrigger>
+      <DialogContent className="max-h-[85vh] gap-5 overflow-y-auto p-6 sm:max-w-2xl">
+        <DialogTitle className="pr-8 text-lg font-bold">{title}</DialogTitle>
+        {open ? id ? <LoadedInfo id={id} /> : children : null}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function LoadedInfo({ id }: { id: string }) {
   const [info, setInfo] = useState<EditionInfo | null | "loading">("loading");
-
-  // 표에서 이름을 눌러 이 칸으로 오면 펼친다
   useEffect(() => {
-    const check = () => {
-      if (window.location.hash === `#edition-${id}` && ref.current) {
-        ref.current.open = true;
-        ref.current.scrollIntoView({ block: "start" });
-      }
-    };
-    check();
-    window.addEventListener("hashchange", check);
-    return () => window.removeEventListener("hashchange", check);
-  }, [id]);
-
-  useEffect(() => {
-    if (!open) return;
     let alive = true;
     fetchEditionInfo(id)
       .then((v) => alive && setInfo(v))
@@ -46,40 +61,14 @@ export function EditionDetails({
     return () => {
       alive = false;
     };
-  }, [open, id]);
-
-  return (
-    <details
-      ref={ref}
-      id={`edition-${id}`}
-      className="group scroll-mt-20 border-t first:border-t-0"
-      onToggle={(e) => setOpen(e.currentTarget.open)}
-    >
-      <summary className="flex cursor-pointer list-none items-center gap-3 px-5 py-3.5 outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
-        <span className="min-w-0 flex-1">
-          <span className="font-semibold text-foreground">{title}</span>
-          {subtitle ? (
-            <span className="ml-2 text-sm text-muted-foreground">
-              {subtitle}
-            </span>
-          ) : null}
-        </span>
-        <ChevronDown
-          aria-hidden
-          className="size-4 shrink-0 text-faint transition-transform group-open:rotate-180"
-        />
-      </summary>
-      <div className="px-5 pt-1 pb-6">
-        {!open ? null : info === "loading" ? (
-          <p className="text-sm text-faint">불러오는 중…</p>
-        ) : info ? (
-          <EditionInfoView info={info} />
-        ) : (
-          <p className="text-sm text-faint">
-            이 판본의 상세 정보는 아직 준비 중입니다.
-          </p>
-        )}
-      </div>
-    </details>
-  );
+  }, [id]);
+  if (info === "loading")
+    return <p className="text-sm text-faint">불러오는 중…</p>;
+  if (!info)
+    return (
+      <p className="text-sm text-faint">
+        이 판본의 상세 정보는 아직 준비 중입니다.
+      </p>
+    );
+  return <EditionInfoView info={info} />;
 }
