@@ -367,9 +367,34 @@ function readText(dir: string, folder: string, sub: string, edition: string) {
   for (const kind of ["root", "translation"]) {
     const file = path.join(dir, folder, `${sub}_${kind}-${edition}.json`);
     if (existsSync(file))
-      return applyLineMap(edition, rawTextSchema.parse(readJson(file)));
+      return applyLineMap(
+        edition,
+        edition === "pli-pts"
+          ? cleanPts(rawTextSchema.parse(readJson(file)))
+          : rawTextSchema.parse(readJson(file)),
+      );
   }
   return null;
+}
+
+/**
+ * PTS 전자판(GRETIL · 담마까야 재단 입력)의 별표·밑줄을 뗀다 (원본 파일은 그대로, 사이트 자료에서만):
+ *  · 품·경 끝의 구분선 "********…", "______…" (인쇄본의 줄 긋기)
+ *  · 각주 표시 "Suttanta.]*", "aṭṭhamiṃ*" (각주 글은 넣지 않았다)
+ *  · 두 별표로 감싼 말 "*kiṃ paccati*" — 별표만 빼고 글자는 그대로
+ * 빠알리 글자는 하나도 바뀌지 않는다.
+ */
+function cleanPts(text: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(text).map(([key, value]) => [
+      key,
+      value
+        .replace(/\s*(?:\*{3,}|_{3,})/g, "")
+        .replace(/\*/g, "")
+        .replace(/[ \t]{2,}/g, " ")
+        .trim(),
+    ]),
+  );
 }
 
 /**
