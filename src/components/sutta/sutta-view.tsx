@@ -49,7 +49,12 @@ import {
   DESKTOP_QUERY,
   useMediaQuery,
 } from "@/components/shared/use-media-query";
-import { BarButton, Breadcrumb, SubBar } from "@/components/layout/app-bar";
+import {
+  BarButton,
+  Breadcrumb,
+  type CrumbItem,
+  SubBar,
+} from "@/components/layout/app-bar";
 import {
   bookIndexOf,
   bookLabel,
@@ -131,7 +136,7 @@ export interface SuttaLink {
 export interface SuttaHead {
   title: string;
   titleLang?: string;
-  crumbs: { label: string; href?: string }[];
+  crumbs: CrumbItem[];
   backHref: string;
 }
 

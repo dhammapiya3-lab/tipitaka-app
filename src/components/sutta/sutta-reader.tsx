@@ -4,13 +4,13 @@ import { BookX, CloudOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Screen, SubBar } from "@/components/layout/app-bar";
+import { type CrumbItem, Screen, SubBar } from "@/components/layout/app-bar";
 import { EmptyState } from "@/components/shared/empty-state";
 import { SuttaView } from "@/components/sutta/sutta-view";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchSuttaIndex } from "@/lib/content";
-import { suttaLabel } from "@/lib/format";
+import { suttaHref, suttaLabel } from "@/lib/format";
 import type { Edition, SuttaIndexEntry } from "@/types";
 
 type State =
@@ -113,17 +113,70 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
     s && s.nikaya === sutta.nikaya ? { id: s.id, title: titleOf(s) } : null;
 
   const { nikayaName, groups, groupPages } = sutta.trail;
-  const crumbs = [
+  // 위치 줄: 니까야·묶음·경마다 같은 단계의 목록을 펼쳐 옮겨 갈 수 있다 (원래 앱처럼)
+  const pathOf = (s: SuttaIndexEntry) => s.trail.groups.map((g) => g.id);
+  const firstOf = (
+    match: (s: SuttaIndexEntry) => boolean,
+    key: (s: SuttaIndexEntry) => string,
+    label: (s: SuttaIndexEntry) => string,
+    current: string,
+  ) => {
+    const seen = new Map<
+      string,
+      { label: string; href: string; current: boolean }
+    >();
+    for (const s of index)
+      if (match(s) && !seen.has(key(s)))
+        seen.set(key(s), {
+          label: label(s),
+          href: suttaHref(s.id),
+          current: key(s) === current,
+        });
+    return [...seen.values()];
+  };
+  const here = pathOf(sutta);
+  const crumbs: CrumbItem[] = [
     { label: "경", href: "/suttas" },
-    { label: nikayaName, href: `/suttas/${sutta.nikaya}` },
-    ...groups.map((g, i) => ({
+    {
+      label: nikayaName,
+      href: `/suttas/${sutta.nikaya}`,
+      options: firstOf(
+        () => true,
+        (s) => s.nikaya,
+        (s) => s.trail.nikayaName,
+        sutta.nikaya,
+      ),
+    },
+    ...groups.map((g, d) => ({
       label: g.label,
       href:
-        groupPages && i === groups.length - 1
+        groupPages && d === groups.length - 1
           ? `/suttas/${sutta.nikaya}/${encodeURIComponent(g.id)}`
           : undefined,
+      options: firstOf(
+        (s) =>
+          s.nikaya === sutta.nikaya &&
+          pathOf(s).length > d &&
+          here.slice(0, d).every((id, k) => pathOf(s)[k] === id),
+        (s) => pathOf(s)[d],
+        (s) => s.trail.groups[d].label,
+        g.id,
+      ),
     })),
-    { label: suttaLabel(sutta.id) },
+    {
+      label: suttaLabel(sutta.id),
+      options: index
+        .filter(
+          (s) =>
+            s.nikaya === sutta.nikaya && pathOf(s).join("/") === here.join("/"),
+        )
+        .map((s) => ({
+          label: titleOf(s),
+          sub: suttaLabel(s.id),
+          href: suttaHref(s.id),
+          current: s.id === sutta.id,
+        })),
+    },
   ];
 
   // 경이 바뀌면 읽기 화면을 새로 그린다 (열어 둔 각주·사전 창 등을 비운다)

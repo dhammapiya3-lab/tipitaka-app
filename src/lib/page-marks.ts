@@ -15,11 +15,6 @@ export const PAGE_EDITIONS: { ed: string; label: string; title: string }[] = [
   { ed: "pts-cs", label: "PTS 문단", title: "PTS본 문단(절) 번호" },
   { ed: "M", label: "미얀마 6차", title: "미얀마 제6차 결집 인쇄본 — 권.쪽" },
   {
-    ed: "csp",
-    label: "미얀마 6차 2판",
-    title: "미얀마 제6차 결집 인쇄본 (Chaṭṭhasaṅgīti Piṭaka) 2판 — 권.쪽",
-  },
-  {
     ed: "V",
     label: "VRI 인쇄본",
     title: "VRI(위빳사나 연구소) 인쇄본 — 권.쪽",
@@ -66,7 +61,6 @@ const SHORT: Record<string, string> = {
   M: "Mya",
   T: "Thai",
   V: "VRI",
-  csp: "CSP",
   sya: "Syā",
   cck: "Cck",
   mc: "Mc",

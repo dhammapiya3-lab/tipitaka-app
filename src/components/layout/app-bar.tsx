@@ -1,11 +1,17 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { isActiveItem, NAV_TOOLS } from "@/components/layout/nav-items";
 import { SiteMap } from "@/components/layout/site-map";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { KeyboardShortcuts } from "@/components/shared/keyboard-shortcuts";
 import { cn } from "@/lib/utils";
@@ -173,11 +179,15 @@ export function BarButton({
 }
 
 /** 위치 줄 — 경 › 상윳따 니까야 › 대품 … (원래 앱과 같은 모양) */
-export function Breadcrumb({
-  items,
-}: {
-  items: { label: string; href?: string }[];
-}) {
+/** 위치 줄의 한 칸 — options 가 있으면 누를 때 같은 단계의 목록이 펼쳐져 옮겨 갈 수 있다 (원래 앱과 같다) */
+export interface CrumbItem {
+  label: string;
+  href?: string;
+  options?: { label: string; sub?: string; href: string; current?: boolean }[];
+}
+
+export function Breadcrumb({ items }: { items: CrumbItem[] }) {
+  const router = useRouter();
   return (
     <nav aria-label="위치" className="mt-3 print:hidden">
       <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
@@ -188,7 +198,44 @@ export function Breadcrumb({
                 ›
               </span>
             ) : null}
-            {i === 0 && !item.href ? (
+            {item.options?.length ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="inline-flex items-center gap-0.5 rounded px-0.5 hover:text-secondary-foreground data-popup-open:text-primary"
+                  title={`${item.label} — 같은 단계의 목록에서 고르기`}
+                >
+                  {item.label}
+                  <ChevronDown className="size-3 opacity-60" aria-hidden />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="max-h-80 w-auto max-w-[min(22rem,90vw)]">
+                  {item.href ? (
+                    <DropdownMenuItem
+                      onClick={() => router.push(item.href!)}
+                      className="text-xs text-muted-foreground"
+                    >
+                      목록 화면으로 →
+                    </DropdownMenuItem>
+                  ) : null}
+                  {item.options.map((o) => (
+                    <DropdownMenuItem
+                      key={o.href}
+                      onClick={() => router.push(o.href)}
+                      className={cn(
+                        "flex items-baseline gap-2",
+                        o.current && "font-bold text-primary",
+                      )}
+                    >
+                      {o.sub ? (
+                        <span className="w-16 shrink-0 text-xs text-faint">
+                          {o.sub}
+                        </span>
+                      ) : null}
+                      <span className="min-w-0 truncate">{o.label}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : i === 0 && !item.href ? (
               <span className="font-bold text-secondary-foreground">
                 {item.label}
               </span>

@@ -9,9 +9,9 @@
     pts-cs  PTS본 문단(절) 번호          nya   냐나몰리 스님 문단 번호(맛지마 니까야)
     bj      스리랑카 붓다자얀띠본 권.쪽    sya   태국 시암본(2538/1995) 권.쪽
     cck     태국 쭐라쫌끌라오본(1893)      mc    태국 마하쭐라본          dr  태국 다이야랏타본
-    ndp     인도 날란다 데바나가리본       csp   미얀마 제6차 결집 인쇄본(2판) 권.쪽
+    ndp     인도 날란다 데바나가리본
 - 빼는 것: ms·msdiv(마하상기띠 번호 — msdiv 는 VRI 문단 번호와 같다), pts-vp-pli·vri(이미 있음),
-  csp1ed(2판과 같음), 뜻을 확인하지 못한 km·maku·lv·vns·vnp.
+  csp1ed·csp2ed(미얀마 제6차 결집 인쇄본 — 쪽은 VRI 의 M 과 같고 권 번호만 시리즈 전체로 센 것), 뜻을 확인하지 못한 km·maku·lv·vns·vnp.
 """
 
 import json
@@ -19,8 +19,8 @@ import re
 import sys
 from pathlib import Path
 
-KEEP = ["pts-cs", "nya", "bj", "sya", "cck", "mc", "dr", "ndp", "csp2ed"]
-NAME = {"csp2ed": "csp"}
+KEEP = ["pts-cs", "nya", "bj", "sya", "cck", "mc", "dr", "ndp"]
+NAME: dict[str, str] = {}
 PAT = re.compile(r"^(" + "|".join(sorted(KEEP, key=len, reverse=True)) + r")(\d[\d.]*)$")
 
 
