@@ -23,12 +23,6 @@ export function TopicChips({ suttaId }: { suttaId: string }) {
   const ids = [...new Set(mine.map((m) => m.t))];
   return (
     <div className="mt-1 flex flex-wrap items-center gap-1.5 print:hidden">
-      <span
-        className="text-[11px] font-semibold text-faint"
-        title="Access to Insight 주제 색인 (CC BY 4.0)"
-      >
-        ATI 주제
-      </span>
       {ids.map((id) => {
         const t = byId.get(id);
         if (!t) return null;

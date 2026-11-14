@@ -22,11 +22,11 @@ export interface SuttaRowData {
   editions: string[];
 }
 
-/** 판본 배지 바탕색 — 원래 앱처럼 한국어는 호박색, 빠알리는 짙은 회색, 영어는 회색 */
+/** 판본 배지 바탕색 — 한국어는 호박색, 빠알리는 짙은 회색, 영어는 청록색 (빠알리와 헷갈리지 않게) */
 export function editionBadgeClass(e: Pick<Edition, "language">): string {
   if (e.language === "ko") return "bg-primary";
   if (e.language === "pli") return "bg-gray-600";
-  return "bg-gray-500";
+  return "bg-teal-700";
 }
 
 /** 판본 순서: 한국어 → 빠알리 → 영어 (원래 앱의 경 목록·판본 선택과 같다) */
