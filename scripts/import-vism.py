@@ -156,6 +156,7 @@ def tika_paras(items: list, sid: str, root_paras: list[int]) -> list[dict]:
     for p in paras:
         if p["para"] in merged:
             merged[p["para"]]["lines"] += p["lines"]
+            merged[p["para"]]["vripara"] = merged[p["para"]]["vripara"] or p["vripara"]
         else:
             merged[p["para"]] = p
     out = list(merged.values())

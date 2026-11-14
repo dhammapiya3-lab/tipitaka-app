@@ -478,6 +478,13 @@ const vriSchema = z.object({
   preface: z.array(z.string()).default([]),
   source: z.object({ vripara: z.unknown() }).partial().optional(),
 });
+/** 수따센따 msdiv — 경 → 문장 번호 → VRI 문단 번호 (content/sc-msdiv.json, scripts/import-sc-refs.py) */
+const scMsdivFile = path.join(ROOT, "content", "sc-msdiv.json");
+const scMsdiv: Record<string, Record<string, string>> = existsSync(scMsdivFile)
+  ? z
+      .record(z.string(), z.record(z.string(), z.string()))
+      .parse(readJson(scMsdivFile))
+  : {};
 const commentaryFiles: SuttaCommentary[] = [];
 const vriTexts: SuttaText[] = [];
 const vriUnsure = new Map<string, string[]>();
@@ -679,6 +686,11 @@ function buildSutta(
     if (vri.unsure.length) vriUnsure.set(id, vri.unsure);
     if (vri.preface.length) vriPreface.set(id, vri.preface);
     const numbers = vriParaNumbers(vri.segments, id, vri.source?.vripara);
+    // VRI 원문에서 번호를 못 뗀 문단(제목 줄에 붙은 번호가 맞춤에서 빠진 곳 등)은 수따센따의 msdiv(= VRI 문단 번호)로 채운다
+    for (const [key, n] of Object.entries(scMsdiv[id] ?? {})) {
+      const p = paragraphOf(key, id);
+      if (!numbers[p]) numbers[p] = n;
+    }
     if (Object.keys(numbers).length) vriNumbers.set(id, numbers);
     const rootParas = new Set(
       Object.keys(root).map((key) => paragraphOf(key, id)),

@@ -37,6 +37,17 @@ def main() -> None:
                 sutta = f.name.removesuffix("_reference.json")
                 out.setdefault(sutta, []).append([key, NAME.get(m.group(1), m.group(1)), m.group(2)])
                 count += 1
+    # 마하상기띠 문단 번호(msdiv) = VRI 문단 번호. VRI 원문 맞추기에서 놓친 문단 번호(제목 줄에 붙은 번호 등)를 채우는 데 쓴다
+    msdiv: dict[str, dict[str, str]] = {}
+    for f in sorted(root.rglob("*_reference.json")):
+        for key, value in json.loads(f.read_text(encoding="utf-8")).items():
+            for ref in (x.strip() for x in value.split(",")):
+                m = re.match(r"^msdiv(\d[\d-]*)$", ref)
+                if m:
+                    msdiv.setdefault(f.name.removesuffix("_reference.json"), {})[key] = m.group(1)
+    (Path(__file__).resolve().parent.parent / "content" / "sc-msdiv.json").write_text(
+        json.dumps(msdiv, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8"
+    )
     dest = Path(__file__).resolve().parent.parent / "content" / "sc-refs.json"
     dest.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"참조 번호 {count}개 · 경 {len(out)}개 → {dest.name}")
