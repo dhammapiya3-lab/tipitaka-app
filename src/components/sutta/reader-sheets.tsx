@@ -2,7 +2,7 @@
 
 import { Check, Printer } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 import { BottomSheet } from "@/components/shared/bottom-sheet";
 import {
   editionBadgeClass,
@@ -451,6 +451,16 @@ export function EditionBadges({
   shownIds: string[];
   onToggle: (id: string) => void;
 }) {
+  // 누르면 단추 색은 곧바로 바뀌고(useOptimistic), 본문은 뒤에서 다시 그린다(startTransition) — 긴 경에서도 반응이 빠르게
+  const [shown, setShown] = useOptimistic(shownIds);
+  const toggle = (id: string) =>
+    startTransition(() => {
+      const next = shown.includes(id)
+        ? shown.filter((x) => x !== id)
+        : [...shown, id];
+      if (next.length) setShown(next);
+      onToggle(id);
+    });
   return (
     <div
       className="mt-2 flex flex-wrap gap-1.5 print:hidden"
@@ -458,13 +468,13 @@ export function EditionBadges({
       aria-label="보이는 판본 고르기"
     >
       {orderEditions(editions).map((e) => {
-        const on = shownIds.includes(e.id);
+        const on = shown.includes(e.id);
         return (
           <button
             key={e.id}
             type="button"
             aria-pressed={on}
-            onClick={() => onToggle(e.id)}
+            onClick={() => toggle(e.id)}
             className={cn(
               "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold active:opacity-75",
               on
