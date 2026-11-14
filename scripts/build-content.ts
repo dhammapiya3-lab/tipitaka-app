@@ -21,6 +21,7 @@ import { z } from "zod";
 import {
   extrasSchema,
   parallelsSchema,
+  suttaTitlesSchema,
   catalogSchema,
   editionsSchema,
   editionInfoSchema,
@@ -975,6 +976,34 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
     path.join(path.dirname(OUT_SUTTAS), "extras.json"),
     JSON.stringify(extras),
   );
+}
+// 검색에서 경 제목으로 찾도록 — 한국어 번역들의 경 제목 (0.x 줄의 마지막 글, 예: "새김확립 긴 경", "무아상경(無我相經)")
+{
+  const titles = new Map<string, Set<string>>();
+  for (const text of texts) {
+    if (editionById.get(text.editionId)?.language !== "ko") continue;
+    const head = text.segments.filter((seg) => /:0\.\d+$/.test(seg.key));
+    const last = head.at(-1);
+    if (!last) continue;
+    const t = last.parts
+      .map((p) => (p.type === "note" ? "" : p.text))
+      .join("")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!t || t.length > 60) continue;
+    const set = titles.get(text.suttaId) ?? new Set<string>();
+    set.add(t);
+    titles.set(text.suttaId, set);
+  }
+  writeFileSync(
+    path.join(path.dirname(OUT_SUTTAS), "sutta-titles.json"),
+    JSON.stringify(
+      suttaTitlesSchema.parse(
+        Object.fromEntries([...titles].map(([id, set]) => [id, [...set]])),
+      ),
+    ),
+  );
+  console.log(`경 제목(한국어 번역): 경 ${titles.size}개`);
 }
 // 병행 경전 (content/parallels.json — scripts/import-parallels.py). 니까야마다 파일 하나.
 {

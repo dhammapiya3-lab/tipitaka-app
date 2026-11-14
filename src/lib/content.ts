@@ -28,6 +28,7 @@ import {
   searchShardSchema,
   editionInfoSchema,
   parallelsSchema,
+  suttaTitlesSchema,
   suttaCommentarySchema,
   suttaNissayaSchema,
   suttaNotesSchema,
@@ -239,6 +240,15 @@ export function fetchExtras(): Promise<Record<string, SuttaExtras>> {
     });
   }
   return extrasPromise;
+}
+
+let titlesPromise: Promise<Record<string, string[]>> | null = null;
+/** 경 번호 → 한국어 번역들의 경 제목 (검색에서 제목으로 찾기) */
+export function fetchSuttaTitles(): Promise<Record<string, string[]>> {
+  titlesPromise ??= getJson("/data/sutta-titles.json")
+    .then((d) => suttaTitlesSchema.parse(d))
+    .catch(() => ({}));
+  return titlesPromise;
 }
 
 const parallelsCache = new Map<

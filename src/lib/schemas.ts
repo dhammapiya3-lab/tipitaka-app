@@ -311,6 +311,9 @@ export const extrasSchema: z.ZodType<Record<string, SuttaExtras>> = z.record(
   }),
 );
 
+/** 경 번호 → 한국어 번역들의 경 제목 (검색에서 제목으로 찾기) */
+export const suttaTitlesSchema = z.record(z.string(), z.array(z.string()));
+
 /** 경 번호 → 병행 경전 (content/parallels.json → public/data/parallels/<니까야>.json) */
 export const parallelsSchema: z.ZodType<Record<string, ParallelLink[]>> =
   z.record(

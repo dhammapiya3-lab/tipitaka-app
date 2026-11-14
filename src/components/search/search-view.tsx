@@ -10,7 +10,17 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TopicMatches } from "@/components/search/topic-matches";
-import { fetchSuttaText, searchText, type SearchHits } from "@/lib/content";
+import {
+  AbbreviationGuide,
+  NumberMatches,
+} from "@/components/search/number-matches";
+import {
+  fetchSuttaText,
+  fetchSuttaTitles,
+  searchText,
+  type SearchHits,
+} from "@/lib/content";
+import { findSuttas } from "@/lib/sutta-number";
 import { formatCount, suttaHref } from "@/lib/format";
 import { highlightParts, minQueryLength, tokenize } from "@/lib/search";
 import { compareSegmentKeys, plainText } from "@/lib/segments";
@@ -21,6 +31,8 @@ import type { Edition, Language, SuttaText } from "@/types";
 export interface SearchableSutta {
   id: string;
   title: string;
+  /** 빠알리 이름 (제목으로 찾기) */
+  name: string;
   label: string;
 }
 
@@ -77,6 +89,19 @@ export function SearchView({
     key: "",
   });
   const [shown, setShown] = useState(PAGE);
+  /** 한국어 번역들의 경 제목 — 제목으로 찾기 (한 번만 받는다) */
+  const [koTitles, setKoTitles] = useState<Record<string, string[]>>({});
+  useEffect(() => {
+    let alive = true;
+    fetchSuttaTitles().then((t) => alive && setKoTitles(t));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  const found = useMemo(
+    () => (q ? findSuttas(q, suttas, koTitles) : null),
+    [q, suttas, koTitles],
+  );
   const searchKey = `${q}|${scope}`;
 
   function go(nextQ: string, nextScope: Scope) {
@@ -152,7 +177,7 @@ export function SearchView({
             id="search-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="찾을 말 (예: 마음챙김, satipatthana)"
+            placeholder="찾을 말 · 경 번호 · 경 제목 (예: 마음챙김, DN 22, 대념처경)"
             aria-label="찾을 말"
             className="h-10 pl-9"
           />
@@ -185,15 +210,26 @@ export function SearchView({
         ))}
       </div>
 
+      {/* 경 번호(DN 22)·책 이름(법구경)·경 제목(대념처경)으로 찾은 경 */}
+      {found ? <NumberMatches found={found} query={q} /> : null}
+
       {/* ATI 주제 이름에 찾을 말이 들어 있으면 그 주제의 경들도 함께 */}
       {q && !tooShort ? <TopicMatches query={q} suttas={suttas} /> : null}
 
       {!q ? (
-        <EmptyState
-          icon={Search}
-          title="경 본문에서 찾을 말을 넣으세요"
-          description="띄어 쓴 말은 모두 한 문장에 있는 것만 찾습니다. 빠알리는 ā·ṭ 없이 쳐도 됩니다."
-        />
+        <>
+          <EmptyState
+            icon={Search}
+            title="경 본문·경 번호·경 제목으로 찾습니다"
+            description="띄어 쓴 말은 모두 한 문장에 있는 것만 찾습니다. 빠알리는 ā·ṭ 없이 쳐도 됩니다."
+          />
+          <AbbreviationGuide
+            onPick={(example) => {
+              setInput(example);
+              go(example, scope);
+            }}
+          />
+        </>
       ) : tooShort ? (
         <EmptyState
           icon={Search}
@@ -212,7 +248,7 @@ export function SearchView({
           description="인터넷 연결을 확인한 뒤 다시 시도해 주세요."
           action={<Button onClick={() => go(q, scope)}>다시 시도</Button>}
         />
-      ) : grouped.length === 0 ? (
+      ) : grouped.length === 0 && found ? null : grouped.length === 0 ? (
         <EmptyState
           icon={SearchX}
           title={`“${q}”을(를) 찾지 못했습니다`}
