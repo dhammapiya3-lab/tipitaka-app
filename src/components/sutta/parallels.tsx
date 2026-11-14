@@ -128,7 +128,7 @@ export function ParagraphParallels({
         {items.length}
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-80 p-1.5"
+        className="max-h-[70vh] w-80 p-1.5"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="px-2 pt-1 pb-1.5 text-xs font-bold text-muted-foreground">

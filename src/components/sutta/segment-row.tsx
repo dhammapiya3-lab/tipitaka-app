@@ -1,8 +1,16 @@
 "use client";
 
-import { Bookmark, Headphones, MoreHorizontal, NotebookPen } from "lucide-react";
+import {
+  Bookmark,
+  Headphones,
+  MoreHorizontal,
+  NotebookPen,
+} from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { InlineText, type InlineHighlight } from "@/components/sutta/inline-text";
+import {
+  InlineText,
+  type InlineHighlight,
+} from "@/components/sutta/inline-text";
 import type { NotesState } from "@/components/sutta/use-sutta-content";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +40,8 @@ export interface SentenceActions {
 
 /** 누른 곳이 단어·각주 버튼·링크가 아니고, 글자를 끌어 고르는 중도 아닐 때만 문장 누르기로 본다 */
 function isPlainClick(target: EventTarget | null): boolean {
-  if (!(target instanceof Element) || target.closest("[data-word], button, a")) return false;
+  if (!(target instanceof Element) || target.closest("[data-word], button, a"))
+    return false;
   const selection = window.getSelection();
   return !selection || selection.isCollapsed;
 }
@@ -112,7 +121,8 @@ export function SegmentRow({
       className={cn(
         "group/row relative flex scroll-mt-32 gap-1 break-inside-avoid",
         compare && !columns && "py-1",
-        active && "-mx-2 rounded-lg bg-brand-softer px-2 ring-2 ring-primary/30",
+        active &&
+          "-mx-2 rounded-lg bg-brand-softer px-2 ring-2 ring-primary/30",
       )}
     >
       {bookmarked ? (
@@ -126,7 +136,10 @@ export function SegmentRow({
         // 인쇄본 쪽이 바뀌는 문장 — 오른쪽 위에 작게
         <span className="pointer-events-none absolute -top-1.5 right-7 flex gap-1 font-sans text-[10px] leading-none text-faint select-none">
           {pageMarks.map((m) => (
-            <span key={m} className="rounded bg-gray-100 px-1 py-0.5 dark:bg-muted">
+            <span
+              key={m}
+              className="rounded bg-gray-100 px-1 py-0.5 dark:bg-muted"
+            >
               {m}
             </span>
           ))}
@@ -134,20 +147,34 @@ export function SegmentRow({
       ) : null}
       <div
         className={cn("min-w-0 flex-1", onSentence && "cursor-pointer")}
-        onClick={onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined}
+        onClick={
+          onSentence ? (e) => isPlainClick(e.target) && onSentence() : undefined
+        }
       >
         <div
-          className={cn((columns || compare) && "print:grid print:grid-cols-[var(--cols)]", columns && "grid grid-cols-[var(--cols)] gap-x-6 border-t border-gray-100 dark:border-border")}
-          style={{ "--cols": `repeat(${shown.length}, minmax(0, 1fr))` } as CSSProperties}
+          className={cn(
+            (columns || compare) && "print:grid print:grid-cols-[var(--cols)]",
+            columns &&
+              "grid grid-cols-[var(--cols)] gap-x-6 border-t border-gray-100 dark:border-border",
+          )}
+          style={
+            {
+              "--cols": `repeat(${shown.length}, minmax(0, 1fr))`,
+            } as CSSProperties
+          }
         >
           {shown.map((edition) => {
             const segment = row.cells[edition.id];
-            if (!texts[edition.id]) return <Skeleton key={edition.id} className="my-2 h-5" />;
+            if (!texts[edition.id])
+              return <Skeleton key={edition.id} className="my-2 h-5" />;
             if (!segment) return <div key={edition.id} />;
             const isPali = edition.language === "pli";
             const marks = new Set(
               segment.parts.flatMap((p) =>
-                p.type === "note" && openNotes.has(`${edition.id} ${row.key} ${p.mark}`) ? [p.mark] : [],
+                p.type === "note" &&
+                openNotes.has(`${edition.id} ${row.key} ${p.mark}`)
+                  ? [p.mark]
+                  : [],
               ),
             );
             const text = (
@@ -172,7 +199,11 @@ export function SegmentRow({
                   linked={isPali ? linked : undefined}
                   onLinked={isPali ? onLinked : undefined}
                   activeWord={isPali && active ? activeWord : null}
-                  onNote={noteEditions.includes(edition.id) ? (mark) => onNote(edition.id, row.key, mark) : undefined}
+                  onNote={
+                    noteEditions.includes(edition.id)
+                      ? (mark) => onNote(edition.id, row.key, mark)
+                      : undefined
+                  }
                 />
                 {segment.unsure ? (
                   <span
@@ -191,7 +222,9 @@ export function SegmentRow({
                 lang={LANG_ATTR[edition.language]}
                 // 복사를 막아 둔 번역(법현 스님)은 인쇄에서 빼고, 복사 단축키로도 가져가지 못하게 한다
                 className={cn(!edition.allowCopy && "print:invisible")}
-                onCopy={edition.allowCopy ? undefined : (e) => e.preventDefault()}
+                onCopy={
+                  edition.allowCopy ? undefined : (e) => e.preventDefault()
+                }
               >
                 {compare && !columns ? (
                   <div className="flex items-start gap-2 py-1">
@@ -212,7 +245,12 @@ export function SegmentRow({
                   text
                 )}
                 {[...marks].map((mark) => (
-                  <NoteBox key={mark} mark={mark} state={notes[edition.id]} rowKey={row.key} />
+                  <NoteBox
+                    key={mark}
+                    mark={mark}
+                    state={notes[edition.id]}
+                    rowKey={row.key}
+                  />
                 ))}
               </div>
             );
@@ -220,14 +258,21 @@ export function SegmentRow({
         </div>
         {actions?.memo ? (
           <p className="mt-2 mb-1 rounded-lg border-l-2 border-primary bg-surface-2 px-3 py-2 text-[0.85em] whitespace-pre-line">
-            <NotebookPen className="mr-1 inline size-3.5 text-primary" aria-label="메모" />
+            <NotebookPen
+              className="mr-1 inline size-3.5 text-primary"
+              aria-label="메모"
+            />
             {actions.memo}
           </p>
         ) : null}
-        {compare && !columns ? <div className="mt-1 border-b border-gray-100 dark:border-border" /> : null}
+        {compare && !columns ? (
+          <div className="mt-1 border-b border-gray-100 dark:border-border" />
+        ) : null}
       </div>
       {/* 문장 메뉴(책갈피·메모·복사) — 새로 더한 기능. 인쇄할 때는 뺀다 */}
-      <div className="w-6 shrink-0 pt-2 print:hidden">{actions ? <SentenceMenu actions={actions} /> : null}</div>
+      <div className="w-6 shrink-0 pt-2 print:hidden">
+        {actions ? <SentenceMenu actions={actions} /> : null}
+      </div>
     </div>
   );
 }
@@ -250,7 +295,9 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
             size="icon-xs"
             aria-label={saved ? "문장 메뉴 (책갈피 있음)" : "문장 메뉴"}
             className={cn(
-              saved ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground",
+              saved
+                ? "text-primary"
+                : "text-muted-foreground/40 hover:text-muted-foreground",
             )}
           />
         }
@@ -261,14 +308,25 @@ function SentenceMenu({ actions }: { actions: SentenceActions }) {
           <MoreHorizontal className="size-4" aria-hidden />
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48">
-        {actions.onListen ? item(<Headphones aria-hidden />, "여기서부터 듣기", actions.onListen) : null}
+      {/* 메뉴가 짧으니 높이를 줄이지 않는다 — 둘레 칸(overflow-hidden) 때문에 쓸 수 있는 높이가 작게 잡히면 빈 막대처럼 보였다 */}
+      <DropdownMenuContent align="start" className="max-h-none w-48">
+        {actions.onListen
+          ? item(
+              <Headphones aria-hidden />,
+              "여기서부터 듣기",
+              actions.onListen,
+            )
+          : null}
         {item(
           <Bookmark className={cn(saved && "fill-current")} aria-hidden />,
           saved ? "책갈피 지우기" : "책갈피",
           actions.onBookmark,
         )}
-        {item(<NotebookPen aria-hidden />, actions.memo ? "메모 고치기" : "메모 남기기", actions.onMemo)}
+        {item(
+          <NotebookPen aria-hidden />,
+          actions.memo ? "메모 고치기" : "메모 남기기",
+          actions.onMemo,
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -284,7 +342,8 @@ export function NoteBox({
   state: NotesState | undefined;
 }) {
   let body: ReactNode = "각주를 불러오는 중입니다…";
-  if (state?.status === "error") body = `각주를 불러오지 못했습니다. ${state.message}`;
+  if (state?.status === "error")
+    body = `각주를 불러오지 못했습니다. ${state.message}`;
   if (state?.status === "ready") {
     const note: Footnote | undefined = state.notes.notes.find(
       (n) => n.key === rowKey && n.mark === mark,

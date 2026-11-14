@@ -1,6 +1,15 @@
 "use client";
 
-import { Bookmark, BookmarkCheck, Copy, Eraser, Highlighter, NotebookPen, Share2, Volume2 } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheck,
+  Copy,
+  Eraser,
+  Highlighter,
+  NotebookPen,
+  Share2,
+  Volume2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { HIGHLIGHT_CLASS, type HighlightColor } from "@/store/highlights";
@@ -24,7 +33,10 @@ const COLORS: { color: HighlightColor; label: string; dot: string }[] = [
 /** 칸 안에서 node·offset 자리가 몇 번째 글자인지 (각주 번호 [data-note] 는 세지 않는다) */
 function offsetIn(cell: Element, node: Node, offset: number): number {
   const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT, {
-    acceptNode: (n) => (n.parentElement?.closest("[data-note]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+    acceptNode: (n) =>
+      n.parentElement?.closest("[data-note]")
+        ? NodeFilter.FILTER_REJECT
+        : NodeFilter.FILTER_ACCEPT,
   });
   let count = 0;
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
@@ -39,10 +51,14 @@ function offsetIn(cell: Element, node: Node, offset: number): number {
 /** 칸 안 글자 수 (각주 번호는 세지 않는다) */
 function lengthOf(cell: Element): number {
   const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT, {
-    acceptNode: (n) => (n.parentElement?.closest("[data-note]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+    acceptNode: (n) =>
+      n.parentElement?.closest("[data-note]")
+        ? NodeFilter.FILTER_REJECT
+        : NodeFilter.FILTER_ACCEPT,
   });
   let count = 0;
-  for (let n = walker.nextNode(); n; n = walker.nextNode()) count += n.textContent?.length ?? 0;
+  for (let n = walker.nextNode(); n; n = walker.nextNode())
+    count += n.textContent?.length ?? 0;
   return count;
 }
 
@@ -53,12 +69,17 @@ function cellRangesIn(root: Element, range: Range): CellRange[] {
     if (!range.intersectsNode(cell)) continue;
     const [editionId, key] = (cell.getAttribute("data-cell") ?? "").split("|");
     if (!editionId || !key) continue;
-    const start = cell.contains(range.startContainer) ? offsetIn(cell, range.startContainer, range.startOffset) : 0;
-    const end = cell.contains(range.endContainer) ? offsetIn(cell, range.endContainer, range.endOffset) : lengthOf(cell);
+    const start = cell.contains(range.startContainer)
+      ? offsetIn(cell, range.startContainer, range.startOffset)
+      : 0;
+    const end = cell.contains(range.endContainer)
+      ? offsetIn(cell, range.endContainer, range.endOffset)
+      : lengthOf(cell);
     if (end <= start) continue;
     const r = range.cloneRange();
     if (!cell.contains(range.startContainer)) r.setStart(cell, 0);
-    if (!cell.contains(range.endContainer)) r.setEnd(cell, cell.childNodes.length);
+    if (!cell.contains(range.endContainer))
+      r.setEnd(cell, cell.childNodes.length);
     const text = r.toString().trim();
     if (text) out.push({ editionId, key, start, end, text });
   }
@@ -72,7 +93,8 @@ export function selectedCellText(root: Element, range: Range): string {
     if (!range.intersectsNode(cell)) continue;
     const r = range.cloneRange();
     if (!cell.contains(range.startContainer)) r.setStart(cell, 0);
-    if (!cell.contains(range.endContainer)) r.setEnd(cell, cell.childNodes.length);
+    if (!cell.contains(range.endContainer))
+      r.setEnd(cell, cell.childNodes.length);
     const t = r.toString().trim();
     if (t) out.push(t);
   }
@@ -93,7 +115,8 @@ export function editionsIn(root: Element, range: Range): string[] {
 /** 고른 범위가 걸친 첫 문장 칸의 문장 번호 */
 function firstKeyIn(root: Element, range: Range): string | null {
   for (const cell of root.querySelectorAll("[data-cell]")) {
-    if (range.intersectsNode(cell)) return (cell.getAttribute("data-cell") ?? "").split("|")[1] || null;
+    if (range.intersectsNode(cell))
+      return (cell.getAttribute("data-cell") ?? "").split("|")[1] || null;
   }
   return null;
 }
@@ -125,6 +148,8 @@ export function SelectionToolbar({
   /** 소리로 읽기를 못 쓰는 브라우저면 없음 */
   onListen?: (key: string) => void;
 }) {
+  /** 막대의 실제 너비 — 화면 가장자리 밖으로 나가지 않게 가운데 자리를 잡는 데 쓴다 */
+  const [barWidth, setBarWidth] = useState(600);
   const [sel, setSel] = useState<{
     x: number;
     y: number;
@@ -142,7 +167,8 @@ export function SelectionToolbar({
       timer = window.setTimeout(() => {
         const s = window.getSelection();
         const root = container();
-        if (!s || s.isCollapsed || s.rangeCount === 0 || !root) return setSel(null);
+        if (!s || s.isCollapsed || s.rangeCount === 0 || !root)
+          return setSel(null);
         const range = s.getRangeAt(0);
         // 본문 밖까지 끌어도 본문 문장이 걸려 있으면 막대를 띄운다
         if (!range.intersectsNode(root)) return setSel(null);
@@ -176,31 +202,51 @@ export function SelectionToolbar({
     window.getSelection()?.removeAllRanges();
     setSel(null);
   };
-  const button = "flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold hover:bg-gray-100 dark:hover:bg-muted";
+  const button =
+    "flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold hover:bg-gray-100 dark:hover:bg-muted";
   return (
     <div
       role="toolbar"
       aria-label="고른 글"
       onMouseDown={(e) => e.preventDefault()}
-      className="fixed z-50 flex max-w-[calc(100vw-12px)] -translate-x-1/2 flex-wrap items-center justify-center gap-0.5 rounded-xl border bg-card p-1 shadow-lg print:hidden"
+      ref={(el) => {
+        if (el && el.offsetWidth !== barWidth) setBarWidth(el.offsetWidth);
+      }}
+      className="fixed z-50 flex max-w-[calc(100vw-12px)] flex-wrap items-center justify-center gap-0.5 rounded-xl border bg-card p-1 shadow-lg print:hidden"
       style={{
-        left: Math.min(Math.max(sel.x, Math.min(300, window.innerWidth / 2)), window.innerWidth - Math.min(300, window.innerWidth / 2)),
+        // 막대 반 너비만큼 안쪽으로 — 길어진 막대(색·밑줄 단추)가 왼쪽 밖으로 잘리지 않게
+        left: Math.min(
+          Math.max(sel.x, Math.min(barWidth / 2 + 6, window.innerWidth / 2)),
+          window.innerWidth - Math.min(barWidth / 2 + 6, window.innerWidth / 2),
+        ),
         top: sel.y,
         transform: `translate(-50%, ${sel.below ? "0" : "-100%"})`,
       }}
     >
-      <button type="button" className={button} onClick={() => (onCopy(sel.text, sel.editions), done())}>
+      <button
+        type="button"
+        className={button}
+        onClick={() => (onCopy(sel.text, sel.editions), done())}
+      >
         <Copy className="size-3.5" aria-hidden />
         복사
       </button>
-      <button type="button" className={button} onClick={() => (onShare(sel.text, sel.editions), done())}>
+      <button
+        type="button"
+        className={button}
+        onClick={() => (onShare(sel.text, sel.editions), done())}
+      >
         <Share2 className="size-3.5" aria-hidden />
         공유
       </button>
       {sel.key ? (
         <>
           <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />
-          <button type="button" className={button} onClick={() => (onBookmark(sel.key!), done())}>
+          <button
+            type="button"
+            className={button}
+            onClick={() => (onBookmark(sel.key!), done())}
+          >
             {isSaved(sel.key) ? (
               <BookmarkCheck className="size-3.5 text-primary" aria-hidden />
             ) : (
@@ -208,12 +254,20 @@ export function SelectionToolbar({
             )}
             {isSaved(sel.key) ? "책갈피 지우기" : "책갈피"}
           </button>
-          <button type="button" className={button} onClick={() => (onMemo(sel.key!), done())}>
+          <button
+            type="button"
+            className={button}
+            onClick={() => (onMemo(sel.key!), done())}
+          >
             <NotebookPen className="size-3.5" aria-hidden />
             메모
           </button>
           {onListen ? (
-            <button type="button" className={button} onClick={() => (onListen(sel.key!), done())}>
+            <button
+              type="button"
+              className={button}
+              onClick={() => (onListen(sel.key!), done())}
+            >
               <Volume2 className="size-3.5" aria-hidden />
               여기서부터 듣기
             </button>
@@ -223,7 +277,10 @@ export function SelectionToolbar({
       {sel.cells.length ? (
         <>
           <span className="mx-0.5 h-5 w-px bg-border" aria-hidden />
-          <Highlighter className="ml-1 size-3.5 text-muted-foreground" aria-hidden />
+          <Highlighter
+            className="ml-1 size-3.5 text-muted-foreground"
+            aria-hidden
+          />
           {COLORS.map((c) => (
             <button
               key={c.color}
@@ -233,7 +290,12 @@ export function SelectionToolbar({
               onClick={() => (onHighlight(sel.cells, c.color), done())}
               className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-muted"
             >
-              <span className={cn("block size-4 rounded-full ring-1 ring-black/10", c.dot)} />
+              <span
+                className={cn(
+                  "block size-4 rounded-full ring-1 ring-black/10",
+                  c.dot,
+                )}
+              />
             </button>
           ))}
           <button
@@ -266,7 +328,10 @@ export function HighlightMenu({
     const close = (e: MouseEvent) => {
       if (!(e.target as Element).closest("[data-highlight-menu]")) onClose();
     };
-    const t = window.setTimeout(() => document.addEventListener("mousedown", close), 0);
+    const t = window.setTimeout(
+      () => document.addEventListener("mousedown", close),
+      0,
+    );
     window.addEventListener("scroll", onClose, { once: true });
     return () => {
       window.clearTimeout(t);
@@ -280,7 +345,11 @@ export function HighlightMenu({
       role="toolbar"
       aria-label="밑줄"
       className="fixed z-50 flex items-center gap-0.5 rounded-xl border bg-card p-1 shadow-lg"
-      style={{ left: Math.min(Math.max(at.x, 140), window.innerWidth - 140), top: at.y + 8, transform: "translateX(-50%)" }}
+      style={{
+        left: Math.min(Math.max(at.x, 140), window.innerWidth - 140),
+        top: at.y + 8,
+        transform: "translateX(-50%)",
+      }}
     >
       {COLORS.map((c) => (
         <button
@@ -290,7 +359,12 @@ export function HighlightMenu({
           onClick={() => onColor(c.color)}
           className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-muted"
         >
-          <span className={cn("block size-4 rounded-full ring-1 ring-black/10", c.dot)} />
+          <span
+            className={cn(
+              "block size-4 rounded-full ring-1 ring-black/10",
+              c.dot,
+            )}
+          />
         </button>
       ))}
       <button
