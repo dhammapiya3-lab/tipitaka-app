@@ -44,39 +44,43 @@ export default function AboutPage() {
               </tr>
             </thead>
             <tbody className="t-sub">
-              {editions.map((e) => (
-                <tr key={e.id} className="border-t">
-                  <td className="px-5 py-3 font-semibold text-foreground">
-                    {e.label}
-                  </td>
-                  <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
-                  <td className="px-3 py-3">{e.translator ?? "—"}</td>
-                  <td className="px-3 py-3">
-                    {[
-                      summarize(
-                        allSuttas
-                          .filter((s) => s.editions.includes(e.id))
-                          .map((s) => s.id),
-                      ),
-                      summarize(
-                        allSuttas
-                          .filter((s) => s.nissaya.includes(e.id))
-                          .map((s) => s.id),
-                        "대역",
-                      ),
-                      summarize(
-                        allSuttas
-                          .filter((s) => s.grammar.includes(e.id))
-                          .map((s) => s.id),
-                        "문법분석",
-                      ),
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </td>
-                  <td className="px-5 py-3">{e.license ?? LICENSE_UNKNOWN}</td>
-                </tr>
-              ))}
+              {editions
+                .filter((e) => e.language === "pli")
+                .map((e) => (
+                  <tr key={e.id} className="border-t">
+                    <td className="px-5 py-3 font-semibold text-foreground">
+                      {e.label}
+                    </td>
+                    <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
+                    <td className="px-3 py-3">{e.translator ?? "—"}</td>
+                    <td className="px-3 py-3">
+                      {[
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.editions.includes(e.id))
+                            .map((s) => s.id),
+                        ),
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.nissaya.includes(e.id))
+                            .map((s) => s.id),
+                          "대역",
+                        ),
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.grammar.includes(e.id))
+                            .map((s) => s.id),
+                          "문법분석",
+                        ),
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </td>
+                    <td className="px-5 py-3">
+                      {e.license ?? LICENSE_UNKNOWN}
+                    </td>
+                  </tr>
+                ))}
               <tr className="border-t">
                 <td className="px-5 py-3 font-semibold text-foreground">
                   <a
@@ -97,6 +101,43 @@ export default function AboutPage() {
                   E-Piṭaka — CC BY-NC 4.0 (비영리, 출처 표시)
                 </td>
               </tr>
+              {editions
+                .filter((e) => e.language !== "pli")
+                .map((e) => (
+                  <tr key={e.id} className="border-t">
+                    <td className="px-5 py-3 font-semibold text-foreground">
+                      {e.label}
+                    </td>
+                    <td className="px-3 py-3">{LANGUAGE_LABELS[e.language]}</td>
+                    <td className="px-3 py-3">{e.translator ?? "—"}</td>
+                    <td className="px-3 py-3">
+                      {[
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.editions.includes(e.id))
+                            .map((s) => s.id),
+                        ),
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.nissaya.includes(e.id))
+                            .map((s) => s.id),
+                          "대역",
+                        ),
+                        summarize(
+                          allSuttas
+                            .filter((s) => s.grammar.includes(e.id))
+                            .map((s) => s.id),
+                          "문법분석",
+                        ),
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </td>
+                    <td className="px-5 py-3">
+                      {e.license ?? LICENSE_UNKNOWN}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </CardContent>
