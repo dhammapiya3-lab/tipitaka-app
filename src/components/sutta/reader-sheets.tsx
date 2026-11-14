@@ -438,29 +438,44 @@ export function TextSettingsSheet({
   );
 }
 
-/** 머리 아래 판본 배지 줄 (누르면 판본 정보) */
+/**
+ * 머리 아래 판본 배지 줄 — 이 경에 있는 판본을 모두 보이고, 누르면 그 판본을 켜고 끈다 (사전 고르기와 같은 방식).
+ * 켠 판본은 색을 채우고, 끈 판본은 테두리만. 마지막 하나는 끌 수 없다.
+ */
 export function EditionBadges({
   editions,
-  onInfo,
+  shownIds,
+  onToggle,
 }: {
   editions: Edition[];
-  onInfo: (e: Edition) => void;
+  shownIds: string[];
+  onToggle: (id: string) => void;
 }) {
   return (
-    <div className="mt-2 flex flex-wrap gap-1.5 print:hidden">
-      {orderEditions(editions).map((e) => (
-        <button
-          key={e.id}
-          type="button"
-          onClick={() => onInfo(e)}
-          className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold text-white active:opacity-75",
-            editionBadgeClass(e),
-          )}
-        >
-          {e.badge}) {e.label}
-        </button>
-      ))}
+    <div
+      className="mt-2 flex flex-wrap gap-1.5 print:hidden"
+      role="group"
+      aria-label="보이는 판본 고르기"
+    >
+      {orderEditions(editions).map((e) => {
+        const on = shownIds.includes(e.id);
+        return (
+          <button
+            key={e.id}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onToggle(e.id)}
+            className={cn(
+              "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold active:opacity-75",
+              on
+                ? cn("border-transparent text-white", editionBadgeClass(e))
+                : "border-border bg-card text-muted-foreground hover:bg-muted",
+            )}
+          >
+            {e.badge}) {e.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

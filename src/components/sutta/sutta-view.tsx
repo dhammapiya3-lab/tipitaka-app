@@ -79,7 +79,6 @@ import {
 } from "@/components/sutta/segment-row";
 import {
   EditionBadges,
-  EditionInfoSheet,
   EditionPickerSheet,
   TextSettingsSheet,
   TocSheet,
@@ -194,6 +193,13 @@ export function SuttaView({
     .filter((id) => picked.includes(id));
   // 화면에는 원래 앱처럼 한국어 → 빠알리 → 영어 순서로
   const shown = orderEditions(editions.filter((e) => shownIds.includes(e.id)));
+  const togglePick = (id: string) =>
+    setPicked((cur) => {
+      const next = cur.includes(id)
+        ? cur.filter((e) => e !== id)
+        : [...cur, id];
+      return next.length > 0 ? next : cur; // 마지막 하나는 끌 수 없다
+    });
 
   const { texts, error, retry } = useSuttaTexts(suttaId, shownIds);
   const { notes, load: loadNotes } = useSuttaNotes(suttaId);
@@ -421,7 +427,6 @@ export function SuttaView({
   >(["sutta", "attha", "tika"]);
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
-  const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
   /** 오른쪽 칸(넓은 화면)에서 고른 탭과, 고를 때 열려 있던 풀이 — 그 뒤 새 문장·단어를 누르면 다시 풀이를 보인다 */
   const [chosen, setChosen] = useState<{
     panel: SidePanel;
@@ -1056,7 +1061,7 @@ export function SuttaView({
           {picked.includes(VRI_ID) && texts[VRI_ID]?.vriNumbers?.[p] ? (
             <span
               className="rounded bg-brand-soft px-1.5 py-0.5 text-[11px] font-semibold text-brand-ink"
-              title="VRI 제6차 결집본의 번호 — 주석서·다른 책에서 이 번호로 인용합니다"
+              title="VRI 제6차 결집본의 번호"
             >
               VRI {VERSE_BOOKS.test(suttaId) ? "게송" : "문단"}{" "}
               {texts[VRI_ID]!.vriNumbers![p]}
@@ -1591,12 +1596,9 @@ export function SuttaView({
             <TopicChips suttaId={suttaId} />
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <EditionBadges
-                editions={
-                  layer === "sutta"
-                    ? shown
-                    : commEditions.filter((e) => commPicked.includes(e.id))
-                }
-                onInfo={setInfoEdition}
+                editions={layer === "sutta" ? editions : commEditions}
+                shownIds={layer === "sutta" ? shownIds : commPicked}
+                onToggle={layer === "sutta" ? togglePick : toggleCommPick}
               />
               {canCompare ? (
                 <div
@@ -2083,14 +2085,7 @@ export function SuttaView({
         onOpenChange={(o) => setSheet(o ? "editions" : null)}
         editions={editions}
         shownIds={shownIds}
-        onToggle={(id) =>
-          setPicked((cur) => {
-            const next = cur.includes(id)
-              ? cur.filter((e) => e !== id)
-              : [...cur, id];
-            return next.length > 0 ? next : cur; // 마지막 하나는 끌 수 없다
-          })
-        }
+        onToggle={togglePick}
         commentary={
           commentary.length
             ? {
@@ -2118,11 +2113,6 @@ export function SuttaView({
         open={sheet === "text"}
         onOpenChange={(o) => setSheet(o ? "text" : null)}
         onWordLinksOn={showPaliForLinks}
-      />
-      <EditionInfoSheet
-        open={infoEdition !== null}
-        onOpenChange={(o) => !o && setInfoEdition(null)}
-        edition={infoEdition}
       />
     </div>
   );
