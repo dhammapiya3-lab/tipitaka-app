@@ -44,13 +44,13 @@ def clean(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
-def xml_text(path: Path) -> tuple[str, list[tuple[int, int, str]]]:
+def xml_text(path: Path) -> tuple[str, list[tuple[int, float, str]]]:
     """글(태그를 뺀)과 제목 줄들 (글 속 시작 자리, 단계, 글자)"""
     b = path.read_bytes()
     raw = b.decode("utf-16") if b[:2] == b"\xff\xfe" else b.decode()
     raw = re.sub(r"<note>.*?</note>", " ", raw, flags=re.S)
     out: list[str] = []
-    heads: list[tuple[int, int, str]] = []
+    heads: list[tuple[int, float, str]] = []
     pos = 0
     last = 0
     for m in HEAD.finditer(raw):
@@ -59,7 +59,11 @@ def xml_text(path: Path) -> tuple[str, list[tuple[int, int, str]]]:
         pos += len(before)
         text = clean(m.group(3))
         if text:
-            heads.append((pos, LEVEL[m.group(2)], text))
+            level = LEVEL[m.group(2)]
+            # 청정도론 "(Paṭhamo bhāgo)" 처럼 책 아래 권(bhāga) 이름은 책과 장 사이 단계
+            if re.fullmatch(r"\(\S+ bhāgo\)", text):
+                level = 1.5
+            heads.append((pos, level, text))
         body = " " + plain(m.group(3)) + " \n"
         out.append(body)
         pos += len(body)
@@ -102,7 +106,7 @@ def main() -> None:
             continue
         d = json.loads(f.read_text(encoding="utf-8"))
         code = (d.get("source") or {}).get("vriCode") or ""
-        if code.endswith("mul") and not d["suttaId"].startswith("vism"):
+        if code.endswith("mul"):
             books[code].append(d)
     result: dict[str, dict] = {}
     for code in sorted(books):
@@ -138,7 +142,7 @@ def main() -> None:
                 body_start[di] = xt[s2x[si]][0]
         # 제목 줄마다: 경 안(소제목 칸·문장)에 맞으면 그 경의 소제목, 아니면 경로
         in_sutta: dict[int, list[tuple[str, str]]] = collections.defaultdict(list)
-        path_heads: list[tuple[int, int, str]] = []
+        path_heads: list[tuple[int, float, str]] = []
         for pos, level, text in heads:
             xi = bisect.bisect_left(starts, pos)
             si = x2s.get(xi) if xi < len(xt) else None
@@ -157,7 +161,7 @@ def main() -> None:
             if not placed:
                 path_heads.append((pos, level, text))
         # 경로: 본문 시작 전까지 나온 제목들 (같거나 위 단계 제목이 나오면 아래 단계는 지운다)
-        stack: list[tuple[int, str]] = []
+        stack: list[tuple[float, str]] = []
         hi = 0
         order = sorted(range(len(docs)), key=lambda di: body_start[di] if body_start[di] is not None else -1)
         for di in order:
@@ -169,7 +173,18 @@ def main() -> None:
                 stack = [s for s in stack if s[0] < level] + [(level, text)]
                 hi += 1
             sid = docs[di]["suttaId"]
-            entry: dict = {"path": [s[1] for s in stack]}
+            # 본문이 시작된 뒤에 나오는 장 제목이 이 경의 제목 줄(0.x)과 같으면 이 경의 경로에 넣는다
+            # (청정도론 1장: 서문 "Nidānādikathā" 뒤에 "1. Sīlaniddeso")
+            title_words = {norm(w) for k, v in docs[di]["segments"].items() if is_title(k) for w in W.findall(masked(v))}
+            nxt_bs = min((b for b in body_start if b is not None and b > bs), default=None)
+            own = list(stack)
+            for pos, level, text in path_heads:
+                if pos < bs or (nxt_bs is not None and pos >= nxt_bs) or level > LEVEL["title"]:
+                    continue
+                ws = {norm(w) for w in W.findall(text)}
+                if ws and ws <= title_words:
+                    own = [s for s in own if s[0] < level] + [(level, text)]
+            entry: dict = {"path": [s[1] for s in own]}
             seen: list[tuple[str, str]] = []
             for p, text in in_sutta.get(di, []):
                 if (p, text) not in seen:
