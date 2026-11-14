@@ -1795,7 +1795,7 @@ export function SuttaView({
                     }
                     rootName={rootName}
                     pathLine={
-                      vriPaths ? (
+                      vriPaths && commPicked.includes(VRI_ID) ? (
                         <VriPathLine
                           suttaId={suttaId}
                           paths={vriPaths}
@@ -1886,7 +1886,8 @@ export function SuttaView({
                                 {preface.join(" ")}
                               </p>
                             ) : null}
-                            {mine && vriPaths ? (
+                            {/* 경로 줄은 VRI 판본을 골랐을 때만 */}
+                            {mine && vriPaths && picked.includes(VRI_ID) ? (
                               <VriPathLine
                                 suttaId={suttaId}
                                 paths={vriPaths}
