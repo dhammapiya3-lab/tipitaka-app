@@ -1262,8 +1262,10 @@ if (quiet) {
     if (prev && lastPara > covered && lastPara - covered < 2000)
       addTo(prev, "after", parasOf(covered + 1, lastPara));
   }
-  for (const file of touched)
+  regroupDhammapada(docs, touched);
+  for (const file of touched) {
     writeFileSync(path.join(OUT, file), `${JSON.stringify(docs.get(file))}\n`);
+  }
   console.log(
     `주석 앞 부분(머리말 등): 문단 ${filled}개를 경 ${touched.size}개 앞에 붙였습니다 · 끝 부분(맺음말 등): 문단 ${tailFilled}개`,
   );
@@ -1312,7 +1314,7 @@ function fixDhammapadaStories(
     return v && n >= lo && n <= hi ? `dhp${n}` : null;
   };
   const isClosing = (line: string) =>
-    /vatthu\s+\S+\.\s*\d+\.?\s*$/i.test(line.replace(/<[^>]+>/g, "").trim());
+    /vatthu\s+\S+\.(\s*\d+\.?)?\s*$/i.test(line.replace(/<[^>]+>/g, "").trim());
   let start = 0;
   const apply = (from: number, to: number) => {
     const story = paras.slice(from, to + 1);
@@ -1326,11 +1328,154 @@ function fixDhammapadaStories(
       p.lineRefs = p.lines.map(() => [current]);
     });
   };
+  // 이야기 제목 줄("Revatattheravatthu")에서도 새 이야기가 시작된다 (맺음 줄에 번호가 없는 곳이 있다)
+  const isTitle = (p: { lines: string[] }) =>
+    p.lines.length === 1 &&
+    /^[^.;,“”]{0,60}vatthu$/i.test(p.lines[0].replace(/<[^>]+>/g, "").trim());
   paras.forEach((p, i) => {
+    if (isTitle(p) && i > start) {
+      apply(start, i - 1);
+      start = i;
+    }
     if (p.lines.some(isClosing)) {
       apply(start, i);
       start = i + 1;
     }
   });
   if (start < paras.length) apply(start, paras.length - 1);
+}
+
+type DhpPara = {
+  para: number;
+  vripara: string | number | null;
+  title?: string | null;
+  refs?: string[];
+  lines: string[];
+  lineRefs?: string[][];
+};
+type DhpLayer = {
+  paras: DhpPara[];
+  before?: DhpPara[];
+  after?: DhpPara[];
+  wordLinks?: [string, string, number, number][];
+};
+
+/**
+ * 법구경 주석서를 품(묶음) 단위로 다시 나눈다. 묶음 하나가 품 하나다.
+ * - 품 제목("Attavaggo 1.")과 그 품의 이야기들은 처음부터 끝까지 본문 문단으로 (게송마다 이어서)
+ * - 품 맺음말("Jarāvaggavaṇṇanā niṭṭhitā.", "Ekādasamo vaggo.")은 그 품 마지막 이야기에 붙인다.
+ *   맺음 줄 끝의 번호("12.")는 다음 품의 차례 번호라서 다음 품 제목 앞으로 옮긴다 ("12. Attavaggo 1.")
+ * - 책 머리말(Namo tassa…, 권 제목, 서문)만 "앞 부분", 책 맺음말(Nigamanakathā 부터)만 "끝 부분"에 남긴다.
+ */
+function regroupDhammapada(
+  docs: Map<string, Record<string, unknown>>,
+  touched: Set<string>,
+) {
+  const chunks = [...docs.keys()]
+    .filter((f) => /^dhp\d+-\d+\.json$/.test(f))
+    .map((file) => {
+      const [lo, hi] = file.match(/\d+/g)!.map(Number);
+      return { file, lo, hi, layer: docs.get(file)!.attha as DhpLayer | null };
+    })
+    .filter((c) => c.layer?.paras.length)
+    .sort((a, b) => a.lo - b.lo);
+  if (chunks.length < 2) return;
+  const plain = (p: DhpPara) =>
+    p.lines
+      .join(" ")
+      .replace(/<[^>]+>/g, "")
+      .trim();
+  const seen = new Set<number>();
+  const stream = chunks
+    .flatMap(({ layer }) => [
+      ...(layer!.before ?? []),
+      ...layer!.paras,
+      ...(layer!.after ?? []),
+    ])
+    .filter((p) => !seen.has(p.para) && seen.add(p.para))
+    .sort((a, b) => a.para - b.para);
+  // 낱말 연결은 문단 순번으로 가리키므로, 옮기기 전 문단 번호를 기억해 둔다
+  const linkParas = chunks.map(({ layer }) =>
+    (layer!.wordLinks ?? []).map((l) => layer!.paras[l[2]]?.para),
+  );
+  const out = chunks.map(() => ({
+    before: [] as DhpPara[],
+    paras: [] as DhpPara[],
+  }));
+  const tail: DhpPara[] = [];
+  let cur = -1;
+  let header: DhpPara[] = [];
+  let inHeader = true;
+  let closing = false;
+  let carry: string | null = null;
+  const isVaggaHead = (s: string) => /^\S+vaggo\s+1\.$/.test(s);
+  for (const p of stream) {
+    const text = plain(p);
+    if (closing || /^Nigamanakathā/.test(text)) {
+      closing = true;
+      tail.push(p);
+      continue;
+    }
+    if (isVaggaHead(text) && cur + 1 < chunks.length) {
+      cur++;
+      out[cur].before.push(...header);
+      header = [];
+      inHeader = false;
+      out[cur].paras.push({
+        ...p,
+        lines: carry
+          ? p.lines.map((l, k) => (k ? l : `${carry} ${l}`))
+          : p.lines,
+      });
+      carry = null;
+      continue;
+    }
+    if (/^Namo tassa/.test(text)) inHeader = true;
+    // 맺음 줄 끝의 다음 품 번호 — 품 맺음("…vaggo. 12.", "…niṭṭhitaṃ. 15.")이나 권 제목("(Dutiyo bhāgo) 9.")에만
+    const num = text.match(/^(.*(?:vaggo|niṭṭhitaṃ|bhāgo\))\.?)\s+(\d+\.)$/);
+    let item = p;
+    if (num && !/vatthu/i.test(text)) {
+      carry = num[2];
+      item = {
+        ...p,
+        lines: p.lines.map((l, k, all) =>
+          k === all.length - 1 ? l.replace(/\s+\d+\.\s*$/, "") : l,
+        ),
+      };
+    }
+    if (inHeader || cur < 0) header.push(item);
+    else out[cur].paras.push(item);
+  }
+  chunks.forEach((c, k) => {
+    const layer = c.layer!;
+    const paras = out[k].paras.map((p) => ({
+      para: p.para,
+      vripara: p.vripara,
+      refs: p.refs ?? [],
+      lines: p.lines,
+      lineRefs: p.lineRefs ?? p.lines.map(() => []),
+      ...(p.title === undefined && (p as { book?: string }).book
+        ? { book: (p as { book?: string }).book }
+        : {}),
+    }));
+    fixDhammapadaStories(paras, `dhp${c.lo}-${c.hi}`);
+    // 게송이 없는 머리·맺음 문단은 앞(없으면 뒤) 문단의 게송을 따른다
+    let ref = paras.find((p) => p.refs.length)?.refs[0] ?? `dhp${c.lo}`;
+    for (const p of paras) {
+      if (p.refs.length) ref = p.refs[p.refs.length - 1];
+      else {
+        p.refs = [ref];
+        p.lineRefs = p.lines.map(() => [ref]);
+      }
+    }
+    const index = new Map(paras.map((p, i) => [p.para, i]));
+    layer.wordLinks = (layer.wordLinks ?? []).flatMap((l, i) => {
+      const at = index.get(linkParas[k][i]);
+      return at === undefined ? [] : [[l[0], l[1], at, l[3]]];
+    }) as [string, string, number, number][];
+    layer.paras = paras;
+    layer.before = out[k].before;
+    layer.after = k === chunks.length - 1 ? tail : [];
+    touched.add(c.file);
+  });
 }
