@@ -19,7 +19,8 @@ const COMMENTARIES: {
     abbr: "VISM",
     name: "위숫디막가",
     pali: "Visuddhimagga",
-    note: "청정도론(淸淨道論)",
+    note: "청정도론(淸淨道論) — VRI 제6차 결집본 원문, 23장 (계·정·혜)",
+    href: suttaHref("vism1"),
   },
   {
     abbr: "DhpA",

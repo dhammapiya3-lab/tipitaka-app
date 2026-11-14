@@ -26,8 +26,13 @@ export function splitsIntoGroups(nikaya: Nikaya): boolean {
 }
 
 /** 경을 직접 담은 묶음(맨 아래 묶음)과 그 위 묶음들 */
-export function getLeafGroups(nikaya: Nikaya): { node: CatalogNode; parents: CatalogNode[] }[] {
-  const walk = (node: CatalogNode, parents: CatalogNode[]): { node: CatalogNode; parents: CatalogNode[] }[] =>
+export function getLeafGroups(
+  nikaya: Nikaya,
+): { node: CatalogNode; parents: CatalogNode[] }[] {
+  const walk = (
+    node: CatalogNode,
+    parents: CatalogNode[],
+  ): { node: CatalogNode; parents: CatalogNode[] }[] =>
     node.suttas.length > 0
       ? [{ node, parents }]
       : node.children.flatMap((child) => walk(child, [...parents, node]));
@@ -43,16 +48,21 @@ function nikayaRange(n: Nikaya, total: number): string | null {
 }
 
 /** 니까야별 경 수와 본문이 있는 경 수 */
+/** 5부 니까야만 (주석 문헌인 청정도론은 경전 화면의 "주석 문헌"에 따로) */
+const NIKAYA_IDS = new Set(["dn", "mn", "sn", "an", "kn"]);
+
 export function getNikayaSummaries() {
-  return catalog.nikayas.map((n) => {
-    const suttas = n.nodes.flatMap(collect);
-    return {
-      nikaya: n,
-      total: suttas.length,
-      readable: suttas.filter((s) => s.editions.length > 0).length,
-      range: nikayaRange(n, suttas.length),
-    };
-  });
+  return catalog.nikayas
+    .filter((n) => NIKAYA_IDS.has(n.id))
+    .map((n) => {
+      const suttas = n.nodes.flatMap(collect);
+      return {
+        nikaya: n,
+        total: suttas.length,
+        readable: suttas.filter((s) => s.editions.length > 0).length,
+        range: nikayaRange(n, suttas.length),
+      };
+    });
 }
 
 /** 목록 순서대로 모든 경 */
@@ -85,7 +95,9 @@ export function getEdition(id: string): Edition | undefined {
 }
 
 const nikayaBySutta = new Map(
-  catalog.nikayas.flatMap((n) => n.nodes.flatMap(collect).map((s) => [s.id, n.id] as const)),
+  catalog.nikayas.flatMap((n) =>
+    n.nodes.flatMap(collect).map((s) => [s.id, n.id] as const),
+  ),
 );
 
 /** 같은 니까야 안에서 본문이 있는 앞·뒤 경 (본문 없는 경은 건너뛴다) */
@@ -94,7 +106,9 @@ export function getAdjacentSuttas(id: string): {
   next: CatalogSutta | null;
 } {
   const nikaya = nikayaBySutta.get(id);
-  const list = getReadableSuttas().filter((s) => nikayaBySutta.get(s.id) === nikaya);
+  const list = getReadableSuttas().filter(
+    (s) => nikayaBySutta.get(s.id) === nikaya,
+  );
   const i = list.findIndex((s) => s.id === id);
   return { prev: list[i - 1] ?? null, next: list[i + 1] ?? null };
 }
@@ -112,12 +126,15 @@ export function getKoreanSuttas(nikayaId: string): CatalogSutta[] {
 
 /** 홈의 "지금 읽을 수 있는 경" — 니까야별 한국어 번역 경 수 */
 export function getKoreanSummaries(): { nikaya: Nikaya; count: number }[] {
-  return catalog.nikayas.map((n) => ({ nikaya: n, count: getKoreanSuttas(n.id).length }));
+  return catalog.nikayas
+    .filter((n) => NIKAYA_IDS.has(n.id))
+    .map((n) => ({ nikaya: n, count: getKoreanSuttas(n.id).length }));
 }
 
 /** 이 경의 한국어 번역 판본 수 */
 export function koreanEditionCount(s: CatalogSutta): number {
-  return s.editions.filter((id) => editionById.get(id)?.language === "ko").length;
+  return s.editions.filter((id) => editionById.get(id)?.language === "ko")
+    .length;
 }
 
 /**
@@ -126,10 +143,16 @@ export function koreanEditionCount(s: CatalogSutta): number {
  */
 export function getKoreanGroups(
   nikayaId: string,
-): { id: string; label: string; pali: string | null; suttas: CatalogSutta[] }[] {
+): {
+  id: string;
+  label: string;
+  pali: string | null;
+  suttas: CatalogSutta[];
+}[] {
   const nikaya = getNikaya(nikayaId);
   if (!nikaya) return [];
-  const groupNodes = nikaya.id === "sn" ? nikaya.nodes.flatMap((n) => n.children) : nikaya.nodes;
+  const groupNodes =
+    nikaya.id === "sn" ? nikaya.nodes.flatMap((n) => n.children) : nikaya.nodes;
   return groupNodes
     .map((node) => ({
       id: node.id,

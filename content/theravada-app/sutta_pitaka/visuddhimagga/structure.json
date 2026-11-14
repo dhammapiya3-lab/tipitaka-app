@@ -1,3 +1,141 @@
 [
-  {}
+  {
+    "id": "vism-sila",
+    "name": "Sīla",
+    "nameKo": "계 (戒)",
+    "description": "계의 설명 — 1~2장",
+    "suttas": [
+      {
+        "id": "vism1",
+        "name": "Sīlaniddeso",
+        "nameKo": "1장. 계"
+      },
+      {
+        "id": "vism2",
+        "name": "Dhutaṅganiddeso",
+        "nameKo": "2장. 두타행"
+      }
+    ]
+  },
+  {
+    "id": "vism-samadhi",
+    "name": "Samādhi",
+    "nameKo": "정 (定)",
+    "description": "삼매의 설명 — 3~13장",
+    "suttas": [
+      {
+        "id": "vism3",
+        "name": "Kammaṭṭhānaggahaṇaniddeso",
+        "nameKo": "3장. 명상 주제를 받아 지님"
+      },
+      {
+        "id": "vism4",
+        "name": "Pathavīkasiṇaniddeso",
+        "nameKo": "4장. 땅 까시나"
+      },
+      {
+        "id": "vism5",
+        "name": "Sesakasiṇaniddeso",
+        "nameKo": "5장. 나머지 까시나"
+      },
+      {
+        "id": "vism6",
+        "name": "Asubhakammaṭṭhānaniddeso",
+        "nameKo": "6장. 부정(不淨)의 명상 주제"
+      },
+      {
+        "id": "vism7",
+        "name": "Chaanussatiniddeso",
+        "nameKo": "7장. 여섯 가지 계속 생각함"
+      },
+      {
+        "id": "vism8",
+        "name": "Anussatikammaṭṭhānaniddeso",
+        "nameKo": "8장. 그 밖의 계속 생각함"
+      },
+      {
+        "id": "vism9",
+        "name": "Brahmavihāraniddeso",
+        "nameKo": "9장. 거룩한 마음가짐"
+      },
+      {
+        "id": "vism10",
+        "name": "Āruppaniddeso",
+        "nameKo": "10장. 무색의 경지"
+      },
+      {
+        "id": "vism11",
+        "name": "Samādhiniddeso",
+        "nameKo": "11장. 삼매"
+      },
+      {
+        "id": "vism12",
+        "name": "Iddhividhaniddeso",
+        "nameKo": "12장. 신통 변화"
+      },
+      {
+        "id": "vism13",
+        "name": "Abhiññāniddeso",
+        "nameKo": "13장. 초월지"
+      }
+    ]
+  },
+  {
+    "id": "vism-panna",
+    "name": "Paññā",
+    "nameKo": "혜 (慧)",
+    "description": "통찰지의 설명 — 14~23장",
+    "suttas": [
+      {
+        "id": "vism14",
+        "name": "Khandhaniddeso",
+        "nameKo": "14장. 무더기"
+      },
+      {
+        "id": "vism15",
+        "name": "Āyatanadhātuniddeso",
+        "nameKo": "15장. 감각 장소와 요소"
+      },
+      {
+        "id": "vism16",
+        "name": "Indriyasaccaniddeso",
+        "nameKo": "16장. 기능과 진리"
+      },
+      {
+        "id": "vism17",
+        "name": "Paññābhūminiddeso",
+        "nameKo": "17장. 통찰지의 토양"
+      },
+      {
+        "id": "vism18",
+        "name": "Diṭṭhivisuddhiniddeso",
+        "nameKo": "18장. 견해의 청정"
+      },
+      {
+        "id": "vism19",
+        "name": "Kaṅkhāvitaraṇavisuddhiniddeso",
+        "nameKo": "19장. 의심을 건넘에 의한 청정"
+      },
+      {
+        "id": "vism20",
+        "name": "Maggāmaggañāṇadassanavisuddhiniddeso",
+        "nameKo": "20장. 도와 도 아님에 대한 지견의 청정"
+      },
+      {
+        "id": "vism21",
+        "name": "Paṭipadāñāṇadassanavisuddhiniddeso",
+        "nameKo": "21장. 도닦음에 대한 지견의 청정"
+      },
+      {
+        "id": "vism22",
+        "name": "Ñāṇadassanavisuddhiniddeso",
+        "nameKo": "22장. 지견의 청정"
+      },
+      {
+        "id": "vism23",
+        "name": "Paññābhāvanānisaṃsaniddeso",
+        "nameKo": "23장. 통찰지 수행의 이익"
+      }
+    ]
+  }
 ]

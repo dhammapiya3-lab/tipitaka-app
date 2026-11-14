@@ -57,6 +57,11 @@ const SECTIONS: {
       ...NIKAYAS.map(([id, name]) => ({ href: `/suttas/${id}/`, label: name })),
       { href: "/topics/", label: "주제별 경전", note: "ATI 주제 색인" },
       {
+        href: "/suttas/vism/",
+        label: "위숫디막가",
+        note: "청정도론 · VRI 원문 23장",
+      },
+      {
         href: suttaHref("dhp1-20", undefined, "attha"),
         label: "법구경 이야기",
         note: "법구경 주석서",

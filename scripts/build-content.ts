@@ -166,7 +166,22 @@ const NIKAYAS = [
     name: "Khuddaka Nikāya",
     nameKo: "쿳다까 니까야",
   },
-];
+  // 주석 문헌 — 니까야는 아니지만 같은 경전 목록·읽기 화면을 쓴다 (경전 화면의 "주석 문헌"에서 연다)
+  {
+    id: "vism",
+    folder: "visuddhimagga",
+    name: "Visuddhimagga",
+    nameKo: "위숫디막가 (청정도론)",
+    vriOnly: true,
+  },
+] as {
+  id: string;
+  folder: string;
+  name: string;
+  nameKo: string;
+  /** 마하상기띠본 없이 VRI 원문만 있는 책 */
+  vriOnly?: boolean;
+}[];
 
 /** 쿳다까 니까야 책 → 폴더 (원래 앱과 같은 이름) */
 const KN_BOOKS: Record<string, string> = {
@@ -493,9 +508,13 @@ function buildSutta(
   };
 
   const rootEntry = editionList.find((e) => e.edition === ROOT_EDITION);
+  // 마하상기띠본이 없는 책(청정도론)은 VRI 원문이 곧 기준 원문이다 — 문장 번호를 VRI 자료에서 가져온다
+  const vriOnly = path.join(ROOT, "content", "vri", `${id}.json`);
   const root = rootEntry
     ? readText(dir, rootEntry.folder, sub, ROOT_EDITION)
-    : null;
+    : nikaya.vriOnly && existsSync(vriOnly)
+      ? vriSchema.parse(readJson(vriOnly)).segments
+      : null;
 
   for (const entry of editionList) {
     const raw =

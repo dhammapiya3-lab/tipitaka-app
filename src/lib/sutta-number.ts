@@ -93,6 +93,10 @@ const BOOK_NAMES: [string, string[]][] = [
       "milinda",
     ],
   ],
+  [
+    "vism",
+    ["vism", "vsm", "청정도론", "위숫디막가", "위숟디막가", "visuddhimagga"],
+  ],
 ];
 /**
  * 이름 맞추기용으로 접는다 — 표기가 갈리는 곳을 하나로:

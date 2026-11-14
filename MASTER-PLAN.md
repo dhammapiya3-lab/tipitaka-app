@@ -366,3 +366,10 @@ Firebase·recharts 는 쓰지 않는다.
 - 주석 범위: 연결된 주석 문단을 가까운 것끼리(60문단 이내) 묶어 가장 많이 걸린 묶음만 쓴다 (멀리 떨어진 엉뚱한 연결 제외).
 - 호스팅 파일 수 한도 때문에 VRI 본문·주석은 경마다 파일을 만들지 않고 ~400KB 묶음(`public/data/vri/t-<n>.json`, `c-<n>.json`)에 모은다. 어느 묶음인지는 sutta-index 의 `vri` 칸.
 - VRI 본문은 검색 색인에 넣지 않는다(빠알리 검색은 마하상기띠본으로).
+
+## 청정도론 (Visuddhimagga) — VRI본만 (2026-11-15, 시안 가)
+
+- `python3 -I scripts/import-vism.py <VRI XML 폴더>` (e0101n.mul.xml · e0102n.mul.xml) → `content/vri/vism1~23.json` 과 `content/theravada-app/sutta_pitaka/visuddhimagga/structure.json` (계 1–2장 · 정 3–13장 · 혜 14–23장).
+- 문단 = VRI 문단 번호 (문장 번호 `vism<장>:<VRI 문단>.<줄>`). 번호 바로 앞 소제목은 `.0`, 문단 가운데 소제목·맺음 줄은 굵은 본문 줄. 산문은 문장마다, 게송은 VRI 줄 그대로.
+- 마하상기띠본이 없으므로 `build-content.ts` 의 NIKAYAS 에 `vriOnly` 책으로 넣어 VRI 원문이 곧 기준 원문이 된다. 5부 니까야 카드·홈 타일에서는 뺀다(경전 화면의 "주석 문헌"에서 1장부터 연다).
+- PTS 쪽 번호(SLTP)·SLTP 원문은 이용 조건이 분명하지 않아 넣지 않았다 (시안 나·다).
