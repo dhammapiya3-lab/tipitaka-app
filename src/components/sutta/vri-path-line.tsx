@@ -71,18 +71,27 @@ export function VriPathLine({
   const mine = paths.byId.get(suttaId);
   if (!mine) return null;
   const path = layer ? (mine.layers[layer] ?? []) : mine.path;
-  const heads = layer ? [] : mine.heads;
+  const heads: [string, string, boolean][] = layer ? [] : mine.heads;
   if (!path.length) return null;
   const pathOf = (id: string) => {
     const e = paths.byId.get(id)!;
     return layer ? (e.layers[layer] ?? []) : e.path;
   };
-  // 지금 읽는 자리의 소제목 — 그 문단이거나 그 앞에서 가장 가까운 소제목
+  // 지금 읽는 자리 — 그 문단이거나 그 앞에서 가장 가까운 장 제목·소제목
+  // (장 제목 앞의 소제목은 그 장에 들지 않으므로 장 제목이 나오면 지운다 — DPR 처럼)
   const at = Math.max(0, current ? paragraphs.indexOf(current) : 0);
-  const head = heads.reduce<[string, string] | null>((found, h) => {
-    const i = paragraphs.indexOf(h[0]);
-    return i >= 0 && i <= at ? h : found;
-  }, null);
+  let chapter: string | null = null;
+  let head: [string, string] | null = null;
+  for (const [p, name, isChapter] of heads) {
+    const i = paragraphs.indexOf(p);
+    if (i < 0 || i > at) continue;
+    if (isChapter) {
+      chapter = name;
+      head = null;
+    } else head = [p, name];
+  }
+  const subheads = heads.filter((h) => !h[2]);
+  const shownPath = chapter ? [...path, chapter] : path;
 
   /** i 번째 이름과 같은 단계의 목록 — 위 단계가 같은 경들 가운데 이름마다 첫 경 */
   const optionsAt = (i: number) => {
@@ -107,8 +116,8 @@ export function VriPathLine({
       <span className="mr-1 font-sans text-xs font-bold text-faint">
         ({suttaLabel(suttaId)})
       </span>
-      {path.map((name, i) => {
-        const options = optionsAt(i);
+      {shownPath.map((name, i) => {
+        const options = i < path.length ? optionsAt(i) : [];
         return (
           <span key={`${i}-${name}`}>
             {i > 0 ? ", " : null}
@@ -143,7 +152,7 @@ export function VriPathLine({
       {head ? (
         <span>
           {", "}
-          {heads.length > 1 ? (
+          {subheads.length > 1 ? (
             <DropdownMenu>
               <DropdownMenuTrigger
                 className="rounded px-0.5 font-bold text-primary hover:underline"
@@ -152,7 +161,7 @@ export function VriPathLine({
                 {head[1]}
               </DropdownMenuTrigger>
               <DropdownMenuContent className={menuClass}>
-                {heads.map(([p, label]) => (
+                {subheads.map(([p, label]) => (
                   <DropdownMenuItem
                     key={`${p}-${label}`}
                     onClick={() => onGoParagraph(p)}

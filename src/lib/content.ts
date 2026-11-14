@@ -278,7 +278,12 @@ const vriPathsSchema = z.object({
     z.tuple([
       z.string(),
       z.array(z.number().int()),
-      z.array(z.tuple([z.string(), z.number().int()])),
+      z.array(
+        z.union([
+          z.tuple([z.string(), z.number().int()]),
+          z.tuple([z.string(), z.number().int(), z.literal(1)]),
+        ]),
+      ),
       z
         .object({
           attha: z.array(z.number().int()).optional(),
@@ -292,8 +297,11 @@ const vriPathsSchema = z.object({
 export interface VriPath {
   /** 니까야·책·상윳따·품·경 이름 … (VRI 원본 글자 그대로) */
   path: string[];
-  /** 경 안 소제목 — [그 소제목이 시작하는 경 문단, 소제목] */
-  heads: [string, string][];
+  /**
+   * 경 안 소제목 — [그 소제목이 시작하는 경 문단, 소제목, 장 제목인지].
+   * 장 제목(청정도론 1장 "1. Sīlaniddeso" 처럼 서문 뒤에 오는 것)은 그 문단부터 경로에 붙는다.
+   */
+  heads: [string, string, boolean][];
   /** 주석서·복주석서의 경로 (그 책 XML 의 제목 그대로) */
   layers: Partial<Record<"attha" | "tika", string[]>>;
 }
@@ -321,7 +329,11 @@ export function fetchVriPaths(nikaya: string): Promise<VriPaths | null> {
               id,
               {
                 path: p.map(name),
-                heads: h.map(([para, i]): [string, string] => [para, name(i)]),
+                heads: h.map((x): [string, string, boolean] => [
+                  x[0],
+                  name(x[1]),
+                  x.length === 3,
+                ]),
                 layers: {
                   ...(c?.attha ? { attha: c.attha.map(name) } : {}),
                   ...(c?.tika ? { tika: c.tika.map(name) } : {}),

@@ -173,24 +173,46 @@ def main() -> None:
                 stack = [s for s in stack if s[0] < level] + [(level, text)]
                 hi += 1
             sid = docs[di]["suttaId"]
-            # 본문이 시작된 뒤에 나오는 장 제목이 이 경의 제목 줄(0.x)과 같으면 이 경의 경로에 넣는다
-            # (청정도론 1장: 서문 "Nidānādikathā" 뒤에 "1. Sīlaniddeso")
+            # 본문이 시작된 뒤에 나오는 장 제목이 이 경의 제목 줄(0.x)과 같으면, 경로에 바로 넣지 않고
+            # "그 문단부터 이 장" 이라고 적는다 (청정도론 1장: 서문 Nidānādikathā 다음에 "1. Sīlaniddeso" —
+            # Digital Pali Reader 처럼 서문을 읽을 때는 장 이름 없이, 1장 본문부터 장 이름이 경로에 붙는다)
             title_words = {norm(w) for k, v in docs[di]["segments"].items() if is_title(k) for w in W.findall(masked(v))}
             nxt_bs = min((b for b in body_start if b is not None and b > bs), default=None)
-            own = list(stack)
+            d = docs[di]
+            keys = list(d["segments"])
+            chapters: list[tuple[str, str]] = []
             for pos, level, text in path_heads:
                 if pos < bs or (nxt_bs is not None and pos >= nxt_bs) or level > LEVEL["title"]:
                     continue
                 ws = {norm(w) for w in W.findall(text)}
-                if ws and ws <= title_words:
-                    own = [s for s in own if s[0] < level] + [(level, text)]
-            entry: dict = {"path": [s[1] for s in own]}
-            seen: list[tuple[str, str]] = []
+                if not (ws and ws <= title_words):
+                    continue
+                # 제목 뒤 첫 낱말이 든 이 경의 문장 → 그 문단
+                xi = bisect.bisect_left(starts, pos + len(text) + 2)
+                para = None
+                for j in range(xi, min(xi + 200, len(xt))):
+                    si = x2s.get(j)
+                    if si is None:
+                        continue
+                    wdi, key = where[si]
+                    if wdi == di and key and not is_title(key):
+                        nxt = next((k for k in keys[keys.index(key) :] if not is_heading(k) and not is_title(k)), None)
+                        para = paragraph_of(nxt, d["suttaId"]) if nxt else None
+                    break
+                if para:
+                    chapters.append((para, text))
+            entry: dict = {"path": [s[1] for s in stack]}
+            order_of = {paragraph_of(k, d["suttaId"]): n for n, k in enumerate(keys)}
+            seen: list[tuple[str, str, int]] = []
             for p, text in in_sutta.get(di, []):
-                if (p, text) not in seen:
-                    seen.append((p, text))
+                if (p, text, 0) not in seen:
+                    seen.append((p, text, 0))
+            for p, text in chapters:
+                seen.append((p, text, 1))
+            # 문단 차례대로, 같은 문단이면 장 제목이 먼저
+            seen.sort(key=lambda h: (order_of.get(h[0], 0), -h[2]))
             if seen:
-                entry["heads"] = [[p, text] for p, text in seen]
+                entry["heads"] = [[p, text, 1] if c else [p, text] for p, text, c in seen]
             result[sid] = entry
             # 경 안 소제목은 다음 경 경로에 넘기지 않는다 (경 이름 아래 단계는 경마다 새로)
         print(f"{code}: 경 {len(docs)}개")

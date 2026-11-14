@@ -319,6 +319,18 @@ function editionsFor(nikaya: string, suttaId: string, base = SOURCE) {
  * 본문에서 떼는 VRI 번호를 경 문단에 매긴다. 문장 끝의 번호는 다음 문단의 번호이고(VRI 는 문단 앞에 번호가 있다),
  * 문장 가운데의 번호는 그 문장이 든 문단, 경 첫 문단은 VRI 자료의 첫 번호.
  */
+/**
+ * 주석 문단 첫 줄 맨 앞의 VRI 번호 — 문단 머리("VRI 1")에 이미 보이므로 글에서는 뗀다 (데이터는 그대로).
+ * 번호가 그 문단의 VRI 번호(의 첫 수)와 같을 때만 — 장·품 제목의 번호("2. Nīvaraṇappahāna…")는 그대로.
+ */
+function withoutLeadNumber(line: string, vripara: string | null): string {
+  if (!vripara) return line;
+  const m = line.match(/^\s*(\d+)(?:-\d+)?\.\s+(?=\S)/);
+  return m && m[1] === vripara.split(/[-,\s]/)[0]
+    ? line.slice(m[0].length)
+    : line;
+}
+
 /** 문장 칸인지 (경 이름 줄 0.x · 소제목 칸 .0 / .0.N 이 아닌) — 맨 앞 번호는 문장 칸에서만 문단 번호로 본다 */
 function isSentenceKey(key: string): boolean {
   const tail = key.slice(key.indexOf(":") + 1);
@@ -871,7 +883,9 @@ function buildSutta(
             : {}),
           vripara: p.vripara,
           refs: p.refs,
-          lines: p.lines.map((line) => parseInline(line)),
+          lines: p.lines.map((line, i) =>
+            parseInline(i === 0 ? withoutLeadNumber(line, p.vripara) : line),
+          ),
           lineRefs: p.lineRefs,
           ...(() => {
             const heads = p.lines.flatMap((line, i) =>
@@ -907,13 +921,17 @@ function buildSutta(
           para: p.para,
           vripara: p.vripara,
           title: p.title ?? null,
-          lines: p.lines.map((line) => parseInline(line)),
+          lines: p.lines.map((line, i) =>
+            parseInline(i === 0 ? withoutLeadNumber(line, p.vripara) : line),
+          ),
         })),
         after: (("after" in c ? c.after : undefined) ?? []).map((p) => ({
           para: p.para,
           vripara: p.vripara,
           title: p.title ?? null,
-          lines: p.lines.map((line) => parseInline(line)),
+          lines: p.lines.map((line, i) =>
+            parseInline(i === 0 ? withoutLeadNumber(line, p.vripara) : line),
+          ),
         })),
         links: c.wordLinks
           .filter(([key]) => key in root)
@@ -1183,7 +1201,15 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
         z.string(),
         z.object({
           path: z.array(z.string()),
-          heads: z.array(z.tuple([z.string(), z.string()])).optional(),
+          // [문단, 소제목] 또는 장 제목이면 [문단, 장 제목, 1]
+          heads: z
+            .array(
+              z.union([
+                z.tuple([z.string(), z.string()]),
+                z.tuple([z.string(), z.string(), z.literal(1)]),
+              ]),
+            )
+            .optional(),
         }),
       )
       .parse(readJson(pathsFile));
@@ -1215,12 +1241,14 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
         return at.get(name)!;
       };
       const suttas = list.map((s) => {
-        const e = all[s.id] ?? { path: [], heads: [] };
+        const e = all[s.id] ?? { path: [], heads: [] as [string, string][] };
         const c = comm[s.id] ?? {};
         return [
           s.id,
           e.path.map(idx),
-          (e.heads ?? []).map(([p, name]) => [p, idx(name)]),
+          (e.heads ?? []).map((h) =>
+            h.length === 3 ? [h[0], idx(h[1]), 1] : [h[0], idx(h[1])],
+          ),
           Object.fromEntries(
             (["attha", "tika"] as const)
               .filter((l) => c[l]?.length)
