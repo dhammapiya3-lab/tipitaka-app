@@ -27,6 +27,7 @@ import {
   plainShardSchema,
   searchShardSchema,
   editionInfoSchema,
+  parallelsSchema,
   suttaCommentarySchema,
   suttaNissayaSchema,
   suttaNotesSchema,
@@ -51,6 +52,7 @@ import type {
   AnalysisKind,
   CommentaryLayer,
   EditionInfo,
+  ParallelLink,
   SuttaCommentary,
   SuttaExtras,
   SuttaIndexEntry,
@@ -237,6 +239,26 @@ export function fetchExtras(): Promise<Record<string, SuttaExtras>> {
     });
   }
   return extrasPromise;
+}
+
+const parallelsCache = new Map<
+  string,
+  Promise<Record<string, ParallelLink[]>>
+>();
+
+/** 이 경의 병행 경전 (니까야마다 파일 하나 — 한 번만 받는다) */
+export async function fetchParallels(suttaId: string): Promise<ParallelLink[]> {
+  const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
+  if (!entry) return [];
+  const url = `/data/parallels/${entry.nikaya}.json`;
+  let promise = parallelsCache.get(url);
+  if (!promise) {
+    promise = getJson(url)
+      .then((d) => parallelsSchema.parse(d))
+      .catch(() => ({}));
+    parallelsCache.set(url, promise);
+  }
+  return (await promise)[suttaId] ?? [];
 }
 
 const analysisCache = new Map<string, Promise<SuttaNissaya>>();

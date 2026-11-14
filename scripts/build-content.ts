@@ -20,6 +20,7 @@ import path from "node:path";
 import { z } from "zod";
 import {
   extrasSchema,
+  parallelsSchema,
   catalogSchema,
   editionsSchema,
   editionInfoSchema,
@@ -973,6 +974,35 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
   writeFileSync(
     path.join(path.dirname(OUT_SUTTAS), "extras.json"),
     JSON.stringify(extras),
+  );
+}
+// 병행 경전 (content/parallels.json — scripts/import-parallels.py). 니까야마다 파일 하나.
+{
+  const file = path.join(ROOT, "content/parallels.json");
+  const parallels = existsSync(file)
+    ? parallelsSchema.parse(readJson(file))
+    : {};
+  const nikayaOf = new Map(suttaIndex.map((s) => [s.id, s.nikaya]));
+  const out = new Map<string, Record<string, unknown>>();
+  let missing = 0;
+  for (const [id, list] of Object.entries(parallels)) {
+    const nikaya = nikayaOf.get(id);
+    const kept = list.filter((p) => nikayaOf.has(p.s));
+    missing += list.length - kept.length;
+    if (!nikaya || kept.length === 0) continue;
+    out.set(nikaya, { ...out.get(nikaya), [id]: kept });
+  }
+  const dir = path.join(path.dirname(OUT_SUTTAS), "parallels");
+  rmSync(dir, { recursive: true, force: true });
+  mkdirSync(dir, { recursive: true });
+  for (const [nikaya, body] of out)
+    writeFileSync(path.join(dir, `${nikaya}.json`), JSON.stringify(body));
+  if (missing)
+    warnings.push(
+      `병행 경전: 목록에 없는 경으로 가는 연결 ${missing}건은 뺐습니다`,
+    );
+  console.log(
+    `병행 경전: 경 ${Object.keys(parallels).length}개 (니까야 ${out.size}개 파일)`,
   );
 }
 // VRI 묶음 파일: 목록 차례대로 경을 모아 ~400KB 가 넘으면 다음 묶음. 본문(t-)과 주석(c-)은 따로.

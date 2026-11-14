@@ -100,6 +100,19 @@ export type ExtraKind = "refs" | "talks" | "others";
 export type SuttaExtras = Partial<Record<ExtraKind, ExtraItem[]>>;
 
 /**
+ * 병행 경전 — 이 경과 같은 가르침이 담긴 다른 니까야 경 (SuttaCentral parallels, CC0).
+ * 원본 content/parallels.json (`python3 scripts/import-parallels.py`), 사이트에는 public/data/parallels/<니까야>.json.
+ */
+export interface ParallelLink {
+  /** 이어진 경 번호 */
+  s: string;
+  /** 관계 — p 같은 내용 · pp 일부 같음 · rt 다시 들려줌 · m 언급·인용 */
+  r: "p" | "pp" | "rt" | "m";
+  /** [이 경의 문장 번호, 그 경의 문장 번호] — 경 전체가 이어지면 빈 목록 */
+  l: [string, string][];
+}
+
+/**
  * 경 하나에 이어진 주석서·복주석서 (VRI 6차 결집본, E-Piṭaka 의 문단 연결로 이음).
  * 원본은 content/vri/<경>.json (`pnpm import:vri`), `pnpm build:content` 가 public/data/suttas/<경>/<attha|tika>.json 으로 옮긴다.
  */

@@ -3,7 +3,12 @@
 import { ExternalLink, MousePointerClick } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { WordPanelBody, type AnalysisEditions, type WordTarget } from "@/components/dictionary/word-sheet";
+import {
+  WordPanelBody,
+  type AnalysisEditions,
+  type WordTarget,
+} from "@/components/dictionary/word-sheet";
+import { ParallelList, type useParallels } from "@/components/sutta/parallels";
 import type { TocEntry } from "@/components/sutta/reader-sheets";
 import { fetchExtras } from "@/lib/content";
 import { suttaHref, suttaLabel } from "@/lib/format";
@@ -13,9 +18,21 @@ import type { ExtraKind, SuttaExtras } from "@/types";
 export type SidePanel = "toc" | "analysis" | ExtraKind;
 
 const EXTRA_TABS: { id: ExtraKind; label: string; empty: string }[] = [
-  { id: "refs", label: "참고 경전", empty: "이 경과 함께 읽으면 좋은 경을 모으고 있습니다." },
-  { id: "talks", label: "해설 법문", empty: "이 경을 풀어 설한 법문(글·음성·영상)을 모으고 있습니다." },
-  { id: "others", label: "기타 자료", empty: "이 경에 관한 그 밖의 자료를 모으고 있습니다." },
+  {
+    id: "refs",
+    label: "참고 경전",
+    empty: "이 경과 함께 읽으면 좋은 경을 모으고 있습니다.",
+  },
+  {
+    id: "talks",
+    label: "해설 법문",
+    empty: "이 경을 풀어 설한 법문(글·음성·영상)을 모으고 있습니다.",
+  },
+  {
+    id: "others",
+    label: "기타 자료",
+    empty: "이 경에 관한 그 밖의 자료를 모으고 있습니다.",
+  },
 ];
 
 /**
@@ -32,6 +49,7 @@ export function ReaderSide({
   suttaId,
   analysisEditions,
   onCloseWord,
+  parallels,
 }: {
   panel: SidePanel;
   onPanel: (panel: SidePanel) => void;
@@ -42,6 +60,8 @@ export function ReaderSide({
   suttaId: string;
   analysisEditions: AnalysisEditions;
   onCloseWord: () => void;
+  /** 병행 경전 — '참고 경전' 칸 맨 위에 관계별로 */
+  parallels?: ReturnType<typeof useParallels>;
 }) {
   const [extras, setExtras] = useState<SuttaExtras | null>(null);
   useEffect(() => {
@@ -66,7 +86,9 @@ export function ReaderSide({
       onClick={() => onPanel(id)}
       className={cn(
         "flex-1 rounded-lg py-2 text-sm font-bold transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-        panel === id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+        panel === id
+          ? "bg-primary text-primary-foreground"
+          : "bg-muted text-muted-foreground",
       )}
     >
       {label}
@@ -78,13 +100,21 @@ export function ReaderSide({
       className={cn(
         "sticky top-4 flex h-[calc(100vh-2rem)] shrink-0 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-[width] print:hidden",
         // 풀이(문법분석·사전)를 볼 때는 화면에 여유가 있는 만큼 넓힌다
-        panel === "analysis" && word ? "w-[340px] xl:w-[440px] 2xl:w-[560px]" : "w-[340px]",
+        panel === "analysis" && word
+          ? "w-[340px] xl:w-[440px] 2xl:w-[560px]"
+          : "w-[340px]",
       )}
     >
       {/* 덧붙임 자료 — 참고 경전 · 해설 법문 · 기타 자료 */}
-      <div className="grid shrink-0 grid-cols-3 gap-1.5 px-3 pt-3" role="tablist" aria-label="덧붙임 자료">
+      <div
+        className="grid shrink-0 grid-cols-3 gap-1.5 px-3 pt-3"
+        role="tablist"
+        aria-label="덧붙임 자료"
+      >
         {EXTRA_TABS.map((t) => {
-          const count = extras?.[t.id]?.length ?? 0;
+          const count =
+            (extras?.[t.id]?.length ?? 0) +
+            (t.id === "refs" ? (parallels?.links.length ?? 0) : 0);
           return (
             <button
               key={t.id}
@@ -100,16 +130,38 @@ export function ReaderSide({
               )}
             >
               {t.label}
-              {count > 0 ? <span className="ml-1 text-primary">{count}</span> : null}
+              {count > 0 ? (
+                <span className="ml-1 text-primary">{count}</span>
+              ) : null}
             </button>
           );
         })}
       </div>
-      <div className="flex shrink-0 gap-1.5 p-3" role="tablist" aria-label="오른쪽 칸">
+      <div
+        className="flex shrink-0 gap-1.5 p-3"
+        role="tablist"
+        aria-label="오른쪽 칸"
+      >
         {tab("toc", "목차")}
         {tab("analysis", "풀이")}
       </div>
-      {panel === "refs" || panel === "talks" || panel === "others" ? (
+      {panel === "refs" && parallels && parallels.links.length > 0 ? (
+        <div className="min-h-0 flex-1 overflow-y-auto border-t px-3 pb-3">
+          <ParallelList
+            suttaId={suttaId}
+            links={parallels.links}
+            names={parallels.names}
+          />
+          {(extras?.refs ?? []).length > 0 ? (
+            <ExtraList
+              items={extras?.refs ?? []}
+              loading={false}
+              empty=""
+              heading="참고 경전"
+            />
+          ) : null}
+        </div>
+      ) : panel === "refs" || panel === "talks" || panel === "others" ? (
         <ExtraList
           items={extras?.[panel] ?? []}
           loading={extras === null}
@@ -129,10 +181,19 @@ export function ReaderSide({
                 onClick={() => onPick(item.paragraph)}
                 className={cn(
                   "flex w-full gap-2.5 border-l-2 px-3.5 py-2 text-left text-sm transition-colors outline-none hover:bg-hover focus-visible:ring-3 focus-visible:ring-ring/50",
-                  on ? "border-primary bg-brand-soft font-bold text-foreground" : "border-transparent text-secondary-foreground",
+                  on
+                    ? "border-primary bg-brand-soft font-bold text-foreground"
+                    : "border-transparent text-secondary-foreground",
                 )}
               >
-                <span className={cn("w-9 shrink-0 font-pali", on ? "text-primary" : "text-faint")}>{item.label}</span>
+                <span
+                  className={cn(
+                    "w-9 shrink-0 font-pali",
+                    on ? "text-primary" : "text-faint",
+                  )}
+                >
+                  {item.label}
+                </span>
                 <span className="min-w-0 break-keep">{item.title ?? ""}</span>
               </button>
             );
@@ -152,8 +213,9 @@ export function ReaderSide({
         <div className="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center">
           <MousePointerClick className="size-6 text-faint" aria-hidden />
           <p className="text-sm text-muted-foreground">
-            문장이나 빠알리 단어, <b className="text-violet-700">문법분석</b>·<b className="text-sky-700">대역</b> 배지를 누르면
-            여기에 풀이가 나옵니다.
+            문장이나 빠알리 단어, <b className="text-violet-700">문법분석</b>·
+            <b className="text-sky-700">대역</b> 배지를 누르면 여기에 풀이가
+            나옵니다.
           </p>
         </div>
       )}
@@ -172,11 +234,14 @@ function ExtraList({
   empty: string;
   heading: string;
 }) {
-  if (loading) return <p className="px-4 py-6 text-sm text-faint">불러오는 중…</p>;
+  if (loading)
+    return <p className="px-4 py-6 text-sm text-faint">불러오는 중…</p>;
   if (items.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center gap-1 border-t px-6 pt-10 text-center">
-        <p className="text-sm font-bold text-secondary-foreground">{heading} — 준비 중</p>
+        <p className="text-sm font-bold text-secondary-foreground">
+          {heading} — 준비 중
+        </p>
         <p className="text-sm text-muted-foreground">{empty}</p>
       </div>
     );
@@ -188,7 +253,12 @@ function ExtraList({
           <>
             <span className="flex items-start gap-1.5 text-sm font-bold">
               <span className="min-w-0 flex-1 break-keep">{item.title}</span>
-              {item.url && !item.suttaId ? <ExternalLink className="mt-0.5 size-3.5 shrink-0 text-faint" aria-hidden /> : null}
+              {item.url && !item.suttaId ? (
+                <ExternalLink
+                  className="mt-0.5 size-3.5 shrink-0 text-faint"
+                  aria-hidden
+                />
+              ) : null}
             </span>
             {item.suttaId || item.by ? (
               <span className="mt-0.5 block text-xs text-primary">
@@ -197,7 +267,11 @@ function ExtraList({
                 {item.by}
               </span>
             ) : null}
-            {item.note ? <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{item.note}</span> : null}
+            {item.note ? (
+              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                {item.note}
+              </span>
+            ) : null}
           </>
         );
         const cls =
@@ -209,7 +283,12 @@ function ExtraList({
                 {body}
               </Link>
             ) : item.url ? (
-              <a href={item.url} target="_blank" rel="noopener noreferrer" className={cls}>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cls}
+              >
                 {body}
               </a>
             ) : (

@@ -12,6 +12,7 @@ import type {
   Segment,
   SuttaCommentary,
   EditionInfo,
+  ParallelLink,
   SuttaExtras,
   SuttaIndexEntry,
   SuttaNissaya,
@@ -309,6 +310,19 @@ export const extrasSchema: z.ZodType<Record<string, SuttaExtras>> = z.record(
     others: z.array(extraItemSchema).optional(),
   }),
 );
+
+/** 경 번호 → 병행 경전 (content/parallels.json → public/data/parallels/<니까야>.json) */
+export const parallelsSchema: z.ZodType<Record<string, ParallelLink[]>> =
+  z.record(
+    z.string(),
+    z.array(
+      z.object({
+        s: z.string().min(1),
+        r: z.enum(["p", "pp", "rt", "m"]),
+        l: z.array(z.tuple([z.string(), z.string()])),
+      }),
+    ),
+  );
 
 export const suttaCommentarySchema: z.ZodType<SuttaCommentary> = z.object({
   suttaId: z.string().min(1),

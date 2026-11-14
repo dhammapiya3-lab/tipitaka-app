@@ -3,6 +3,13 @@
 import { TtsLockOverlay } from "@/components/sutta/tts-lock";
 import { GlossDialog } from "@/components/dictionary/gloss-dialog";
 import { SuttaEndNav } from "@/components/sutta/sutta-end";
+import {
+  ParagraphParallels,
+  ParallelList,
+  ParallelSummaryChip,
+  parallelsByParagraph,
+  useParallels,
+} from "@/components/sutta/parallels";
 import { TopicChips } from "@/components/topics/topic-chips";
 import {
   BookA,
@@ -415,6 +422,13 @@ export function SuttaView({
     for: null,
   });
   const panel = word && word !== chosen.for ? "analysis" : chosen.panel;
+  /** 병행 경전 (SuttaCentral) — 문단 번호 옆 "⇄ n" 과 '참고 경전' 목록 */
+  const parallels = useParallels(suttaId);
+  const parallelsAt = parallels
+    ? parallelsByParagraph(suttaId, parallels.links)
+    : new Map<string, never[]>();
+  /** 휴대폰: 경 머리 아래에 펼친 병행 경전 목록 */
+  const [parallelsOpen, setParallelsOpen] = useState(false);
   /** 지금 화면 맨 위에 있는 문단 (목차에서 호박색) */
   const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
 
@@ -1048,6 +1062,12 @@ export function SuttaView({
               {texts[VRI_ID]!.vriNumbers![p]}
             </span>
           ) : null}
+          {parallels && parallelsAt.get(p)?.length ? (
+            <ParagraphParallels
+              items={parallelsAt.get(p)!}
+              names={parallels.names}
+            />
+          ) : null}
         </span>
         {inFocus ? null : (
           // 마우스를 올리면 누를 수 있다는 것을 알린다
@@ -1499,6 +1519,33 @@ export function SuttaView({
           >
             <Breadcrumb items={head.crumbs} />
             <TopicChips suttaId={suttaId} />
+            {parallels && parallels.links.length > 0 ? (
+              <>
+                <ParallelSummaryChip
+                  count={parallels.links.length}
+                  open={
+                    isDesktop && !parallel ? panel === "refs" : parallelsOpen
+                  }
+                  onClick={() =>
+                    isDesktop && !parallel
+                      ? setChosen({
+                          panel: panel === "refs" ? "toc" : "refs",
+                          for: word,
+                        })
+                      : setParallelsOpen((v) => !v)
+                  }
+                />
+                {parallelsOpen && !(isDesktop && !parallel) ? (
+                  <div className="rounded-2xl border bg-card p-3">
+                    <ParallelList
+                      suttaId={suttaId}
+                      links={parallels.links}
+                      names={parallels.names}
+                    />
+                  </div>
+                ) : null}
+              </>
+            ) : null}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <EditionBadges
                 editions={
@@ -1873,6 +1920,7 @@ export function SuttaView({
               suttaId={suttaId}
               analysisEditions={analysisEditions}
               onCloseWord={() => setWord(null)}
+              parallels={parallels}
             />
           </div>
         ) : null}
