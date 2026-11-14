@@ -120,6 +120,7 @@ import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useHighlightsStore } from "@/store/highlights";
 import { useReadingStore } from "@/store/reading";
+import { type ReaderSheet, useReaderSheet } from "@/store/reader-sheet";
 import { useSettingsStore } from "@/store/settings";
 import type {
   AnalysisKind,
@@ -424,7 +425,9 @@ export function SuttaView({
     ("sutta" | CommentaryLayer)[]
   >(["sutta", "attha", "tika"]);
   /** 열려 있는 아래 창 */
-  const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
+  // 열린 아래 창은 창 쪽에서만 읽는다 (여기서 읽으면 창을 열 때마다 경 전체를 다시 그린다)
+  const setSheet = useReaderSheet((s) => s.setSheet);
+  useEffect(() => () => setSheet(null), [setSheet, suttaId]);
   /** 오른쪽 칸(넓은 화면)에서 고른 탭과, 고를 때 열려 있던 풀이 — 그 뒤 새 문장·단어를 누르면 다시 풀이를 보인다 */
   const [chosen, setChosen] = useState<{
     panel: SidePanel;
@@ -2152,41 +2155,53 @@ export function SuttaView({
         onClose={() => setMemoRow(null)}
       />
 
-      <EditionPickerSheet
-        open={sheet === "editions"}
-        onOpenChange={(o) => setSheet(o ? "editions" : null)}
-        editions={editions}
-        shownIds={shownIds}
-        onToggle={togglePick}
-        commentary={
-          commentary.length
-            ? {
-                editions: commEditions,
-                shownIds: commPicked,
-                onToggle: toggleCommPick,
-              }
-            : undefined
-        }
-        commentaryFirst={false}
-      />
-      <TocSheet
-        open={sheet === "toc"}
-        onOpenChange={(o) => setSheet(o ? "toc" : null)}
-        title={head.title}
-        items={toc}
-        onPick={(p) => {
-          setSheet(null);
-          revealAll();
-          document
-            .getElementById(`section-${p}`)
-            ?.scrollIntoView({ block: "start" });
-        }}
-      />
-      <TextSettingsSheet
-        open={sheet === "text"}
-        onOpenChange={(o) => setSheet(o ? "text" : null)}
-        onWordLinksOn={showPaliForLinks}
-      />
+      <SheetGate name="editions">
+        {(open, onOpenChange) => (
+          <EditionPickerSheet
+            open={open}
+            onOpenChange={onOpenChange}
+            editions={editions}
+            shownIds={shownIds}
+            onToggle={togglePick}
+            commentary={
+              commentary.length
+                ? {
+                    editions: commEditions,
+                    shownIds: commPicked,
+                    onToggle: toggleCommPick,
+                  }
+                : undefined
+            }
+            commentaryFirst={false}
+          />
+        )}
+      </SheetGate>
+      <SheetGate name="toc">
+        {(open, onOpenChange) => (
+          <TocSheet
+            open={open}
+            onOpenChange={onOpenChange}
+            title={head.title}
+            items={toc}
+            onPick={(p) => {
+              setSheet(null);
+              revealAll();
+              document
+                .getElementById(`section-${p}`)
+                ?.scrollIntoView({ block: "start" });
+            }}
+          />
+        )}
+      </SheetGate>
+      <SheetGate name="text">
+        {(open, onOpenChange) => (
+          <TextSettingsSheet
+            open={open}
+            onOpenChange={onOpenChange}
+            onWordLinksOn={showPaliForLinks}
+          />
+        )}
+      </SheetGate>
     </div>
   );
 }
@@ -2209,4 +2224,20 @@ function unitLabel(unit: string): string {
     /^([a-z-]+)/,
     (letters) => `${letters[0].toUpperCase()}${letters.slice(1)} `,
   );
+}
+
+/** 아래 창 하나 — 열림 상태를 스스로 읽어, 창을 여닫을 때 경 화면 전체가 다시 그려지지 않게 */
+function SheetGate({
+  name,
+  children,
+}: {
+  name: Exclude<ReaderSheet, null>;
+  children: (
+    open: boolean,
+    onOpenChange: (open: boolean) => void,
+  ) => React.ReactNode;
+}) {
+  const open = useReaderSheet((s) => s.sheet === name);
+  const setSheet = useReaderSheet((s) => s.setSheet);
+  return children(open, (o) => setSheet(o ? name : null));
 }
