@@ -1004,6 +1004,10 @@ for (const suttaId of ids) {
     const num = (r: string) => Number(r.match(/(\d+)(?:\.\d+)*$/)?.[1] ?? 0);
     for (const p of paras)
       p.refs = [...new Set(p.lineRefs.flat())].sort((a, b) => num(a) - num(b));
+    // 법구경 주석서: 낱말 연결은 게송 풀이(Tattha …)에만 있어, 그 앞의 인연담(이야기)은 앞 게송에 붙어 버린다.
+    // 이야기 하나(제목 줄 … "…vatthu …timaṃ. 30." 맺음 줄)를 통째로 그 이야기가 든 게송에 단다.
+    if (info.book_name.startsWith("Dhammapada"))
+      fixDhammapadaStories(paras, suttaId);
     // 낱말 연결: [경 문장 번호, 낱말, 주석 문단 순번, 그 문단 안 줄 순번] — 경의 낱말을 누르면 그 주석 줄로 간다
     const paraIndex = new Map(paras.map((p, i) => [p.para, i]));
     const lineIndex = new Map<string, number>();
@@ -1284,4 +1288,49 @@ if (quiet) {
     path.join(OUT, "_import-report.txt"),
     `짝을 못 찾은 줄이 있는 경:\n${stats.withUnmatched.join("\n")}\n\nE-Piṭaka 에 없는 경:\n${stats.missing.join("\n")}\n`,
   );
+}
+
+/**
+ * 법구경 주석서의 문단을 이야기 단위로 게송에 다시 단다.
+ * 이야기는 맺음 줄("Revatattheravatthu ekūnatiṃsatimaṃ. 30.")로 끝난다. 이야기 안의 게송 문단(vripara)
+ * 앞쪽은 그 첫 게송에, 게송 문단부터는 그 게송에 단다 (한 이야기에 게송이 여럿이면 게송마다 나뉜다).
+ */
+function fixDhammapadaStories(
+  paras: {
+    vripara: string | number | null;
+    refs: string[];
+    lines: string[];
+    lineRefs: string[][];
+  }[],
+  suttaId: string,
+) {
+  const m = suttaId.match(/^dhp(\d+)-(\d+)$/);
+  if (!m) return;
+  const [lo, hi] = [Number(m[1]), Number(m[2])];
+  const mark = (v: string | number | null) => {
+    const n = Number(v);
+    return v && n >= lo && n <= hi ? `dhp${n}` : null;
+  };
+  const isClosing = (line: string) =>
+    /vatthu\s+\S+\.\s*\d+\.?\s*$/i.test(line.replace(/<[^>]+>/g, "").trim());
+  let start = 0;
+  const apply = (from: number, to: number) => {
+    const story = paras.slice(from, to + 1);
+    const verses = story.map((p) => mark(p.vripara));
+    const first = verses.find(Boolean);
+    if (!first) return;
+    let current = first;
+    story.forEach((p, i) => {
+      current = verses[i] ?? current;
+      p.refs = [current];
+      p.lineRefs = p.lines.map(() => [current]);
+    });
+  };
+  paras.forEach((p, i) => {
+    if (p.lines.some(isClosing)) {
+      apply(start, i);
+      start = i + 1;
+    }
+  });
+  if (start < paras.length) apply(start, paras.length - 1);
 }

@@ -1445,6 +1445,83 @@ export function SuttaView({
   const navButton =
     "flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-bold text-primary transition-colors hover:bg-brand-soft disabled:pointer-events-none disabled:opacity-30";
 
+  /** 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 (주석서·복주석서에서는 그 층을 그대로 연다) */
+  const navBar = (
+    <div
+      className={cn(
+        "mx-auto box-content flex items-center justify-between px-4 py-2 print:hidden",
+        readWidth,
+      )}
+    >
+      {focus ? (
+        <>
+          <button
+            type="button"
+            className={navButton}
+            disabled={focusIndex <= 0}
+            onClick={() => openParagraph(paragraphList[focusIndex - 1])}
+          >
+            <ChevronLeft className="size-4" aria-hidden />
+            이전
+          </button>
+          <span className="text-xs text-faint">
+            {focusIndex + 1} / {paragraphList.length}
+          </span>
+          <button
+            type="button"
+            className={navButton}
+            disabled={focusIndex >= paragraphList.length - 1}
+            onClick={() => openParagraph(paragraphList[focusIndex + 1])}
+          >
+            다음
+            <ChevronRight className="size-4" aria-hidden />
+          </button>
+        </>
+      ) : (
+        <>
+          {prev ? (
+            <Link
+              href={suttaHref(
+                prev.id,
+                undefined,
+                layer === "sutta" ? undefined : layer,
+              )}
+              className={navButton}
+              title={prev.title}
+            >
+              <ChevronLeft className="size-4" aria-hidden />
+              이전
+            </Link>
+          ) : (
+            <span className={cn(navButton, "opacity-30")}>
+              <ChevronLeft className="size-4" aria-hidden />
+              이전
+            </span>
+          )}
+          {next ? (
+            <Link
+              href={suttaHref(
+                next.id,
+                undefined,
+                layer === "sutta" ? undefined : layer,
+              )}
+              className={navButton}
+              title={next.title}
+            >
+              다음
+              <ChevronRight className="size-4" aria-hidden />
+            </Link>
+          ) : (
+            <span className={cn(navButton, "opacity-30")}>
+              다음
+              <ChevronRight className="size-4" aria-hidden />
+            </span>
+          )}
+        </>
+      )}
+    </div>
+  );
+
   return (
     <div className="flex flex-col">
       {/* 넓은 화면: 왼쪽 본문 + 오른쪽 목차·풀이 칸 */}
@@ -1588,119 +1665,53 @@ export function SuttaView({
           />
 
           {layer !== "sutta" ? (
-            <div className="px-4 pt-2 pb-6">
-              <div className={cn("mx-auto w-full min-w-0", readWidth)}>
-                <CommentaryView
-                  suttaId={suttaId}
-                  layer={layer}
-                  available={commentary.includes(layer)}
-                  picked={commPicked}
-                  paragraph={focus}
-                  prev={prev}
-                  next={next}
-                  paragraphLabel={
-                    focus
-                      ? `${editionTitle ?? head.title} ${paragraphMark(focus)}`
-                      : undefined
-                  }
-                  fontStyle={articleStyle}
-                  onWord={(w) =>
-                    setWord({
-                      word: w,
-                      rowKey: layer,
-                      keys: [],
-                      tab: "dictionary",
-                      title: "",
-                      pali: "",
-                    })
-                  }
-                  onGoParagraph={(p) => {
-                    setLayer("sutta");
-                    if (focus) openParagraph(p);
-                    else
-                      requestAnimationFrame(() =>
+            <>
+              {navBar}
+              <div className="px-4 pt-2 pb-6">
+                <div className={cn("mx-auto w-full min-w-0", readWidth)}>
+                  <CommentaryView
+                    suttaId={suttaId}
+                    layer={layer}
+                    available={commentary.includes(layer)}
+                    picked={commPicked}
+                    paragraph={focus}
+                    prev={prev}
+                    next={next}
+                    paragraphLabel={
+                      focus
+                        ? `${editionTitle ?? head.title} ${paragraphMark(focus)}`
+                        : undefined
+                    }
+                    fontStyle={articleStyle}
+                    onWord={(w) =>
+                      setWord({
+                        word: w,
+                        rowKey: layer,
+                        keys: [],
+                        tab: "dictionary",
+                        title: "",
+                        pali: "",
+                      })
+                    }
+                    onGoParagraph={(p) => {
+                      setLayer("sutta");
+                      if (focus) openParagraph(p);
+                      else
                         requestAnimationFrame(() =>
-                          document
-                            .getElementById(`section-${p}`)
-                            ?.scrollIntoView({ block: "start" }),
-                        ),
-                      );
-                  }}
-                />
+                          requestAnimationFrame(() =>
+                            document
+                              .getElementById(`section-${p}`)
+                              ?.scrollIntoView({ block: "start" }),
+                          ),
+                        );
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             <>
-              {/* 이전 · 다음 — 문단 보기에서는 문단, 아니면 경 */}
-              <div
-                className={cn(
-                  "mx-auto box-content flex items-center justify-between px-4 py-2 print:hidden",
-                  readWidth,
-                )}
-              >
-                {focus ? (
-                  <>
-                    <button
-                      type="button"
-                      className={navButton}
-                      disabled={focusIndex <= 0}
-                      onClick={() =>
-                        openParagraph(paragraphList[focusIndex - 1])
-                      }
-                    >
-                      <ChevronLeft className="size-4" aria-hidden />
-                      이전
-                    </button>
-                    <span className="text-xs text-faint">
-                      {focusIndex + 1} / {paragraphList.length}
-                    </span>
-                    <button
-                      type="button"
-                      className={navButton}
-                      disabled={focusIndex >= paragraphList.length - 1}
-                      onClick={() =>
-                        openParagraph(paragraphList[focusIndex + 1])
-                      }
-                    >
-                      다음
-                      <ChevronRight className="size-4" aria-hidden />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {prev ? (
-                      <Link
-                        href={suttaHref(prev.id)}
-                        className={navButton}
-                        title={prev.title}
-                      >
-                        <ChevronLeft className="size-4" aria-hidden />
-                        이전
-                      </Link>
-                    ) : (
-                      <span className={cn(navButton, "opacity-30")}>
-                        <ChevronLeft className="size-4" aria-hidden />
-                        이전
-                      </span>
-                    )}
-                    {next ? (
-                      <Link
-                        href={suttaHref(next.id)}
-                        className={navButton}
-                        title={next.title}
-                      >
-                        다음
-                        <ChevronRight className="size-4" aria-hidden />
-                      </Link>
-                    ) : (
-                      <span className={cn(navButton, "opacity-30")}>
-                        다음
-                        <ChevronRight className="size-4" aria-hidden />
-                      </span>
-                    )}
-                  </>
-                )}
-              </div>
+              {navBar}
 
               {error ? (
                 <EmptyState
