@@ -37,6 +37,38 @@ export function useVriPaths(nikaya: string | undefined): VriPaths | null {
   return state && state.nikaya === nikaya ? state.data : null;
 }
 
+/** 화면 위 고정 칸 높이 — 이보다 아래에 있는 첫 주석 문단을 "읽는 곳"으로 본다 (sutta-view 와 같다) */
+const TOP_OFFSET = 80;
+
+/** 주석서·복주석서에서 지금 읽는 주석 문단 번호 (문단 상자의 data-cpara) — 스크롤이 멈추면 */
+function useCommentaryPara(on: boolean): number | null {
+  const [para, setPara] = useState<number | null>(null);
+  useEffect(() => {
+    if (!on) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const update = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const list = [
+          ...document.querySelectorAll<HTMLElement>("[data-cpara]"),
+        ];
+        const el = list.find(
+          (x) => x.getBoundingClientRect().bottom > TOP_OFFSET,
+        );
+        const n = Number(el?.dataset.cpara);
+        setPara(Number.isFinite(n) ? n : null);
+      }, 150);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", update);
+    };
+  }, [on]);
+  return para;
+}
+
 /** 머리말 줄 가운데 경로 줄과 같은 제목 줄(책·품 이름)인지 — 그런 줄은 화면에서 따로 보이지 않는다(데이터는 그대로) */
 export function coveredByPath(line: string, path: string[]): boolean {
   const have = new Set(path.flatMap(words));
@@ -68,14 +100,23 @@ export function VriPathLine({
   onGoParagraph: (paragraph: string) => void;
 }) {
   const router = useRouter();
+  const commPara = useCommentaryPara(Boolean(layer));
   const mine = paths.byId.get(suttaId);
   if (!mine) return null;
-  const path = layer ? (mine.layers[layer] ?? []) : mine.path;
+  // 주석서·복주석서: 지금 읽는 주석 문단까지 바뀐 경로 가운데 마지막 (처음에는 첫 경로)
+  const changes = layer ? (mine.layers[layer] ?? []) : [];
+  const path = layer
+    ? ((commPara === null
+        ? undefined
+        : changes.filter(([p]) => p <= commPara).at(-1)?.[1]) ??
+      changes[0]?.[1] ??
+      [])
+    : mine.path;
   const heads: [string, string, boolean][] = layer ? [] : mine.heads;
   if (!path.length) return null;
   const pathOf = (id: string) => {
     const e = paths.byId.get(id)!;
-    return layer ? (e.layers[layer] ?? []) : e.path;
+    return layer ? (e.layers[layer]?.[0]?.[1] ?? []) : e.path;
   };
   // 지금 읽는 자리 — 그 문단이거나 그 앞에서 가장 가까운 장 제목·소제목
   // (장 제목 앞의 소제목은 그 장에 들지 않으므로 장 제목이 나오면 지운다 — DPR 처럼)

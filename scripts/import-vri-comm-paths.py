@@ -52,6 +52,10 @@ class Book:
                 level: float = LEVEL[m.group(2)]
                 if re.fullmatch(r"\(\S+ bhāgo\)", text):
                     level = 1.5
+                # 번호 붙은 소제목(경·이야기 이름 "1. Mūlapariyāyasuttavaṇṇanā")은 번호 없는 소제목(단락 이름)보다 한 단계 위
+                # — 단락 이름("Suttanikkhepavaṇṇanā")이 나와도 경 이름은 경로에 남는다 (DPR 처럼)
+                elif level >= LEVEL["subhead"] and re.match(r"\d+(?:-\d+)?\.\s", text):
+                    level = 3.5
                 self.heads.append((len(self.words), level, text))
             self._add(m.group(3))
             last = m.end()
@@ -81,32 +85,10 @@ class Book:
         return [s[1] for s in stack]
 
 
-SUTTA_LIKE = re.compile(r"sutta|jātak|vatthu|niddes|vagg", re.I)
-
-
-def _extend(self: "Book", path: list[str], start: int, end: int) -> list[str]:
-    """주석이 서문으로 시작하면, 그 경의 주석 안에서 처음 나오는 장(·품)과 경 이름 제목까지 경로에 더한다"""
-    if any(re.search(r"sutta|jātak|niddes", p, re.I) and "vaṇṇanā" in p for p in path):
-        return path
-    stack = [(lvl, txt) for (_, lvl, txt) in self.heads[: bisect.bisect_right(self.head_at, start)]]
-    cur: list[tuple[float, str]] = []
-    for lvl, txt in stack:
-        cur = [s for s in cur if s[0] < lvl] + [(lvl, txt)]
-    for at, lvl, txt in self.heads[bisect.bisect_right(self.head_at, start) : bisect.bisect_right(self.head_at, end)]:
-        if lvl <= LEVEL["title"] or SUTTA_LIKE.search(txt):
-            cur = [s for s in cur if s[0] < lvl] + [(lvl, txt)]
-            if lvl > LEVEL["title"] or re.search(r"sutta|jātak|niddes", txt, re.I):
-                break
-    return [s[1] for s in cur]
-
-
-Book.extend = _extend  # type: ignore[attr-defined]
-
-
 def main() -> None:
     xml_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/refs/tipitaka-xml/romn")
     books: dict[str, Book | None] = {}
-    out: dict[str, dict[str, list[str]]] = {}
+    out: dict[str, dict[str, list[list]]] = {}
     missing = 0
     files = sorted(f for f in VRI.glob("*.json") if not f.name.endswith(".ko.json") and not f.name.startswith("_"))
     for f in files:
@@ -126,32 +108,34 @@ def main() -> None:
             book = books[code]
             if book is None:
                 continue
-            pos = None
-            for para in c["paras"][:5]:
+            # 문단마다 그 자리의 경로 (Digital Pali Reader 처럼 — 서문을 읽을 때는 서문, 장·소제목을 지나면 그 이름)
+            changes: list[list] = []
+            last: list[str] | None = None
+            after = 0
+            found_any = False
+            for para in c["paras"]:
+                pos = None
                 for line in para["lines"]:
                     if len(W.findall(strip_text(line))) >= N:
-                        pos = book.find(line, 0)
+                        pos = book.find(line, after)
                         if pos is not None:
                             break
-                if pos is not None:
-                    break
-            if pos is None:
+                if pos is None:
+                    continue
+                found_any = True
+                after = pos
+                path = book.path_at(pos)
+                if path and path != last:
+                    changes.append([para["para"], path])
+                    last = path
+            if not found_any:
                 missing += 1
                 continue
-            # 끝 문단 자리 — 책 서문(Ganthārambhakathā 등) 뒤에 나오는 장·경 제목을 넣으려고
-            end = pos
-            for para in reversed(c["paras"][-3:]):
-                line = next((l for l in para["lines"] if len(W.findall(strip_text(l))) >= N), None)
-                found = book.find(line, pos) if line else None
-                if found is not None and found >= pos:
-                    end = found
-                    break
-            path = book.extend(book.path_at(pos), pos, end)
-            if path:
-                out.setdefault(d["suttaId"], {})[layer] = path
+            if changes:
+                out.setdefault(d["suttaId"], {})[layer] = changes
     target = ROOT / "content" / "vri-comm-paths.json"
     target.write_text(json.dumps(dict(sorted(out.items())), ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    print(f"주석 경로 {sum(len(v) for v in out.values()):,}개 (경 {len(out):,}개), 자리를 못 찾은 것 {missing}개 → {target.relative_to(ROOT)}")
+    print(f"주석 경로 {sum(len(v) for v in out.values()):,}개 (경 {len(out):,}개, 경로가 바뀌는 자리 {sum(len(x) for v in out.values() for x in v.values()):,}곳), 자리를 못 찾은 것 {missing}개 → {target.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

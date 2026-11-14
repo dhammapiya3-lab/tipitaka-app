@@ -481,6 +481,7 @@ export function CommentaryCard({
   return (
     <section
       id={label ? undefined : `${layer}-${index}`}
+      data-cpara={label ? undefined : para.para}
       className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm"
     >
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-5 py-3 dark:border-border">

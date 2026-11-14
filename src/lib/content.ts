@@ -274,6 +274,8 @@ export async function fetchParallels(suttaId: string): Promise<ParallelLink[]> {
 /** VRI 경로 줄 — 니까야마다 파일 하나 (scripts/import-vri-paths.py → build-content) */
 const vriPathsSchema = z.object({
   names: z.array(z.string()),
+  /** 주석 경로 표 — 이름 번호들 */
+  paths: z.array(z.array(z.number().int())).default([]),
   suttas: z.array(
     z.tuple([
       z.string(),
@@ -286,8 +288,8 @@ const vriPathsSchema = z.object({
       ),
       z
         .object({
-          attha: z.array(z.number().int()).optional(),
-          tika: z.array(z.number().int()).optional(),
+          attha: z.array(z.tuple([z.number(), z.number().int()])).optional(),
+          tika: z.array(z.tuple([z.number(), z.number().int()])).optional(),
         })
         .optional(),
     ]),
@@ -302,8 +304,11 @@ export interface VriPath {
    * 장 제목(청정도론 1장 "1. Sīlaniddeso" 처럼 서문 뒤에 오는 것)은 그 문단부터 경로에 붙는다.
    */
   heads: [string, string, boolean][];
-  /** 주석서·복주석서의 경로 (그 책 XML 의 제목 그대로) */
-  layers: Partial<Record<"attha" | "tika", string[]>>;
+  /**
+   * 주석서·복주석서의 경로 (그 책 XML 의 제목 그대로) — [그 주석 문단부터, 경로] 를 문단 차례대로.
+   * 읽는 자리에 따라 바뀐다 (서문 → 장 → 경 → 단락, Digital Pali Reader 처럼).
+   */
+  layers: Partial<Record<"attha" | "tika", [number, string[]][]>>;
 }
 
 export interface VriPaths {
@@ -321,8 +326,11 @@ export function fetchVriPaths(nikaya: string): Promise<VriPaths | null> {
   if (!promise) {
     promise = getJson(`/data/vri-paths/${nikaya}.json`)
       .then((d) => {
-        const { names, suttas } = vriPathsSchema.parse(d);
+        const { names, paths, suttas } = vriPathsSchema.parse(d);
         const name = (i: number) => names[i] ?? "";
+        const pathOf = (i: number) => (paths[i] ?? []).map(name);
+        const layer = (list?: [number, number][]) =>
+          list?.map(([para, i]): [number, string[]] => [para, pathOf(i)]);
         return {
           byId: new Map(
             suttas.map(([id, p, h, c]) => [
@@ -335,8 +343,8 @@ export function fetchVriPaths(nikaya: string): Promise<VriPaths | null> {
                   x.length === 3,
                 ]),
                 layers: {
-                  ...(c?.attha ? { attha: c.attha.map(name) } : {}),
-                  ...(c?.tika ? { tika: c.tika.map(name) } : {}),
+                  ...(c?.attha ? { attha: layer(c.attha) } : {}),
+                  ...(c?.tika ? { tika: layer(c.tika) } : {}),
                 },
               },
             ]),

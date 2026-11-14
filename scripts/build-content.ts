@@ -1215,13 +1215,18 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
       .parse(readJson(pathsFile));
     // 주석서·복주석서 경로 — content/vri-comm-paths.json (scripts/import-vri-comm-paths.py)
     const commFile = path.join(ROOT, "content", "vri-comm-paths.json");
+    // 경 → 층 → [[주석 문단, 그 문단부터의 경로], …] (경로가 바뀌는 자리만)
     const comm = existsSync(commFile)
       ? z
           .record(
             z.string(),
             z.object({
-              attha: z.array(z.string()).optional(),
-              tika: z.array(z.string()).optional(),
+              attha: z
+                .array(z.tuple([z.number(), z.array(z.string())]))
+                .optional(),
+              tika: z
+                .array(z.tuple([z.number(), z.array(z.string())]))
+                .optional(),
             }),
           )
           .parse(readJson(commFile))
@@ -1240,6 +1245,17 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
         }
         return at.get(name)!;
       };
+      // 주석 경로는 같은 경로가 여러 번 나오므로 경로 표(paths)에 한 번만
+      const paths: number[][] = [];
+      const pathAt = new Map<string, number>();
+      const pathIdx = (p: string[]) => {
+        const k = p.join("\u0000");
+        if (!pathAt.has(k)) {
+          pathAt.set(k, paths.length);
+          paths.push(p.map(idx));
+        }
+        return pathAt.get(k)!;
+      };
       const suttas = list.map((s) => {
         const e = all[s.id] ?? { path: [], heads: [] as [string, string][] };
         const c = comm[s.id] ?? {};
@@ -1252,13 +1268,13 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
           Object.fromEntries(
             (["attha", "tika"] as const)
               .filter((l) => c[l]?.length)
-              .map((l) => [l, c[l]!.map(idx)]),
+              .map((l) => [l, c[l]!.map(([para, p]) => [para, pathIdx(p)])]),
           ),
         ];
       });
       writeFileSync(
         path.join(OUT_PATHS, `${nikaya}.json`),
-        JSON.stringify({ names, suttas }),
+        JSON.stringify({ names, paths, suttas }),
       );
     }
     console.log(
