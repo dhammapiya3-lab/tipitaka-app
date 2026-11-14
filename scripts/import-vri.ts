@@ -1478,4 +1478,50 @@ function regroupDhammapada(
     layer.after = k === chunks.length - 1 ? tail : [];
     touched.add(c.file);
   });
+  numberDhammapadaStories(chunks.map((c) => c.layer!.paras));
+}
+
+/**
+ * 법구경 이야기 번호: VRI 는 이야기의 번호를 앞 줄 끝에 붙여 둔다 —
+ * 품 제목 "Appamādavaggo 1." 의 1 은 그 품의 첫 이야기 번호, 이야기 맺음 "Sāmāvatīvatthu paṭhamaṃ. 2." 의 2 는 다음 이야기 번호.
+ * 그 번호를 떼어 다음 이야기 제목 앞으로 옮긴다: "2. Appamādavaggo" / "1. Sāmāvatīvatthu".
+ * (품 번호 "12. Attavaggo" 는 regroupDhammapada 가 이미 옮겼다)
+ */
+function numberDhammapadaStories(chunks: { lines: string[] }[][]) {
+  const plain = (s: string) => s.replace(/<[^>]+>/g, "").trim();
+  let carry: string | null = null;
+  let firstVagga = true;
+  for (const paras of chunks)
+    for (const p of paras) {
+      const first = plain(p.lines[0] ?? "");
+      if (p.lines.length === 1) {
+        // 이야기 제목에 제 번호가 뒤에 붙은 곳도 있다 ("Cakkhupālattheravatthu 1.") — 앞으로 옮긴다
+        const own = first.match(/^([^.;,“”]{0,60}vatthu)\s+(\d+)\.$/i);
+        if (own) {
+          p.lines[0] = `${own[2]}. ${own[1]}`;
+          carry = null;
+          continue;
+        }
+        if (carry && /^[^.;,“”]{0,60}vatthu$/i.test(first)) {
+          p.lines[0] = `${carry} ${p.lines[0]}`;
+          carry = null;
+          continue;
+        }
+      }
+      // 책의 첫 품 제목에는 품 번호가 없다 ("Yamakavaggo 1.") — 다른 품처럼 "1. " 을 붙인다
+      if (firstVagga && /^\S+vaggo\s+\d+\.$/.test(first)) {
+        p.lines[0] = `1. ${p.lines[0]}`;
+        firstVagga = false;
+      }
+      const i = p.lines.length - 1;
+      const last = plain(p.lines[i] ?? "");
+      // 품 제목 "2. Appamādavaggo 1." · 이야기 맺음 "Sāmāvatīvatthu paṭhamaṃ. 2."
+      const m =
+        last.match(/^(?:\d+\.\s+)?\S+vaggo\s+(\d+)\.$/) ??
+        last.match(/vatthu\s+\S+?\.?\s+(\d+)\.$/i);
+      if (m) {
+        carry = `${m[1]}.`;
+        p.lines[i] = p.lines[i].replace(/\s+\d+\.\s*$/, "");
+      }
+    }
 }
