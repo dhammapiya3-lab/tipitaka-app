@@ -29,6 +29,9 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   const layerParam = params.get("layer");
   const layer =
     layerParam === "attha" || layerParam === "tika" ? layerParam : null;
+  /** 문단별로 보기로 앞뒤 경에서 넘어왔으면 (?para=first|last) 그 문단부터 */
+  const paraParam = params.get("para");
+  const para = paraParam === "first" || paraParam === "last" ? paraParam : null;
   const router = useRouter();
   const [state, setState] = useState<State>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
@@ -56,12 +59,12 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
   }, [sutta]);
 
   useEffect(() => {
-    if (!sutta || (!ed && !layer)) return;
+    if (!sutta || (!ed && !layer && !para)) return;
     // 주소에서 ?ed= 를 지운다 (고른 판본은 읽기 화면이 처음 한 번 받아 둔다)
     router.replace(
       `/sutta/?id=${encodeURIComponent(sutta.id)}${window.location.hash}`,
     );
-  }, [sutta, ed, layer, router]);
+  }, [sutta, ed, layer, para, router]);
 
   if (state.status === "loading") {
     return (
@@ -192,6 +195,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
       key={sutta.id}
       initialEdition={ed}
       initialLayer={layer}
+      initialFocus={para}
       head={{
         title: titleOf(sutta),
         titleLang: sutta.nameKo ? undefined : "pi",

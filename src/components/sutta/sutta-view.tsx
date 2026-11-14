@@ -153,6 +153,7 @@ export function SuttaView({
   next,
   head,
   initialEdition,
+  initialFocus,
   commentary = [],
   paliName,
   initialLayer,
@@ -166,6 +167,8 @@ export function SuttaView({
   head: SuttaHead;
   /** 경 목록에서 고른 판본 (?ed=) */
   initialEdition?: string | null;
+  /** 문단별로 보기로 열기 — 앞 경에서 '다음'으로 넘어오면 첫 문단, 뒤 경에서 '이전'이면 마지막 문단 */
+  initialFocus?: "first" | "last" | null;
   suttaId: string;
   suttaTitle: string;
   /** 이 경에 있는 판본 (빠알리 → 한국어 → 영어 순) */
@@ -609,6 +612,16 @@ export function SuttaView({
     paragraphs.set(p, [...(paragraphs.get(p) ?? []), row.key]);
   }
   const paragraphList = [...paragraphs.keys()];
+  // 앞뒤 경에서 문단별로 보기로 넘어왔으면, 문단 목록이 생긴 뒤 한 번만 그 문단을 연다
+  const [pendingFocus, setPendingFocus] = useState(initialFocus ?? null);
+  if (pendingFocus && paragraphList.length) {
+    setPendingFocus(null);
+    setFocus(
+      pendingFocus === "first"
+        ? paragraphList[0]
+        : paragraphList[paragraphList.length - 1],
+    );
+  }
   /** 문단 → 그 문단과 같은 대목이 있는 경 (경 전체가 이어진 경은 첫 문단에) */
   const parallelsAt = parallels
     ? parallelsByParagraph(suttaId, parallels.links, paragraphList)
@@ -1452,27 +1465,60 @@ export function SuttaView({
     >
       {focus ? (
         <>
-          <button
-            type="button"
-            className={navButton}
-            disabled={focusIndex <= 0}
-            onClick={() => openParagraph(paragraphList[focusIndex - 1])}
-          >
-            <ChevronLeft className="size-4" aria-hidden />
-            이전
-          </button>
+          {/* 경의 첫·마지막 문단에서는 앞뒤 경의 마지막·첫 문단으로 이어 넘긴다 (품이 끝나도 계속) */}
+          {focusIndex <= 0 && prev ? (
+            <Link
+              href={suttaHref(
+                prev.id,
+                undefined,
+                layer === "sutta" ? undefined : layer,
+                "last",
+              )}
+              className={navButton}
+              title={`앞 경 · ${prev.title}`}
+            >
+              <ChevronLeft className="size-4" aria-hidden />
+              이전
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className={navButton}
+              disabled={focusIndex <= 0}
+              onClick={() => openParagraph(paragraphList[focusIndex - 1])}
+            >
+              <ChevronLeft className="size-4" aria-hidden />
+              이전
+            </button>
+          )}
           <span className="text-xs text-faint">
             {focusIndex + 1} / {paragraphList.length}
           </span>
-          <button
-            type="button"
-            className={navButton}
-            disabled={focusIndex >= paragraphList.length - 1}
-            onClick={() => openParagraph(paragraphList[focusIndex + 1])}
-          >
-            다음
-            <ChevronRight className="size-4" aria-hidden />
-          </button>
+          {focusIndex >= paragraphList.length - 1 && next ? (
+            <Link
+              href={suttaHref(
+                next.id,
+                undefined,
+                layer === "sutta" ? undefined : layer,
+                "first",
+              )}
+              className={navButton}
+              title={`다음 경 · ${next.title}`}
+            >
+              다음
+              <ChevronRight className="size-4" aria-hidden />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className={navButton}
+              disabled={focusIndex >= paragraphList.length - 1}
+              onClick={() => openParagraph(paragraphList[focusIndex + 1])}
+            >
+              다음
+              <ChevronRight className="size-4" aria-hidden />
+            </button>
+          )}
         </>
       ) : (
         <>
@@ -2092,7 +2138,7 @@ export function SuttaView({
               }
             : undefined
         }
-        commentaryFirst={layer !== "sutta"}
+        commentaryFirst={false}
       />
       <TocSheet
         open={sheet === "toc"}

@@ -35,6 +35,8 @@ export function suttaHref(
   rowKey?: string,
   /** 처음 볼 층 — 주석서·복주석서로 바로 열 때 (?layer=) */
   layer?: "attha" | "tika",
+  /** 문단별로 보기로 열 때 처음 볼 문단 — 앞뒤 경으로 이어 넘길 때 (?para=first|last) */
+  paragraph?: "first" | "last",
 ): string {
-  return `/sutta/?id=${encodeURIComponent(suttaId)}${layer ? `&layer=${layer}` : ""}${rowKey ? `#${rowKey}` : ""}`;
+  return `/sutta/?id=${encodeURIComponent(suttaId)}${layer ? `&layer=${layer}` : ""}${paragraph ? `&para=${paragraph}` : ""}${rowKey ? `#${rowKey}` : ""}`;
 }

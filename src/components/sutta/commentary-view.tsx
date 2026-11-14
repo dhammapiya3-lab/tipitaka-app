@@ -300,7 +300,19 @@ export function CommentaryView({
               </span>
               <span className="truncate font-normal text-faint">
                 ·{" "}
-                {[...new Set(data.before.map((p) => p.title).filter(Boolean))]
+                {[
+                  ...new Set(
+                    data.before
+                      .map((p) => p.title)
+                      // 책 이름(Dhammapada-aṭṭhakathā 등)은 빼고 그 안의 단락 이름만
+                      .filter(
+                        (x) =>
+                          x &&
+                          x !== data.bookName &&
+                          !/(aṭṭhakathā|ṭīkā)$/i.test(x),
+                      ),
+                  ),
+                ]
                   .slice(0, 3)
                   .join(" · ") || "책·품 머리말, 이야기 등"}{" "}
                 ({data.before.length}문단)
