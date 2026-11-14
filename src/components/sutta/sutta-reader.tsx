@@ -238,6 +238,7 @@ export function SuttaReader({ editions }: { editions: Edition[] }) {
       prev={neighbour(index[i - 1])}
       next={neighbour(index[i + 1])}
       book={book}
+      nikaya={sutta.nikaya}
     />
   );
 }

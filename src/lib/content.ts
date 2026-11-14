@@ -271,6 +271,61 @@ export async function fetchParallels(suttaId: string): Promise<ParallelLink[]> {
   return (await promise)[suttaId] ?? [];
 }
 
+/** VRI 경로 줄 — 니까야마다 파일 하나 (scripts/import-vri-paths.py → build-content) */
+const vriPathsSchema = z.object({
+  names: z.array(z.string()),
+  suttas: z.array(
+    z.tuple([
+      z.string(),
+      z.array(z.number().int()),
+      z.array(z.tuple([z.string(), z.number().int()])),
+    ]),
+  ),
+});
+
+export interface VriPath {
+  /** 니까야·책·상윳따·품·경 이름 … (VRI 원본 글자 그대로) */
+  path: string[];
+  /** 경 안 소제목 — [그 소제목이 시작하는 경 문단, 소제목] */
+  heads: [string, string][];
+}
+
+export interface VriPaths {
+  /** 경 → 경로 */
+  byId: Map<string, VriPath>;
+  /** 목록 차례대로 경 id */
+  order: string[];
+}
+
+const vriPathsCache = new Map<string, Promise<VriPaths | null>>();
+
+/** 이 니까야의 VRI 경로 줄들 (한 번만 받는다). 없으면 null */
+export function fetchVriPaths(nikaya: string): Promise<VriPaths | null> {
+  let promise = vriPathsCache.get(nikaya);
+  if (!promise) {
+    promise = getJson(`/data/vri-paths/${nikaya}.json`)
+      .then((d) => {
+        const { names, suttas } = vriPathsSchema.parse(d);
+        const name = (i: number) => names[i] ?? "";
+        return {
+          byId: new Map(
+            suttas.map(([id, p, h]) => [
+              id,
+              {
+                path: p.map(name),
+                heads: h.map(([para, i]): [string, string] => [para, name(i)]),
+              },
+            ]),
+          ),
+          order: suttas.map(([id]) => id),
+        };
+      })
+      .catch(() => null);
+    vriPathsCache.set(nikaya, promise);
+  }
+  return promise;
+}
+
 const analysisCache = new Map<string, Promise<SuttaNissaya>>();
 
 /** 대역(.nissaya.json)·문법분석(.grammar.json) — 처음 열 때만 받고 페이지 안에서 기억한다 */

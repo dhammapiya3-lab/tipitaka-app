@@ -94,6 +94,11 @@ import {
 import { orderEditions } from "@/components/suttas/sutta-row";
 import { ANALYSIS_LABEL } from "@/components/dictionary/analysis-panel";
 import { useReaderKeys } from "@/components/sutta/use-reader-keys";
+import {
+  coveredByPath,
+  useVriPaths,
+  VriPathLine,
+} from "@/components/sutta/vri-path-line";
 import { useTts, type TtsLang } from "@/components/sutta/use-tts";
 import {
   useAnalysisKeys,
@@ -162,7 +167,10 @@ export function SuttaView({
   paliName,
   initialLayer,
   book,
+  nikaya,
 }: {
+  /** 이 경의 니까야 (경로 줄을 받을 때) */
+  nikaya?: string;
   /** 맨 위 목차 단추로 보는 이 문헌 전체의 장(경) 목록 */
   book?: BookToc;
   /** 주석에서 앞뒤 경으로 넘어왔으면 그 층 (?layer=) */
@@ -446,6 +454,8 @@ export function SuttaView({
   const parallels = useParallels(suttaId);
   /** 지금 화면 맨 위에 있는 문단 (목차에서 호박색) */
   const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
+  /** VRI 경로 줄 (이 니까야 것) */
+  const vriPaths = useVriPaths(nikaya);
 
   const bookmarks = useBookmarksStore((s) => s.items);
   const toggleBookmark = useBookmarksStore((s) => s.toggle);
@@ -1840,18 +1850,48 @@ export function SuttaView({
                   )}
                   style={articleStyle}
                 >
-                  {/* 책 첫머리 줄 (VRI 의 "Namo tassa bhagavato…") — 책의 첫 경에만, 경 문장과 따로 */}
-                  {!waiting &&
-                  !focus &&
-                  picked.includes(VRI_ID) &&
-                  texts[VRI_ID]?.preface?.length ? (
-                    <p
-                      lang="pi"
-                      className="py-2 text-center font-pali text-sm text-secondary-foreground"
-                    >
-                      {texts[VRI_ID]!.preface!.join(" ")}
-                    </p>
-                  ) : null}
+                  {/*
+                   * 머리말 자리 = 경로 줄 (Digital Pali Reader 처럼, VRI 원본 제목 그대로).
+                   * 머리말의 책·품 제목 줄은 경로 줄과 같아 따로 보이지 않고(데이터는 그대로),
+                   * "Namo tassa bhagavato…" 같은 그 밖의 줄은 VRI 판본을 볼 때 경로 줄 위에 그대로.
+                   */}
+                  {!waiting && !focus
+                    ? (() => {
+                        const mine = vriPaths?.byId.get(suttaId);
+                        const preface = picked.includes(VRI_ID)
+                          ? (texts[VRI_ID]?.preface ?? []).filter(
+                              (line) =>
+                                !mine || !coveredByPath(line, mine.path),
+                            )
+                          : [];
+                        return (
+                          <>
+                            {preface.length ? (
+                              <p
+                                lang="pi"
+                                className="pt-2 text-center font-pali text-sm text-secondary-foreground"
+                              >
+                                {preface.join(" ")}
+                              </p>
+                            ) : null}
+                            {mine && vriPaths ? (
+                              <VriPathLine
+                                suttaId={suttaId}
+                                paths={vriPaths}
+                                paragraphs={paragraphList}
+                                current={currentParagraph}
+                                onGoParagraph={(p) => {
+                                  revealAll();
+                                  document
+                                    .getElementById(`section-${p}`)
+                                    ?.scrollIntoView({ block: "start" });
+                                }}
+                              />
+                            ) : null}
+                          </>
+                        );
+                      })()
+                    : null}
                   {waiting ? (
                     Array.from({ length: 4 }, (_, i) => (
                       <Skeleton key={i} className="h-32 w-full rounded-2xl" />
@@ -1919,7 +1959,7 @@ export function SuttaView({
               panel={panel}
               onPanel={(p) => setChosen({ panel: p, for: word })}
               toc={toc}
-              book={book}
+              book={commentaryOnly ? book : undefined}
               tocEdition={shown[0]?.id}
               current={focus ?? currentParagraph}
               onPick={(p) =>
@@ -2201,16 +2241,6 @@ export function SuttaView({
             onOpenChange={onOpenChange}
             title={head.title}
             items={toc}
-            book={book}
-            bookTitle={
-              layer === "sutta"
-                ? undefined
-                : (comm[layer]?.bookName ?? undefined)
-            }
-            currentId={suttaId}
-            chapterHref={(id) =>
-              suttaHref(id, undefined, layer === "sutta" ? undefined : layer)
-            }
             onPick={(p) => {
               setSheet(null);
               revealAll();

@@ -294,117 +294,42 @@ export interface BookToc {
   chapters: { id: string; title: string; sub: string; group: string | null }[];
 }
 
-/**
- * 목차 — 이 문헌 전체(예: 청정도론 마하띠까 23장)를 장마다 보여 주고, 지금 읽는 장은 펼쳐서
- * 문단 번호(와 단락 제목)까지. 다른 장을 누르면 그 장의 같은 층(경·주석서·복주석서)으로 간다.
- * (오른쪽 칸 목차는 지금 장의 문단만)
- */
+/** 목차 — 문단 번호(와 단락 제목). 누르면 그 문단으로 */
 export function TocSheet({
   open,
   onOpenChange,
   title,
   items,
   onPick,
-  book,
-  bookTitle,
-  currentId,
-  chapterHref,
 }: SheetProps & {
   title: string;
   items: TocEntry[];
   onPick: (paragraph: string) => void;
-  book?: BookToc;
-  /** 주석서·복주석서 층이면 그 책 이름 (예: Visuddhimagga-mahāṭīkā) */
-  bookTitle?: string;
-  currentId?: string;
-  chapterHref?: (id: string) => string;
 }) {
-  const paragraphs = (
-    <div className="flex flex-col gap-1">
-      {items.map((item) => (
-        <button
-          key={item.paragraph}
-          type="button"
-          onClick={() => onPick(item.paragraph)}
-          className="w-full rounded-xl border bg-gray-50 px-4 py-3 text-left transition-colors outline-none hover:border-amber-200 hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-muted"
-        >
-          <span className="text-sm text-secondary-foreground">
-            {item.label}
-            {item.title ? (
-              <span className="ml-2 font-medium">{item.title}</span>
-            ) : null}
-          </span>
-        </button>
-      ))}
-    </div>
-  );
-  if (!book || book.chapters.length < 2 || !chapterHref)
-    return (
-      <BottomSheet
-        open={open}
-        onOpenChange={onOpenChange}
-        title="목차"
-        subtitle={title}
-      >
-        {paragraphs}
-      </BottomSheet>
-    );
   return (
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
       title="목차"
-      subtitle={bookTitle ?? book.title}
+      subtitle={title}
     >
-      <ol className="flex flex-col gap-1">
-        {book.chapters.map((ch, i) => {
-          const here = ch.id === currentId;
-          const groupHead =
-            ch.group && ch.group !== book.chapters[i - 1]?.group
-              ? ch.group
-              : null;
-          return (
-            <li
-              key={ch.id}
-              // 목차를 열면 지금 장이 보이도록 (긴 니까야에서)
-              ref={
-                here
-                  ? (el) => el?.scrollIntoView({ block: "start" })
-                  : undefined
-              }
-            >
-              {groupHead ? (
-                <p className="mt-3 mb-1 px-2 text-xs font-bold text-faint first:mt-0">
-                  {groupHead}
-                </p>
+      <div className="flex flex-col gap-1">
+        {items.map((item) => (
+          <button
+            key={item.paragraph}
+            type="button"
+            onClick={() => onPick(item.paragraph)}
+            className="w-full rounded-xl border bg-gray-50 px-4 py-3 text-left transition-colors outline-none hover:border-amber-200 hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-muted"
+          >
+            <span className="text-sm text-secondary-foreground">
+              {item.label}
+              {item.title ? (
+                <span className="ml-2 font-medium">{item.title}</span>
               ) : null}
-              {here ? (
-                <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-2 dark:border-amber-900 dark:bg-amber-950/30">
-                  <p
-                    aria-current="page"
-                    className="px-2 pt-1 pb-2 text-sm font-bold text-primary"
-                  >
-                    <span className="mr-2 font-pali text-xs">{ch.sub}</span>
-                    {ch.title}
-                  </p>
-                  {paragraphs}
-                </div>
-              ) : (
-                <Link
-                  href={chapterHref(ch.id)}
-                  onClick={() => onOpenChange(false)}
-                  className="block w-full rounded-xl px-4 py-2.5 text-left text-sm text-secondary-foreground transition-colors outline-none hover:bg-amber-50 focus-visible:ring-3 focus-visible:ring-ring/50 dark:hover:bg-amber-950/40"
-                >
-                  <span className="mr-2 font-pali text-xs text-faint">
-                    {ch.sub}
-                  </span>
-                  {ch.title}
-                </Link>
-              )}
-            </li>
-          );
-        })}
-      </ol>
+            </span>
+          </button>
+        ))}
+      </div>
     </BottomSheet>
   );
 }

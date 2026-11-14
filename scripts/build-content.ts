@@ -1144,6 +1144,55 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
     `병행 경전: 경 ${Object.keys(parallels).length}개 (니까야 ${out.size}개 파일)`,
   );
 }
+// VRI 경로 줄 — content/vri-paths.json (scripts/import-vri-paths.py) 을 니까야마다 한 파일로.
+// 이름은 한 번만 적고(names) 경마다 번호로 — public/data/vri-paths/<니까야>.json
+{
+  const pathsFile = path.join(ROOT, "content", "vri-paths.json");
+  const OUT_PATHS = path.join(ROOT, "public/data/vri-paths");
+  rmSync(OUT_PATHS, { recursive: true, force: true });
+  if (existsSync(pathsFile)) {
+    mkdirSync(OUT_PATHS, { recursive: true });
+    const all = z
+      .record(
+        z.string(),
+        z.object({
+          path: z.array(z.string()),
+          heads: z.array(z.tuple([z.string(), z.string()])).optional(),
+        }),
+      )
+      .parse(readJson(pathsFile));
+    const byNikaya = new Map<string, typeof suttaIndex>();
+    for (const s of suttaIndex)
+      if (all[s.id])
+        byNikaya.set(s.nikaya, [...(byNikaya.get(s.nikaya) ?? []), s]);
+    for (const [nikaya, list] of byNikaya) {
+      const names: string[] = [];
+      const at = new Map<string, number>();
+      const idx = (name: string) => {
+        if (!at.has(name)) {
+          at.set(name, names.length);
+          names.push(name);
+        }
+        return at.get(name)!;
+      };
+      const suttas = list.map((s) => {
+        const e = all[s.id]!;
+        return [
+          s.id,
+          e.path.map(idx),
+          (e.heads ?? []).map(([p, name]) => [p, idx(name)]),
+        ];
+      });
+      writeFileSync(
+        path.join(OUT_PATHS, `${nikaya}.json`),
+        JSON.stringify({ names, suttas }),
+      );
+    }
+    console.log(
+      `VRI 경로 줄: 경 ${Object.keys(all).length}개 (니까야 ${byNikaya.size}개 파일)`,
+    );
+  }
+}
 // VRI 묶음 파일: 목록 차례대로 경을 모아 ~400KB 가 넘으면 다음 묶음. 본문(t-)과 주석(c-)은 따로.
 const OUT_VRI = path.join(ROOT, "public/data/vri");
 rmSync(OUT_VRI, { recursive: true, force: true });
