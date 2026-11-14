@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import {
   Fragment,
   useCallback,
+  useDeferredValue,
   useEffect,
   useMemo,
   useRef,
@@ -220,9 +221,14 @@ export function SuttaView({
   /** 문단 보기: 이 문단 하나만 크게 보고 이전·다음 문단으로 넘긴다. null 이면 경 전체를 이어서 읽기 */
   const [focus, setFocus] = useState<string | null>(null);
   /** 경 · 주석서 · 복주석서 */
-  const [layer, setLayer] = useState<"sutta" | "attha" | "tika">(
+  const [layerNow, setLayer] = useState<"sutta" | "attha" | "tika">(
     initialLayer ?? "sutta",
   );
+  /*
+   * 단추(경·주석서·복주석서·주석 낱말·나란히 보기)는 누르는 즉시 바뀌고(…Now),
+   * 긴 경의 본문은 그 뒤에 따라 그린다(useDeferredValue) — 긴 경에서 단추가 늦게 반응하던 것.
+   */
+  const layer = useDeferredValue(layerNow);
   /** 이어 붙인 주석서·복주석서 (작은 파일이라 경을 열 때 함께 받는다) */
   const [comm, setComm] = useState<
     Partial<Record<CommentaryLayer, SuttaCommentary>>
@@ -355,7 +361,8 @@ export function SuttaView({
     return map;
   }, [pageData, pageEditions, suttaId]);
   /** 주석 연결 낱말 (켜고 끄기는 텍스트 설정·탭 줄) */
-  const wordLinksOn = useSettingsStore((s) => s.wordLinks);
+  const wordLinksNow = useSettingsStore((s) => s.wordLinks);
+  const wordLinksOn = useDeferredValue(wordLinksNow);
   const setWordLinks = useSettingsStore((s) => s.setWordLinks);
   /** 경 문장 → 그 문장에서 주석이 풀이한 낱말들 (첫 낱말을 접어 맞춘다: pabbajitenā ↔ pabbajitena) */
   const linkIndex = useMemo(() => {
@@ -405,11 +412,13 @@ export function SuttaView({
     hits: ReturnType<typeof linkHits>;
   } | null>(null);
   /** 컴퓨터 화면: 경 · 주석서 · 복주석서를 문단마다 나란히 (Digital Pāḷi Reader 처럼) */
-  const [parallelPref, setParallel] = useState(false);
+  const [parallelPrefNow, setParallel] = useState(false);
+  const parallelPref = useDeferredValue(parallelPrefNow);
   /** 나란히 볼 칸 — 경·주석서·복주석서 중 둘 이상 (경+주석, 경+복주석, 주석+복주석, 셋 다) */
-  const [parallelCols, setParallelCols] = useState<
+  const [parallelColsNow, setParallelCols] = useState<
     ("sutta" | CommentaryLayer)[]
   >(["sutta", "attha", "tika"]);
+  const parallelCols = useDeferredValue(parallelColsNow);
   /** 열려 있는 아래 창 */
   const [sheet, setSheet] = useState<"editions" | "toc" | "text" | null>(null);
   const [infoEdition, setInfoEdition] = useState<Edition | null>(null);
@@ -817,20 +826,28 @@ export function SuttaView({
   /** 경 · 주석서 · 복주석서 나란히 (컴퓨터, 주석이 있는 경, 경 탭에서) — 이때 판본은 칸 대신 문장마다 번갈아 */
   const parallel =
     isDesktop && parallelPref && commentary.length > 0 && layer === "sutta";
+  const parallelNow =
+    isDesktop &&
+    parallelPrefNow &&
+    commentary.length > 0 &&
+    layerNow === "sutta";
   const parallelLayers = commentary.filter(
     (l) => comm[l] && parallelCols.includes(l),
   );
   const withSutta = parallelCols.includes("sutta");
   const parallelGrid = `${withSutta ? "minmax(0,1.15fr) " : ""}repeat(${parallelLayers.length}, minmax(0,1fr))`;
   /** 나란히 보기에서 칸 하나 켜고 끄기 — 둘보다 적게는 끌 수 없다 */
-  const toggleCol = (c: "sutta" | CommentaryLayer) =>
-    setParallelCols((cur) => {
-      if (!cur.includes(c)) return [...cur, c];
-      const left = cur.filter(
-        (x) => x !== c && (x === "sutta" || commentary.includes(x)),
-      );
-      return left.length >= 2 ? cur.filter((x) => x !== c) : cur;
-    });
+  const toggleCol = (c: "sutta" | CommentaryLayer) => {
+    const cur = parallelColsNow;
+    if (!cur.includes(c)) return setParallelCols([...cur, c]);
+    const left = cur.filter(
+      (x) => x !== c && (x === "sutta" || commentary.includes(x)),
+    );
+    if (left.length >= 2) return setParallelCols(cur.filter((x) => x !== c));
+    // 한 칸만 남으면 나란히 보기를 끝내고 그 칸 하나만 본다 (예전에는 아무 반응이 없어 안 눌리는 것처럼 보였다)
+    setParallel(false);
+    setLayer(left[0] ?? "sutta");
+  };
   /** 판본 대조 방식을 고를 수 있는 때 (컴퓨터, 판본 둘 이상, 주석 나란히 보기가 아닐 때) */
   const canCompare = isDesktop && shown.length > 1 && !parallel;
   const columns = canCompare && compareMode === "side";
@@ -1601,21 +1618,21 @@ export function SuttaView({
                 ["tika", "복주석서"],
               ] as const
             ).map(([id, label]) =>
-              parallel ? (
+              parallelNow ? (
                 // 나란히 보기에서는 탭이 칸 고르기가 된다 (둘 이상)
                 <button
                   key={id}
                   type="button"
-                  aria-pressed={parallelCols.includes(id)}
+                  aria-pressed={parallelColsNow.includes(id)}
                   disabled={id !== "sutta" && !commentary.includes(id)}
-                  title={`${label} 칸 ${parallelCols.includes(id) ? "끄기" : "켜기"}`}
+                  title={`${label} 칸 ${parallelColsNow.includes(id) ? "끄기" : "켜기"}`}
                   onClick={() => toggleCol(id)}
                   className={cn(
-                    tabClass(parallelCols.includes(id)),
+                    tabClass(parallelColsNow.includes(id)),
                     "disabled:opacity-40",
                   )}
                 >
-                  {parallelCols.includes(id) ? "✓ " : ""}
+                  {parallelColsNow.includes(id) ? "✓ " : ""}
                   {label}
                 </button>
               ) : (
@@ -1623,9 +1640,9 @@ export function SuttaView({
                   key={id}
                   type="button"
                   role="tab"
-                  aria-selected={layer === id}
+                  aria-selected={layerNow === id}
                   onClick={() => setLayer(id)}
-                  className={tabClass(layer === id)}
+                  className={tabClass(layerNow === id)}
                 >
                   {label}
                 </button>
@@ -1635,24 +1652,24 @@ export function SuttaView({
               <button
                 type="button"
                 aria-pressed={
-                  wordLinksOn && shown.some((e) => e.language === "pli")
+                  wordLinksNow && shown.some((e) => e.language === "pli")
                 }
                 onClick={() => {
                   // 켜져 있어도 빠알리가 안 보이면 밑줄이 안 보이므로, 먼저 빠알리를 띄운다
-                  if (wordLinksOn && !shown.some((e) => e.language === "pli"))
+                  if (wordLinksNow && !shown.some((e) => e.language === "pli"))
                     return showPaliForLinks();
-                  if (!wordLinksOn) showPaliForLinks();
-                  setWordLinks(!wordLinksOn);
+                  if (!wordLinksNow) showPaliForLinks();
+                  setWordLinks(!wordLinksNow);
                 }}
                 title="빠알리 원문에서 주석이 풀이한 낱말에 점선 밑줄 (누르면 그 풀이)"
                 className={cn(
                   "ml-auto shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
-                  wordLinksOn && shown.some((e) => e.language === "pli")
+                  wordLinksNow && shown.some((e) => e.language === "pli")
                     ? "border-amber-300 bg-amber-50 text-amber-800"
                     : "bg-card text-muted-foreground hover:bg-gray-50",
                 )}
               >
-                {wordLinksOn && shown.some((e) => e.language === "pli")
+                {wordLinksNow && shown.some((e) => e.language === "pli")
                   ? "✓ "
                   : ""}
                 주석 낱말
@@ -1661,20 +1678,20 @@ export function SuttaView({
             {isDesktop && commentary.length > 0 ? (
               <button
                 type="button"
-                aria-pressed={parallel}
+                aria-pressed={parallelNow}
                 onClick={() => {
                   setLayer("sutta");
-                  setParallel(!parallel);
+                  setParallel(!parallelNow);
                 }}
                 title="경 · 주석서 · 복주석서를 문단마다 나란히 봅니다"
                 className={cn(
                   "shrink-0 rounded-xl border px-4 text-sm font-bold transition-colors",
-                  parallel
+                  parallelNow
                     ? "border-amber-300 bg-amber-50 text-amber-800"
                     : "bg-card text-muted-foreground hover:bg-gray-50",
                 )}
               >
-                {parallel ? "✓ " : ""}주석 나란히 보기
+                {parallelNow ? "✓ " : ""}주석 나란히 보기
               </button>
             ) : null}
           </div>
