@@ -14,7 +14,9 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const XML_DIR = process.env.VRI_XML ?? path.join(process.cwd(), "content", "tipitaka-xml", "romn");
+const XML_DIR =
+  process.env.VRI_XML ??
+  path.join(process.cwd(), "content", "tipitaka-xml", "romn");
 const VRI_DIR = path.join(process.cwd(), "content", "vri");
 
 /** import-vri.ts 의 맞춰 보기용 글자와 같은 규칙 */
@@ -37,7 +39,10 @@ function bookOf(code: string): Book | null {
   let raw: string;
   try {
     const buf = readFileSync(path.join(XML_DIR, `${code}.xml`));
-    raw = buf[0] === 0xff && buf[1] === 0xfe ? buf.toString("utf16le") : buf.toString("utf8");
+    raw =
+      buf[0] === 0xff && buf[1] === 0xfe
+        ? buf.toString("utf16le")
+        : buf.toString("utf8");
   } catch {
     return null;
   }
@@ -71,8 +76,12 @@ type Doc = {
   tika?: Layer;
   tika2?: Layer;
 };
-const files = readdirSync(VRI_DIR).filter((f) => f.endsWith(".json") && !f.endsWith(".ko.json") && !f.startsWith("_"));
-const docs = files.map((f) => JSON.parse(readFileSync(path.join(VRI_DIR, f), "utf8")) as Doc);
+const files = readdirSync(VRI_DIR).filter(
+  (f) => f.endsWith(".json") && !f.endsWith(".ko.json") && !f.startsWith("_"),
+);
+const docs = files.map(
+  (f) => JSON.parse(readFileSync(path.join(VRI_DIR, f), "utf8")) as Doc,
+);
 
 /**
  * 맞출 글 덩어리 하나 — 경 본문(문장 번호마다) 또는 주석서·복주석서 한 권의 이 경 부분(줄마다).
@@ -97,7 +106,11 @@ for (const d of docs) {
   });
   for (const layer of [d.attha, d.tika, d.tika2]) {
     if (!layer?.vriCode) continue;
-    const all = [...(layer.before ?? []), ...layer.paras, ...(layer.after ?? [])].sort((a, b) => a.para - b.para);
+    const all = [
+      ...(layer.before ?? []),
+      ...layer.paras,
+      ...(layer.after ?? []),
+    ].sort((a, b) => a.para - b.para);
     const keysC: string[] = [];
     const textsC: string[] = [];
     for (const p of all)
@@ -105,7 +118,13 @@ for (const d of docs) {
         keysC.push(`c:${layer.book}:${p.para}:${i}`);
         textsC.push(line);
       });
-    units.push({ suttaId: d.suttaId, code: layer.vriCode, order: all[0]?.para ?? layer.from, keys: keysC, texts: textsC });
+    units.push({
+      suttaId: d.suttaId,
+      code: layer.vriCode,
+      order: all[0]?.para ?? layer.from,
+      keys: keysC,
+      texts: textsC,
+    });
   }
 }
 units.sort((a, b) => a.code.localeCompare(b.code) || a.order - b.order);
@@ -176,7 +195,8 @@ for (const u of units) {
   const startPage = new Map<string, string>();
   for (const p of book.pages) if (p.at <= k) startPage.set(p.ed, p.n);
   for (const [ed, n] of startPage)
-    if (!book.pages.some((p) => p.ed === ed && p.at > k && p.at <= k + 3)) list.push([keys[0], ed, n]);
+    if (!book.pages.some((p) => p.ed === ed && p.at > k && p.at <= k + 3))
+      list.push([keys[0], ed, n]);
   for (const p of book.pages) {
     if (p.at < k || p.at > j) continue;
     // 쪽이 바뀐 바로 뒤 글자가 맞춰진 곳을 찾는다
@@ -186,10 +206,20 @@ for (const u of units) {
     if (s === undefined) continue;
     list.push([segAt(s), p.ed, p.n]);
   }
+  // 첫 줄 안에서 쪽이 바로 바뀌면(제목 줄 뒤 등) 시작 쪽은 빼고 바뀐 쪽만 둔다
+  for (const [ed] of startPage) {
+    const same = list.filter((x) => x[0] === keys[0] && x[1] === ed);
+    if (same.length > 1) list.splice(list.indexOf(same[0]), 1);
+  }
   if (list.length) {
     out[u.suttaId] = [...(out[u.suttaId] ?? []), ...list];
     found += list.length;
   }
 }
-writeFileSync(path.join(process.cwd(), "content", "vri-pages.json"), `${JSON.stringify(out)}\n`);
-console.log(`쪽 번호 ${found}개 · 경 ${Object.keys(out).length}개 (XML 에서 자리를 못 찾은 글 덩어리 ${missed}개)`);
+writeFileSync(
+  path.join(process.cwd(), "content", "vri-pages.json"),
+  `${JSON.stringify(out)}\n`,
+);
+console.log(
+  `쪽 번호 ${found}개 · 경 ${Object.keys(out).length}개 (XML 에서 자리를 못 찾은 글 덩어리 ${missed}개)`,
+);

@@ -109,6 +109,7 @@ import {
   unitOf,
   type AlignedRow,
 } from "@/lib/segments";
+import { pageMark, type PageMark } from "@/lib/page-marks";
 import { cn } from "@/lib/utils";
 import { useBookmarksStore } from "@/store/bookmarks";
 import { useHighlightsStore } from "@/store/highlights";
@@ -334,38 +335,11 @@ export function SuttaView({
     };
   }, [pageEditions.length, suttaId]);
   const pageMarksOf = useMemo(() => {
-    const map = new Map<string, string[]>();
+    const map = new Map<string, PageMark[]>();
     if (pageEditions.length === 0 || pageData?.id !== suttaId) return map;
-    const nikaya = suttaId.match(/^(dn|mn|sn|an)/)?.[1];
-    const roman = [
-      "",
-      "i",
-      "ii",
-      "iii",
-      "iv",
-      "v",
-      "vi",
-      "vii",
-      "viii",
-      "ix",
-      "x",
-    ];
     for (const [key, ed, n] of pageData.marks) {
       if (!pageEditions.includes(ed)) continue;
-      const [vol, page] = n.split(".");
-      const pg = String(Number(page));
-      // PTS 는 학계에서 쓰는 꼴로 (S v 421), 나머지는 판 이름 + 권.쪽
-      // 주석서·복주석서 줄(c:<책>:…)의 PTS 쪽은 그 주석서 이름으로 (Spk iii 296)
-      const commBook = key.startsWith("c:")
-        ? key.split(":")[1].replace(/-(?:i|ii|iii|iv|v|vi)$/, "")
-        : null;
-      const label =
-        ed === "P"
-          ? commBook
-            ? `PTS ${commBook} ${roman[Number(vol)] ?? vol} ${pg}`
-            : `PTS ${nikaya ? `${nikaya[0].toUpperCase()} ${roman[Number(vol)] ?? vol} ` : `${Number(vol)}.`}${pg}`
-          : `${{ M: "Mya", T: "Thai", V: "VRI" }[ed] ?? ed} ${Number(vol)}.${pg}`;
-      map.set(key, [...(map.get(key) ?? []), label]);
+      map.set(key, [...(map.get(key) ?? []), pageMark(suttaId, key, ed, n)]);
     }
     return map;
   }, [pageData, pageEditions, suttaId]);

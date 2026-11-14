@@ -10,6 +10,7 @@ import {
 } from "@/components/suttas/sutta-row";
 import { FONT_SIZES, LINE_HEIGHTS } from "@/lib/constants";
 import { fetchEditionInfo } from "@/lib/content";
+import { PAGE_EDITIONS } from "@/lib/page-marks";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/store/settings";
 import type {
@@ -654,13 +655,6 @@ function SizeSlider({
   );
 }
 
-const PAGE_EDITIONS = [
-  { ed: "P", label: "PTS" },
-  { ed: "M", label: "미얀마 6차" },
-  { ed: "T", label: "태국" },
-  { ed: "V", label: "VRI 인쇄본" },
-] as const;
-
 /** 책 쪽 번호 표시 — 인쇄본의 쪽이 바뀌는 문장 옆에 작게 (논문·책 인용용) */
 function PageEditionsPicker() {
   const eds = useSettingsStore((s) => s.pageEditions);
@@ -703,12 +697,13 @@ function PageEditionsPicker() {
         {shown && " 아래에서 어느 인쇄본의 쪽 번호를 볼지 고르세요."}
       </p>
       <div className={cn("mt-2 flex flex-wrap gap-1.5", !shown && "hidden")}>
-        {PAGE_EDITIONS.map(({ ed, label }) => {
+        {PAGE_EDITIONS.map(({ ed, label, title }) => {
           const on = eds.includes(ed);
           return (
             <button
               key={ed}
               type="button"
+              title={title}
               aria-pressed={on}
               onClick={() =>
                 setEds(on ? eds.filter((x) => x !== ed) : [...eds, ed])

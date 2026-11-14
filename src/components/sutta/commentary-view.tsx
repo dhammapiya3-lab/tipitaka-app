@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchCommentary } from "@/lib/content";
 import { useSettingsStore } from "@/store/settings";
+import type { PageMark } from "@/lib/page-marks";
 import { cn } from "@/lib/utils";
 import type { CommentaryLayer, Edition, SuttaCommentary } from "@/types";
 
@@ -118,7 +119,7 @@ export function CommentaryView({
   pageMarksOf,
 }: {
   /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
-  pageMarksOf?: (key: string) => string[] | undefined;
+  pageMarksOf?: (key: string) => PageMark[] | undefined;
   /** 앞뒤 경 — 주석에서 앞뒤로 넘겨 읽는다 (Digital Pāḷi Reader 처럼) */
   prev?: { id: string; title: string } | null;
   next?: { id: string; title: string } | null;
@@ -422,7 +423,7 @@ export function CommentaryCard({
   /** 이 문단이 든 책 (쪽 번호 찾기용 — 예: Spk-v) */
   bookId?: string;
   /** 줄의 인쇄본 쪽 표시 (키: c:<책>:<문단>:<줄>) */
-  pageMarksOf?: (key: string) => string[] | undefined;
+  pageMarksOf?: (key: string) => PageMark[] | undefined;
   /** 책이 둘인 층에서 이 문단의 책 이름 (머리에 작게) */
   bookBadge?: string | null;
   /** 이 줄들만 보인다 (문단별로 보기) */
@@ -535,16 +536,17 @@ export function CommentaryCard({
 }
 
 /** 인쇄본 쪽이 바뀌는 줄 — 줄 앞에 작게 (텍스트 설정의 '책 쪽 번호'를 켰을 때) */
-function PageBadges({ marks }: { marks?: string[] }) {
+function PageBadges({ marks }: { marks?: PageMark[] }) {
   if (!marks?.length) return null;
   return (
     <>
       {marks.map((m) => (
         <span
-          key={m}
-          className="mr-1.5 inline-flex rounded bg-gray-100 px-1 py-0.5 align-middle font-sans text-[10px] leading-none text-faint select-none dark:bg-muted"
+          key={m.label}
+          title={m.title}
+          className="mr-1.5 inline-flex cursor-help rounded bg-gray-100 px-1 py-0.5 align-middle font-sans text-[10px] leading-none text-faint select-none dark:bg-muted"
         >
-          {m}
+          {m.label}
         </span>
       ))}
     </>

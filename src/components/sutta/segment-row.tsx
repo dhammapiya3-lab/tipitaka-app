@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AlignedRow } from "@/lib/segments";
+import type { PageMark } from "@/lib/page-marks";
 import { cn } from "@/lib/utils";
 import type { Edition, Footnote, Language, SuttaText } from "@/types";
 
@@ -81,7 +82,7 @@ export function SegmentRow({
   pageMarks,
 }: {
   /** 이 문장에서 인쇄본 쪽이 바뀌면 그 쪽 번호들 (예: "PTS S v 421") */
-  pageMarks?: string[];
+  pageMarks?: PageMark[];
   /** 판본별 밑줄 */
   highlightsFor?: (editionId: string) => InlineHighlight[];
   onHighlight?: (id: string, target: HTMLElement) => void;
@@ -137,10 +138,11 @@ export function SegmentRow({
         <span className="pointer-events-none absolute -top-1.5 right-7 flex gap-1 font-sans text-[10px] leading-none text-faint select-none">
           {pageMarks.map((m) => (
             <span
-              key={m}
-              className="rounded bg-gray-100 px-1 py-0.5 dark:bg-muted"
+              key={m.label}
+              title={m.title}
+              className="pointer-events-auto cursor-help rounded bg-gray-100 px-1 py-0.5 dark:bg-muted"
             >
-              {m}
+              {m.label}
             </span>
           ))}
         </span>

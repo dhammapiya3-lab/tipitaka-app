@@ -1127,6 +1127,18 @@ mkdirSync(OUT_VRI, { recursive: true });
         )
         .parse(readJson(pagesFile))
     : {};
+  // 수따센따 참조 번호(PTS 문단·냐나몰리 문단·스리랑카·태국·날란다·미얀마 인쇄본) — content/sc-refs.json (scripts/import-sc-refs.py)
+  const scRefsFile = path.join(ROOT, "content", "sc-refs.json");
+  if (existsSync(scRefsFile)) {
+    const refs = z
+      .record(
+        z.string(),
+        z.array(z.tuple([z.string(), z.string(), z.string()])),
+      )
+      .parse(readJson(scRefsFile));
+    for (const [id, list] of Object.entries(refs))
+      pages[id] = [...(pages[id] ?? []), ...list];
+  }
   const tCount = writeShards(
     "t",
     byOrder(vriTexts).map((t) => ({
