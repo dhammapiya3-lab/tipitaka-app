@@ -1,5 +1,6 @@
 [
     
+    { "folder": "theragatha_pli_pts", "edition": "pli-pts" },
     { "folder": "theragatha_pli_ms",             "edition": "pli-ms" },
     { "folder": "theragatha_en_sujato", "edition": "en-sujato", "comments": "theragatha_en_sujato_comment" }
 ]

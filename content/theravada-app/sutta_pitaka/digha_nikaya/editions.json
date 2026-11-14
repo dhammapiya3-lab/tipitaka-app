@@ -2,6 +2,7 @@
     { "folder": "digha_nikaya_kor_dhammagandha",   "edition": "kor-dhammagandha"  },
     { "folder": "digha_nikaya_kor_kimjaeseong_calmvoice",   "footnote": "digha_nikaya_kor_kimjaeseong_calmvoice_comment",   "edition": "kor-kimjaeseong-calmvoice"  },
     { "folder": "digha_nikaya_kor_myowon",   "edition": "kor-myowon"  },
+    { "folder": "digha_nikaya_pli_pts", "edition": "pli-pts" },
     { "folder": "digha_nikaya_pli_ms",                 "edition": "pli-ms"                  },
     { "folder": "digha_nikaya_en_sujato",                 "edition": "en-sujato", "comments": "digha_nikaya_en_sujato_comment"}
 ]

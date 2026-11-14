@@ -21,6 +21,22 @@ Based on the edition by R. Morris, London : Pali Text Society 1885.
 <b>담마빠다<\b>
 O. v. Hinüber and K.R. Norman, London : Pali Text Society 1995.
 
+<b>쿳다까 니까야의 다른 책<\b>
+쿳다까빠타 — Helmer Smith (Mabel Hunt 대조), 1915.
+우다나 — Paul Steinthal, 1885.
+이띠웃따까 — Ernst Windisch, 1889.
+숫따니빠따 — Dines Andersen and Helmer Smith, 1913.
+위마나왓투 · 뻬따왓투 — N. A. Jayawickrama, 1977.
+테라가타 · 테리가타 — H. Oldenberg and R. Pischel, 1883 (K.R. Norman, L. Alsdorf 부록을 붙인 2판 1966).
+아빠다나 — Mary E. Lilley, 1925/1927.
+붓다왕사 · 짜리야삐따까 — N. A. Jayawickrama, 1974.
+자따까 — V. Fausbøll, 1877~1896 (게송만 실음).
+마하닛데사 — L. de la Vallée Poussin and E.J. Thomas, 1916/1917.
+쭐라닛데사 — Wilhelm Stede, 1918 (1부 본문만. 2부 "Explanatory Matter"는 전자 원문에 없음).
+빠띠삼비다막가 — Arnold C. Taylor, 1905/1907.
+밀린다빤하 — V. Trenckner, 1890.
+(모두 London/Oxford : Pali Text Society)
+
 # 위 PTS 판본을 기반으로 태국 담마까야 재단(Dhammakaya Foundation)에서 1989~1996년에 걸쳐 입력하여 디지털화하였습니다.
 
 
@@ -34,6 +50,13 @@ O. v. Hinüber and K.R. Norman, London : Pali Text Society 1995.
 
 * 빌랄라 데이터: 빠알리어와 번역본의 문장 대조가 가능하도록 문장과 문단 단위로 고유번호를 매겨 정리한 데이터입니다.  
 
+<b>자동으로 맞춘 판본에 대하여<\b>
+초전법륜경(SN 56.11), 무아상경(SN 22.59), 법구경은 한 줄씩 손으로 나누고 GRETIL 원문과 대조했습니다.
+그 밖의 경은 프로그램이 PTS 원문과 Mahāsaṅgīti 판본을 글자 단위로 견주어 문단 자리를 찾아 붙였습니다. 그래서 다음과 같은 차이가 있습니다.
+- 한 문단의 PTS 글이 그 문단의 첫 문장 자리에 모여 있습니다(문장 단위가 아니라 문단 단위로 맞춤).
+- PTS 판본이 되풀이를 줄여 적은 곳(pe, la)이나 자리를 확신할 수 없는 곳은 비워 두었습니다.
+- 드물게 한 문단 앞뒤로 자리가 어긋난 곳이 있을 수 있습니다.
+
 
 <big><b>저작권 안내<\b><\big>
 
@@ -43,6 +66,6 @@ These files are provided by courtesy of the Pali Text Society for scholarly purp
 
 본 데이터의 저작권은 빠알리 성전 협회(Pali Text Society)와 담마까야 재단(Dhammakaya Foundation)에 있습니다. 법보시 해주신 빠알리 성전 협회와 담마까야 재단에 감사드립니다. 
 
-본 저작물은 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License(CC BY-NC-SA 4.0. 저작자표시-비영리-동일조건변경허락 4.0 국제)에 따라 이용할 수 있습니다.
+본 저작물은 Creative Commons Attribution-ShareAlike 4.0 International License(CC BY-SA 4.0. 저작자표시-동일조건변경허락 4.0 국제)에 따라 이용할 수 있습니다.
 
 본 데이터는 학술적인 목적에 한하여 빠알리 성전 협회(PTS)의 호의로 제공됩니다. 일련의 검증 과정을 거치기는 하였으나, 인쇄본과 완전히 일치한다고 단정할 수는 없으므로 경전을 인용하기 전에는 반드시 인쇄본과 대조하여 확인해 볼 것을 강력히 권장합니다.

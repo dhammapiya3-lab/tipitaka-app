@@ -1,5 +1,6 @@
 [
     
+    { "folder": "vimanavatthu_pli_pts", "edition": "pli-pts" },
     { "folder": "vimanavatthu_pli_ms",             "edition": "pli-ms" }
     
 ]

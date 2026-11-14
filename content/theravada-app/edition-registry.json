@@ -1,6 +1,6 @@
 {
   "pli-ms":       { "label": "Mahāsaṅgīti Tipiṭaka Buddhavasse 2500", "badge": "M)", "badgeColor": "bg-gray-600", "language": "빠알리어"},
-  "pli-pts":      { "label": "Pāli Text Society",                      "badge": "P)", "badgeColor": "bg-gray-600", "language": "빠알리어"},
+  "pli-pts":      { "label": "Pāli Text Society",                      "badge": "P)", "badgeColor": "bg-gray-600", "language": "빠알리어", "license": "© Pali Text Society · Dhammakaya Foundation — CC BY-SA 4.0 (출처 표시, 동일 조건)"},
 
   "kor-koreatheravada": { "label": "한국테라와다불교 교단", "badge": "한)", "badgeColor": "bg-amber-700", "language": "한국어"},
 

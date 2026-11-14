@@ -79,14 +79,16 @@ function vriShard(
   kind: "t" | "c",
   n: number,
 ): Promise<Record<string, unknown>> {
-  const url = `/data/vri/${kind}-${n}.json`;
+  return shardJson(`/data/vri/${kind}-${n}.json`);
+}
+
+/** 묶음 파일 하나 — 한 번만 받는다 (VRI · PTS) */
+function shardJson(url: string): Promise<Record<string, unknown>> {
   let promise = vriShardCache.get(url);
   if (!promise) {
-    promise = getJson(url).then((data) => {
-      if (typeof data !== "object" || data === null)
-        throw new Error("VRI 자료 형식이 맞지 않습니다");
-      return data as Record<string, unknown>;
-    });
+    promise = getJson(url).then((data) =>
+      z.record(z.string(), z.unknown()).parse(data),
+    );
     vriShardCache.set(url, promise);
     promise.catch(() => vriShardCache.delete(url));
   }
@@ -145,6 +147,12 @@ export async function fetchSuttaText(
         }
       : text;
   }
+  // 경이 아주 많은 판본(PTS)은 묶음 파일에 들어 있다
+  const shardNo = await editionShardNo(suttaId, editionId);
+  if (shardNo !== undefined) {
+    const shard = await shardJson(`/data/shards/${editionId}-${shardNo}.json`);
+    return suttaTextSchema.parse(shard[suttaId]);
+  }
   const data = await getJson(suttaUrl(suttaId, editionId, ".json"));
   // 복사를 막아 둔 번역은 감싸 둔 글을 풀어서 같은 검사를 한다
   const sealed = sealedSuttaTextSchema.safeParse(data);
@@ -158,10 +166,22 @@ export async function fetchSuttaText(
   return suttaTextSchema.parse(data);
 }
 
+async function editionShardNo(
+  suttaId: string,
+  editionId: string,
+): Promise<number | undefined> {
+  const entry = (await fetchSuttaIndex()).find((s) => s.id === suttaId);
+  return entry?.shards?.[editionId];
+}
+
 export async function fetchSuttaNotes(
   suttaId: string,
   editionId: string,
 ): Promise<SuttaNotes> {
+  if ((await editionShardNo(suttaId, editionId)) !== undefined) {
+    const text = await fetchSuttaText(suttaId, editionId);
+    return { suttaId, editionId, notes: text.notes ?? [] };
+  }
   // 각주가 본문 파일 안에 함께 든 판본(수자또 스님 — 빌라라 각주)이 있다
   const text = suttaTextSchema.safeParse(
     await getJson(suttaUrl(suttaId, editionId, ".json")),

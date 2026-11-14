@@ -1,6 +1,7 @@
 [
     { "folder": "anguttara_nikaya_kor_hyuneum_calmvoice",  "footnote": "anguttara_nikaya_kor_hyuneum_calmvoice_comment",    "edition": "kor-hyuneum-calmvoice"                  },
     { "folder": "anguttara_nikaya_kor_myowon",                 "edition": "kor-myowon"                  },
+    { "folder": "anguttara_nikaya_pli_pts", "edition": "pli-pts" },
     { "folder": "anguttara_nikaya_pli_ms",                 "edition": "pli-ms"                  },
     { "folder": "anguttara_nikaya_en_sujato",                 "edition": "en-sujato"                  }
 ]

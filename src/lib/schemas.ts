@@ -109,6 +109,7 @@ export const suttaIndexSchema: z.ZodType<SuttaIndexEntry[]> = z.array(
     grammar: z.array(z.string()),
     commentary: z.array(z.enum(["attha", "tika"])).optional(),
     vri: z.object({ t: z.number(), c: z.number().nullable() }).optional(),
+    shards: z.record(z.string(), z.number()).optional(),
     nikaya: z.string().min(1),
     trail: z.object({
       nikayaName: z.string().min(1),

@@ -1,5 +1,6 @@
 [
     
+    { "folder": "mahaniddesa_pli_pts", "edition": "pli-pts" },
     { "folder": "mahaniddesa_pli_ms",             "edition": "pli-ms" }
     
 ]

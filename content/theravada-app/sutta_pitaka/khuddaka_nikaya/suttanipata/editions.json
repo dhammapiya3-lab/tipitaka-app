@@ -10,6 +10,7 @@
     { "folder": "suttanipata_kor_myowon", "edition": "kor-myowon" },
     { "folder": "suttanipata_kor_jeongseungseok_calmvoice", "edition": "kor-jeongseungseok-calmvoice" },
   
+    { "folder": "suttanipata_pli_pts", "edition": "pli-pts" },
     { "folder": "suttanipata_pli_ms",             "edition": "pli-ms" },
     { "folder": "suttanipata_en_sujato", "edition": "en-sujato", "comments": "suttanipata_en_sujato_comment" }
 ]

@@ -253,6 +253,7 @@ const registrySchema = z.record(
     source: z.string().optional(), // 판본 칸 — 원문을 낸 분 (예: 한국마하시 사야도)
     sourceLanguage: z.string().optional(), // 언어 칸 — 원문의 언어 (예: 미얀마어)
     translator: z.string().optional(), // 번역 칸 (예: 담마간다 스님)
+    license: z.string().optional(), // 이용 조건 칸
   }),
 );
 type EditionList = z.infer<typeof rawEditionListSchema>;
@@ -407,7 +408,7 @@ const editionById = new Map<string, Edition>(
           (e.badge ?? "").replace(/\)\s*$/, "").trim() || e.label.slice(0, 2),
         language: language ?? "ko",
         translator: e.translator ?? (language === "pli" ? null : e.label),
-        license: null,
+        license: e.license ?? null,
         allowCopy: e.allowCopy ?? true,
         ...(e.source ? { source: e.source } : {}),
         ...(e.sourceLanguage ? { sourceLanguage: e.sourceLanguage } : {}),
@@ -1058,6 +1059,48 @@ mkdirSync(OUT_VRI, { recursive: true });
     `VRI 묶음: 본문 ${tCount}개 · 주석 ${cCount}개 (경 ${vriTexts.length}개)`,
   );
 }
+// 경이 아주 많은 판본(PTS — 경 5천여 개)은 경마다 파일을 두면 호스팅 파일 수 한도(2만 개)를 넘는다.
+// VRI 처럼 목록 차례대로 ~400KB 씩 묶어 public/data/shards/<판본>-<n>.json 에 두고, 목록(sutta-index)에 몇 번 묶음인지 적는다.
+const SHARDED_EDITIONS = new Set(["pli-pts"]);
+const OUT_SHARDS = path.join(ROOT, "public/data/shards");
+rmSync(OUT_SHARDS, { recursive: true, force: true });
+mkdirSync(OUT_SHARDS, { recursive: true });
+{
+  const SHARD_BYTES = 400_000;
+  const order = new Map(suttaIndex.map((s, i) => [s.id, i]));
+  const entryOf = new Map(suttaIndex.map((s) => [s.id, s]));
+  for (const editionId of SHARDED_EDITIONS) {
+    const list = texts
+      .filter((t) => t.editionId === editionId)
+      .sort(
+        (a, b) => (order.get(a.suttaId) ?? 0) - (order.get(b.suttaId) ?? 0),
+      );
+    let shard: Record<string, unknown> = {};
+    let bytes = 0;
+    let n = 0;
+    const flush = () => {
+      if (Object.keys(shard).length === 0) return;
+      writeFileSync(
+        path.join(OUT_SHARDS, `${editionId}-${n}.json`),
+        JSON.stringify(shard),
+      );
+      shard = {};
+      bytes = 0;
+      n++;
+    };
+    for (const text of list) {
+      const body = suttaTextSchema.parse(text);
+      const json = JSON.stringify(body);
+      if (bytes > 0 && bytes + json.length > SHARD_BYTES) flush();
+      shard[text.suttaId] = body;
+      bytes += json.length;
+      const entry = entryOf.get(text.suttaId);
+      if (entry) entry.shards = { ...entry.shards, [editionId]: n };
+    }
+    flush();
+    console.log(`${editionId} 묶음: ${n}개 (경 ${list.length}개)`);
+  }
+}
 writeFileSync(
   path.join(path.dirname(OUT_SUTTAS), "sutta-index.json"),
   JSON.stringify(suttaIndexSchema.parse(suttaIndex)),
@@ -1065,6 +1108,7 @@ writeFileSync(
 
 rmSync(OUT_SUTTAS, { recursive: true, force: true });
 for (const text of texts) {
+  if (SHARDED_EDITIONS.has(text.editionId)) continue; // 위에서 묶음 파일로 썼다
   const dir = path.join(OUT_SUTTAS, text.suttaId);
   mkdirSync(dir, { recursive: true });
   const notes = embeddedNotes.get(`${text.suttaId}/${text.editionId}`);

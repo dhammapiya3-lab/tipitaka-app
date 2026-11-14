@@ -29,6 +29,8 @@ export type CommentaryLayer = "attha" | "tika";
 export interface SuttaIndexEntry extends CatalogSutta {
   /** VRI 본문(t)·주석(c) 이 든 묶음 파일 번호 (public/data/vri/t-<n>.json, c-<n>.json) */
   vri?: { t: number; c: number | null };
+  /** 묶음 파일로 둔 판본(PTS)의 묶음 번호 — 판본 id → n (public/data/shards/<판본>-<n>.json) */
+  shards?: Record<string, number>;
   /** 니까야 id (dn·mn·sn·an·kn) — 이전·다음 경은 같은 니까야 안에서 */
   nikaya: string;
   /** 경 화면 위 위치 줄: 니까야 이름과 그 아래 묶음들 (품·상윳따 …) */

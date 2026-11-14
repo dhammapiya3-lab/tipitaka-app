@@ -1,5 +1,6 @@
 [
     
+    { "folder": "patisambhidamagga_pli_pts", "edition": "pli-pts" },
     { "folder": "patisambhidamagga_pli_ms",             "edition": "pli-ms" }
     
 ]
