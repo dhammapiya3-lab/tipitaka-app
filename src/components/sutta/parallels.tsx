@@ -13,13 +13,13 @@ import {
 import { fetchParallels, fetchSuttaIndex } from "@/lib/content";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { paragraphOf } from "@/lib/segments";
-import { cn } from "@/lib/utils";
 import type { ParallelLink } from "@/types";
 
 /**
  * 병행 경전 — 이 경과 같은 가르침이 담긴 다른 니까야 경 (SuttaCentral parallels, CC0).
  *  · 문단 번호 옆 "⇄ n" : 그 문단과 같은 대목이 있는 경 (누르면 목록, 고르면 그 대목으로)
- *  · 경 머리의 "⇄ 병행 경전 n" : 오른쪽 칸 '참고 경전'에 관계별 전체 목록
+ *  · 오른쪽 칸 '참고 경전' : 관계별 전체 목록
+ *  경 전체가 이어진 경(대목 표시가 없는 연결)은 첫 문단의 "⇄ n" 에 "경 전체"로 함께 단다.
  */
 
 export const REL_LABEL: Record<ParallelLink["r"], string> = {
@@ -65,9 +65,9 @@ export function useParallels(suttaId: string) {
   return state && state.id === suttaId ? state : null;
 }
 
-/** 문장 번호 → 화면의 문단 표시 ("sn56.11:4.2" → "4", 법구경 게송은 "Dhp 5") */
+/** 문장 번호 → 화면의 문단 표시 ("sn56.11:4.2" → "4", 법구경 게송 "dhp5:1" → "5") */
 function paragraphLabel(suttaId: string, key: string): string {
-  const p = paragraphOf(`${suttaId}:${key}`, suttaId);
+  const p = paragraphOf(key, suttaId);
   const colon = p.indexOf(":");
   return colon >= 0 ? p.slice(colon + 1) : p.replace(/^[a-z-]+/, "");
 }
@@ -77,29 +77,40 @@ export interface ParagraphParallel {
   r: ParallelLink["r"];
   /** 그 경의 문장 번호 ("" 이면 경 처음) */
   there: string;
+  /** 이 경의 어느 대목이 아니라 경 전체가 이어짐 */
+  whole?: boolean;
 }
 
 /** 이 경의 문단 → 그 문단과 이어진 경들 */
 export function parallelsByParagraph(
   suttaId: string,
   links: ParallelLink[],
+  /** 화면의 문단 (차례대로) — 문단을 찾지 못한 연결과 경 전체 연결은 첫 문단에 단다 */
+  paragraphs: string[],
 ): Map<string, ParagraphParallel[]> {
   const map = new Map<string, ParagraphParallel[]>();
+  const known = new Set(paragraphs);
+  const add = (p: string, item: ParagraphParallel) => {
+    const list = map.get(p) ?? [];
+    if (!list.some((x) => x.s === item.s && x.there === item.there))
+      list.push(item);
+    map.set(p, list);
+  };
   for (const link of links) {
-    for (const [here, there] of link.l) {
-      if (!here) continue;
-      const p = paragraphOf(`${suttaId}:${here}`, suttaId);
-      const list = map.get(p) ?? [];
-      if (!list.some((x) => x.s === link.s && x.there === there))
-        list.push({ s: link.s, r: link.r, there });
-      map.set(p, list);
+    const first = paragraphs[0];
+    const pairs = link.l.length ? link.l : [["", ""] as [string, string]];
+    for (const [here, there] of pairs) {
+      const p = here ? paragraphOf(here, suttaId) : "";
+      if (p && known.has(p)) add(p, { s: link.s, r: link.r, there });
+      else if (first) add(first, { s: link.s, r: link.r, there, whole: !here });
     }
   }
   return map;
 }
 
 function targetHref(s: string, there: string) {
-  return suttaHref(s, there ? `${s}:${there}` : undefined);
+  // "dhp383:" 처럼 경의 처음만 가리키면 문장 번호 없이
+  return suttaHref(s, there && !there.endsWith(":") ? there : undefined);
 }
 
 /** 문단 번호 옆 "⇄ n" — 누르면 그 문단과 같은 대목이 있는 경 목록 */
@@ -145,6 +156,7 @@ export function ParagraphParallels({
               <span className="text-muted-foreground">
                 {names.get(it.s)}
                 {it.there ? ` ¶${paragraphLabel(it.s, it.there)}` : ""}
+                {it.whole ? " · 경 전체" : ""}
               </span>
             </span>
             <span className="text-xs text-primary">
@@ -157,36 +169,7 @@ export function ParagraphParallels({
   );
 }
 
-/** 경 머리의 "⇄ 병행 경전 n" */
-export function ParallelSummaryChip({
-  count,
-  open,
-  onClick,
-}: {
-  count: number;
-  open: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={open}
-      title="이 경과 같은 가르침이 담긴 다른 니까야 경 — SuttaCentral 병행 경전 자료"
-      className={cn(
-        "inline-flex w-fit items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors print:hidden",
-        open
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300",
-      )}
-    >
-      <ArrowLeftRight className="size-3.5" aria-hidden />
-      병행 경전 {count}
-    </button>
-  );
-}
-
-/** 관계별 전체 목록 — 오른쪽 칸 '참고 경전' (휴대폰에서는 경 머리 아래에 펼침) */
+/** 관계별 전체 목록 — 오른쪽 칸 '참고 경전' */
 export function ParallelList({
   suttaId,
   links,

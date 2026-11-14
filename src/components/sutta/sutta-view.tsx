@@ -6,8 +6,6 @@ import { SuttaEndNav } from "@/components/sutta/sutta-end";
 import { LayerTabs } from "@/components/sutta/layer-tabs";
 import {
   ParagraphParallels,
-  ParallelList,
-  ParallelSummaryChip,
   parallelsByParagraph,
   useParallels,
 } from "@/components/sutta/parallels";
@@ -435,11 +433,6 @@ export function SuttaView({
   const panel = word && word !== chosen.for ? "analysis" : chosen.panel;
   /** 병행 경전 (SuttaCentral) — 문단 번호 옆 "⇄ n" 과 '참고 경전' 목록 */
   const parallels = useParallels(suttaId);
-  const parallelsAt = parallels
-    ? parallelsByParagraph(suttaId, parallels.links)
-    : new Map<string, never[]>();
-  /** 휴대폰: 경 머리 아래에 펼친 병행 경전 목록 */
-  const [parallelsOpen, setParallelsOpen] = useState(false);
   /** 지금 화면 맨 위에 있는 문단 (목차에서 호박색) */
   const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
 
@@ -617,6 +610,10 @@ export function SuttaView({
     paragraphs.set(p, [...(paragraphs.get(p) ?? []), row.key]);
   }
   const paragraphList = [...paragraphs.keys()];
+  /** 문단 → 그 문단과 같은 대목이 있는 경 (경 전체가 이어진 경은 첫 문단에) */
+  const parallelsAt = parallels
+    ? parallelsByParagraph(suttaId, parallels.links, paragraphList)
+    : new Map<string, never[]>();
   const focusIndex = focus ? paragraphList.indexOf(focus) : -1;
   function openParagraph(p: string) {
     setFocus(p);
@@ -1515,33 +1512,6 @@ export function SuttaView({
           >
             <Breadcrumb items={head.crumbs} />
             <TopicChips suttaId={suttaId} />
-            {parallels && parallels.links.length > 0 ? (
-              <>
-                <ParallelSummaryChip
-                  count={parallels.links.length}
-                  open={
-                    isDesktop && !parallel ? panel === "refs" : parallelsOpen
-                  }
-                  onClick={() =>
-                    isDesktop && !parallel
-                      ? setChosen({
-                          panel: panel === "refs" ? "toc" : "refs",
-                          for: word,
-                        })
-                      : setParallelsOpen((v) => !v)
-                  }
-                />
-                {parallelsOpen && !(isDesktop && !parallel) ? (
-                  <div className="rounded-2xl border bg-card p-3">
-                    <ParallelList
-                      suttaId={suttaId}
-                      links={parallels.links}
-                      names={parallels.names}
-                    />
-                  </div>
-                ) : null}
-              </>
-            ) : null}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <EditionBadges
                 editions={

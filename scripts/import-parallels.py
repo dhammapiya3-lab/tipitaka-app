@@ -10,7 +10,8 @@ content/parallels.json 으로 정리한다. 아함경·산스끄리뜨·티베�
   { "mn10": [ { "s": "dn22", "r": "p", "l": [["47.1", "22.24"], ...] }, ... ] }
   s  이어진 경 (이 사이트의 경 번호)
   r  관계 — p 같은 내용 · pp 일부 같음 · rt 다시 들려줌(자따까 등) · m 언급·인용
-  l  [이 경의 문장 번호, 그 경의 문장 번호] 쌍 — 경 전체가 이어지면 빈 목록. 한쪽만 알면 다른 쪽은 ""
+  l  [이 경의 문장 번호, 그 경의 문장 번호] 쌍 (온전한 번호, 예: "mn10:44.1"). 경 전체가 이어지면 빈 목록.
+     한쪽만 알면 다른 쪽은 "". 묶은 번호 안의 경은 "dhp383:" 처럼 그 경의 처음.
 """
 import collections
 import json
@@ -42,18 +43,19 @@ def main():
         if not m or m.group(1) not in PALI:
             return None
         if base in ours:
-            return base, anchor
+            return base, f"{base}:{anchor}" if anchor else ""
         m2 = re.match(r"^(.*?)(\d+)(?:-\d+)?$", base)
         if not m2:
             return None
         for lo, hi, i in ranges.get(m2.group(1), []):
             if lo <= int(m2.group(2)) <= hi:
-                return i, ""  # 묶은 번호 안의 경 — 문장 번호는 맞지 않으니 버린다
+                # 묶은 번호 안의 경 (법구경 dhp383 ⊂ dhp383-423) — 문장 번호는 그 안 경의 번호로 (dhp383:1)
+                return i, f"{base}:{anchor}" if anchor else f"{base}:"
         return None
 
-    def first_key(anchor):
-        # "14-18.1" → "14.1" (대목의 첫 문장)
-        return re.sub(r"^(\d+)-\d+", r"\1", anchor)
+    def first_key(key):
+        # "mn9:14-18.1" → "mn9:14.1" (대목의 첫 문장)
+        return re.sub(r":(\d+)-\d+", r":\1", key)
 
     links = {}  # (a, b) → [관계, set((a 문장, b 문장))]
     skipped = 0
@@ -88,7 +90,7 @@ def main():
                     add(refs[0], r, kind)
 
     def seg_order(k):
-        return [int(n) if n.isdigit() else 0 for n in re.split(r"[.\-]", k)] if k else [10**9]
+        return [int(n) if n.isdigit() else 0 for n in re.split(r"[.\-:]", re.sub(r"^[a-z-]+", "", k))] if k else [10**9]
 
     out = collections.defaultdict(list)
     for (a, b), (rel, pairs) in sorted(links.items(), key=lambda kv: (order[kv[0][0]], RANK.index(kv[1][0]), order[kv[0][1]])):
