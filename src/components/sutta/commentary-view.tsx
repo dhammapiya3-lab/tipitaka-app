@@ -272,7 +272,7 @@ export function CommentaryView({
             )}
             aria-hidden
           />
-          {showBefore ? "앞 부분 접기" : "앞 부분 보기"}
+          {showBefore ? "이전 접기" : "이전"}
           <span className="font-normal text-faint">
             ·{" "}
             {[...new Set(data.before.map((p) => p.title).filter(Boolean))]
