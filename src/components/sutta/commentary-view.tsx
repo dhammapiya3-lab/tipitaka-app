@@ -243,46 +243,59 @@ export function CommentaryView({
   const navLink = (to: { id: string; title: string }, dir: "prev" | "next") => (
     <Link
       href={`/sutta/?id=${encodeURIComponent(to.id)}&layer=${layer}`}
-      className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
+      title={`${dir === "prev" ? "앞" : "다음"} 경의 ${LAYER_NAME[layer]} · ${to.title}`}
+      className="inline-flex min-w-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
     >
-      {dir === "prev" ? <ChevronLeft className="size-4" aria-hidden /> : null}
-      {dir === "prev" ? "앞 경의 " : "다음 경의 "}
-      {LAYER_NAME[layer]}
+      {dir === "prev" ? (
+        <ChevronLeft className="size-4 shrink-0" aria-hidden />
+      ) : null}
+      <span className="shrink-0">{dir === "prev" ? "이전" : "다음"}</span>
       <span className="max-w-[12rem] truncate font-normal text-faint">
         · {to.title}
       </span>
-      {dir === "next" ? <ChevronRight className="size-4" aria-hidden /> : null}
+      {dir === "next" ? (
+        <ChevronRight className="size-4 shrink-0" aria-hidden />
+      ) : null}
     </Link>
   );
 
   return (
     <div className="flex flex-col gap-4" style={fontStyle}>
-      {/* 앞으로 넘기기: 이 경 앞에 있는, 어느 경에도 붙지 않은 주석(책·품 머리말, 이야기)이 먼저, 없으면 앞 경 */}
-      {only ? null : data.before.length ? (
-        <button
-          type="button"
-          aria-expanded={showBefore}
-          onClick={() => setShowBefore((v) => !v)}
-          className="inline-flex w-fit items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
-        >
-          <ChevronLeft
-            className={cn(
-              "size-4 transition-transform",
-              showBefore && "-rotate-90",
-            )}
-            aria-hidden
-          />
-          {showBefore ? "이전 접기" : "이전"}
-          <span className="font-normal text-faint">
-            ·{" "}
-            {[...new Set(data.before.map((p) => p.title).filter(Boolean))]
-              .slice(0, 3)
-              .join(" · ") || "책·품 머리말, 이야기 등"}{" "}
-            ({data.before.length}문단)
-          </span>
-        </button>
-      ) : prev ? (
-        navLink(prev, "prev")
+      {/* 이전 · 다음 (한 줄) — 이전: 이 경 앞에 붙은 주석(책·품 머리말 등)을 펼치고, 없으면 앞 경의 주석. 다음: 다음 경의 주석 */}
+      {only ? null : data.before.length || prev || next ? (
+        <div className="flex items-center justify-between gap-3">
+          {data.before.length ? (
+            <button
+              type="button"
+              aria-expanded={showBefore}
+              onClick={() => setShowBefore((v) => !v)}
+              className="inline-flex min-w-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-bold text-primary hover:bg-amber-50"
+            >
+              <ChevronLeft
+                className={cn(
+                  "size-4 shrink-0 transition-transform",
+                  showBefore && "-rotate-90",
+                )}
+                aria-hidden
+              />
+              <span className="shrink-0">
+                {showBefore ? "이전 접기" : "이전"}
+              </span>
+              <span className="truncate font-normal text-faint">
+                ·{" "}
+                {[...new Set(data.before.map((p) => p.title).filter(Boolean))]
+                  .slice(0, 3)
+                  .join(" · ") || "책·품 머리말, 이야기 등"}{" "}
+                ({data.before.length}문단)
+              </span>
+            </button>
+          ) : prev ? (
+            navLink(prev, "prev")
+          ) : (
+            <span />
+          )}
+          {next ? navLink(next, "next") : null}
+        </div>
       ) : null}
       {!only && showBefore
         ? data.before.map((para, i, list) =>

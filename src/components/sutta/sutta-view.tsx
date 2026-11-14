@@ -1663,7 +1663,9 @@ export function SuttaView({
 
           {layer !== "sutta" ? (
             <>
-              {navBar}
+              {/* 주석서·복주석서: 경 사이를 넘기는 단추는 두지 않는다 — 위아래 이전·다음은 주석 화면이 직접 (앞 내용 · 앞뒤 경의 주석).
+                  문단별로 보기에서는 앞뒤 문단으로 넘기는 이전·다음만 */}
+              {focus ? navBar : null}
               <div className="px-4 pt-2 pb-6">
                 <div className={cn("mx-auto w-full min-w-0", readWidth)}>
                   <CommentaryView
