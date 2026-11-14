@@ -478,6 +478,15 @@ const vriSchema = z.object({
   preface: z.array(z.string()).default([]),
   source: z.object({ vripara: z.unknown() }).partial().optional(),
 });
+/** VRI XML 의 문단 번호 자리 — 경 → 경 문단 → VRI 문단 번호 (content/vri-paranums.json, scripts/fill-vri-gaps.py) */
+const vriParanumsFile = path.join(ROOT, "content", "vri-paranums.json");
+const vriParanums: Record<string, Record<string, string>> = existsSync(
+  vriParanumsFile,
+)
+  ? z
+      .record(z.string(), z.record(z.string(), z.string()))
+      .parse(readJson(vriParanumsFile))
+  : {};
 /** 수따센따 msdiv — 경 → 문장 번호 → VRI 문단 번호 (content/sc-msdiv.json, scripts/import-sc-refs.py) */
 const scMsdivFile = path.join(ROOT, "content", "sc-msdiv.json");
 const scMsdiv: Record<string, Record<string, string>> = existsSync(scMsdivFile)
@@ -686,7 +695,16 @@ function buildSutta(
     if (vri.unsure.length) vriUnsure.set(id, vri.unsure);
     if (vri.preface.length) vriPreface.set(id, vri.preface);
     const numbers = vriParaNumbers(vri.segments, id, vri.source?.vripara);
-    // VRI 원문에서 번호를 못 뗀 문단(제목 줄에 붙은 번호가 맞춤에서 빠진 곳 등)은 수따센따의 msdiv(= VRI 문단 번호)로 채운다
+    // VRI 원문에서 번호를 못 뗀 문단(제목 줄에 붙은 번호가 맞춤에서 빠진 곳 등)은 VRI XML 의 번호 자리(fill-vri-gaps.py)로 채운다
+    // 경 문단 하나에 VRI 문단이 둘 이상 들어 있으면 "266, 267" 처럼 모두
+    for (const [p, n] of Object.entries(vriParanums[id] ?? {})) {
+      const list = (numbers[p] ?? "").split(", ").filter(Boolean);
+      for (const x of n.split(", ")) if (!list.includes(x)) list.push(x);
+      numbers[p] = list
+        .sort((a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10))
+        .join(", ");
+    }
+    // 그래도 없으면 수따센따의 msdiv(= VRI 문단 번호)로
     for (const [key, n] of Object.entries(scMsdiv[id] ?? {})) {
       const p = paragraphOf(key, id);
       if (!numbers[p]) numbers[p] = n;

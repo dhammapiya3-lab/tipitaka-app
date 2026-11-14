@@ -11,6 +11,7 @@ VRI 원문 빠짐 채우기 — content/vri/<경>.json 의 VRI 본문(segments)�
 - 경과 경 사이의 짧은 제목(품 이름 등) → 다음 경의 머리말 줄(preface, 화면에서 첫 카드 위에 가운데로)
 - 경과 경 사이의 긴 글(반복 생략 묶음, 앞 경의 맺음 게송 등) → 앞 경의 마지막 문장 끝
 - 책 맨 끝의 맺음말 → 마지막 경의 마지막 문장 끝
+또 VRI 문단 번호가 경의 어느 문단 앞에 있는지 찾아 content/vri-paranums.json 에 적는다 (문단 머리의 "VRI 문단 N").
 """
 
 import collections
@@ -39,13 +40,23 @@ def xml_text(path: Path) -> str:
     b = path.read_bytes()
     t = b.decode("utf-16") if b[:2] == b"\xff\xfe" else b.decode()
     t = re.sub(r"<note>.*?</note>", " ", t, flags=re.S)
-    t = re.sub(r'<hi rend="paranum">[^<]*</hi>(<hi rend="dot">[^<]*</hi>)?', " ", t)
+    # 문단 번호는 낱말로 세지 않는 표시(\x01번호\x02)로 남겨, 어느 문단 앞에 있었는지 찾는 데 쓴다
+    t = re.sub(r'<hi rend="paranum">([^<]*)</hi>(<hi rend="dot">[^<]*</hi>)?', lambda m: f" \x01{m.group(1).strip()}\x02 ", t)
     t = re.sub(r"<pb [^>]*/>", "", t)
     t = re.sub(r"</p>", "\n", t)
     t = re.sub(r"<[^>]+>", "", t)
     # 원문의 [ ] 안 글은 사이트 VRI 본문에서도 [ ] 로 두고 낱말로 세지 않는다 (양쪽을 같게)
     t = re.sub(r"\[[^\]\n]*\]", lambda m: " " * len(m.group()), t)
     return t.replace("&amp;", "&")
+
+
+def paragraph_of(key: str, sutta_id: str) -> str:
+    """src/lib/segments.ts 의 paragraphOf 와 같은 규칙"""
+    prefix, _, tail = key.partition(":")
+    if prefix and prefix != sutta_id:
+        return prefix
+    head, dot, _ = tail.rpartition(".")
+    return f"{prefix}:{head}" if dot and head else key
 
 
 def main() -> None:
@@ -61,6 +72,7 @@ def main() -> None:
             books[code].append((f, d))
     total_missing = 0
     total_words = 0
+    paranums: dict[str, dict[str, list[str]]] = {}
     for code in sorted(books):
         path = xml_dir / f"{code}.xml"
         if not path.exists():
@@ -82,6 +94,22 @@ def main() -> None:
                     where.append((di, k, m.start()))
         total_words += len(xt)
         sm = difflib.SequenceMatcher(None, [x[2] for x in xt], sw, autojunk=False)
+        # VRI 문단 번호 → 그 번호 바로 뒤 낱말이 든 경 문단 (사이트 문단 머리의 "VRI 문단 N")
+        x2s: dict[int, int] = {}
+        for a, b_, size in sm.get_matching_blocks():
+            for k in range(size):
+                x2s[a + k] = b_ + k
+        starts = [x[0] for x in xt]
+        import bisect
+
+        for m in re.finditer(r"\x01([^\x02]*)\x02", t):
+            xi = bisect.bisect_left(starts, m.end())
+            si = next((x2s[j] for j in range(xi, min(xi + 40, len(xt))) if j in x2s), None)
+            if si is None or si >= len(where) or not where[si][1]:
+                continue
+            di, key, _ = where[si]
+            sid = docs[di][1]["suttaId"]
+            paranums.setdefault(sid, {}).setdefault(paragraph_of(key, sid), []).append(m.group(1))
         inserts: dict[tuple[int, str], list[tuple[int, str]]] = collections.defaultdict(list)
         prefaces: dict[int, list[str]] = collections.defaultdict(list)
         for op, a1, a2, b1, b2 in sm.get_opcodes():
@@ -140,6 +168,10 @@ def main() -> None:
         for di in changed:
             f, d = docs[di]
             f.write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    (ROOT / "content" / "vri-paranums.json").write_text(
+        json.dumps({s: {p: ", ".join(dict.fromkeys(v)) for p, v in ps.items()} for s, ps in sorted(paranums.items())}, ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
     print(f"경 본문: VRI 낱말 {total_words:,}개 중 빠졌던 낱말 {total_missing:,}개" + ("" if check else " — 다시 넣었습니다"))
     fill_commentary(xml_dir, check)
 
