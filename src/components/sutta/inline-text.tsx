@@ -125,7 +125,7 @@ function renderInline(
     return variants && value.includes("[")
       ? value.split(VARIANT).map((piece, k) =>
           VARIANT_ONLY.test(piece) ? (
-            <span key={k} data-variant>
+            <span key={k} data-pali-variant>
               {text(piece)}
             </span>
           ) : (

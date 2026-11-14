@@ -307,7 +307,7 @@
   background: var(--overlay);
 }
 
-/* 설정 "이본 표기 감추기": 빠알리 원문의 다른 판본 글자 차이 [..] 를 감춘다 (inline-text.tsx 의 data-variant) */
-.hide-variants [data-variant] {
+/* 설정 "이본 표기 감추기": 빠알리 원문의 다른 판본 글자 차이 [..] 를 감춘다 (inline-text.tsx 의 data-pali-variant — 메뉴 단추들이 쓰는 data-variant 와 겹치지 않게) */
+.hide-variants [data-pali-variant] {
   display: none;
 }
