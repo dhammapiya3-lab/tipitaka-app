@@ -38,6 +38,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
+import { flushSync } from "react-dom";
 import { toast } from "sonner";
 import {
   WordSheet,
@@ -524,15 +525,6 @@ export function SuttaView({
   }
   const waiting = loaded.length === 0 && !error;
 
-  // 본문이 늦게 그려지므로, 주소의 #문장번호(책갈피·목차·검색 링크)로 한 번만 이동한다.
-  const scrolled = useRef(false);
-  useEffect(() => {
-    if (waiting || scrolled.current) return;
-    scrolled.current = true;
-    const target = decodeURIComponent(window.location.hash.slice(1));
-    if (target) document.getElementById(target)?.scrollIntoView();
-  }, [waiting]);
-
   // 이어 읽기: 스크롤이 멈추면 화면 맨 위 문장을 기억한다.
   const rowKeys = textRows.map((r) => r.key).join(",");
   useEffect(() => {
@@ -612,6 +604,39 @@ export function SuttaView({
     paragraphs.set(p, [...(paragraphs.get(p) ?? []), row.key]);
   }
   const paragraphList = [...paragraphs.keys()];
+  /**
+   * 긴 경(청정도론 등)은 문단 카드 수천 줄을 한꺼번에 그리면 단추를 누른 뒤 한참 멈춘다.
+   * 앞 문단 몇 개를 먼저 그려 곧바로 보이고, 나머지는 바로 뒤에 한가할 때(startTransition) 그린다.
+   * 목차·책갈피 등으로 뒤쪽 문단에 가야 하면 revealAll() 로 먼저 다 그린다.
+   */
+  const [rendered, setRendered] = useState(3);
+  // 경 칸을 떠나면 다음에 돌아올 때 다시 앞에서부터 조금씩 그린다
+  if (layer !== "sutta" && rendered !== 3) setRendered(3);
+  const allRendered = rendered >= paragraphList.length;
+  useEffect(() => {
+    if (allRendered || layer !== "sutta" || paragraphList.length === 0) return;
+    // 한 번에 몇 문단씩 — 그리는 사이사이 화면이 멈추지 않게
+    // (startTransition 은 쓰지 않는다 — 경·주석서 단추의 전환과 한데 묶여 단추 반응이 늦어진다)
+    const id = setTimeout(() => setRendered((n) => n + 3), 30);
+    return () => clearTimeout(id);
+  }, [allRendered, layer, rendered, paragraphList.length]);
+  const revealAll = () => {
+    if (!allRendered) flushSync(() => setRendered(Infinity));
+  };
+  const visibleParagraphs = allRendered
+    ? paragraphList
+    : paragraphList.slice(0, rendered);
+
+  // 본문이 늦게 그려지므로, 주소의 #문장번호(책갈피·목차·검색 링크)로 한 번만 이동한다.
+  const scrolled = useRef(false);
+  useEffect(() => {
+    if (waiting || scrolled.current) return;
+    const target = decodeURIComponent(window.location.hash.slice(1));
+    if (target && !document.getElementById(target) && !allRendered) return; // 뒤쪽 문단은 다 그린 뒤에
+    scrolled.current = true;
+    if (target) document.getElementById(target)?.scrollIntoView();
+  }, [waiting, allRendered]);
+
   // 앞뒤 경에서 문단별로 보기로 넘어왔으면, 문단 목록이 생긴 뒤 한 번만 그 문단을 연다
   const [pendingFocus, setPendingFocus] = useState(initialFocus ?? null);
   if (pendingFocus && paragraphList.length) {
@@ -762,6 +787,7 @@ export function SuttaView({
       const nextRow =
         textRows[Math.min(textRows.length - 1, Math.max(0, i + step))];
       setActive({ key: nextRow.key, word: 0 });
+      revealAll();
       document.getElementById(nextRow.key)?.scrollIntoView({ block: "center" });
     },
     moveWord: (step) => {
@@ -1380,13 +1406,14 @@ export function SuttaView({
                 onClick={() => {
                   setLinkView(null);
                   setLayer(h.layer);
-                  requestAnimationFrame(() =>
-                    requestAnimationFrame(() =>
-                      document
-                        .getElementById(`${h.layer}-${h.para}`)
-                        ?.scrollIntoView({ block: "start" }),
-                    ),
-                  );
+                  // 주석 문단은 앞에서부터 조금씩 그려지므로, 그 문단이 생길 때까지 잠깐 기다렸다가 옮긴다
+                  const started = Date.now();
+                  const go = () => {
+                    const el = document.getElementById(`${h.layer}-${h.para}`);
+                    if (el) el.scrollIntoView({ block: "start" });
+                    else if (Date.now() - started < 5000) setTimeout(go, 50);
+                  };
+                  requestAnimationFrame(() => requestAnimationFrame(go));
                 }}
                 className="w-fit text-xs font-bold text-primary hover:underline"
               >
@@ -1740,6 +1767,7 @@ export function SuttaView({
                     rootName={rootName}
                     onGoParagraph={(p) => {
                       setLayer("sutta");
+                      setRendered(Infinity);
                       if (focus) openParagraph(p);
                       else
                         requestAnimationFrame(() =>
@@ -1831,7 +1859,7 @@ export function SuttaView({
                   ) : parallel ? (
                     <>
                       {parallelHeader}
-                      {paragraphList.map((p) =>
+                      {visibleParagraphs.map((p) =>
                         parallelRow(
                           p,
                           commentaryRows.get(p) ?? {},
@@ -1843,7 +1871,7 @@ export function SuttaView({
                       )}
                     </>
                   ) : (
-                    paragraphList.map((p) => (
+                    visibleParagraphs.map((p) => (
                       <div key={p} className="flex flex-col gap-2">
                         {headingBlock(p)}
                         {paragraphCard(p, false)}
@@ -1876,9 +1904,10 @@ export function SuttaView({
               onPick={(p) =>
                 focus
                   ? openParagraph(p)
-                  : document
+                  : (revealAll(),
+                    document
                       .getElementById(`section-${p}`)
-                      ?.scrollIntoView({ block: "start" })
+                      ?.scrollIntoView({ block: "start" }))
               }
               word={word}
               suttaId={suttaId}
@@ -2147,6 +2176,7 @@ export function SuttaView({
         items={toc}
         onPick={(p) => {
           setSheet(null);
+          revealAll();
           document
             .getElementById(`section-${p}`)
             ?.scrollIntoView({ block: "start" });

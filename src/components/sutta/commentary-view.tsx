@@ -149,6 +149,15 @@ export function CommentaryView({
   const [attempt, setAttempt] = useState(0);
   const [showBefore, setShowBefore] = useState(false);
   const key = `${suttaId}/${layer}/${attempt}`;
+  // 그린 문단 수 — 경·층이 바뀌면 다시 앞에서부터
+  const [progress, setProgress] = useState({ key, n: 4 });
+  const rendered = progress.key === key ? progress.n : 4;
+  const total = state?.data?.paras.length ?? 0;
+  useEffect(() => {
+    if (rendered >= total) return;
+    const id = setTimeout(() => setProgress({ key, n: rendered + 4 }), 30);
+    return () => clearTimeout(id);
+  }, [key, rendered, total]);
   useEffect(() => {
     if (!available) return;
     let alive = true;
@@ -388,6 +397,8 @@ export function CommentaryView({
             data.books.length < 2 ||
             bookIndexOf(data, para.book) === tikaBook,
         )
+        // 긴 주석(청정도론 마하띠까 등)은 앞 몇 문단을 먼저, 나머지는 조금씩 이어 그린다 (단추 반응이 늦지 않게)
+        .slice(0, only ? undefined : rendered)
         .map(({ para, i, lines }) => (
           <Fragment key={i}>
             <CommentaryCard
