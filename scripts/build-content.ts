@@ -472,17 +472,17 @@ const NAMO =
  * PTS 경 첫머리의 큰 글자 제목 — 대문자 낱말이 이어지는 부분. 큰 글자로 찍힌 문장 첫 낱말
  * ("EVAṂ me sutaṃ", "KĀ iddhi?")은 문장이므로 뺀다. 로마 숫자만 있는 것("CII.", "I-VI.")은 그대로 둔다.
  */
-function ptsHeading(text: string): string | null {
+function ptsHeading(text: string): string[] | null {
   const UP = /^[A-ZĀĪŪṀṂṄÑṬḌṆḶ0-9.,:;\-–—()[\]'"/{}]+$/;
   const ROMAN = /^\(?[IVXLCDM]+(?:[-–]+[IVXLCDM]+)?[.\-–)]*$/;
   const tokens = text.trim().split(/\s+/);
   let n = 0;
   while (n < tokens.length && UP.test(tokens[n]!)) n++;
-  // 바로 뒤가 작은 글자(또는 "Bhikkhave" 처럼 첫 글자만 큰 낱말)로 이어지면 마지막 큰 글자 낱말은 문장 첫 낱말
+  // 바로 뒤가 작은 글자로 이어지면 마지막 큰 글자 낱말은 문장 첫 낱말 ("EVAṂ me sutaṃ")
   while (
     n > 0 &&
     n < tokens.length &&
-    /^[‘']?\p{L}\p{Ll}/u.test(tokens[n]!) &&
+    /^[‘']?([a-zāīūṃṁṅñṭḍṇḷ]|Bhikkhave)/.test(tokens[n]!) &&
     !/[.)\]]$/.test(tokens[n - 1]!)
   )
     n--;
@@ -495,7 +495,22 @@ function ptsHeading(text: string): string | null {
       !ROMAN.test(w) &&
       w !== "[FOOTNOTES]",
   );
-  return real ? run.join(" ") : null;
+  if (!real) return null;
+  // 줄 나누기 — 번호로 시작하는 낱말("1", "1.ITTHIVIMĀNA", "I-PĪṬHAVAGGA", "II")에서 새 줄
+  // (PTS 인쇄본에서 제목마다 따로 된 줄). "BOOK III." 처럼 앞 낱말과 한 덩어리인 번호는 그대로.
+  const lines: string[][] = [];
+  run.forEach((w, i) => {
+    const prev = run[i - 1];
+    const numbered = /^(\d|[IVXLC]+(?:[-–.]|$))/.test(w);
+    const joined =
+      !prev ||
+      /^(BOOK|VAGGA|SECTION|DIVISION|PART)$/.test(prev) ||
+      /^[\d[(]|^[IVXLC]+[-–.]*$/.test(prev);
+    if (numbered && !joined) lines.push([w]);
+    else if (lines.length) lines.at(-1)!.push(w);
+    else lines.push([w]);
+  });
+  return lines.map((l) => l.join(" "));
 }
 
 function splitNamo(
@@ -517,16 +532,18 @@ function splitNamo(
       preface.push(m[0].trim());
       rest = rest.slice(m[0].length);
     }
-    // PTS: 경 첫머리의 큰 글자 제목 줄(예: "ITTHIVIMĀNA 1.ITTHIVIMĀNA", "IX -- PADUMABUDDHAVAṂSO")도 머리말로
+    // PTS: 경 첫머리의 큰 글자 제목 줄(예: "1 ITTHIVIMĀNA", "1.ITTHIVIMĀNA", "I-PĪṬHAVAGGA")도 머리말로
     if (pts) {
       const head = ptsHeading(rest);
       if (head) {
-        preface.push(head);
-        rest = rest.slice(rest.indexOf(head) + head.length);
+        preface.push(...head);
+        const at = rest.indexOf(head.at(-1)!) + head.at(-1)!.length;
+        rest = rest.slice(at).replace(/^\s+/, "");
       }
     }
     if (rest !== value) text[key] = rest;
-    if (!titleOrHeading && value.trim()) break; // 첫 문장까지만
+    // 첫 문장까지만 — 머리말로 다 빠져 비었으면 다음 문장도 본다 (vv1: 1.1 = Namo·제목, 2.1 첫머리 = "I-PĪṬHAVAGGA")
+    if (!titleOrHeading && rest.trim()) break;
   }
   return { text, preface };
 }
