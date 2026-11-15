@@ -1874,26 +1874,28 @@ export function SuttaView({
                         const mine = vriPaths?.byId.get(suttaId);
                         // 고른 판본마다의 머리말 — VRI(경로 줄과 같은 제목 줄은 빼고), 마하상기띠본·PTS 의
                         // "Namo tassa …"·PTS 제목 줄. 같은 글(글자 크기·띄어쓰기만 다른 것)은 한 번만
-                        const seen = new Set<string>();
-                        const preface = picked
-                          .flatMap((e) =>
-                            (texts[e]?.preface ?? []).filter(
-                              (line) =>
-                                e !== VRI_ID ||
-                                !mine ||
-                                !coveredByPath(line, mine.path),
-                            ),
-                          )
-                          .filter((line) => {
-                            const k = line
-                              .toLowerCase()
-                              .replace(/ṁ/g, "ṃ")
-                              .replace(/arahata/g, "arahato")
-                              .replace(/[^a-zāīūṃṅñṭḍṇḷ]/g, "");
-                            if (seen.has(k)) return false;
-                            seen.add(k);
-                            return true;
-                          });
+                        // 같은 줄이 앞서 고른 다른 판본의 머리말에 이미 있으면 한 번만 (한 판본 안의 줄은 모두 그대로 —
+                        // PTS "1 ITTHIVIMĀNA" 와 "1.ITTHIVIMĀNA" 는 원본에 따로 있는 두 줄)
+                        const keyOf = (line: string) =>
+                          line
+                            .toLowerCase()
+                            .replace(/ṁ/g, "ṃ")
+                            .replace(/arahata/g, "arahato")
+                            .replace(/[^a-zāīūṃṅñṭḍṇḷ]/g, "");
+                        const earlier = new Set<string>();
+                        const preface = picked.flatMap((e) => {
+                          const lines = (texts[e]?.preface ?? []).filter(
+                            (line) =>
+                              e !== VRI_ID ||
+                              !mine ||
+                              !coveredByPath(line, mine.path),
+                          );
+                          const kept = lines.filter(
+                            (line) => !earlier.has(keyOf(line)),
+                          );
+                          for (const line of lines) earlier.add(keyOf(line));
+                          return kept;
+                        });
                         return (
                           <>
                             {preface.length ? (
