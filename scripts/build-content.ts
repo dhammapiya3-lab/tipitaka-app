@@ -506,7 +506,9 @@ function ptsHeading(text: string): string[] | null {
       !prev ||
       /^(BOOK|VAGGA|SECTION|DIVISION|PART)$/.test(prev) ||
       /^[\d[(]|^[IVXLC]+[-–.]*$/.test(prev);
-    if (numbered && !joined) lines.push([w]);
+    // 끝에 혼자 붙은 로마 숫자("MAGGA-SAṂYUTTAM XLV.")는 앞 줄에 그대로
+    const lastRoman = i === run.length - 1 && /^[IVXLC]+\.?$/.test(w);
+    if (numbered && !joined && !lastRoman) lines.push([w]);
     else if (lines.length) lines.at(-1)!.push(w);
     else lines.push([w]);
   });
@@ -527,19 +529,24 @@ function splitNamo(
     const titleOrHeading =
       tail === "0" || tail.startsWith("0.") || /\.0(\.\d+)?$/.test(tail);
     let rest = value;
-    const m = rest.match(NAMO);
-    if (m && !/[“"]/.test(m[0])) {
-      preface.push(m[0].trim());
-      rest = rest.slice(m[0].length);
-    }
-    // PTS: 경 첫머리의 큰 글자 제목 줄(예: "1 ITTHIVIMĀNA", "1.ITTHIVIMĀNA", "I-PĪṬHAVAGGA")도 머리말로
-    if (pts) {
-      const head = ptsHeading(rest);
-      if (head) {
-        preface.push(...head);
-        const at = rest.indexOf(head.at(-1)!) + head.at(-1)!.length;
-        rest = rest.slice(at).replace(/^\s+/, "");
+    // "Namo tassa …" 와 PTS 큰 글자 제목 줄은 원본 차례대로 번갈아 나올 수 있다 (thig1.1: THERĪ-GĀTHĀ. → Namo tassa …)
+    for (let guard = 0; guard < 6; guard++) {
+      const before = rest;
+      const m = rest.match(NAMO);
+      if (m && !/[“"]/.test(m[0])) {
+        preface.push(m[0].trim());
+        rest = rest.slice(m[0].length);
       }
+      // PTS: 경 첫머리의 큰 글자 제목 줄(예: "1 ITTHIVIMĀNA", "1.ITTHIVIMĀNA", "I-PĪṬHAVAGGA")도 머리말로
+      if (pts) {
+        const head = ptsHeading(rest);
+        if (head) {
+          preface.push(...head);
+          const at = rest.indexOf(head.at(-1)!) + head.at(-1)!.length;
+          rest = rest.slice(at).replace(/^\s+/, "");
+        }
+      }
+      if (rest === before) break;
     }
     if (rest !== value) text[key] = rest;
     // 첫 문장까지만 — 머리말로 다 빠져 비었으면 다음 문장도 본다 (vv1: 1.1 = Namo·제목, 2.1 첫머리 = "I-PĪṬHAVAGGA")
