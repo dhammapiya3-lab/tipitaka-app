@@ -464,6 +464,73 @@ function applyLineMap(
   );
 }
 
+const NAMO =
+  /^\s*[“"]?\s*namo\s+tassa\s+bhagavato\s+arahat[oa]\s+sammā\s*sambuddhassa\s*[.!]?\s*/i;
+
+/** 경의 첫 문장(그 앞의 제목·소제목 칸 포함)이 "Namo tassa …" 로 시작하면 그 부분을 떼어 머리말로 */
+/**
+ * PTS 경 첫머리의 큰 글자 제목 — 대문자 낱말이 이어지는 부분. 큰 글자로 찍힌 문장 첫 낱말
+ * ("EVAṂ me sutaṃ", "KĀ iddhi?")은 문장이므로 뺀다. 로마 숫자만 있는 것("CII.", "I-VI.")은 그대로 둔다.
+ */
+function ptsHeading(text: string): string | null {
+  const UP = /^[A-ZĀĪŪṀṂṄÑṬḌṆḶ0-9.,:;\-–—()[\]'"/{}]+$/;
+  const ROMAN = /^\(?[IVXLCDM]+(?:[-–]+[IVXLCDM]+)?[.\-–)]*$/;
+  const tokens = text.trim().split(/\s+/);
+  let n = 0;
+  while (n < tokens.length && UP.test(tokens[n]!)) n++;
+  // 바로 뒤가 작은 글자(또는 "Bhikkhave" 처럼 첫 글자만 큰 낱말)로 이어지면 마지막 큰 글자 낱말은 문장 첫 낱말
+  while (
+    n > 0 &&
+    n < tokens.length &&
+    /^[‘']?\p{L}\p{Ll}/u.test(tokens[n]!) &&
+    !/[.)\]]$/.test(tokens[n - 1]!)
+  )
+    n--;
+  // 끝의 번호만 있는 낱말("[11.", "1--2.")은 다음 제목·문장의 것이므로 글에 남긴다
+  while (n > 0 && /^[[(]?[\d\-–.]+$/.test(tokens[n - 1]!)) n--;
+  const run = tokens.slice(0, n);
+  const real = run.some(
+    (w) =>
+      w.replace(/[^A-ZĀĪŪṀṂṄÑṬḌṆḶ]/g, "").length >= 3 &&
+      !ROMAN.test(w) &&
+      w !== "[FOOTNOTES]",
+  );
+  return real ? run.join(" ") : null;
+}
+
+function splitNamo(
+  raw: Record<string, string>,
+  pts = false,
+): {
+  text: Record<string, string>;
+  preface: string[];
+} {
+  const text = { ...raw };
+  const preface: string[] = [];
+  for (const [key, value] of Object.entries(raw)) {
+    const tail = key.slice(key.indexOf(":") + 1);
+    const titleOrHeading =
+      tail === "0" || tail.startsWith("0.") || /\.0(\.\d+)?$/.test(tail);
+    let rest = value;
+    const m = rest.match(NAMO);
+    if (m && !/[“"]/.test(m[0])) {
+      preface.push(m[0].trim());
+      rest = rest.slice(m[0].length);
+    }
+    // PTS: 경 첫머리의 큰 글자 제목 줄(예: "ITTHIVIMĀNA 1.ITTHIVIMĀNA", "IX -- PADUMABUDDHAVAṂSO")도 머리말로
+    if (pts) {
+      const head = ptsHeading(rest);
+      if (head) {
+        preface.push(head);
+        rest = rest.slice(rest.indexOf(head) + head.length);
+      }
+    }
+    if (rest !== value) text[key] = rest;
+    if (!titleOrHeading && value.trim()) break; // 첫 문장까지만
+  }
+  return { text, preface };
+}
+
 function toSegments(raw: Record<string, string>): Segment[] {
   return Object.entries(raw)
     .map(([key, text]) => ({ key, parts: parseInline(text) }))
@@ -641,8 +708,19 @@ function buildSutta(
       else errors.push(message);
     }
 
-    const segments = toSegments(raw);
-    texts.push({ suttaId: id, editionId: entry.edition, segments });
+    // 마하상기띠본·PTS 경 첫머리의 "Namo tassa bhagavato…" 는 문장이 아니라 책 첫머리 줄 — 그 판본의 머리말로
+    // 따로 보인다 (VRI 처럼, 데이터는 그대로). 경 안 대화 속의 Namo tassa(mn27 등)는 그대로.
+    const { text: body, preface } =
+      entry.edition === "pli-ms" || entry.edition === "pli-pts"
+        ? splitNamo(raw, entry.edition === "pli-pts")
+        : { text: raw, preface: [] };
+    const segments = toSegments(body);
+    texts.push({
+      suttaId: id,
+      editionId: entry.edition,
+      segments,
+      ...(preface.length ? { preface } : {}),
+    });
     sutta.editions.push(entry.edition);
     usedEditions.add(entry.edition);
 

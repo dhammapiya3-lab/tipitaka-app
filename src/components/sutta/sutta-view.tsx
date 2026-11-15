@@ -1872,12 +1872,28 @@ export function SuttaView({
                   {!waiting && !focus
                     ? (() => {
                         const mine = vriPaths?.byId.get(suttaId);
-                        const preface = picked.includes(VRI_ID)
-                          ? (texts[VRI_ID]?.preface ?? []).filter(
+                        // 고른 판본마다의 머리말 — VRI(경로 줄과 같은 제목 줄은 빼고), 마하상기띠본·PTS 의
+                        // "Namo tassa …"·PTS 제목 줄. 같은 글(글자 크기·띄어쓰기만 다른 것)은 한 번만
+                        const seen = new Set<string>();
+                        const preface = picked
+                          .flatMap((e) =>
+                            (texts[e]?.preface ?? []).filter(
                               (line) =>
-                                !mine || !coveredByPath(line, mine.path),
-                            )
-                          : [];
+                                e !== VRI_ID ||
+                                !mine ||
+                                !coveredByPath(line, mine.path),
+                            ),
+                          )
+                          .filter((line) => {
+                            const k = line
+                              .toLowerCase()
+                              .replace(/ṁ/g, "ṃ")
+                              .replace(/arahata/g, "arahato")
+                              .replace(/[^a-zāīūṃṅñṭḍṇḷ]/g, "");
+                            if (seen.has(k)) return false;
+                            seen.add(k);
+                            return true;
+                          });
                         return (
                           <>
                             {preface.length ? (
@@ -1885,7 +1901,11 @@ export function SuttaView({
                                 lang="pi"
                                 className="pt-2 text-center font-pali text-sm text-secondary-foreground"
                               >
-                                {preface.join(" ")}
+                                {preface.map((line, i) => (
+                                  <span key={i} className="block">
+                                    {line}
+                                  </span>
+                                ))}
                               </p>
                             ) : null}
                             {/* 경로 줄은 VRI 판본을 골랐을 때만 */}
