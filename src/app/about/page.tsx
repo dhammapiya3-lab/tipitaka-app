@@ -343,28 +343,20 @@ export default function AboutPage() {
 
       <Card id="sources" className="scroll-mt-20">
         <CardHeader>
-          <CardTitle>출처</CardTitle>
+          <CardTitle>저작권</CardTitle>
         </CardHeader>
         <CardContent className="t-sub flex flex-col gap-2">
-          <p>
-            경전 목록과 판본 자료는{" "}
-            <a
-              href="https://theravada-application.vercel.app/"
-              className="font-semibold text-primary underline-offset-4 hover:underline"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Theravāda Tipiṭaka 앱
-            </a>
-            의 자료를 바탕으로 합니다.
-          </p>
           <p>
             각 번역의 저작권은 번역자에게 있습니다. 이용 조건은 확인되는 대로 위
             표에 적습니다.
           </p>
           <p>
-            원래 앱에서 복사를 막은 번역(법현 스님)은 이 앱에서도 글자를 선택할
-            수 없게 했습니다.
+            본 사이트(앱)에 올라와 있는 번역들은 모두 법보시 자료이며 이용
+            조건을 준수하는 한에서 복사, 배포가 가능합니다.
+          </p>
+          <p>
+            단, 출판사에 계약되어 있으며 양해를 얻어 게시하는 번역(법현 스님)은
+            이 사이트(앱)에서 복사하지 못하도록 했습니다.
           </p>
         </CardContent>
       </Card>

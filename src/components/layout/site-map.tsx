@@ -93,7 +93,7 @@ const SECTIONS: {
       { href: "/about/#editions", label: "판본" },
       { href: "/about/#translators", label: "저자·번역자" },
       { href: "/about/#dictionaries", label: "사전 출처" },
-      { href: "/about/#sources", label: "출처" },
+      { href: "/about/#sources", label: "저작권" },
       { href: "/about/#settings", label: "읽기 설정" },
     ],
   },
