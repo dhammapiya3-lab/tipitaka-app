@@ -343,6 +343,21 @@ export default function AboutPage() {
             안내만 있습니다. (사용한
             판: 받은 날짜 기록 없음, 반년마다 새 자료를 여쭙니다)
           </p>
+          <p>
+            <span className="text-foreground">함께 볼 곳:</span>{" "}
+            <a
+              href="https://abhidhana.buddha-dhamma.net/"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Tipiṭaka Pāḷi-Myanmā Abhidhāna (abhidhana.buddha-dhamma.net)
+            </a>{" "}
+            — 스페인 불교학 연구소(IEBH)가 25권 전체를 글자 인식(OCR)으로
+            디지털화한 사이트입니다. 낱말마다 권·쪽과 인쇄본 쪽 그림을 함께
+            보여 주고, 영어·스페인어 뜻풀이는 아직 검토하지 않은 AI
+            번역입니다. 이 사이트의 사전 자료로 쓰지는 않았습니다.
+          </p>
         </CardContent>
       </Card>
 
