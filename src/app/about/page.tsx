@@ -291,7 +291,7 @@ export default function AboutPage() {
             — 예전 이름 Pali English Ultimate(PEU). 27권이 넘는 『Pāḷi Myanmar
             Abhidhān』을 영어로 옮기며 크게 줄인 사전으로,{" "}
             <a
-              href="https://github.com/bksubhuti/tipitaka-pali-reader"
+              href="https://apps.microsoft.com/detail/9mth9td82tgr?hl=ko-KR&gl=KR"
               className="font-semibold text-primary underline-offset-4 hover:underline"
               target="_blank"
               rel="noreferrer"

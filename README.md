@@ -95,7 +95,7 @@ Next.js 16 (정적 내보내기) · TypeScript · Tailwind CSS v4 · shadcn/ui �
   원래 앱이 복사를 막은 판본(법현 스님)은 이 앱에서도 글자 선택·복사를 막았습니다.
 - Digital Pāḷi Dictionary (DPD) — 보디라사(Bodhirasa) 스님과 기여자들이 만드는 빠알리-영어 사전입니다. 사전 자료, 문법 모듈, 화면 양식을 DPD에서 가져왔습니다. 매달 고쳐지는 진행 중인 작업입니다. (사용한 판: v0.4.20261026, 이용 조건 CC BY-NC-SA 4.0) 광고나 유료 기능을 넣지 않습니다.
 - Pāḷi Text Society’s Pāḷi-English Dictionary (PTS PED) — K.R. Norman, William Pruitt, Peter Jackson이 교정하여 The Pāḷi Text Society에서 펴낸 2015년 수정 재판을 바탕으로, Buddhadust가 디지털로 옮긴 PTS 사전 자료를 가져와 다듬었습니다. (CC BY-NC 3.0)
-- Pali English Abhidhan (PEA, 예전 이름 Pali English Ultimate) — 27권이 넘는 『Pāḷi Myanmar Abhidhān』을 영어로 옮기며 크게 줄인 사전. Tipitaka Pali Reader(TPR, https://github.com/bksubhuti/tipitaka-pali-reader)를 위해 만들어졌다. 오픈 소스 — 출처를 밝히면 자유롭게 사용 (Bhante Subhuti 스님 답장, 2026-11).
+- Pali English Abhidhan (PEA, 예전 이름 Pali English Ultimate) — 27권이 넘는 『Pāḷi Myanmar Abhidhān』을 영어로 옮기며 크게 줄인 사전. Tipitaka Pali Reader(TPR, https://apps.microsoft.com/detail/9mth9td82tgr?hl=ko-KR&gl=KR)를 위해 만들어졌다. 오픈 소스 — 출처를 밝히면 자유롭게 사용 (Bhante Subhuti 스님 답장, 2026-11).
 - Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.
 - Bhikkhu Sujato 영어 번역: SuttaCentral bilara-data, CC0 (퍼블릭 도메인). 쿳다까(소송경·우다나·이띠웃따까·숫따니빠따·테라/테리가타·짜리야삐따까·자따까 83개)는 2026-11-13 bilara-data 에서 추가. 각주(디가·맛지마·상윳따·쿳다까)도 bilara-data 에서 (CC0).
 - K-PTS 빠알리–한국어 사전 (K-PTSdic. 한글빠알리사전) — 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우. 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받았습니다.
