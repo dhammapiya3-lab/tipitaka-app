@@ -334,7 +334,6 @@ export default function AboutPage() {
           <p>
             <span className="text-foreground">진행:</span> 2023년에 편찬을
             마쳤습니다. a부터 ḷa까지 25권(29책), 표제어는 약 21만 5천 개입니다.
-            자료마다 권수를 23권·25권·27권 이상으로 다르게 적고 있습니다.
           </p>
           <p>
             <span className="text-foreground">이 사이트의 자료:</span> Pn Daza
