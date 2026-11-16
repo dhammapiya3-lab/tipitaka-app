@@ -202,7 +202,10 @@ export default function AboutPage() {
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
                     </td>
                     <td className="px-3 py-3">
-                      {e.translator ? (
+                      {/* 언어 칸이 "한국어"(한국어로 쓴 글)이면 번역 칸은 비운다 */}
+                      {e.translator &&
+                      (e.sourceLanguage ?? LANGUAGE_LABELS[e.language]) !==
+                        "한국어" ? (
                         <EditionInfoDialog
                           id={e.id}
                           title={e.source ?? e.label}
