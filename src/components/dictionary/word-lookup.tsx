@@ -73,7 +73,7 @@ const PLAIN_SECTIONS: {
     id: "peu",
     lang: "en",
     credit:
-      "Pali English Ultimate (PEU) — Pāḷi Myanmar Abhidhān을 영어로 옮기는 pm12e 프로젝트(pm12e.pali.tools)의 자료입니다. 약 80%는 사람이, 나머지는 기계가 번역해서 어색한 문장이 섞여 있습니다. Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
+      "Pali English Abhidhan (PEA, 예전 이름 Pali English Ultimate) — 27권이 넘는 『Pāḷi Myanmar Abhidhān』을 영어로 옮기며 크게 줄인 사전으로, Tipitaka Pali Reader(TPR)를 위해 만들어졌습니다. 번역 작업: pm12e 프로젝트(pm12e.pali.tools). 약 80%는 사람이, 나머지는 기계가 번역해서 어색한 문장이 섞여 있습니다. 이용 조건: 오픈 소스이며, 출처를 밝히면 자유롭게 쓸 수 있습니다(Bhante Subhuti 스님 답장). Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
   },
   {
     id: "mm",

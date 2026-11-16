@@ -18,7 +18,7 @@ export const DICTIONARY_LABELS: Record<DictionaryId, string> = {
   kpts: "K-PTS 빠알리–한국어",
   pts: "PTS Pali–English",
   mm: "Tipiṭaka Pāḷi–Myanmar",
-  peu: "Pali English Ultimate",
+  peu: "Pali English Abhidhan (PEA)",
   cone: "Cone · Dictionary of Pāli",
 };
 

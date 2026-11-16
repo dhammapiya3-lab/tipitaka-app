@@ -5,7 +5,9 @@
  *   CONE_TAB=cone.txt pnpm build:peu -- cone                       Margaret Cone, A Dictionary of Pāli (MDict 를 pyglossary 로 Tabfile 로 바꾼 것)
  *       (pyglossary cone-mdict.mdx cone.txt --read-format=OctopusMdict --write-format=Tabfile)
  *
- * - 『빠알리-미얀마 아비단(Pāḷi Myanmar Abhidhān, 23권)』의 영어 번역본 (사람 번역 약 80%, 나머지 기계 번역).
+ * - 『빠알리-미얀마 아비단(Pāḷi Myanmar Abhidhān)』의 영어 번역 요약본 (사람 번역 약 80%, 나머지 기계 번역).
+ *   이름: Pali English Ultimate(PEU) → Pali English Abhidhan(PEA). Tipitaka Pali Reader(TPR)를 위해 만든 사전.
+ *   이용 조건(Bhante Subhuti 답장, 2026-11): 오픈 소스, 자유롭게 사용 가능, 출처를 밝힐 것. 원본은 27권이 넘는 책이고 이 사전은 그것을 크게 줄인 것.
  *   Bodhirasa 가 StarDict 로 만든 것 (2024). 출처: https://pm12e.pali.tools/ · Tipitaka Pali Projector
  * - 다른 사전처럼 "정리된 표제어 → 뜻풀이 목록" 조각으로 나눈다. 호스팅 파일 수 한도(2만 개) 때문에 조각을 크게(약 600KB) 잡는다.
  * - public/data/dict/index.json 에 이 사전과 조각 나눔(split.peu)을 더한다 (사전 전체를 다시 만들지 않아도 된다).
@@ -169,8 +171,8 @@ index.dictionaries = [
       }
     : {
         id: "peu",
-        label: "Pali English Ultimate",
-        license: null,
+        label: "Pali English Abhidhan (PEA)",
+        license: "오픈 소스 — 출처를 밝히면 자유롭게 사용 (Bhante Subhuti, 2026-11)",
         source: `Pāḷi Myanmar Abhidhān 영어 번역 (사람 번역 약 80%, 나머지 기계 번역) · Bodhirasa 인코딩 · ${info.website ?? "https://pm12e.pali.tools/"} · ${String(info.date ?? "").slice(0, 10)}`,
       },
 ];
