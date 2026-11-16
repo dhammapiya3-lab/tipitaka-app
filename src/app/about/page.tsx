@@ -337,11 +337,12 @@ export default function AboutPage() {
           </p>
           <p>
             <span className="text-foreground">이 사이트의 자료:</span> Pn Daza
-            스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와
-            다듬었습니다. 디지털로 옮기는 작업이 아직 끝나지 않아, 낱말 약 18만
-            개 가운데 약 2만 8천 개는 뜻풀이 대신 &ldquo;원본 사전을 보라&rdquo;는
-            안내만 있습니다. (사용한
-            판: 받은 날짜 기록 없음, 반년마다 새 자료를 여쭙니다)
+            스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료(Pn Daza 스님께
+            받은 2026-02-06 판)를 가져와 다듬었습니다. 디지털로 옮기는 작업이
+            아직 끝나지 않아, 낱말 약 18만 개 가운데 약 2만 8천 개는 뜻풀이 대신
+            &ldquo;원본 사전을 보라&rdquo;는 안내만 있습니다. 사전 데이터를
+            사용하고자 하는 분은 Pn Daza 스님께 허락을 받아 사용하시기
+            바랍니다(mrpndaza@gmail.com).
           </p>
           <p>
             <span className="text-foreground">함께 볼 곳:</span>{" "}
