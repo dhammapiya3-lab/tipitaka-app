@@ -4,12 +4,16 @@
  */
 import catalogJson from "@/data/catalog.json";
 import editionsJson from "@/data/editions.json";
+import peuVersionJson from "@/data/peu-version.json";
 import { INLINE_SUTTA_LIMIT } from "@/lib/constants";
+import { z } from "zod";
 import { catalogSchema, editionsSchema } from "@/lib/schemas";
 import type { CatalogNode, CatalogSutta, Edition, Nikaya } from "@/types";
 
 export const catalog = catalogSchema.parse(catalogJson);
 export const editions: Edition[] = editionsSchema.parse(editionsJson);
+/** PEA 사전 자료를 pm12e 에서 받은 날 — 매달 자동 확인(.github/workflows/peu-update-check.yml)이 고친다 */
+export const peuVersion = z.object({ date: z.string() }).parse(peuVersionJson).date;
 
 /** 묶음 안의 모든 경 (하위 묶음 포함) */
 export function collect(node: CatalogNode): CatalogSutta[] {

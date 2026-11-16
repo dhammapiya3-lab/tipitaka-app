@@ -49,7 +49,75 @@ const add = (word: string, text: string) => {
 };
 let info: Record<string, string> = {};
 if (MODE === "cone") readCone();
+else if (process.env.PEU_DUMP) readPeuDump(process.env.PEU_DUMP);
 else readPeu();
+
+/**
+ * pm12e 사이트가 내주는 전체 자료(https://pm12e.pali.tools/dump) — "var pm12e = {'낱말':'뜻', …};" 꼴.
+ * 코드로 실행하지 않고 글자 그대로 읽는다 (작은따옴표·큰따옴표 문자열, \ 탈출 문자).
+ * DPD 가 같은 자료로 StarDict 를 만들 때처럼 ṁ 은 ṃ 으로 바꾼다.
+ */
+function readPeuDump(file: string) {
+  const src = readFileSync(file, "utf8");
+  let i = src.indexOf("{") + 1;
+  if (i <= 0) throw new Error("PEU_DUMP: '{' 가 없습니다");
+  const skip = () => {
+    while (i < src.length && /[\s,]/.test(src[i])) i++;
+  };
+  const readString = (): string => {
+    const q = src[i];
+    if (q !== "'" && q !== '"') throw new Error(`PEU_DUMP: ${i} 번째 글자에 문자열이 없습니다`);
+    let out = "";
+    for (i++; i < src.length; i++) {
+      const c = src[i];
+      if (c === q) {
+        i++;
+        return out;
+      }
+      if (c === "\\") {
+        const n = src[++i];
+        if (n === "n") out += "\n";
+        else if (n === "t") out += " ";
+        else if (n === "r") out += "";
+        else if (n === "u") {
+          out += String.fromCharCode(parseInt(src.slice(i + 1, i + 5), 16));
+          i += 4;
+        } else out += n;
+      } else if (!/[\u0000-\u001f\u007f-\u009f]/.test(c)) out += c; // 제어 문자(탭·줄바꿈 등)는 뺀다 (DPD 판과 같게)
+    }
+    throw new Error("PEU_DUMP: 문자열이 닫히지 않았습니다");
+  };
+  // 같은 표제어가 두 번 나오면 뒤의 것 (자바스크립트가 이 파일을 읽을 때와 같게 — pm12e 사이트가 보여 주는 것)
+  const raw = new Map<string, string>();
+  for (;;) {
+    skip();
+    if (src[i] === "}" || i >= src.length) break;
+    const word = readString().replace(/ṁ/g, "ṃ");
+    skip();
+    if (src[i] !== ":") throw new Error(`PEU_DUMP: ${i} 번째에 ':' 가 없습니다`);
+    i++;
+    skip();
+    raw.set(word, readString().replace(/ṁ/g, "ṃ"));
+  }
+  // StarDict 사전 순서(영문자 대소문자 무시 → 바이트)로 — 같은 낱말로 합쳐지는 뜻풀이의 순서가 DPD 판과 같도록
+  const asciiLower = (w: string) => Buffer.from(w.replace(/[A-Z]/g, (c) => c.toLowerCase()), "utf8");
+  const order = [...raw.keys()].sort(
+    (a, b) => Buffer.compare(asciiLower(a), asciiLower(b)) || Buffer.compare(Buffer.from(a), Buffer.from(b)),
+  );
+  const variants: [string, string][] = [];
+  for (const word of order) {
+    const html = raw.get(word)!;
+    const text = htmlToText(html);
+    add(word, text);
+    // StarDict 판의 다른 표기(ŋ)와 같게 — 정리(normalizeWord)하면 ṃ 이 빠진 꼴이 된다. 표제어를 다 넣은 뒤에 넣는다.
+    if (word.includes("ṃ")) variants.push([word.replace(/ṃ/g, "ŋ"), text]);
+  }
+  for (const [w, t] of variants) add(w, t);
+  const n = raw.size;
+  const date = process.env.PEU_DATE ?? new Date().toISOString().slice(0, 10);
+  info = { website: "https://pm12e.pali.tools/", date };
+  console.log(`PEU(pm12e 자료): 표제어 ${n.toLocaleString()}개 · 받은 날 ${date}`);
+}
 
 /** Margaret Cone — Tabfile 한 줄: "1abala|abala<탭>HTML(\n 은 글자 \ n)" */
 function readCone() {

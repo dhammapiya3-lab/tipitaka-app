@@ -1,0 +1,70 @@
+# PEA(Pali English Abhidhan) 새 자료 확인 — 한 달에 한 번
+# pm12e 사이트(https://pm12e.pali.tools/dump)에서 최신 자료를 받아 사전 조각을 다시 만들고,
+# 바뀐 점이 있으면 "변경 요청(Pull Request)"을 연다. 사이트는 바로 바뀌지 않는다.
+# 변경 요청을 보고 Claude 에게 "넣어줘"라고 하면(또는 직접 Merge 하면) 그때 사이트에 반영된다.
+name: PEA 새 자료 확인
+
+on:
+  schedule:
+    - cron: "47 2 5 * *" # 매달 5일 02:47 (UTC) = 한국 시각 11:47
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: 최신 자료 받기
+        run: |
+          curl -fsSL --retry 3 -o /tmp/peu_dump.js https://pm12e.pali.tools/dump
+          ls -l /tmp/peu_dump.js
+          head -c 20 /tmp/peu_dump.js | grep -q "{" || { echo "받은 파일이 자료 꼴이 아닙니다"; exit 1; }
+
+      - name: 사전 조각 다시 만들기
+        run: |
+          cp -r public/data/dict/peu /tmp/peu-old
+          today="$(date -u +%Y-%m-%d)"
+          PEU_DUMP=/tmp/peu_dump.js PEU_DATE="$today" pnpm -s build:peu
+          python3 -I scripts/peu-diff.py /tmp/peu-old public/data/dict/peu > /tmp/peu-diff.md
+          cat /tmp/peu-diff.md
+          echo "TODAY=$today" >> "$GITHUB_ENV"
+
+      - name: 바뀐 점이 있으면 변경 요청 열기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- public/data/dict/peu; then
+            echo "바뀐 낱말이 없습니다."
+            exit 0
+          fi
+          # 사전 조각·안내 파일·판 기록 말고는 바뀌면 안 된다
+          other="$(git status --porcelain | grep -v -e ' public/data/dict/peu/' -e ' public/data/dict/index.json' || true)"
+          if [ -n "$other" ]; then echo "예상하지 못한 파일이 바뀌었습니다:"; echo "$other"; exit 1; fi
+          printf '{"date":"%s"}\n' "$TODAY" > content/peu-version.json
+          branch="peu-update-$TODAY"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add public/data/dict/peu public/data/dict/index.json content/peu-version.json
+          git commit -qm "사전: PEA 새 자료 ($TODAY, pm12e.pali.tools)"
+          git push -q origin "$branch"
+          title="PEA 사전 새 자료 ($TODAY)"
+          body="$(printf 'pm12e 사이트에서 %s 에 받은 자료로 PEA 사전을 다시 만들었습니다. **아직 사이트에는 반영되지 않았습니다.**\n\n%s\n\n- 넣으려면 Claude 에게 \"PEA 새 자료 넣어줘\"라고 하거나, 이 변경 요청을 Merge 하세요.\n- 넣지 않으려면 이 변경 요청을 닫으세요.' "$TODAY" "$(cat /tmp/peu-diff.md)")"
+          if ! gh pr create --base main --head "$branch" --title "$title" --body "$body"; then
+            # 저장소 설정에서 Actions 의 변경 요청 만들기가 꺼져 있으면 알림(Issue)으로 대신 알린다
+            gh issue create --title "$title" --body "$body
+
+          (변경 요청을 자동으로 열지 못했습니다. 바뀐 내용은 브랜치 \`$branch\` 에 있습니다: https://github.com/${{ github.repository }}/compare/main...$branch)"
+          fi

@@ -3,7 +3,7 @@ import { TopLevelPage } from "@/components/layout/page-header";
 import { EditionInfoDialog } from "@/components/about/edition-details";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LANGUAGE_LABELS, LICENSE_UNKNOWN } from "@/lib/constants";
-import { allSuttas, editions } from "@/lib/data";
+import { allSuttas, editions, peuVersion } from "@/lib/data";
 import { suttaLabel } from "@/lib/format";
 
 export const metadata: Metadata = { title: "정보" };
@@ -304,8 +304,8 @@ export default function AboutPage() {
             를 위해 만들어졌습니다. 번역 작업은 pm12e 프로젝트
             (pm12e.pali.tools)에서 했고, 약 80%는 사람이, 나머지는 기계가
             번역했습니다. 이용 조건: 오픈 소스이며, 출처를 밝히면 자유롭게 쓸 수
-            있습니다(Bhante Subhuti 스님 답장). Digital Pāḷi Dictionary
-            사이트에서 공개된 자료를 가져왔습니다.
+            있습니다(Bhante Subhuti 스님 답장). (사용한 판: pm12e 자료{" "}
+            {peuVersion}, 매달 새 자료를 확인합니다)
           </p>
           <p>
             TPR은 빠알리 삼장을 읽으며 여러 사전을 바로 찾아볼 수 있는 무료
@@ -339,7 +339,10 @@ export default function AboutPage() {
           <p>
             <span className="text-foreground">이 사이트의 자료:</span> Pn Daza
             스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와
-            다듬었습니다.
+            다듬었습니다. 디지털로 옮기는 작업이 아직 끝나지 않아, 낱말 약 18만
+            개 가운데 약 2만 8천 개는 뜻풀이 대신 &ldquo;원본 사전을 보라&rdquo;는
+            안내만 있습니다. (사용한
+            판: 받은 날짜 기록 없음, 반년마다 새 자료를 여쭙니다)
           </p>
         </CardContent>
       </Card>

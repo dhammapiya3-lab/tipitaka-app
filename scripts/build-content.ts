@@ -1176,6 +1176,13 @@ writeFileSync(
   path.join(OUT_DATA, "editions.json"),
   JSON.stringify(editionsSchema.parse(editions)),
 );
+// PEA 사전 자료를 받은 날 (매달 자동 확인이 content/peu-version.json 을 고친다) → 정보 화면 "사용한 판"
+writeFileSync(
+  path.join(OUT_DATA, "peu-version.json"),
+  JSON.stringify(
+    z.object({ date: z.string() }).parse(JSON.parse(readFileSync(path.join(process.cwd(), "content/peu-version.json"), "utf8"))),
+  ),
+);
 // 경 읽기 화면용 목록 — 본문이 있는 경만, 목록 순서대로 (SuttaIndexEntry)
 const suttaIndex = catalog.nikayas.flatMap((n) => {
   const entries: SuttaIndexEntry[] = [];
