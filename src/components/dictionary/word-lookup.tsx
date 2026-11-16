@@ -53,7 +53,7 @@ const PLAIN_SECTIONS: {
     licensed: true,
     lang: "ko",
     credit:
-      "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙 · 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우 · 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받음",
+      "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙 · 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우 · 사용 허락: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받음",
   },
   {
     id: "cone",
@@ -79,7 +79,7 @@ const PLAIN_SECTIONS: {
     id: "mm",
     lang: "my",
     credit:
-      "Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료 — Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
+      "Tipiṭaka Pāḷi-Myanmar Abhidhān — 1950년대부터 2023년까지 미얀마 학승들이 편찬한 삼장 빠알리-미얀마어 사전(25권). Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
   },
 ];
 

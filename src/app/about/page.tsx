@@ -273,7 +273,7 @@ export default function AboutPage() {
             </span>{" "}
             — K-PTSdic. 한글빠알리사전, 원문 표기: 선운사대학원용 초역, 박경숙,
             편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적,
-            무진, 원우. 이용 조건: 자비선사 초기불교승가대학원(법인 스님)의
+            무진, 원우. 사용 허락: 자비선사 초기불교승가대학원(법인 스님)의
             법보시 공유 허락을 받았습니다.
           </p>
           <p>
@@ -310,10 +310,33 @@ export default function AboutPage() {
           </p>
           <p>
             <span className="font-semibold text-foreground">
-              Tipiṭaka Pāḷi-Myanmar (Abhidhān) 자료
+              Tipiṭaka Pāḷi-Myanmar Abhidhān
             </span>{" "}
-            — Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를
-            가져와 다듬었습니다.
+            — 『တိပိဋက ပါဠိ-မြန်မာ အဘိဓာန်』. 삼장의 빠알리어를 미얀마어로 풀이한
+            사전입니다.
+          </p>
+          <p>
+            <span className="text-foreground">기획·출판:</span> 1950년대에
+            편찬을 시작했습니다. 제1권은 1964년 버마 연방 불교교단
+            평의회(Union of Burma Buddha Sāsana Council)가 펴냈고, 그 뒤의
+            권들은 미얀마 종교부 교법 진흥·포교국(Department for the Promotion
+            and Propagation of the Sāsana)이 펴냈습니다.
+          </p>
+          <p>
+            <span className="text-foreground">편찬:</span> 학승 다섯 팀이
+            알파벳을 나누어 맡았고, 만달레이 마소예인(Masoeyein) 사원이 5·6권과
+            15·16권을 썼습니다. 우 실라난다(U Sīlānanda, 1927–2005) 스님이 편찬
+            책임자(chief compiler)로 소개됩니다.
+          </p>
+          <p>
+            <span className="text-foreground">진행:</span> 2023년에 편찬을
+            마쳤습니다. a부터 ḷa까지 25권(29책), 표제어는 약 21만 5천 개입니다.
+            자료마다 권수를 23권·25권·27권 이상으로 다르게 적고 있습니다.
+          </p>
+          <p>
+            <span className="text-foreground">이 사이트의 자료:</span> Pn Daza
+            스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와
+            다듬었습니다.
           </p>
         </CardContent>
       </Card>
