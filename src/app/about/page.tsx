@@ -179,9 +179,8 @@ export default function AboutPage() {
           <table className="w-full min-w-[560px] text-left">
             <thead className="bg-surface-2 text-[13px] font-semibold text-muted-foreground">
               <tr>
-                <th className="px-5 py-3">저자·번역자</th>
+                <th className="min-w-[17rem] px-5 py-3">저자·번역자</th>
                 <th className="px-3 py-3 whitespace-nowrap">언어</th>
-                <th className="px-3 py-3">번역</th>
                 <th className="px-3 py-3">실린 경</th>
                 <th className="px-5 py-3 whitespace-nowrap">이용 조건</th>
               </tr>
@@ -191,29 +190,20 @@ export default function AboutPage() {
                 .filter((e) => e.language !== "pli")
                 .map((e) => (
                   <tr key={e.id} className="border-t">
-                    <td className="px-5 py-3 font-semibold text-foreground">
+                    <td className="min-w-[17rem] px-5 py-3 font-semibold text-foreground">
+                      {/* 저자와 번역자가 다르면 "저자 · 번역자" (예: 한국마하시 사야도 · 담마간다 스님) */}
                       <EditionInfoDialog
                         id={e.id}
                         title={e.source ?? e.label}
-                        label={e.source ?? e.label}
+                        label={
+                          e.source && e.translator && e.translator !== e.source
+                            ? `${e.source} · ${e.translator}`
+                            : (e.source ?? e.label)
+                        }
                       />
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap">
                       {e.sourceLanguage ?? LANGUAGE_LABELS[e.language]}
-                    </td>
-                    <td className="px-3 py-3">
-                      {/* 언어 칸이 "한국어"(한국어로 쓴 글)이면 번역 칸은 비운다 */}
-                      {e.translator &&
-                      (e.sourceLanguage ?? LANGUAGE_LABELS[e.language]) !==
-                        "한국어" ? (
-                        <EditionInfoDialog
-                          id={e.id}
-                          title={e.source ?? e.label}
-                          label={e.translator}
-                        />
-                      ) : (
-                        "—"
-                      )}
                     </td>
                     <td className="px-3 py-3">
                       {[
