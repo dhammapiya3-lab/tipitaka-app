@@ -8,7 +8,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { segmentBurmese } from "@/lib/burmese";
 import {
-  type BurmeseSense,
+  type BurmeseEntry,
   fetchBurmeseEntry,
   fetchBurmeseWords,
 } from "@/lib/content";
@@ -27,7 +27,7 @@ const POS: Record<string, string> = {
 export function BurmeseText({ text }: { text: string }) {
   const [dict, setDict] = useState<{ words: Set<string>; maxLen: number } | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
-  const [senses, setSenses] = useState<BurmeseSense[] | "loading" | "error">("loading");
+  const [senses, setSenses] = useState<BurmeseEntry | "loading" | "error">("loading");
 
   useEffect(() => {
     let alive = true;
@@ -94,25 +94,60 @@ export function BurmeseText({ text }: { text: string }) {
           ) : senses === "error" ? (
             <span className="block text-muted-foreground">풀이를 받지 못했습니다.</span>
           ) : (
-            senses.map(([pos, def, ex, en], j) => (
-              <span key={j} className="mt-1.5 block">
-                {pos && (
-                  <span className="mr-1.5 text-xs text-muted-foreground">
-                    {POS[pos] ?? pos}
+            <>
+              {(senses.m ?? []).length > 0 && (
+                <span className="mt-1.5 block">
+                  <span className="block text-xs font-semibold text-muted-foreground">
+                    우 호크 세인 미얀마어-영어-빠알리어 사전
                   </span>
-                )}
-                {def && <span lang="my">{def}</span>}
-                {en && <span className="block text-foreground">{en}</span>}
-                {ex && (
-                  <span lang="my" className="block text-xs text-muted-foreground">
-                    {ex}
+                  {senses.m!.map(([head, eng, pli, page], j) => (
+                    <span key={j} className="mt-1 block">
+                      <span lang="my" className="text-muted-foreground">
+                        {head}
+                      </span>{" "}
+                      <span className="text-foreground">{eng}</span>
+                      {pli && (
+                        <span lang="my" className="block">
+                          빠알리어: {pli}
+                        </span>
+                      )}
+                      <span className="text-[11px] text-muted-foreground">
+                        {" "}
+                        (원서 {page}쪽)
+                      </span>
+                    </span>
+                  ))}
+                </span>
+              )}
+              {(senses.w ?? []).length > 0 && (
+                <span className="mt-2 block">
+                  <span className="block text-xs font-semibold text-muted-foreground">
+                    미얀마어 위키낱말사전
                   </span>
-                )}
-              </span>
-            ))
+                  {senses.w!.map(([pos, def, ex, en], j) => (
+                    <span key={j} className="mt-1.5 block">
+                      {pos && (
+                        <span className="mr-1.5 text-xs text-muted-foreground">
+                          {POS[pos] ?? pos}
+                        </span>
+                      )}
+                      {def && <span lang="my">{def}</span>}
+                      {en && <span className="block text-foreground">{en}</span>}
+                      {ex && (
+                        <span lang="my" className="block text-xs text-muted-foreground">
+                          {ex}
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </>
           )}
           <span className="mt-2 block text-[11px] text-muted-foreground">
-            미얀마어 위키낱말사전 (my.wiktionary.org, CC BY-SA 4.0)
+            출처: 우 호크 세인 『미얀마어-영어-빠알리어 사전』(Pn Daza 스님 MEP
+            Dictionary 자료) · 미얀마어 위키낱말사전(my.wiktionary.org, CC
+            BY-SA 4.0) — 자세한 이용 조건은 정보 화면
           </span>
         </span>
       )}

@@ -787,6 +787,13 @@ export async function searchText(
 const MYWIKT_BASE = "/data/mywikt";
 const burmeseSenseSchema = z.tuple([z.string(), z.string(), z.string(), z.string()]);
 export type BurmeseSense = z.infer<typeof burmeseSenseSchema>;
+const burmeseEntrySchema = z.object({
+  /** 미얀마어 위키낱말사전 [품사, 미얀마어 뜻풀이, 용례, 영어 뜻] */
+  w: z.array(burmeseSenseSchema).optional(),
+  /** 우 호크 세인 MEP [표제어, 영어 뜻, 빠알리어 뜻, 쪽] */
+  m: z.array(z.tuple([z.string(), z.string(), z.string(), z.number()])).optional(),
+});
+export type BurmeseEntry = z.infer<typeof burmeseEntrySchema>;
 let burmeseWordsPromise: Promise<{ words: Set<string>; maxLen: number }> | null = null;
 
 /** 낱말 목록 (낱말 경계 찾기용) — 처음 한 번만 받는다 */
@@ -805,11 +812,11 @@ export function fetchBurmeseWords(): Promise<{ words: Set<string>; maxLen: numbe
   return burmeseWordsPromise;
 }
 
-/** 낱말 하나의 풀이 [[품사, 미얀마어 뜻풀이, 용례, 영어 뜻], …] — 없으면 [] */
-export async function fetchBurmeseEntry(word: string): Promise<BurmeseSense[]> {
+/** 낱말 하나의 풀이 (두 사전) — 없으면 {} */
+export async function fetchBurmeseEntry(word: string): Promise<BurmeseEntry> {
   const shard = await getShard(
     `${MYWIKT_BASE}/h${mywiktHash(word)}.json`,
-    z.record(z.string(), z.array(burmeseSenseSchema)),
+    z.record(z.string(), burmeseEntrySchema),
   );
-  return shard[word] ?? [];
+  return shard[word] ?? {};
 }

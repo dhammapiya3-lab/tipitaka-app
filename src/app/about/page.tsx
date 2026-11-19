@@ -279,6 +279,19 @@ export default function AboutPage() {
           </p>
           <p>
             <span className="font-semibold text-foreground">
+              A Dictionary of Pāli (Cone)
+            </span>{" "}
+            — Margaret Cone 지음, Pali Text Society 펴냄. 제1권(a–kh, 2001),
+            제2권(g–n), 제3권(p–bh, 2020)까지 나온 부분입니다. Pali Text
+            Society가 2024년 3월부터 gandhari.org(gandhari.org/dop)에서 누구나
+            무료로 찾아보고 쓸 수 있게 공개했고, 이 사이트는 Digital Pāḷi
+            Dictionary가 배포한 디지털판을 가져왔습니다. 저작권: © Pali Text
+            Society. 이용 조건: PTS는 &ldquo;누구나 무료로 찾아보고 쓸 수
+            있다&rdquo;고 밝혔으며, 별도의 공개 라이선스(CC 등)는 밝히지
+            않았습니다.
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">
               Pali English Abhidhan (PEA)
             </span>{" "}
             — 예전 이름 Pali English Ultimate(PEU). 27권이 넘는 『Pāḷi Myanmar
@@ -359,6 +372,22 @@ export default function AboutPage() {
             없어서 사전에 있는 가장 긴 낱말부터 맞춰 낱말을 나누므로, 미얀마
             글자로 적은 빠알리어 낱말이 엉뚱하게 나뉠 수 있습니다. 이용 조건: CC
             BY-SA 4.0 (출처를 밝히고 같은 조건으로 공유).
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">
+              우 호크 세인 『미얀마어-영어-빠알리어 사전』 (U Hoke Sein, The
+              Universal Burmese-English-Pali Dictionary)
+            </span>{" "}
+            — 우 호크 세인(ဦးဟုတ်စိန်, 1890–1984)이 펴낸 미얀마어 낱말의 영어 뜻과
+            빠알리어 대응어 사전입니다. 미얀마어 글에서 낱말을 누르면 위키낱말사전과
+            함께 나옵니다. 자료: Pn Daza 스님의 MEP Dictionary 앱 저장소
+            (github.com/pndaza/mep_dictionary, 2026-05-30판, 71,427항목). 그
+            저장소에 따르면 자료는 붓다쩨따만(ဗုဒ္ဓစေတမန်)이 낸 iOS 앱에서 가져왔고,
+            원서 약 300쪽은 아직 입력되지 않았습니다. 저장소에는 라이선스가 적혀
+            있지 않습니다. 같은 자료를 정리한 Hugging Face 공개본
+            (huggingface.co/datasets/freococo/myanmar-english-pali-dictionary)은
+            &ldquo;연구와 교육 목적으로만 공유&rdquo;하며 &ldquo;상업적 이용은
+            권리자의 추가 허락이 필요할 수 있다&rdquo;고 밝히고 있습니다.
           </p>
         </CardContent>
       </Card>

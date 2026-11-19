@@ -13,7 +13,7 @@ export function mywiktHash(word: string): number {
 
 export type BurmesePiece = { text: string; word: boolean };
 
-const RUN = /[က-႟‌‍]+/gu;
+const RUN = /[\u1000-\u109F\u200C\u200D]+/gu;
 
 /** 글을 [낱말 / 낱말 아님] 조각으로. 두 글자 이상인 사전 낱말만 낱말로 친다. */
 export function segmentBurmese(
