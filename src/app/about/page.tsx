@@ -389,6 +389,16 @@ export default function AboutPage() {
           </p>
           <p>
             <span className="font-semibold text-foreground">
+              영어 위키낱말사전의 미얀마어 항목 (en.wiktionary.org)
+            </span>{" "}
+            — 영어 위키낱말사전에 실린 미얀마어 낱말의 영어 뜻·로마자 표기·발음
+            기호·어원입니다. 미얀마어 글에서 낱말을 누르거나 사전에서 미얀마 글자로
+            찾으면 다른 두 사전과 함께 나옵니다. 자료: kaikki.org 가 wiktextract 로
+            정리한 미얀마어 파일(2026-11-19에 받음, 낱말 약 8천 5백 개). 이용 조건:
+            CC BY-SA 4.0 (출처를 밝히고 같은 조건으로 공유).
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">
               우 호크 세인 『미얀마어-영어-빠알리어 사전』 (U Hoke Sein, The
               Universal Burmese-English-Pali Dictionary)
             </span>{" "}

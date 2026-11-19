@@ -796,6 +796,10 @@ const burmeseEntrySchema = z.object({
   w: z.array(burmeseSenseSchema).optional(),
   /** 우 호크 세인 MEP [표제어, 영어 뜻, 빠알리어 뜻, 쪽] */
   m: z.array(z.tuple([z.string(), z.string(), z.string(), z.number()])).optional(),
+  /** 영어 위키낱말사전 미얀마어 항목 [품사, [영어 뜻…], 로마자, 발음 기호, 어원] */
+  e: z
+    .array(z.tuple([z.string(), z.array(z.string()), z.string(), z.string(), z.string()]))
+    .optional(),
 });
 export type BurmeseEntry = z.infer<typeof burmeseEntrySchema>;
 let burmeseWordsPromise: Promise<BurmeseDict> | null = null;

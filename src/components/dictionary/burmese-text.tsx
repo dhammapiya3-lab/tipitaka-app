@@ -24,6 +24,28 @@ const POS: Record<string, string> = {
   interj: "감탄사",
 };
 
+/** 영어 위키낱말사전(kaikki.org) 품사 이름 */
+const EN_POS: Record<string, string> = {
+  noun: "명사",
+  verb: "동사",
+  name: "고유명사",
+  adj: "형용사",
+  adv: "부사",
+  particle: "조사·첨사",
+  pron: "대명사",
+  classifier: "분류사",
+  num: "수사",
+  character: "글자",
+  conj: "접속사",
+  postp: "후치사",
+  intj: "감탄사",
+  prefix: "접두사",
+  suffix: "접미사",
+  phrase: "구",
+  det: "한정사",
+  prep: "전치사",
+};
+
 /** 화면이 한가할 때 하기 */
 function whenIdle(fn: () => void): () => void {
   if (typeof window.requestIdleCallback === "function") {
@@ -159,7 +181,7 @@ export function BurmeseText({ text }: { text: string }) {
 }
 
 const CREDIT =
-  "출처: 우 호크 세인 『미얀마어-영어-빠알리어 사전』(Pn Daza 스님 MEP Dictionary 자료) · 미얀마어 위키낱말사전(my.wiktionary.org, CC BY-SA 4.0) — 자세한 이용 조건은 정보 화면";
+  "출처: 우 호크 세인 『미얀마어-영어-빠알리어 사전』(Pn Daza 스님 MEP Dictionary 자료) · 미얀마어 위키낱말사전(my.wiktionary.org, CC BY-SA 4.0) · 영어 위키낱말사전 미얀마어 항목(en.wiktionary.org, kaikki.org 정리본, CC BY-SA 4.0) — 자세한 이용 조건은 정보 화면";
 
 function BurmeseCredit() {
   return <span className="mt-2 block text-[11px] text-muted-foreground">{CREDIT}</span>;
@@ -211,6 +233,34 @@ function BurmeseSenses({ entry }: { entry: BurmeseEntry }) {
           ))}
         </span>
       )}
+      {(entry.e ?? []).length > 0 && (
+        <span className="mt-2 block">
+          <span className="block text-xs font-semibold text-muted-foreground">
+            영어 위키낱말사전
+          </span>
+          {entry.e!.map(([pos, glosses, roman, ipa, etym], j) => (
+            <span key={j} className="mt-1.5 block">
+              {pos && (
+                <span className="mr-1.5 text-xs text-muted-foreground">{EN_POS[pos] ?? pos}</span>
+              )}
+              {(roman || ipa) && (
+                <span className="text-xs text-muted-foreground">
+                  {[roman, ipa].filter(Boolean).join(" · ")}
+                </span>
+              )}
+              {glosses.map((g, k) => (
+                <span key={k} className="block text-foreground">
+                  {glosses.length > 1 ? `${k + 1}. ` : ""}
+                  {g}
+                </span>
+              ))}
+              {etym && (
+                <span className="block text-xs text-muted-foreground">어원: {etym}</span>
+              )}
+            </span>
+          ))}
+        </span>
+      )}
     </>
   );
 }
@@ -232,7 +282,7 @@ type SearchState =
     };
 
 /**
- * 사전 화면에서 미얀마어로 찾기 — 우 호크 세인 사전과 미얀마어 위키낱말사전.
+ * 사전 화면에서 미얀마어로 찾기 — 우 호크 세인 사전, 미얀마어 위키낱말사전, 영어 위키낱말사전 미얀마어 항목.
  * 친 글이 통째로 사전에 없으면, 사전 낱말로 나눠 낱말마다 보여 준다.
  */
 export function BurmeseSearchResult({
@@ -257,7 +307,9 @@ export function BurmeseSearchResult({
       words = [...new Set(words)].slice(0, 12);
       const found = (
         await Promise.all(words.map(async (word) => ({ word, entry: await fetchBurmeseEntry(word) })))
-      ).filter((f) => (f.entry.m ?? []).length + (f.entry.w ?? []).length > 0);
+      ).filter(
+        (f) => (f.entry.m ?? []).length + (f.entry.w ?? []).length + (f.entry.e ?? []).length > 0,
+      );
       const more = dict.startingWith(key, 30).filter((w) => w !== key);
       if (alive) setState({ status: "ready", found, more, key });
     })().catch(() => alive && setState({ status: "error", key }));
