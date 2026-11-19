@@ -1,0 +1,61 @@
+# 빠알리-싱할라 사전(Path Nirvana Foundation) 새 자료 확인 — 한 달에 한 번
+# Path Nirvana 쪽 요청: 사이트에서 한 번 떠 온 것 말고 GitHub 저장소의 최신 자료를 쓸 것 (오류를 계속 고치고 있음).
+# https://github.com/pnfo/pali-sinhala-dictionary 를 받아 사전 조각을 다시 만들고, 바뀐 점이 있으면 "변경 요청(Pull Request)"을 연다.
+# 사이트는 바로 바뀌지 않는다 — 변경 요청을 보고 "넣어줘"라고 하면(또는 Merge 하면) 반영된다.
+name: 빠알리-싱할라 사전 새 자료 확인
+
+on:
+  schedule:
+    - cron: "17 3 7 * *" # 매달 7일 03:17 (UTC) = 한국 시각 12:17
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: 최신 자료 받기
+        run: |
+          git clone -q --depth 1 https://github.com/pnfo/pali-sinhala-dictionary /tmp/psd
+          cp /tmp/psd/buddhadatta_dict.json /tmp/psd/sumangala_dict.json content/pali-sinhala/
+          (cd /tmp/psd && git log -1 --format='{"commit":"%H","date":"%ad"}' --date=short) > content/pali-sinhala/version.json
+          cat content/pali-sinhala/version.json
+
+      - name: 바뀐 점이 있으면 변경 요청 열기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- content/pali-sinhala/buddhadatta_dict.json content/pali-sinhala/sumangala_dict.json; then
+            echo "바뀐 것이 없습니다."
+            exit 0
+          fi
+          pnpm -s build:peu -- sibd
+          pnpm -s build:peu -- sisu
+          date="$(node -p 'require("./content/pali-sinhala/version.json").date')"
+          stat="$(git diff --stat -- content/pali-sinhala | tail -1)"
+          branch="sinhala-update-$date"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add content/pali-sinhala public/data/dict/sibd public/data/dict/sisu public/data/dict/index.json
+          git commit -qm "사전: 빠알리-싱할라 새 자료 ($date, pnfo/pali-sinhala-dictionary)"
+          git push -q origin "$branch"
+          title="빠알리-싱할라 사전 새 자료 ($date)"
+          body="$(printf 'Path Nirvana Foundation 저장소의 %s 자료로 빠알리-싱할라 사전(Buddhadatta·Sumaṅgala)을 다시 만들었습니다. **아직 사이트에는 반영되지 않았습니다.**\n\n바뀐 양: %s\n\n- 넣으려면 Claude 에게 \"싱할라 사전 새 자료 넣어줘\"라고 하거나, 이 변경 요청을 Merge 하세요.\n- 넣지 않으려면 이 변경 요청을 닫으세요.' "$date" "$stat")"
+          if ! gh pr create --base main --head "$branch" --title "$title" --body "$body"; then
+            gh issue create --title "$title" --body "$body
+
+          (변경 요청을 자동으로 열지 못했습니다. 바뀐 내용은 브랜치 \`$branch\` 에 있습니다: https://github.com/${{ github.repository }}/compare/main...$branch)"
+          fi

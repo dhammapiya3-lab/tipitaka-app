@@ -589,6 +589,8 @@ const PLAIN_DICTIONARIES: PlainDictionaryId[] = [
   "pts",
   "peu",
   "mm",
+  "sibd",
+  "sisu",
 ];
 
 async function lookupIds(
@@ -648,6 +650,8 @@ export async function lookupWord(
     mm: [],
     peu: [],
     cone: [],
+    sibd: [],
+    sisu: [],
   };
   if (!typed) return empty;
 

@@ -3,7 +3,7 @@ import { TopLevelPage } from "@/components/layout/page-header";
 import { EditionInfoDialog } from "@/components/about/edition-details";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LANGUAGE_LABELS, LICENSE_UNKNOWN } from "@/lib/constants";
-import { allSuttas, editions, peuVersion } from "@/lib/data";
+import { allSuttas, editions, peuVersion, sinhalaVersion } from "@/lib/data";
 import { suttaLabel } from "@/lib/format";
 
 export const metadata: Metadata = { title: "정보" };
@@ -313,6 +313,20 @@ export default function AboutPage() {
           <p>
             TPR은 빠알리 삼장을 읽으며 여러 사전을 바로 찾아볼 수 있는 무료
             앱입니다. Windows·Mac·Linux·iOS·Android에서 쓸 수 있습니다.
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">
+              빠알리-싱할라 사전 (Buddhadatta · Sumaṅgala)
+            </span>{" "}
+            — Path Nirvana Foundation이 정리해 GitHub
+            (github.com/pnfo/pali-sinhala-dictionary)에 공개한 두 사전입니다.
+            Buddhadatta 사전 약 1만 9천 항목, Sumaṅgala 사전 약 2만 3천
+            항목이며, 뜻풀이는 싱할라어입니다. 싱할라 글자 표제어를 로마자로 옮겨
+            찾게 했고, 뜻풀이 첫 줄에 원래 표제어(와 원서 쪽)를 그대로 둡니다.
+            사용 허락: Path Nirvana Foundation이 사용을 허락하며, 계속 오류를
+            고치고 있으니 저장소의 최신 자료를 쓰도록 요청했습니다(2026-11). 그래서
+            매달 저장소의 새 자료를 확인합니다. 저장소에는 따로 라이선스 파일이
+            없습니다. (사용한 판: {sinhalaVersion})
           </p>
           <p>
             <span className="font-semibold text-foreground">

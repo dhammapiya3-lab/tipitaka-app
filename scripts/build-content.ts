@@ -1185,6 +1185,15 @@ writeFileSync(
     z.object({ date: z.string() }).parse(JSON.parse(readFileSync(path.join(process.cwd(), "content/peu-version.json"), "utf8"))),
   ),
 );
+// 빠알리-싱할라 사전 자료 날짜 (매달 자동 확인이 content/pali-sinhala/version.json 을 고친다)
+writeFileSync(
+  path.join(OUT_DATA, "sinhala-version.json"),
+  JSON.stringify(
+    z
+      .object({ date: z.string(), commit: z.string() })
+      .parse(JSON.parse(readFileSync(path.join(process.cwd(), "content/pali-sinhala/version.json"), "utf8"))),
+  ),
+);
 // 경 읽기 화면용 목록 — 본문이 있는 경만, 목록 순서대로 (SuttaIndexEntry)
 const suttaIndex = catalog.nikayas.flatMap((n) => {
   const entries: SuttaIndexEntry[] = [];

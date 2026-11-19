@@ -3,6 +3,8 @@
  *
  *   PEU_DIR=압축을 푼 폴더 pnpm build:peu                       Pali English Ultimate (StarDict: peu.ifo · .idx · .dict.dz · .syn.dz)
  *   CONE_TAB=cone.txt pnpm build:peu -- cone                       Margaret Cone, A Dictionary of Pāli (MDict 를 pyglossary 로 Tabfile 로 바꾼 것)
+ *   pnpm build:peu -- sibd / sisu                                  빠알리-싱할라 사전 (Path Nirvana Foundation, https://github.com/pnfo/pali-sinhala-dictionary)
+ *       sibd = Buddhadatta (buddhadatta_dict.json) · sisu = Sumangala (sumangala_dict.json) — content/pali-sinhala/ 에 받아 둔 것
  *       (pyglossary cone-mdict.mdx cone.txt --read-format=OctopusMdict --write-format=Tabfile)
  *
  * - 『빠알리-미얀마 아비단(Pāḷi Myanmar Abhidhān)』의 영어 번역 요약본 (사람 번역 약 80%, 나머지 기계 번역).
@@ -38,7 +40,8 @@ function htmlToText(html: string): string {
     .trim();
 }
 
-const MODE = process.argv.slice(2).includes("cone") ? "cone" : "peu";
+const ARGS = process.argv.slice(2);
+const MODE = ARGS.includes("cone") ? "cone" : ARGS.includes("sibd") ? "sibd" : ARGS.includes("sisu") ? "sisu" : "peu";
 const entries = new Map<string, string[]>();
 const add = (word: string, text: string) => {
   const key = normalizeWord(word);
@@ -49,6 +52,7 @@ const add = (word: string, text: string) => {
 };
 let info: Record<string, string> = {};
 if (MODE === "cone") readCone();
+else if (MODE === "sibd" || MODE === "sisu") readSinhala(MODE);
 else if (process.env.PEU_DUMP) readPeuDump(process.env.PEU_DUMP);
 else readPeu();
 
@@ -119,6 +123,62 @@ function readPeuDump(file: string) {
   console.log(`PEU(pm12e 자료): 표제어 ${n.toLocaleString()}개 · 받은 날 ${date}`);
 }
 
+/** 싱할라 글자 → 로마자 빠알리 (표제어 열쇠용 — 뜻풀이는 싱할라 글 그대로) */
+function sinhalaToRoman(text: string): string {
+  const SI_VOWEL: Record<string, string> = { "අ": "a", "ආ": "ā", "ඉ": "i", "ඊ": "ī", "උ": "u", "ඌ": "ū", "එ": "e", "ඒ": "e", "ඔ": "o", "ඕ": "o" };
+  const SI_SIGN: Record<string, string> = { "ා": "ā", "ි": "i", "ී": "ī", "ු": "u", "ූ": "ū", "ෙ": "e", "ේ": "e", "ො": "o", "ෝ": "o", "ෛ": "ai" };
+  const SI_CONS: Record<string, string> = {
+    "ක": "k", "ඛ": "kh", "ග": "g", "ඝ": "gh", "ඞ": "ṅ", "ච": "c", "ඡ": "ch", "ජ": "j", "ඣ": "jh", "ඤ": "ñ",
+    "ට": "ṭ", "ඨ": "ṭh", "ඩ": "ḍ", "ඪ": "ḍh", "ණ": "ṇ", "ත": "t", "ථ": "th", "ද": "d", "ධ": "dh", "න": "n",
+    "ප": "p", "ඵ": "ph", "බ": "b", "භ": "bh", "ම": "m", "ය": "y", "ර": "r", "ල": "l", "ව": "v", "ස": "s",
+    "හ": "h", "ළ": "ḷ", "ශ": "ś", "ෂ": "ṣ", "ඟ": "ṅg", "ඬ": "ṇḍ", "ඹ": "mb",
+  };
+  let out = "";
+  const chars = [...text.replace(/[\u200C\u200D]/g, "")];
+  for (let i = 0; i < chars.length; i++) {
+    const c = chars[i]!;
+    const cons = SI_CONS[c];
+    if (cons !== undefined) {
+      const next = chars[i + 1];
+      if (next === "්") {
+        out += cons;
+        i++;
+      } else if (next && SI_SIGN[next] !== undefined) {
+        out += cons + SI_SIGN[next];
+        i++;
+      } else out += cons + "a";
+    } else if (SI_VOWEL[c] !== undefined) out += SI_VOWEL[c];
+    else if (c === "ං") out += "ṃ";
+    else out += c;
+  }
+  return out;
+}
+
+/** 빠알리-싱할라 사전 — [싱할라 표제어, HTML 뜻풀이(, 쪽)] 목록 */
+function readSinhala(mode: "sibd" | "sisu") {
+  const dir = process.env.SINHALA_DIR ?? path.join(process.cwd(), "content", "pali-sinhala");
+  const file = mode === "sibd" ? "buddhadatta_dict.json" : "sumangala_dict.json";
+  const rows = JSON.parse(readFileSync(path.join(dir, file), "utf8")) as unknown;
+  if (!Array.isArray(rows)) throw new Error(`${file}: 목록이 아닙니다`);
+  let n = 0;
+  for (const row of rows) {
+    if (!Array.isArray(row) || typeof row[0] !== "string" || typeof row[1] !== "string")
+      throw new Error(`${file}: 꼴이 다른 항목 ${JSON.stringify(row).slice(0, 80)}`);
+    const [head, html, page] = row as [string, string, number | undefined];
+    // 뜻풀이 앞에 원래 싱할라 표제어(와 쪽)를 그대로 붙여 둔다 — 로마자 열쇠만으로는 원문 표기를 알 수 없으니
+    const text = `${head}${typeof page === "number" ? ` (${page}쪽)` : ""}\n${htmlToText(html)}`;
+    // 표제어 "A, B" · "A (B)" · "A = B" → 꼴마다 열쇠
+    for (const form of head.split(/[,=]/)) {
+      const bare = form.replace(/\([^)]*\)/g, "").trim();
+      if (bare) add(sinhalaToRoman(bare), text);
+    }
+    n++;
+  }
+  const v = JSON.parse(readFileSync(path.join(dir, "version.json"), "utf8")) as { date?: string; commit?: string };
+  info = { website: "https://github.com/pnfo/pali-sinhala-dictionary", date: v.date ?? "", commit: v.commit ?? "" };
+  console.log(`${mode}: 항목 ${n.toLocaleString()}개 · ${info.date}`);
+}
+
 /** Margaret Cone — Tabfile 한 줄: "1abala|abala<탭>HTML(\n 은 글자 \ n)" */
 function readCone() {
   const file = process.env.CONE_TAB ?? path.join(process.cwd(), "content", "cone", "cone.txt");
@@ -185,7 +245,7 @@ console.log(`PEU: 표제어 ${words.length.toLocaleString()}개`);
 }
 
 // 조각 나누기 — 큰 사전(Cone)은 앞글자 대신 해시로 고르게 나눈다 (파일 수를 적게: 호스팅 한도 2만 개)
-const HASHED = MODE === "cone" ? 256 : 128;
+const HASHED = MODE === "cone" ? 256 : MODE === "peu" ? 128 : 32;
 const hashShard = (word: string) => {
   let h = 0;
   for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
@@ -229,7 +289,14 @@ const index = JSON.parse(readFileSync(indexPath, "utf8")) as Record<string, unkn
 };
 index.dictionaries = [
   ...index.dictionaries.filter((d) => d.id !== MODE),
-  MODE === "cone"
+  MODE === "sibd" || MODE === "sisu"
+    ? {
+        id: MODE,
+        label: MODE === "sibd" ? "Pāḷi–Sinhala (Buddhadatta)" : "Pāḷi–Sinhala (Sumaṅgala)",
+        license: "Path Nirvana Foundation 사용 허락 (2026-11) — 저장소의 최신 자료를 쓰도록",
+        source: `${MODE === "sibd" ? "Buddhadatta 빠알리-싱할라 사전 (buddhadatta_dict.json)" : "Sumaṅgala 빠알리-싱할라 사전 (sumangala_dict.json)"} · Path Nirvana Foundation · ${info.website} · ${info.date} (${String(info.commit).slice(0, 7)})`,
+      }
+    : MODE === "cone"
     ? {
         id: "cone",
         label: "A Dictionary of Pāli (Cone)",

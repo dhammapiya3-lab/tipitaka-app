@@ -172,6 +172,8 @@ export const dictionaryIdSchema = z.enum([
   "mm",
   "peu",
   "cone",
+  "sibd",
+  "sisu",
 ]);
 
 export const dictionaryIndexSchema: z.ZodType<DictionaryIndex> = z.object({
@@ -194,6 +196,9 @@ export const dictionaryIndexSchema: z.ZodType<DictionaryIndex> = z.object({
     peu: z.array(z.string()).default([]),
     /** Margaret Cone — 따로 만든다 (scripts/build-peu.ts cone) */
     cone: z.array(z.string()).default([]),
+    /** 빠알리-싱할라 (Buddhadatta · Sumaṅgala) — scripts/build-peu.ts sibd / sisu */
+    sibd: z.array(z.string()).default([]),
+    sisu: z.array(z.string()).default([]),
   }),
   dpdShardSize: z.number().int().positive(),
 });

@@ -82,6 +82,20 @@ const PLAIN_SECTIONS: {
     credit:
       "Tipiṭaka Pāḷi-Myanmar Abhidhān — 1950년대부터 2023년까지 미얀마 학승들이 편찬한 삼장 빠알리-미얀마어 사전(25권). Pn Daza 스님이 만드신 Tipiṭaka App과 Tipiṭaka Abidan의 자료를 가져와 다듬었습니다.",
   },
+  {
+    id: "sibd",
+    licensed: true,
+    lang: "si",
+    credit:
+      "빠알리-싱할라 사전 (Buddhadatta) — Path Nirvana Foundation이 정리해 GitHub(pnfo/pali-sinhala-dictionary)에 공개한 자료입니다. Path Nirvana Foundation의 사용 허락을 받았습니다(2026-11). 뜻풀이 첫 줄은 싱할라 글자 원래 표제어입니다.",
+  },
+  {
+    id: "sisu",
+    licensed: true,
+    lang: "si",
+    credit:
+      "빠알리-싱할라 사전 (Sumaṅgala) — Path Nirvana Foundation이 정리해 GitHub(pnfo/pali-sinhala-dictionary)에 공개한 자료입니다. Path Nirvana Foundation의 사용 허락을 받았습니다(2026-11). 뜻풀이 첫 줄은 싱할라 글자 원래 표제어와 원서 쪽입니다.",
+  },
 ];
 
 type State =
