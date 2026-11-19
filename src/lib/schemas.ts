@@ -295,7 +295,7 @@ const extraItemSchema = z.object({
   note: z.string().nullish(),
   suttaId: z
     .string()
-    .regex(/^[a-z]+[\d.\-]*$/)
+    .regex(/^[a-z][a-z\d.\-]*$/)
     .nullish(),
   url: z.url().nullish(),
   by: z.string().nullish(),

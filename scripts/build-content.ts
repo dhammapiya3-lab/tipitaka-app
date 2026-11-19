@@ -1710,14 +1710,22 @@ function addDhpStoryLinks(
     .map((l) => l.split("\t"));
   const push = (id: string, item: ExtraItem) => {
     const kinds = (extras[id] ??= {});
-    (kinds.refs ??= []).push(item);
+    const refs = (kinds.refs ??= []);
+    // 같은 이야기로 가는 같은 링크는 한 번만 (예: 율장 소품 v.21 이 니까야 목록과 율장 목록에 함께 있음)
+    if (refs.some((r) => r.title === item.title && r.suttaId === item.suttaId && r.anchor === item.anchor && r.note === item.note)) return;
+    refs.push(item);
   };
   const dhpSide: [number, string, ExtraItem][] = [];
   for (const [i, cols] of rows.entries()) {
-    const [verses, target, layer, name, note = ""] = cols;
+    const [verses, targetCol, layer, name, note = ""] = cols;
+    // 율장(층 vinaya): 후보 경 번호 가운데 사이트에 있는 것 — 아직 없으면 "-" (이름만, 율장이 들어오면 저절로 링크)
+    const target =
+      layer === "vinaya"
+        ? (targetCol?.split("|").find((id) => known.has(id)) ?? "-")
+        : targetCol;
     const first = verses?.split("~")[0];
     const story = first ? stories[first] : undefined;
-    if (cols.length < 4 || !verses || !target || !layer || !name || !story) {
+    if (cols.length < 4 || !verses || !targetCol || !target || !layer || !name || !story) {
       errors.push(`content/dhp-story-links.tsv ${i + 1}번째 줄: 칸이 모자라거나 게송 ${first} 이야기 자리를 모릅니다`);
       continue;
     }
@@ -1734,7 +1742,7 @@ function addDhpStoryLinks(
         title: `${verseLabel} — ${name}${linked && layer === "attha" ? " (주석서)" : ""}`,
         ...(linked ? { suttaId: target } : {}),
         ...(linked && layer === "attha" ? { layer: "attha" as const } : {}),
-        note: [linked ? null : "이 사이트에는 아직 없는 문헌", note.trim() || null]
+        note: [linked ? null : "이 사이트에는 아직 없는 문헌 — 등록되면 링크가 생깁니다", note.trim() || null]
           .filter(Boolean)
           .join(" · ") || null,
       },
