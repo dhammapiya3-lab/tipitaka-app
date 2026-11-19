@@ -3,7 +3,7 @@
  *
  * content/mywiktionary.json — 미얀마어 위키낱말사전 (scripts/import-mywiktionary.py, CC BY-SA 4.0)
  * content/mep.json          — 우 호크 세인 『미얀마어-영어-빠알리어 사전』 (scripts/import-mep.py, Pn Daza 스님 MEP Dictionary 앱 자료)
- *   → public/data/mywikt/words.json  두 사전의 낱말 목록 (미얀마어 글 속 낱말 경계 — 가장 긴 낱말부터 맞춘다)
+ *   → public/data/mywikt/words.txt   두 사전의 낱말 목록 (한 줄에 하나 — JSON 보다 휴대폰에서 빨리 읽힌다) (미얀마어 글 속 낱말 경계 — 가장 긴 낱말부터 맞춘다)
  *   → public/data/mywikt/h<n>.json   낱말 → { w?: [[품사, 미얀마어 뜻풀이, 용례, 영어 뜻], …], m?: [[표제어, 영어 뜻, 빠알리어 뜻, 쪽], …] }
  *   → public/data/mywikt/info.json   두 자료의 날짜
  * MEP 표제어 "ကင်းသည်, ကင်းသော (၁)" 은 쉼표로 나눈 꼴마다, 괄호 속 번호·메모와 빈칸을 뺀 열쇠로 찾게 한다 (글은 그대로).
@@ -62,7 +62,7 @@ const words = shards.flatMap((s) => Object.keys(s)).sort();
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 shards.forEach((s, n) => writeFileSync(path.join(OUT, `h${n}.json`), JSON.stringify(s)));
-writeFileSync(path.join(OUT, "words.json"), JSON.stringify(words));
+writeFileSync(path.join(OUT, "words.txt"), words.join("\n"));
 writeFileSync(
   path.join(OUT, "info.json"),
   JSON.stringify({ wiktionary: wiktDate, mep: mep._date, words: words.length }),

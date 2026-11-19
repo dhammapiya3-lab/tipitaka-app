@@ -7,7 +7,7 @@
 import { z } from "zod";
 import { cleanLemma, foldPali, normalizeWord, shardOf } from "@/lib/pali";
 import { unseal } from "@/lib/seal";
-import { mywiktHash } from "@/lib/burmese";
+import { type BurmeseDict, makeBurmeseDictSorted, mywiktHash } from "@/lib/burmese";
 import {
   intersectHits,
   matchPrefix,
@@ -794,15 +794,18 @@ const burmeseEntrySchema = z.object({
   m: z.array(z.tuple([z.string(), z.string(), z.string(), z.number()])).optional(),
 });
 export type BurmeseEntry = z.infer<typeof burmeseEntrySchema>;
-let burmeseWordsPromise: Promise<{ words: Set<string>; maxLen: number }> | null = null;
+let burmeseWordsPromise: Promise<BurmeseDict> | null = null;
 
-/** 낱말 목록 (낱말 경계 찾기용) — 처음 한 번만 받는다 */
-export function fetchBurmeseWords(): Promise<{ words: Set<string>; maxLen: number }> {
+/** 낱말 목록 (낱말 경계 찾기용) — 처음 한 번만 받는다. 한 줄에 낱말 하나인 글 파일 (8만여 개라 JSON·zod 대신 글자 검사 한 번) */
+export function fetchBurmeseWords(): Promise<BurmeseDict> {
   if (!burmeseWordsPromise) {
-    burmeseWordsPromise = getJson(`${MYWIKT_BASE}/words.json`)
-      .then((data) => {
-        const list = z.array(z.string()).parse(data);
-        return { words: new Set(list), maxLen: Math.max(2, ...list.map((w) => w.length)) };
+    burmeseWordsPromise = fetch(`${MYWIKT_BASE}/words.txt`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`낱말 목록을 받지 못했습니다 (${res.status})`);
+        const text = await res.text();
+        if (!/^[\u1000-\u109F\u200C\u200D\n]*$/u.test(text))
+          throw new Error("낱말 목록에 미얀마 글자가 아닌 것이 있습니다");
+        return makeBurmeseDictSorted(text.split("\n"));
       })
       .catch((e: unknown) => {
         burmeseWordsPromise = null;

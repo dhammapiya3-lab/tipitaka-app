@@ -15,12 +15,55 @@ export type BurmesePiece = { text: string; word: boolean };
 
 const RUN = /[\u1000-\u109F\u200C\u200D]+/gu;
 
+/**
+ * 낱말 목록 + 첫 글자마다 가장 긴 낱말 길이 (맞춰 볼 길이를 줄여 빠르게).
+ * 8만여 개를 Set 에 넣는 데도 휴대폰에서는 눈에 띄게 걸려서, 정렬된 목록을 이분 탐색한다.
+ */
+export type BurmeseDict = { has: (w: string) => boolean; maxByFirst: Map<string, number> };
+
+export function makeBurmeseDict(list: string[]): BurmeseDict {
+  const sorted = list.slice().sort();
+  const maxByFirst = new Map<string, number>();
+  for (const w of sorted) {
+    const c = w[0];
+    if (c !== undefined && (maxByFirst.get(c) ?? 0) < w.length) maxByFirst.set(c, w.length);
+  }
+  return { has: (w) => sortedHas(sorted, w), maxByFirst };
+}
+
+/** 이미 정렬된 목록(빌드에서 정렬해 둠)을 그대로 쓴다 — 다시 정렬하지 않는다 */
+export function makeBurmeseDictSorted(sorted: string[]): BurmeseDict {
+  const maxByFirst = new Map<string, number>();
+  let first = "";
+  let max = 0;
+  for (const w of sorted) {
+    const c = w[0] ?? "";
+    if (c !== first) {
+      if (first) maxByFirst.set(first, max);
+      first = c;
+      max = 0;
+    }
+    if (w.length > max) max = w.length;
+  }
+  if (first) maxByFirst.set(first, max);
+  return { has: (w) => sortedHas(sorted, w), maxByFirst };
+}
+
+function sortedHas(sorted: string[], w: string): boolean {
+  let lo = 0;
+  let hi = sorted.length - 1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    const v = sorted[mid]!;
+    if (v === w) return true;
+    if (v < w) lo = mid + 1;
+    else hi = mid - 1;
+  }
+  return false;
+}
+
 /** 글을 [낱말 / 낱말 아님] 조각으로. 두 글자 이상인 사전 낱말만 낱말로 친다. */
-export function segmentBurmese(
-  text: string,
-  words: Set<string>,
-  maxLen: number,
-): BurmesePiece[] {
+export function segmentBurmese(text: string, dict: BurmeseDict): BurmesePiece[] {
   const out: BurmesePiece[] = [];
   const plain = (t: string) => {
     if (!t) return;
@@ -35,8 +78,9 @@ export function segmentBurmese(
     let i = 0;
     while (i < run.length) {
       let hit = 0;
-      for (let len = Math.min(maxLen, run.length - i); len >= 2; len--) {
-        if (words.has(run.slice(i, i + len))) {
+      const max = Math.min(dict.maxByFirst.get(run[i]!) ?? 0, run.length - i);
+      for (let len = max; len >= 2; len--) {
+        if (len >= 2 && dict.has(run.slice(i, i + len))) {
           hit = len;
           break;
         }

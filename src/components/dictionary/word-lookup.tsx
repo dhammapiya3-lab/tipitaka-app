@@ -767,6 +767,11 @@ function PlainCard({
       <p lang="pi" className="mb-2 font-bold">
         {entry.headword}
       </p>
+      {lang === "my" && !onSearch && (
+        <p className="-mt-1 mb-2 text-xs text-muted-foreground">
+          미얀마어 낱말을 누르면 뜻이 나옵니다
+        </p>
+      )}
       <div className="flex flex-col gap-3">
         {entry.definitions.map((text, i) => (
           <p

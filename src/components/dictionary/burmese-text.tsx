@@ -5,7 +5,7 @@
  * 낱말 경계는 사전에 있는 가장 긴 낱말부터 맞춰 찾는다(src/lib/burmese.ts). 사전에 없는 글자는 그대로.
  * 글 자체는 바꾸지 않는다 — 조각들을 이으면 원래 글과 같다.
  */
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { segmentBurmese } from "@/lib/burmese";
 import {
   type BurmeseEntry,
@@ -24,25 +24,66 @@ const POS: Record<string, string> = {
   interj: "감탄사",
 };
 
+/** 화면이 한가할 때 하기 */
+function whenIdle(fn: () => void): () => void {
+  if (typeof window.requestIdleCallback === "function") {
+    const id = window.requestIdleCallback(fn, { timeout: 3000 });
+    return () => window.cancelIdleCallback(id);
+  }
+  const id = window.setTimeout(fn, 200);
+  return () => window.clearTimeout(id);
+}
+
+/** 누른 자리의 글자 위치 (이 span 안의 글자 순번) — 브라우저마다 이름이 다르다 */
+function offsetAt(e: React.MouseEvent<HTMLElement>): number | null {
+  const doc = document as Document & {
+    caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node; offset: number } | null;
+    caretRangeFromPoint?: (x: number, y: number) => Range | null;
+  };
+  let node: Node | null = null;
+  let offset = 0;
+  const pos = doc.caretPositionFromPoint?.(e.clientX, e.clientY);
+  if (pos) {
+    node = pos.offsetNode;
+    offset = pos.offset;
+  } else {
+    const range = doc.caretRangeFromPoint?.(e.clientX, e.clientY);
+    if (range) {
+      node = range.startContainer;
+      offset = range.startOffset;
+    }
+  }
+  if (!node || !e.currentTarget.contains(node)) return null;
+  // span 안 앞쪽 글자 수를 더한다 (고른 낱말을 표시하느라 글이 여러 조각일 수 있다)
+  let before = 0;
+  const walker = document.createTreeWalker(e.currentTarget, NodeFilter.SHOW_TEXT);
+  for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+    if (t === node) return before + offset;
+    before += t.textContent?.length ?? 0;
+  }
+  return null;
+}
+
+/**
+ * 글은 통째로 그대로 그리고(낱말마다 단추를 만들지 않아 가볍다), 누른 자리에서만 낱말을 찾는다.
+ * 낱말 목록은 화면이 한가할 때 미리 받아 둔다.
+ */
 export function BurmeseText({ text }: { text: string }) {
-  const [dict, setDict] = useState<{ words: Set<string>; maxLen: number } | null>(null);
-  const [picked, setPicked] = useState<string | null>(null);
+  const [picked, setPicked] = useState<{ word: string; at: number } | null>(null);
   const [senses, setSenses] = useState<BurmeseEntry | "loading" | "error">("loading");
 
-  useEffect(() => {
-    let alive = true;
-    fetchBurmeseWords()
-      .then((d) => alive && setDict(d))
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, []);
+  useEffect(
+    () =>
+      whenIdle(() => {
+        fetchBurmeseWords().catch(() => {});
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (!picked) return;
     let alive = true;
-    fetchBurmeseEntry(picked)
+    fetchBurmeseEntry(picked.word)
       .then((s) => alive && setSenses(s))
       .catch(() => alive && setSenses("error"));
     return () => {
@@ -50,36 +91,50 @@ export function BurmeseText({ text }: { text: string }) {
     };
   }, [picked]);
 
-  const pieces = useMemo(
-    () => (dict ? segmentBurmese(text, dict.words, dict.maxLen) : null),
-    [text, dict],
-  );
+  const onTap = async (e: React.MouseEvent<HTMLSpanElement>) => {
+    const at = offsetAt(e);
+    if (at === null) return;
+    const dict = await fetchBurmeseWords().catch(() => null);
+    if (!dict) return;
+    // 누른 글자가 든 미얀마 글 덩어리만 나눠 본다
+    let s = at;
+    let t = at;
+    const isMy = (c: string | undefined) => !!c && /[\u1000-\u109F\u200C\u200D]/u.test(c);
+    if (!isMy(text[at])) return;
+    while (s > 0 && isMy(text[s - 1])) s--;
+    while (t < text.length && isMy(text[t])) t++;
+    let pos = s;
+    for (const piece of segmentBurmese(text.slice(s, t), dict)) {
+      const end = pos + piece.text.length;
+      if (at < end) {
+        if (!piece.word) return;
+        setSenses("loading");
+        setPicked((p) => (p && p.at === pos ? null : { word: piece.text, at: pos }));
+        return;
+      }
+      pos = end;
+    }
+  };
 
-  if (!pieces) return <>{text}</>;
+  const mark = picked && text.slice(picked.at, picked.at + picked.word.length) === picked.word;
   return (
     <>
-      {pieces.map((p, i) =>
-        p.word ? (
-          <button
-            key={i}
-            type="button"
-            onClick={() => {
-              setSenses("loading");
-              setPicked((w) => (w === p.text ? null : p.text));
-            }}
-            className={`rounded-sm underline decoration-dotted decoration-muted-foreground/50 underline-offset-4 hover:bg-primary/10 ${picked === p.text ? "bg-primary/15" : ""}`}
-          >
-            {p.text}
-          </button>
+      <span onClick={onTap} className="cursor-pointer" title="미얀마어 낱말을 누르면 뜻이 나옵니다">
+        {mark ? (
+          <>
+            {text.slice(0, picked.at)}
+            <mark className="rounded-sm bg-primary/20 text-inherit">{picked.word}</mark>
+            {text.slice(picked.at + picked.word.length)}
+          </>
         ) : (
-          <Fragment key={i}>{p.text}</Fragment>
-        ),
-      )}
+          text
+        )}
+      </span>
       {picked && (
         <span className="mt-2 block rounded-lg border bg-muted/40 p-3 text-sm">
           <span className="flex items-baseline justify-between gap-2">
             <span lang="my" className="font-semibold text-foreground">
-              {picked}
+              {picked.word}
             </span>
             <button
               type="button"
