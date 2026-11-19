@@ -12,7 +12,7 @@ export const DEFAULT_EDITIONS = [PALI_EDITION, "kor-kimjaeseong-calmvoice"];
 
 /** 처음 쓸 사전: DPD + K-PTS 한국어 (PTS·미얀마 사전은 사전 선택에서 켠다) */
 export const DEFAULT_DICTIONARIES: DictionaryId[] = ["dpd", "kpts"];
-export const DICTIONARY_ORDER: DictionaryId[] = ["dpd", "kpts", "cone", "pts", "peu", "mm", "sibd", "sisu"];
+export const DICTIONARY_ORDER: DictionaryId[] = ["dpd", "kpts", "pts", "cone", "peu", "mm", "sibd", "sisu"];
 export const DICTIONARY_LABELS: Record<DictionaryId, string> = {
   dpd: "Digital Pāḷi Dictionary",
   kpts: "K-PTS 빠알리–한국어",

@@ -585,8 +585,8 @@ export async function analyzeParts(parts: string[]): Promise<PartAnalysis[]> {
 
 const PLAIN_DICTIONARIES: PlainDictionaryId[] = [
   "kpts",
-  "cone",
   "pts",
+  "cone",
   "peu",
   "mm",
   "sibd",

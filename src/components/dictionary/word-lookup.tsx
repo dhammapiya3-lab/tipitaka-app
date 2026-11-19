@@ -57,18 +57,18 @@ const PLAIN_SECTIONS: {
       "K-PTSdic. 한글빠알리사전 · 원문 표기: 선운사대학원용 초역, 박경숙 · 편집: 빅쿠 재연, 환성, 성륜, 성각, 진일, 법이, 원경, 대산, 보적, 무진, 원우 · 사용 허락: 자비선사 초기불교승가대학원(법인 스님)의 법보시 공유 허락을 받음",
   },
   {
-    id: "cone",
-    licensed: true,
-    lang: "en",
-    credit:
-      "A Dictionary of Pāli I–III (a–bh) — Margaret Cone 지음. © Pali Text Society. Pali Text Society가 gandhari.org/dop에서 무료로 공개한 자료입니다. Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
-  },
-  {
     id: "pts",
     licensed: true,
     lang: "en",
     credit:
       "Pāḷi Text Society’s Pāḷi-English Dictionary (PTS PED) — K.R. Norman, William Pruitt, Peter Jackson이 교정하여 The Pāḷi Text Society에서 펴낸 2015년 수정 재판을 바탕으로, Buddhadust가 디지털로 옮긴 PTS 사전 자료를 가져와 다듬었습니다. (CC BY-NC 3.0)",
+  },
+  {
+    id: "cone",
+    licensed: true,
+    lang: "en",
+    credit:
+      "A Dictionary of Pāli I–III (a–bh) — Margaret Cone 지음. © Pali Text Society. Pali Text Society가 gandhari.org/dop에서 무료로 공개한 자료입니다. Digital Pāḷi Dictionary 사이트에서 공개된 자료를 가져왔습니다.",
   },
   {
     id: "peu",
