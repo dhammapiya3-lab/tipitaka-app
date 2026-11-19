@@ -19,7 +19,12 @@ const RUN = /[\u1000-\u109F\u200C\u200D]+/gu;
  * 낱말 목록 + 첫 글자마다 가장 긴 낱말 길이 (맞춰 볼 길이를 줄여 빠르게).
  * 8만여 개를 Set 에 넣는 데도 휴대폰에서는 눈에 띄게 걸려서, 정렬된 목록을 이분 탐색한다.
  */
-export type BurmeseDict = { has: (w: string) => boolean; maxByFirst: Map<string, number> };
+export type BurmeseDict = {
+  has: (w: string) => boolean;
+  maxByFirst: Map<string, number>;
+  /** 이 글자로 시작하는 낱말 (사전 검색의 추천) */
+  startingWith: (prefix: string, limit: number) => string[];
+};
 
 export function makeBurmeseDict(list: string[]): BurmeseDict {
   const sorted = list.slice().sort();
@@ -28,7 +33,29 @@ export function makeBurmeseDict(list: string[]): BurmeseDict {
     const c = w[0];
     if (c !== undefined && (maxByFirst.get(c) ?? 0) < w.length) maxByFirst.set(c, w.length);
   }
-  return { has: (w) => sortedHas(sorted, w), maxByFirst };
+  return makeDict(sorted, maxByFirst);
+}
+
+function makeDict(sorted: string[], maxByFirst: Map<string, number>): BurmeseDict {
+  return {
+    has: (w) => sortedHas(sorted, w),
+    maxByFirst,
+    startingWith: (prefix, limit) => {
+      let lo = 0;
+      let hi = sorted.length;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (sorted[mid]! < prefix) lo = mid + 1;
+        else hi = mid;
+      }
+      const out: string[] = [];
+      for (let i = lo; i < sorted.length && out.length < limit; i++) {
+        if (!sorted[i]!.startsWith(prefix)) break;
+        out.push(sorted[i]!);
+      }
+      return out;
+    },
+  };
 }
 
 /** 이미 정렬된 목록(빌드에서 정렬해 둠)을 그대로 쓴다 — 다시 정렬하지 않는다 */
@@ -46,7 +73,7 @@ export function makeBurmeseDictSorted(sorted: string[]): BurmeseDict {
     if (w.length > max) max = w.length;
   }
   if (first) maxByFirst.set(first, max);
-  return { has: (w) => sortedHas(sorted, w), maxByFirst };
+  return makeDict(sorted, maxByFirst);
 }
 
 function sortedHas(sorted: string[], w: string): boolean {

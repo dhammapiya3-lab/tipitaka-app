@@ -3,6 +3,7 @@
 import { BookA, History, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { BurmeseSearchResult, hasBurmese } from "@/components/dictionary/burmese-text";
 import { DictionaryPicker, WordLookupResult } from "@/components/dictionary/word-lookup";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ export function DictionaryView() {
             lang="pi"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="빠알리어 단어 (예: satipatthana, bhikkhave)"
+            placeholder="빠알리어·미얀마어 단어 (예: satipatthana, ကုသိုလ်)"
             aria-label="찾을 단어"
             className="h-10 pl-9"
           />
@@ -52,13 +53,15 @@ export function DictionaryView() {
       </form>
       <DictionaryPicker />
       <RecentWords onSearch={search} />
-      {searched ? (
+      {searched && hasBurmese(searched) ? (
+        <BurmeseSearchResult query={searched} onSearch={search} />
+      ) : searched ? (
         <WordLookupResult word={searched} onSearch={search} />
       ) : (
         <EmptyState
           icon={BookA}
-          title="검색할 빠알리어 단어를 넣으세요"
-          description="어미가 바뀐 형태도 찾습니다. 빠알리 자판이 없으면 ā·ṭ·ṃ 대신 a·t·m 으로 쳐도 됩니다."
+          title="검색할 빠알리어·미얀마어 단어를 넣으세요"
+          description="어미가 바뀐 형태도 찾습니다. 빠알리 자판이 없으면 ā·ṭ·ṃ 대신 a·t·m 으로 쳐도 됩니다. 미얀마 글자로 치면 미얀마어 사전(우 호크 세인·위키낱말사전)에서 찾습니다."
         />
       )}
     </div>

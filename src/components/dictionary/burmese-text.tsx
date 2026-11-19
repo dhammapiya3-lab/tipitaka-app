@@ -149,63 +149,162 @@ export function BurmeseText({ text }: { text: string }) {
           ) : senses === "error" ? (
             <span className="block text-muted-foreground">풀이를 받지 못했습니다.</span>
           ) : (
-            <>
-              {(senses.m ?? []).length > 0 && (
-                <span className="mt-1.5 block">
-                  <span className="block text-xs font-semibold text-muted-foreground">
-                    우 호크 세인 미얀마어-영어-빠알리어 사전
-                  </span>
-                  {senses.m!.map(([head, eng, pli, page], j) => (
-                    <span key={j} className="mt-1 block">
-                      <span lang="my" className="text-muted-foreground">
-                        {head}
-                      </span>{" "}
-                      <span className="text-foreground">{eng}</span>
-                      {pli && (
-                        <span lang="my" className="block">
-                          빠알리어: {pli}
-                        </span>
-                      )}
-                      <span className="text-[11px] text-muted-foreground">
-                        {" "}
-                        (원서 {page}쪽)
-                      </span>
-                    </span>
-                  ))}
-                </span>
-              )}
-              {(senses.w ?? []).length > 0 && (
-                <span className="mt-2 block">
-                  <span className="block text-xs font-semibold text-muted-foreground">
-                    미얀마어 위키낱말사전
-                  </span>
-                  {senses.w!.map(([pos, def, ex, en], j) => (
-                    <span key={j} className="mt-1.5 block">
-                      {pos && (
-                        <span className="mr-1.5 text-xs text-muted-foreground">
-                          {POS[pos] ?? pos}
-                        </span>
-                      )}
-                      {def && <span lang="my">{def}</span>}
-                      {en && <span className="block text-foreground">{en}</span>}
-                      {ex && (
-                        <span lang="my" className="block text-xs text-muted-foreground">
-                          {ex}
-                        </span>
-                      )}
-                    </span>
-                  ))}
-                </span>
-              )}
-            </>
+            <BurmeseSenses entry={senses} />
           )}
-          <span className="mt-2 block text-[11px] text-muted-foreground">
-            출처: 우 호크 세인 『미얀마어-영어-빠알리어 사전』(Pn Daza 스님 MEP
-            Dictionary 자료) · 미얀마어 위키낱말사전(my.wiktionary.org, CC
-            BY-SA 4.0) — 자세한 이용 조건은 정보 화면
-          </span>
+          <BurmeseCredit />
         </span>
       )}
     </>
+  );
+}
+
+const CREDIT =
+  "출처: 우 호크 세인 『미얀마어-영어-빠알리어 사전』(Pn Daza 스님 MEP Dictionary 자료) · 미얀마어 위키낱말사전(my.wiktionary.org, CC BY-SA 4.0) — 자세한 이용 조건은 정보 화면";
+
+function BurmeseCredit() {
+  return <span className="mt-2 block text-[11px] text-muted-foreground">{CREDIT}</span>;
+}
+
+/** 두 사전의 풀이 (낱말 풀이 상자와 사전 검색이 같이 쓴다) */
+function BurmeseSenses({ entry }: { entry: BurmeseEntry }) {
+  return (
+    <>
+      {(entry.m ?? []).length > 0 && (
+        <span className="mt-1.5 block">
+          <span className="block text-xs font-semibold text-muted-foreground">
+            우 호크 세인 미얀마어-영어-빠알리어 사전
+          </span>
+          {entry.m!.map(([head, eng, pli, page], j) => (
+            <span key={j} className="mt-1 block">
+              <span lang="my" className="text-muted-foreground">
+                {head}
+              </span>{" "}
+              <span className="text-foreground">{eng}</span>
+              {pli && (
+                <span lang="my" className="block">
+                  빠알리어: {pli}
+                </span>
+              )}
+              <span className="text-[11px] text-muted-foreground"> (원서 {page}쪽)</span>
+            </span>
+          ))}
+        </span>
+      )}
+      {(entry.w ?? []).length > 0 && (
+        <span className="mt-2 block">
+          <span className="block text-xs font-semibold text-muted-foreground">
+            미얀마어 위키낱말사전
+          </span>
+          {entry.w!.map(([pos, def, ex, en], j) => (
+            <span key={j} className="mt-1.5 block">
+              {pos && (
+                <span className="mr-1.5 text-xs text-muted-foreground">{POS[pos] ?? pos}</span>
+              )}
+              {def && <span lang="my">{def}</span>}
+              {en && <span className="block text-foreground">{en}</span>}
+              {ex && (
+                <span lang="my" className="block text-xs text-muted-foreground">
+                  {ex}
+                </span>
+              )}
+            </span>
+          ))}
+        </span>
+      )}
+    </>
+  );
+}
+
+/** 미얀마 글자가 들었는가 — 사전 검색에서 미얀마어 사전으로 찾을지 정한다 */
+export function hasBurmese(text: string): boolean {
+  return /[\u1000-\u109F]/u.test(text);
+}
+
+type SearchState =
+  | { status: "loading" }
+  | { status: "error" }
+  | {
+      status: "ready";
+      /** 찾은 낱말들 — 통째로 있으면 하나, 없으면 낱말로 나눈 것들 */
+      found: { word: string; entry: BurmeseEntry }[];
+      /** 이 글자로 시작하는 다른 낱말 */
+      more: string[];
+    };
+
+/**
+ * 사전 화면에서 미얀마어로 찾기 — 우 호크 세인 사전과 미얀마어 위키낱말사전.
+ * 친 글이 통째로 사전에 없으면, 사전 낱말로 나눠 낱말마다 보여 준다.
+ */
+export function BurmeseSearchResult({
+  query,
+  onSearch,
+}: {
+  query: string;
+  onSearch?: (word: string) => void;
+}) {
+  const key = query.replace(/[\s\u200B]+/g, "");
+  const [state, setState] = useState<SearchState & { key: string }>({ status: "loading", key: "" });
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const dict = await fetchBurmeseWords();
+      let words = dict.has(key)
+        ? [key]
+        : segmentBurmese(key, dict)
+            .filter((p) => p.word)
+            .map((p) => p.text);
+      words = [...new Set(words)].slice(0, 12);
+      const found = (
+        await Promise.all(words.map(async (word) => ({ word, entry: await fetchBurmeseEntry(word) })))
+      ).filter((f) => (f.entry.m ?? []).length + (f.entry.w ?? []).length > 0);
+      const more = dict.startingWith(key, 30).filter((w) => w !== key);
+      if (alive) setState({ status: "ready", found, more, key });
+    })().catch(() => alive && setState({ status: "error", key }));
+    return () => {
+      alive = false;
+    };
+  }, [key]);
+
+  if (state.key !== key || state.status === "loading")
+    return <p className="text-sm text-muted-foreground">미얀마어 사전에서 찾는 중…</p>;
+  if (state.status === "error")
+    return <p className="text-sm text-muted-foreground">미얀마어 사전을 받지 못했습니다.</p>;
+  return (
+    <div className="flex flex-col gap-3">
+      {state.found.length === 0 && (
+        <p className="text-sm text-muted-foreground">미얀마어 사전에 &ldquo;{query}&rdquo;가 없습니다.</p>
+      )}
+      {state.found.length > 1 && (
+        <p className="text-xs text-muted-foreground">
+          통째로는 없어서 사전 낱말로 나눠 찾았습니다.
+        </p>
+      )}
+      {state.found.map(({ word, entry }) => (
+        <article key={word} className="rounded-xl border bg-card p-4 text-sm">
+          <p lang="my" className="mb-1 font-bold">
+            {word}
+          </p>
+          <BurmeseSenses entry={entry} />
+        </article>
+      ))}
+      {state.more.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5" aria-label="이 글자로 시작하는 낱말">
+          <span className="text-xs text-muted-foreground">이렇게 시작하는 낱말:</span>
+          {state.more.map((w) => (
+            <button
+              key={w}
+              type="button"
+              lang="my"
+              onClick={() => onSearch?.(w)}
+              className="rounded-md bg-muted px-2 py-0.5 text-sm text-muted-foreground hover:bg-hover hover:text-foreground"
+            >
+              {w}
+            </button>
+          ))}
+        </div>
+      )}
+      <p className="text-[11px] text-muted-foreground">{CREDIT}</p>
+    </div>
   );
 }
