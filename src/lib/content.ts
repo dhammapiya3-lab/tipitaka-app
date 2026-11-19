@@ -7,6 +7,7 @@
 import { z } from "zod";
 import { cleanLemma, foldPali, normalizeWord, shardOf } from "@/lib/pali";
 import { unseal } from "@/lib/seal";
+import { mywiktHash } from "@/lib/burmese";
 import {
   intersectHits,
   matchPrefix,
@@ -780,4 +781,35 @@ export async function searchText(
     for (const [doc, keys] of intersectHits(perToken)) all.set(doc, keys);
   }
   return all;
+}
+
+// ── 미얀마어 위키낱말사전 (미얀마어 글 속 낱말 풀이) ─────────────
+const MYWIKT_BASE = "/data/mywikt";
+const burmeseSenseSchema = z.tuple([z.string(), z.string(), z.string(), z.string()]);
+export type BurmeseSense = z.infer<typeof burmeseSenseSchema>;
+let burmeseWordsPromise: Promise<{ words: Set<string>; maxLen: number }> | null = null;
+
+/** 낱말 목록 (낱말 경계 찾기용) — 처음 한 번만 받는다 */
+export function fetchBurmeseWords(): Promise<{ words: Set<string>; maxLen: number }> {
+  if (!burmeseWordsPromise) {
+    burmeseWordsPromise = getJson(`${MYWIKT_BASE}/words.json`)
+      .then((data) => {
+        const list = z.array(z.string()).parse(data);
+        return { words: new Set(list), maxLen: Math.max(2, ...list.map((w) => w.length)) };
+      })
+      .catch((e: unknown) => {
+        burmeseWordsPromise = null;
+        throw e;
+      });
+  }
+  return burmeseWordsPromise;
+}
+
+/** 낱말 하나의 풀이 [[품사, 미얀마어 뜻풀이, 용례, 영어 뜻], …] — 없으면 [] */
+export async function fetchBurmeseEntry(word: string): Promise<BurmeseSense[]> {
+  const shard = await getShard(
+    `${MYWIKT_BASE}/h${mywiktHash(word)}.json`,
+    z.record(z.string(), z.array(burmeseSenseSchema)),
+  );
+  return shard[word] ?? [];
 }

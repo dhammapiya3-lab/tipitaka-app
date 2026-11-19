@@ -1,5 +1,6 @@
 "use client";
 
+import { BurmeseText } from "@/components/dictionary/burmese-text";
 import { CloudOff, SearchX } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -775,6 +776,8 @@ function PlainCard({
           >
             {onSearch ? (
               <LinkedDefinition text={text} onSearch={onSearch} />
+            ) : lang === "my" ? (
+              <BurmeseText text={text} />
             ) : (
               text
             )}

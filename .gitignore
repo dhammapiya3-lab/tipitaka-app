@@ -45,6 +45,7 @@ next-env.d.ts
 /public/data/*
 # 조각 사전은 원본 DB 가 커서 미리 만들어 둔 것을 저장소에 넣는다
 !/public/data/dict/
+!/public/data/mywikt/
 
 # Firebase 배포 기록
 /.firebase/

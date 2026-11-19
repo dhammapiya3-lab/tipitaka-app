@@ -20,6 +20,7 @@
     "build:splitter": "tsx scripts/build-splitter.ts",
     "build:topics": "tsx scripts/build-topics.ts",
     "build:peu": "tsx scripts/build-peu.ts",
+    "build:mywikt": "tsx scripts/build-mywikt.ts",
     "rehash:dict": "tsx scripts/rehash-dict.ts"
   },
   "dependencies": {
