@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight, CloudOff } from "lucide-react";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
 import { Button } from "@/components/ui/button";
@@ -156,6 +156,29 @@ export function CommentaryView({
   const [progress, setProgress] = useState({ key, n: 4 });
   const rendered = progress.key === key ? progress.n : 4;
   const total = state?.data?.paras.length ?? 0;
+  // 주소의 #attha-p<문단> (참고 경전 링크) — 그 문단까지 한꺼번에 그리고 한 번만 그 자리로 간다
+  const jumpedRef = useRef<string | null>(null);
+  const hashPara =
+    typeof window === "undefined"
+      ? null
+      : new RegExp(`^${layer}-p(\\d+)$`).exec(
+          decodeURIComponent(window.location.hash.slice(1)),
+        );
+  const jumpIndex =
+    hashPara && state?.data
+      ? state.data.paras.findIndex((p) => p.para === Number(hashPara[1]))
+      : -1;
+  if (jumpIndex >= 0 && rendered <= jumpIndex) {
+    setProgress({ key, n: jumpIndex + 4 });
+  }
+  useEffect(() => {
+    if (jumpIndex < 0 || rendered <= jumpIndex || jumpedRef.current === key)
+      return;
+    jumpedRef.current = key;
+    document
+      .getElementById(`${layer}-p${state?.data?.paras[jumpIndex]?.para}`)
+      ?.scrollIntoView({ block: "start" });
+  }, [jumpIndex, rendered, key, layer, state]);
   useEffect(() => {
     if (rendered >= total) return;
     const id = setTimeout(() => setProgress({ key, n: rendered + 4 }), 30);
@@ -480,7 +503,7 @@ export function CommentaryCard({
 }) {
   return (
     <section
-      id={label ? undefined : `${layer}-${index}`}
+      id={label ? undefined : `${layer}-p${para.para}`}
       data-cpara={label ? undefined : para.para}
       className="scroll-mt-4 overflow-hidden rounded-2xl border bg-card shadow-sm"
     >

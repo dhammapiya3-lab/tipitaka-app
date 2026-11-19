@@ -51,10 +51,12 @@ import type {
   CatalogSutta,
   Edition,
   EditionInfo,
+  ExtraItem,
   Footnote,
   Language,
   Segment,
   SuttaCommentary,
+  SuttaExtras,
   SuttaNissaya,
   SuttaNotes,
   SuttaIndexEntry,
@@ -1220,6 +1222,7 @@ mkdirSync(path.dirname(OUT_SUTTAS), { recursive: true });
     ? extrasSchema.parse(readJson(extrasPath))
     : {};
   const known = new Set(suttaIndex.map((s) => s.id));
+  addDhpStoryLinks(extras, known);
   for (const [id, kinds] of Object.entries(extras)) {
     if (!known.has(id))
       errors.push(`content/extras.json: "${id}" 경이 목록에 없습니다`);
@@ -1683,3 +1686,70 @@ console.table(Object.fromEntries(byEdition));
 console.log(`본문 있는 경: ${withText.map((s) => s.id).join(", ")}`);
 for (const w of warnings) console.warn(`경고: ${w}`);
 console.log("변환 오류: 0건");
+
+/**
+ * 법구경 주석서 이야기 ↔ 자따까·우다나·장로니게경·천궁사·아귀사 주석서·니까야·율장 (content/dhp-story-links.tsv, 사용자 목록)
+ * 양쪽 '참고 경전' 칸에 서로 넣는다. 법구경 쪽은 그 이야기가 시작되는 주석서 문단(content/dhp-story-paras.json)으로 간다.
+ * 율장처럼 이 사이트에 없는 문헌(경 번호 "-")은 법구경 쪽에 이름만 적는다.
+ */
+function addDhpStoryLinks(
+  extras: Record<string, SuttaExtras>,
+  known: Set<string>,
+) {
+  const tsvPath = path.join(ROOT, "content/dhp-story-links.tsv");
+  if (!existsSync(tsvPath)) return;
+  const stories = z
+    .record(
+      z.string(),
+      z.object({ suttaId: z.string(), para: z.number().int(), title: z.string() }),
+    )
+    .parse(readJson(path.join(ROOT, "content/dhp-story-paras.json")));
+  const rows = readFileSync(tsvPath, "utf8")
+    .split("\n")
+    .filter((l) => l.trim() && !l.startsWith("#"))
+    .map((l) => l.split("\t"));
+  const push = (id: string, item: ExtraItem) => {
+    const kinds = (extras[id] ??= {});
+    (kinds.refs ??= []).push(item);
+  };
+  const dhpSide: [number, string, ExtraItem][] = [];
+  for (const [i, cols] of rows.entries()) {
+    const [verses, target, layer, name, note = ""] = cols;
+    const first = verses?.split("~")[0];
+    const story = first ? stories[first] : undefined;
+    if (cols.length < 4 || !verses || !target || !layer || !name || !story) {
+      errors.push(`content/dhp-story-links.tsv ${i + 1}번째 줄: 칸이 모자라거나 게송 ${first} 이야기 자리를 모릅니다`);
+      continue;
+    }
+    if (target !== "-" && !known.has(target)) {
+      errors.push(`content/dhp-story-links.tsv: "${target}" 경이 목록에 없습니다`);
+      continue;
+    }
+    const verseLabel = `게송 ${verses}번 이야기`;
+    const linked = target !== "-";
+    dhpSide.push([
+      Number(first),
+      story.suttaId,
+      {
+        title: `${verseLabel} — ${name}${linked && layer === "attha" ? " (주석서)" : ""}`,
+        ...(linked ? { suttaId: target } : {}),
+        ...(linked && layer === "attha" ? { layer: "attha" as const } : {}),
+        note: [linked ? null : "이 사이트에는 아직 없는 문헌", note.trim() || null]
+          .filter(Boolean)
+          .join(" · ") || null,
+      },
+    ]);
+    if (linked) {
+      push(target, {
+        title: `법구경 ${verseLabel} (주석서 — ${story.title})`,
+        suttaId: story.suttaId,
+        layer: "attha",
+        anchor: `attha-p${story.para}`,
+        note: note.trim() || null,
+      });
+    }
+  }
+  // 법구경 쪽은 게송 차례로
+  dhpSide.sort((a, b) => a[0] - b[0]);
+  for (const [, id, item] of dhpSide) push(id, item);
+}

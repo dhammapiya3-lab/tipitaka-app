@@ -1,0 +1,527 @@
+{
+ "2": {
+  "suttaId": "dhp1-20",
+  "para": 110,
+  "title": "2. Maṭṭhakuṇḍalīvatthu"
+ },
+ "6": {
+  "suttaId": "dhp1-20",
+  "para": 258,
+  "title": "5. Kosambakavatthu"
+ },
+ "9": {
+  "suttaId": "dhp1-20",
+  "para": 311,
+  "title": "7. Devadattavatthu"
+ },
+ "11": {
+  "suttaId": "dhp1-20",
+  "para": 328,
+  "title": "8. Sāriputtattheravatthu"
+ },
+ "13": {
+  "suttaId": "dhp1-20",
+  "para": 392,
+  "title": "9. Nandattheravatthu"
+ },
+ "17": {
+  "suttaId": "dhp1-20",
+  "para": 459,
+  "title": "12. Devadattavatthu"
+ },
+ "21": {
+  "suttaId": "dhp21-32",
+  "para": 565,
+  "title": "1. Sāmāvatīvatthu"
+ },
+ "25": {
+  "suttaId": "dhp21-32",
+  "para": 710,
+  "title": "3. Cūḷapanthakattheravatthu"
+ },
+ "30": {
+  "suttaId": "dhp21-32",
+  "para": 787,
+  "title": "7. Maghavatthu"
+ },
+ "32": {
+  "suttaId": "dhp21-32",
+  "para": 836,
+  "title": "9. Nigamavāsitissattheravatthu"
+ },
+ "33": {
+  "suttaId": "dhp33-43",
+  "para": 851,
+  "title": "1. Meghiyattheravatthu"
+ },
+ "38": {
+  "suttaId": "dhp33-43",
+  "para": 903,
+  "title": "5. Cittahatthattheravatthu"
+ },
+ "42": {
+  "suttaId": "dhp33-43",
+  "para": 952,
+  "title": "8. Nandagopālakavatthu"
+ },
+ "47": {
+  "suttaId": "dhp44-59",
+  "para": 1006,
+  "title": "3. Viṭaṭūbhavatthu"
+ },
+ "49": {
+  "suttaId": "dhp44-59",
+  "para": 1060,
+  "title": "5. Macchariyakosiyaseṭṭhivatthu"
+ },
+ "53": {
+  "suttaId": "dhp44-59",
+  "para": 1104,
+  "title": "8. Visākhāvatthu"
+ },
+ "54": {
+  "suttaId": "dhp44-59",
+  "para": 1172,
+  "title": "9. Ānandattherapañhāvatthu"
+ },
+ "56": {
+  "suttaId": "dhp44-59",
+  "para": 1193,
+  "title": "10. Mahākassapattherapiṇḍapātadinnavatthu"
+ },
+ "57": {
+  "suttaId": "dhp44-59",
+  "para": 1217,
+  "title": "11. Godhikattheraparinibbānavatthu"
+ },
+ "58": {
+  "suttaId": "dhp44-59",
+  "para": 1247,
+  "title": "12. Garahadinnavatthu"
+ },
+ "60": {
+  "suttaId": "dhp60-75",
+  "para": 1273,
+  "title": "1. Aññatarapurisavatthu"
+ },
+ "61": {
+  "suttaId": "dhp60-75",
+  "para": 1315,
+  "title": "2. Mahākassapattherasaddhivihārikavatthu"
+ },
+ "65": {
+  "suttaId": "dhp60-75",
+  "para": 1371,
+  "title": "6. Tiṃsamattapāveyyakabhikkhuvatthu"
+ },
+ "66": {
+  "suttaId": "dhp60-75",
+  "para": 1380,
+  "title": "7. Suppabuddhakuṭṭhivatthu"
+ },
+ "69": {
+  "suttaId": "dhp60-75",
+  "para": 1423,
+  "title": "10. Uppalavaṇṇattherīvatthu"
+ },
+ "71": {
+  "suttaId": "dhp60-75",
+  "para": 1455,
+  "title": "12. Ahipetavatthu"
+ },
+ "72": {
+  "suttaId": "dhp60-75",
+  "para": 1473,
+  "title": "13. Saṭṭhikūṭapetavatthu"
+ },
+ "73": {
+  "suttaId": "dhp60-75",
+  "para": 1490,
+  "title": "14. Cittagahapativatthu"
+ },
+ "77": {
+  "suttaId": "dhp76-89",
+  "para": 1576,
+  "title": "2. Assajipunabbasukavatthu"
+ },
+ "78": {
+  "suttaId": "dhp76-89",
+  "para": 1585,
+  "title": "3. Channattheravatthu"
+ },
+ "82": {
+  "suttaId": "dhp76-89",
+  "para": 1651,
+  "title": "7. Kāṇamātuvatthu"
+ },
+ "83": {
+  "suttaId": "dhp76-89",
+  "para": 1664,
+  "title": "8. Pañcasatabhikkhuvatthu"
+ },
+ "92": {
+  "suttaId": "dhp90-99",
+  "para": 1746,
+  "title": "3. Belaṭṭhasīsattheravatthu"
+ },
+ "95": {
+  "suttaId": "dhp90-99",
+  "para": 1778,
+  "title": "6. Sāriputtattheravatthu"
+ },
+ "101": {
+  "suttaId": "dhp100-115",
+  "para": 1858,
+  "title": "2. Bāhiyadārucīriyattheravatthu"
+ },
+ "102": {
+  "suttaId": "dhp100-115",
+  "para": 1872,
+  "title": "3. Kuṇḍalakesittherīvatthu"
+ },
+ "113": {
+  "suttaId": "dhp100-115",
+  "para": 2006,
+  "title": "12. Paṭācārātherīvatthu"
+ },
+ "114": {
+  "suttaId": "dhp100-115",
+  "para": 2033,
+  "title": "13. Kisāgotamīvatthu"
+ },
+ "117": {
+  "suttaId": "dhp116-128",
+  "para": 2075,
+  "title": "2. Seyyasakattheravatthu"
+ },
+ "119": {
+  "suttaId": "dhp116-128",
+  "para": 2095,
+  "title": "4. Anāthapiṇḍikaseṭṭhivatthu"
+ },
+ "121": {
+  "suttaId": "dhp116-128",
+  "para": 2109,
+  "title": "5. Asaññataparikkhārabhikkhuvatthu"
+ },
+ "125": {
+  "suttaId": "dhp116-128",
+  "para": 2157,
+  "title": "9. Kokasunakhaluddakavatthu"
+ },
+ "129": {
+  "suttaId": "dhp129-145",
+  "para": 2210,
+  "title": "1. Chabbaggiyabhikkhuvatthu"
+ },
+ "130": {
+  "suttaId": "dhp129-145",
+  "para": 2219,
+  "title": "2. Chabbaggiyabhikkhuvatthu"
+ },
+ "131": {
+  "suttaId": "dhp129-145",
+  "para": 2228,
+  "title": "3. Sabbahulakumārakavatthu"
+ },
+ "136": {
+  "suttaId": "dhp129-145",
+  "para": 2265,
+  "title": "6. Ajagarapetavatthu"
+ },
+ "137": {
+  "suttaId": "dhp129-145",
+  "para": 2277,
+  "title": "7. Mahāmoggallānattheravatthu"
+ },
+ "141": {
+  "suttaId": "dhp129-145",
+  "para": 2299,
+  "title": "8. Bahubhaṇḍikabhikkhuvatthu"
+ },
+ "146": {
+  "suttaId": "dhp146-156",
+  "para": 2373,
+  "title": "1. Visākhāya sahāyikānaṃ vatthu"
+ },
+ "147": {
+  "suttaId": "dhp146-156",
+  "para": 2384,
+  "title": "2. Sirimāvatthu"
+ },
+ "150": {
+  "suttaId": "dhp146-156",
+  "para": 2417,
+  "title": "5. Janapadakalyāṇī rūpanandātherīvatthu"
+ },
+ "152": {
+  "suttaId": "dhp146-156",
+  "para": 2448,
+  "title": "7. Lāḷudāyittheravatthu"
+ },
+ "157": {
+  "suttaId": "dhp157-166",
+  "para": 2493,
+  "title": "1. Bodhirājakumāravatthu"
+ },
+ "158": {
+  "suttaId": "dhp157-166",
+  "para": 2505,
+  "title": "2. Upanandasakyaputtattheravatthu"
+ },
+ "159": {
+  "suttaId": "dhp157-166",
+  "para": 2520,
+  "title": "3. Padhānikatissattheravatthu"
+ },
+ "160": {
+  "suttaId": "dhp157-166",
+  "para": 2532,
+  "title": "4. Kumārakassapamātutherīvatthu"
+ },
+ "163": {
+  "suttaId": "dhp157-166",
+  "para": 2567,
+  "title": "7. Saṅghabhedaparisakkanavatthu"
+ },
+ "176": {
+  "suttaId": "dhp167-178",
+  "para": 2695,
+  "title": "9. Ciñcamāṇavikāvatthu"
+ },
+ "181": {
+  "suttaId": "dhp179-196",
+  "para": 2773,
+  "title": "2. Devorohaṇavatthu"
+ },
+ "197": {
+  "suttaId": "dhp197-208",
+  "para": 2998,
+  "title": "1. Ñāātikalahavūpasamanavatthu"
+ },
+ "200": {
+  "suttaId": "dhp197-208",
+  "para": 3015,
+  "title": "2. Māravatthu"
+ },
+ "204": {
+  "suttaId": "dhp197-208",
+  "para": 3053,
+  "title": "6. Pasenadikosalavatthu"
+ },
+ "212": {
+  "suttaId": "dhp209-220",
+  "para": 3125,
+  "title": "2. Aññatarakuṭumbikavatthu"
+ },
+ "213": {
+  "suttaId": "dhp209-220",
+  "para": 3139,
+  "title": "3. Visākhāvatthu"
+ },
+ "219": {
+  "suttaId": "dhp209-220",
+  "para": 3196,
+  "title": "9. Nandiyavatthu"
+ },
+ "222": {
+  "suttaId": "dhp221-234",
+  "para": 3228,
+  "title": "2. Aññatarabhikkhuvatthu"
+ },
+ "223": {
+  "suttaId": "dhp221-234",
+  "para": 3239,
+  "title": "3. Uttarāupāsikāvatthu"
+ },
+ "225": {
+  "suttaId": "dhp221-234",
+  "para": 3270,
+  "title": "5. Buddhapitubrāhmaṇavatthu"
+ },
+ "231": {
+  "suttaId": "dhp221-234",
+  "para": 3332,
+  "title": "8. Chabbaggiyavatthu"
+ },
+ "242": {
+  "suttaId": "dhp235-255",
+  "para": 3423,
+  "title": "5. Aññatarakulaputtavatthu"
+ },
+ "252": {
+  "suttaId": "dhp235-255",
+  "para": 3499,
+  "title": "10. Meṇḍakaseṭṭhivatthu"
+ },
+ "254": {
+  "suttaId": "dhp235-255",
+  "para": 3534,
+  "title": "12. Subhaddaparibbājakavatthu"
+ },
+ "259": {
+  "suttaId": "dhp256-272",
+  "para": 3570,
+  "title": "3. Ekudānakhīṇāsavattheravatthu"
+ },
+ "280": {
+  "suttaId": "dhp273-289",
+  "para": 3715,
+  "title": "5. Padhānakammikatissattheravatthu"
+ },
+ "281": {
+  "suttaId": "dhp273-289",
+  "para": 3731,
+  "title": "6. Sūkarapetavatthu"
+ },
+ "284": {
+  "suttaId": "dhp273-289",
+  "para": 3760,
+  "title": "8. Pañcamahallakattheravatthu"
+ },
+ "292": {
+  "suttaId": "dhp290-305",
+  "para": 3862,
+  "title": "3. Bhaddiyabhikkhuvatthu"
+ },
+ "302": {
+  "suttaId": "dhp290-305",
+  "para": 3915,
+  "title": "6. Vajjiputtakabhikkhuvatthu"
+ },
+ "306": {
+  "suttaId": "dhp306-319",
+  "para": 3984,
+  "title": "1. Sundarīparibbājikāvatthu"
+ },
+ "307": {
+  "suttaId": "dhp306-319",
+  "para": 3996,
+  "title": "2. Duccaritaphalapīḷitavatthu"
+ },
+ "308": {
+  "suttaId": "dhp306-319",
+  "para": 4005,
+  "title": "3. Vaggumudātīriyabhikkhuvatthu"
+ },
+ "324": {
+  "suttaId": "dhp320-333",
+  "para": 4116,
+  "title": "3. Parijiṇṇabrāhmaṇaputtavatthu"
+ },
+ "326": {
+  "suttaId": "dhp320-333",
+  "para": 4155,
+  "title": "5. Sānusāmaṇeravatthu"
+ },
+ "328": {
+  "suttaId": "dhp320-333",
+  "para": 4205,
+  "title": "7. Sambahulabhikkhuvatthu"
+ },
+ "331": {
+  "suttaId": "dhp320-333",
+  "para": 4229,
+  "title": "8. Māravatthu"
+ },
+ "334": {
+  "suttaId": "dhp334-359",
+  "para": 4260,
+  "title": "1. Kapilamacchavatthu"
+ },
+ "345": {
+  "suttaId": "dhp334-359",
+  "para": 4337,
+  "title": "4. Bandhanāgāravatthu"
+ },
+ "347": {
+  "suttaId": "dhp334-359",
+  "para": 4355,
+  "title": "5. Khemātherīvatthu"
+ },
+ "349": {
+  "suttaId": "dhp334-359",
+  "para": 4393,
+  "title": "7. Cūḷadhanuggahapaṇḍitavatthu"
+ },
+ "353": {
+  "suttaId": "dhp334-359",
+  "para": 4443,
+  "title": "9. Upakājīvakavatthu"
+ },
+ "355": {
+  "suttaId": "dhp334-359",
+  "para": 4467,
+  "title": "11. Aputtakaseṭṭhivatthu"
+ },
+ "360": {
+  "suttaId": "dhp360-382",
+  "para": 4509,
+  "title": "1. Pañcabhikkhuvatthu"
+ },
+ "362": {
+  "suttaId": "dhp360-382",
+  "para": 4528,
+  "title": "2. Haṃsaghātakabhikkhuvatthu"
+ },
+ "363": {
+  "suttaId": "dhp360-382",
+  "para": 4551,
+  "title": "3. Kokālikavatthu"
+ },
+ "365": {
+  "suttaId": "dhp360-382",
+  "para": 4577,
+  "title": "5. Vipakkhasevakabhikkhuvatthu"
+ },
+ "368": {
+  "suttaId": "dhp360-382",
+  "para": 4608,
+  "title": "7. Sambahulabhikkhuvatthu"
+ },
+ "381": {
+  "suttaId": "dhp360-382",
+  "para": 4697,
+  "title": "11. Vakkalittheravatthu"
+ },
+ "391": {
+  "suttaId": "dhp383-423",
+  "para": 4834,
+  "title": "8. Mahāpajāpatigotamīvatthu"
+ },
+ "394": {
+  "suttaId": "dhp383-423",
+  "para": 4861,
+  "title": "11. Kuhakabrāhmaṇavatthu"
+ },
+ "399": {
+  "suttaId": "dhp383-423",
+  "para": 4919,
+  "title": "16. Akkosakabhāradvājavatthu"
+ },
+ "408": {
+  "suttaId": "dhp383-423",
+  "para": 5014,
+  "title": "25. Pilindavacchattheravatthu"
+ },
+ "414": {
+  "suttaId": "dhp383-423",
+  "para": 5071,
+  "title": "31. Sīvalittheravatthu"
+ },
+ "415": {
+  "suttaId": "dhp383-423",
+  "para": 5082,
+  "title": "32. Sundarasamuddattheravatthu"
+ },
+ "421": {
+  "suttaId": "dhp383-423",
+  "para": 5176,
+  "title": "38. Dhammadinnattherīvatthu"
+ },
+ "423": {
+  "suttaId": "dhp383-423",
+  "para": 5195,
+  "title": "40. Devahitabrāhmaṇavatthu"
+ }
+}

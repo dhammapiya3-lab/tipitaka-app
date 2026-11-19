@@ -264,7 +264,14 @@ function ExtraList({
         return (
           <li key={`${i}-${item.title}`}>
             {item.suttaId ? (
-              <Link href={suttaHref(item.suttaId)} className={cls}>
+              <Link
+                href={suttaHref(
+                  item.suttaId,
+                  item.anchor ?? undefined,
+                  item.layer ?? undefined,
+                )}
+                className={cls}
+              >
                 {body}
               </Link>
             ) : item.url ? (

@@ -93,6 +93,10 @@ export interface ExtraItem {
   url?: string | null;
   /** 법문하신 분·글쓴이 */
   by?: string | null;
+  /** 그 경의 주석서·복주석서로 바로 연다 */
+  layer?: "attha" | "tika" | null;
+  /** 그 경 안의 자리 (#문장번호, 주석 문단은 "attha-p<문단>") */
+  anchor?: string | null;
 }
 
 export type ExtraKind = "refs" | "talks" | "others";

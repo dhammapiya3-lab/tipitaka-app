@@ -299,6 +299,11 @@ const extraItemSchema = z.object({
     .nullish(),
   url: z.url().nullish(),
   by: z.string().nullish(),
+  layer: z.enum(["attha", "tika"]).nullish(),
+  anchor: z
+    .string()
+    .regex(/^[\w.:-]+$/)
+    .nullish(),
 });
 
 /** 경 번호 → 참고 경전 · 해설 법문 · 기타 자료 (content/extras.json, public/data/extras.json) */
