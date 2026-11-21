@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Screen, TopBar } from "@/components/layout/app-bar";
+import { ProgressCard } from "@/components/progress/progress-card";
 import { ListCard, NikayaCards } from "@/components/suttas/nikaya-cards";
 import { PitakaTabs } from "@/components/suttas/pitaka-tabs";
 import { getNikayaSummaries } from "@/lib/data";
@@ -39,7 +40,10 @@ export default function SuttasPage() {
       <TopBar title="경전" pali="Tipiṭaka" />
       <Screen className="px-6 py-2">
         <PitakaTabs>
-          <h2 className="px-2 pt-2 pb-3 text-sm font-bold">5부 니까야</h2>
+          <div className="pt-2">
+            <ProgressCard />
+          </div>
+          <h2 className="px-2 pt-6 pb-3 text-sm font-bold">5부 니까야</h2>
           <NikayaCards items={getNikayaSummaries()} />
           <h2 className="px-2 pt-6 pb-3 text-sm font-bold">주제로 찾기</h2>
           <ListCard

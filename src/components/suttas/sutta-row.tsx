@@ -3,6 +3,7 @@
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { ReadCheck } from "@/components/shared/read-mark";
 import { HIDE_WHEN_ONLY_READABLE } from "@/lib/constants";
 import { suttaHref, suttaLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -90,6 +91,12 @@ export function SuttaRow({
       )}
     >
       <div className="flex items-center gap-3 p-3.5">
+        {readable ? (
+          <ReadCheck
+            suttaId={sutta.id}
+            label={`${suttaLabel(sutta.id)} ${sutta.nameKo ?? sutta.name}`}
+          />
+        ) : null}
         {readable ? (
           <Link
             href={suttaHref(sutta.id)}

@@ -2,6 +2,7 @@
 
 import { TtsLockOverlay } from "@/components/sutta/tts-lock";
 import { GlossDialog } from "@/components/dictionary/gloss-dialog";
+import { ReadMarkButton } from "@/components/shared/read-mark";
 import { SuttaEndNav } from "@/components/sutta/sutta-end";
 import { LayerTabs } from "@/components/sutta/layer-tabs";
 import {
@@ -1983,6 +1984,7 @@ export function SuttaView({
                       readWidth,
                     )}
                   >
+                    <ReadMarkButton suttaId={suttaId} />
                     <SuttaEndNav prev={prev} next={next} />
                   </div>
                 ) : null}
