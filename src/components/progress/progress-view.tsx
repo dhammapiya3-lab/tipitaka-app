@@ -66,7 +66,7 @@ function Count({ done, total }: { done: number; total: number }) {
 }
 
 /**
- * 진도표 — 니까야별 막대, 품을 펼치면 경마다 칸 하나(다 읽은 경은 호박색).
+ * 진도표 (내 서재 맨 위) — 전체 막대, 니까야를 펼치면 품별 막대, 품을 펼치면 경마다 칸 하나(다 읽은 경은 호박색).
  * 칸을 누르면 그 경으로 간다. 다 읽음 표시는 경 목록·경 끝에서 사용자가 직접 한다.
  */
 export function ProgressView({ nikayas }: { nikayas: ProgressNikaya[] }) {
@@ -124,84 +124,93 @@ export function ProgressView({ nikayas }: { nikayas: ProgressNikaya[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-sm">
-        <div className="flex items-baseline justify-between gap-2">
-          <h2 className="text-base font-bold">경장 전체</h2>
-          <Count {...overall} />
-        </div>
-        <Bar {...overall} />
-        <div
-          className="flex rounded-lg bg-muted p-0.5"
-          role="group"
-          aria-label="셀 경의 범위"
-        >
-          {(
-            [
-              ["korean", "한글 번역이 있는 경"],
-              ["all", "본문이 있는 경 전체"],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={scope === id}
-              onClick={() => setScope(id)}
-              className={cn(
-                "h-8 flex-1 rounded-md px-2 text-xs transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                scope === id
-                  ? "bg-card font-semibold text-primary shadow-sm"
-                  : "font-medium text-muted-foreground",
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          다 읽은 경은 경 목록의 동그라미나 경 맨 끝의 [다 읽음으로 표시] 단추로
-          직접 표시합니다. 기록은 이 기기의 브라우저에만 저장되므로, 다른 기기로
-          옮기려면 파일로 내보내고 가져오세요.
-        </p>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => fileInput.current?.click()}
+    <section
+      aria-labelledby="progress-title"
+      className="flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-sm"
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 id="progress-title" className="text-base font-bold">
+          읽기 진도표
+        </h2>
+        <Count {...overall} />
+      </div>
+      <Bar {...overall} />
+      <div
+        className="flex rounded-lg bg-muted p-0.5"
+        role="group"
+        aria-label="셀 경의 범위"
+      >
+        {(
+          [
+            ["korean", "한글 번역이 있는 경"],
+            ["all", "본문이 있는 경 전체"],
+          ] as const
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={scope === id}
+            onClick={() => setScope(id)}
+            className={cn(
+              "h-8 flex-1 rounded-md px-2 text-xs transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+              scope === id
+                ? "bg-card font-semibold text-primary shadow-sm"
+                : "font-medium text-muted-foreground",
+            )}
           >
-            <Upload aria-hidden />
-            기록 가져오기
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={readCount === 0}
-            onClick={exportFile}
-          >
-            <Download aria-hidden />
-            기록 내보내기
-          </Button>
-        </div>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="application/json,.json"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) void importFile(file);
-            e.target.value = "";
-          }}
-        />
+            {label}
+          </button>
+        ))}
       </div>
 
-      {nikayas.map((n) => (
-        <NikayaProgress key={n.id} nikaya={n} scope={scope} read={read} />
-      ))}
-    </div>
+      <div className="flex flex-col">
+        {nikayas.map((n) => (
+          <NikayaProgress key={n.id} nikaya={n} scope={scope} read={read} />
+        ))}
+      </div>
+
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        니까야를 누르면 품별로, 품을 누르면 경마다 칸으로 펼쳐집니다. 다 읽은
+        경은 호박색 칸이고, 칸을 누르면 그 경으로 갑니다. 다 읽은 경은 경 목록의
+        동그라미나 경 맨 끝의 [다 읽음으로 표시] 단추로 직접 표시합니다. 기록은
+        이 기기의 브라우저에만 저장되므로, 다른 기기로 옮기려면 파일로 내보내고
+        가져오세요.
+      </p>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => fileInput.current?.click()}
+        >
+          <Upload aria-hidden />
+          기록 가져오기
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={readCount === 0}
+          onClick={exportFile}
+        >
+          <Download aria-hidden />
+          기록 내보내기
+        </Button>
+      </div>
+      <input
+        ref={fileInput}
+        type="file"
+        accept="application/json,.json"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) void importFile(file);
+          e.target.value = "";
+        }}
+      />
+    </section>
   );
 }
 
+/** 니까야 한 줄 — 막대·숫자, 누르면 품별 줄이 펼쳐진다 */
 function NikayaProgress({
   nikaya,
   scope,
@@ -217,18 +226,24 @@ function NikayaProgress({
   const c = count(suttas, scope, read);
   if (c.total === 0) return null;
   return (
-    <section className="flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-sm">
-      <div className="flex items-baseline justify-between gap-2">
-        <h2 className="text-base font-bold">{nikaya.name}</h2>
+    <details className="group/n border-t">
+      <summary className="flex cursor-pointer list-none items-center gap-3 py-3 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
+        <span className="min-w-0 flex-1 text-sm font-bold">{nikaya.name}</span>
+        <span className="w-20 shrink-0">
+          <Bar {...c} />
+        </span>
         <Count {...c} />
-      </div>
-      <Bar {...c} />
-      <div className="flex flex-col">
+        <ChevronDown
+          className="size-4 shrink-0 text-faint transition-transform group-open/n:rotate-180"
+          aria-hidden
+        />
+      </summary>
+      <div className="mb-2 ml-3 flex flex-col border-l pl-3">
         {nikaya.groups.map((g) => (
           <GroupProgress key={g.name} group={g} scope={scope} read={read} />
         ))}
       </div>
-    </section>
+    </details>
   );
 }
 

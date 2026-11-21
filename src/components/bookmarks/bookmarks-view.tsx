@@ -16,7 +16,7 @@ import { useBookmarksStore } from "@/store/bookmarks";
 import { useReadingStore } from "@/store/reading";
 import { HIGHLIGHT_CLASS, useHighlightsStore } from "@/store/highlights";
 
-type Filter = "all" | "highlight" | "memo" | "progress";
+type Filter = "all" | "highlight" | "memo";
 
 /**
  * 책갈피·메모 목록 — 저장한 순서(최근 먼저). 누르면 그 문장으로 간다.
@@ -26,21 +26,7 @@ export function BookmarksView({ progress }: { progress: ProgressNikaya[] }) {
   const items = useBookmarksStore((s) => s.items);
   const remove = useBookmarksStore((s) => s.remove);
   const importItems = useBookmarksStore((s) => s.importItems);
-  // 주소가 /bookmarks/?view=progress 이면 진도표 탭으로 연다 (옛 주소 /progress/ 도 여기로 넘어온다).
-  // 첫 화면은 저장값을 불러오기 전 자리 표시(Skeleton)라서 서버 화면과 어긋나지 않는다.
-  const [filter, setFilter] = useState<Filter>(() =>
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("view") === "progress"
-      ? "progress"
-      : "all",
-  );
-  function choose(id: Filter) {
-    setFilter(id);
-    const url = new URL(window.location.href);
-    if (id === "progress") url.searchParams.set("view", "progress");
-    else url.searchParams.delete("view");
-    window.history.replaceState(null, "", url);
-  }
+  const [filter, setFilter] = useState<Filter>("all");
   const fileInput = useRef<HTMLInputElement>(null);
   // 이 기기의 저장값은 화면이 뜬 뒤 불러오므로, 그 전에는 "없음"을 보여 주지 않는다.
   // (정적 빌드 때는 브라우저 저장소가 없어 persist 가 붙지 않는다)
@@ -85,14 +71,13 @@ export function BookmarksView({ progress }: { progress: ProgressNikaya[] }) {
             ["all", `책갈피 ${formatCount(items.length)}`],
             ["highlight", `형광펜·밑줄 ${formatCount(highlightCount)}`],
             ["memo", `메모 ${formatCount(memoCount)}`],
-            ["progress", "읽기 진도표"],
           ] as const
         ).map(([id, label]) => (
           <button
             key={id}
             type="button"
             aria-pressed={filter === id}
-            onClick={() => choose(id)}
+            onClick={() => setFilter(id)}
             className={cn(
               "h-8 rounded-md px-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
               filter === id
@@ -104,7 +89,7 @@ export function BookmarksView({ progress }: { progress: ProgressNikaya[] }) {
           </button>
         ))}
       </div>
-      <div className={cn("ml-auto flex gap-2", filter === "progress" && "hidden")}>
+      <div className="ml-auto flex gap-2">
         <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()}>
           <Upload aria-hidden />
           가져오기
@@ -139,11 +124,11 @@ export function BookmarksView({ progress }: { progress: ProgressNikaya[] }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {filter === "progress" ? null : <RecentReading />}
+      {/* 읽기 진도표는 잘 보이게 맨 위에 따로 (2026-11-22 사용자 요청) */}
+      <ProgressView nikayas={progress} />
+      <RecentReading />
       {toolbar}
-      {filter === "progress" ? (
-        <ProgressView nikayas={progress} />
-      ) : filter === "highlight" ? (
+      {filter === "highlight" ? (
         <HighlightList />
       ) : shown.length === 0 ? (
         <Card>
