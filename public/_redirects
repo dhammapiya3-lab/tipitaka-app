@@ -1,2 +1,5 @@
 # 옛 경 주소(/sutta/sn56.11/)를 새 주소(/sutta/?id=sn56.11)로 넘긴다 — Cloudflare Pages 규칙
 /sutta/:id/  /sutta/?id=:id  301
+# 읽기 진도표는 내 서재 안으로 옮겼다 (2026-11-22)
+/progress/  /bookmarks/?view=progress  301
+/progress  /bookmarks/?view=progress  301

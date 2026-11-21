@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { BookmarksView } from "@/components/bookmarks/bookmarks-view";
 import { TopLevelPage } from "@/components/layout/page-header";
+import { progressData } from "@/lib/progress-data";
 
 export const metadata: Metadata = { title: "내 서재" };
 
 export default function BookmarksPage() {
   return (
-    <TopLevelPage title="내 서재" description="책갈피 · 형광펜·밑줄 · 메모 — 이 기기의 브라우저에만 저장됩니다.">
-      <BookmarksView />
+    <TopLevelPage
+      title="내 서재"
+      description="책갈피 · 형광펜·밑줄 · 메모 · 읽기 진도표 — 이 기기의 브라우저에만 저장됩니다."
+    >
+      <BookmarksView progress={progressData()} />
     </TopLevelPage>
   );
 }
