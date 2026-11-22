@@ -1,6 +1,5 @@
 "use client";
 
-import { BurmeseText } from "@/components/dictionary/burmese-text";
 import { CloudOff, SearchX } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -781,11 +780,6 @@ function PlainCard({
       <p lang="pi" className="mb-2 font-bold">
         {entry.headword}
       </p>
-      {lang === "my" && !onSearch && (
-        <p className="-mt-1 mb-2 text-xs text-muted-foreground">
-          미얀마어 낱말을 누르면 뜻이 나옵니다
-        </p>
-      )}
       <div className="flex flex-col gap-3">
         {entry.definitions.map((text, i) => (
           <p
@@ -795,8 +789,6 @@ function PlainCard({
           >
             {onSearch ? (
               <LinkedDefinition text={text} onSearch={onSearch} />
-            ) : lang === "my" ? (
-              <BurmeseText text={text} />
             ) : (
               text
             )}
