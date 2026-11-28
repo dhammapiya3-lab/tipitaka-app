@@ -190,7 +190,7 @@ Firebase·recharts 는 쓰지 않는다.
 - 원본: DPD 공식 배포본 `content/dpd/dpd.db` (GitHub dpd-db v0.4.20261026), PTS·미얀마는 `epitaka.db` 의 dictionary 표(book_id 5·1).
 - `pnpm build:dictionary` → `public/data/dict/` (index.json · lookup · dpd · dpd-inflections · pts · mm). 조각이 150KB 를 넘으면 앞 글자를 한 글자씩 늘려 나눈다(`lib/pali.ts` shardOf).
 - 찾는 순서: DPD "변화형 → 표제어" 표 → DPD 표제어 → 그 기본형으로 PTS·미얀마. 받는 자료는 단어 하나에 수십 KB.
-- DPD 합성어 분해(deconstructor, 76MB)는 찾는 비율이 0.4%p 만 늘어 넣지 않았다.
+- DPD 합성어 분해(deconstructor, 76MB)는 찾는 비율이 0.4%p 만 늘어 넣지 않았다. → **2026-11-13 바뀜:** DPD Splitter 결과(deconstructor_output.json)를 낱말 나누기에 쓴다 — 사이트 VRI 원문에 나오는 낱말만 골라 넣음 (`자료-넣는-법.md` "DPD 사전의 나머지 기능").
 - **추가 (2026-11-03 오후, 원래 사이트가 다시 응답):**
   - K-PTS 빠알리–한국어 사전: 원래 앱의 `dictionary/korean-pali/dictionary.sqlite`(7.5MB, 16,848항목)를 받아 조각 사전 `kpts` 로 넣었다. 처음 켜진 사전은 DPD 하나 (2026-11-28 사용자 요청, 그 전에는 DPD + K-PTS). 그 뒤로는 사용자가 고른 사전이 기기에 저장된다.
   - 대역(nissaya): `sutta_pitaka_nissaya/` 를 받아 `build:content` 가 `public/data/suttas/<경>/<판본>.nissaya.json` 으로 바꾼다.
