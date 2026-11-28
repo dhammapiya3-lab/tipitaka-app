@@ -1,6 +1,7 @@
 "use client";
 
 import { CloudOff, SearchX } from "lucide-react";
+import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { InlineText } from "@/components/sutta/inline-text";
@@ -14,10 +15,12 @@ import {
   fetchDpdTemplates,
   fetchInflections,
   lookupWord,
+  type AttHit,
   type PartAnalysis,
   type SplitWays,
   type WordLookup,
 } from "@/lib/content";
+import { suttaHref, suttaLabel } from "@/lib/format";
 import { normalizeWord } from "@/lib/pali";
 import {
   DICTIONARY_LABELS,
@@ -305,6 +308,8 @@ export function WordLookupResult({
               </p>
             </section>
           ) : null
+        ) : id === "att" ? (
+          result.att.length > 0 ? <AttSection key="att" hits={result.att} /> : null
         ) : (
           (() => {
             const sec = PLAIN_SECTIONS.find((x) => x.id === id);
@@ -378,6 +383,67 @@ function ResolvedNote({
         </>
       ) : null}
     </div>
+  );
+}
+
+/** 주석서 풀이 — 주석서·복주석서에서 이 말을 굵은 표제어로 풀이한 줄들 (원문 그대로) */
+const ATT_PAGE = 20;
+function AttSection({ hits }: { hits: AttHit[] }) {
+  const [layer, setLayer] = useState<"all" | "attha" | "tika">("all");
+  const [shown, setShown] = useState(ATT_PAGE);
+  const attha = hits.filter((h) => h.layer === "attha").length;
+  const list = layer === "all" ? hits : hits.filter((h) => h.layer === layer);
+  const chip = (id: typeof layer, label: string, n: number) => (
+    <button
+      type="button"
+      aria-pressed={layer === id}
+      onClick={() => {
+        setLayer(id);
+        setShown(ATT_PAGE);
+      }}
+      className={cn(
+        "h-7 rounded-lg border px-2 text-xs transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        layer === id
+          ? "border-transparent bg-brand-soft font-semibold text-brand-ink"
+          : "border-line-strong bg-card font-medium text-muted-foreground hover:bg-hover",
+      )}
+    >
+      {label} {n.toLocaleString()}
+    </button>
+  );
+  return (
+    <section className="flex flex-col gap-3">
+      <SectionTitle id="att" />
+      <div className="flex flex-wrap gap-1.5" role="group" aria-label="주석 층">
+        {chip("all", "모두", hits.length)}
+        {chip("attha", "주석서", attha)}
+        {chip("tika", "복주석서", hits.length - attha)}
+      </div>
+      <ul className="flex flex-col divide-y rounded-2xl border bg-card px-4 shadow-sm">
+        {list.slice(0, shown).map((h) => (
+          <li key={`${h.suttaId}/${h.layer}/${h.para}/${h.term}/${h.line}`} className="py-2.5">
+            <p lang="pi" className="font-pali leading-relaxed">
+              <Rich text={h.line} />
+            </p>
+            <Link
+              href={suttaHref(h.suttaId, `${h.layer}-p${h.para}`, h.layer)}
+              className="t-meta mt-1 inline-block hover:text-primary hover:underline"
+            >
+              {suttaLabel(h.suttaId)} {h.layer === "attha" ? "주석서" : "복주석서"}에서 보기
+            </Link>
+          </li>
+        ))}
+      </ul>
+      {list.length > shown ? (
+        <Button variant="outline" onClick={() => setShown((n) => n + ATT_PAGE)}>
+          더 보기 ({(list.length - shown).toLocaleString()}곳 남음)
+        </Button>
+      ) : null}
+      <p className="t-meta">
+        VRI 제6차 결집본의 경전 주석서·복주석서에서 굵게 찍힌 표제어(풀이하는 말, 보통 “~ti” 앞)를 모았습니다.
+        줄은 원문 그대로 보여 줍니다. Digital Pāli Reader의 Aṭṭhakathā·Ṭīkā Terms와 같은 방식입니다.
+      </p>
+    </section>
   );
 }
 

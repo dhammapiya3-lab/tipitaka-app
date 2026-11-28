@@ -9,7 +9,8 @@ export interface DictionaryInfo {
 
 /** 표제어 → 뜻풀이 글만 있는 사전 (K-PTS 한국어 · PTS 영어 · 미얀마) */
 export type PlainDictionaryId = "kpts" | "pts" | "mm" | "peu" | "cone" | "sibd" | "sisu";
-export type DictionaryId = "dpd" | PlainDictionaryId;
+/** att: 주석서 풀이 찾기 (주석서·복주석서가 풀이하는 굵은 표제어) */
+export type DictionaryId = "dpd" | PlainDictionaryId | "att";
 
 /** 조각 사전 안내 파일(index.json) — 어떤 앞부분 조각을 더 잘게 나눴는지 */
 export interface DictionaryIndex {

@@ -5,6 +5,7 @@
  *   검색 색인: public/data/search/ (`pnpm build:content`) — 찾는 단어가 든 조각만 받는다.
  */
 import { z } from "zod";
+import { attKey, attShard } from "@/lib/att";
 import { cleanLemma, foldPali, normalizeWord, shardOf } from "@/lib/pali";
 import { unseal } from "@/lib/seal";
 import { type BurmeseDict, makeBurmeseDictSorted, mywiktHash } from "@/lib/burmese";
@@ -505,6 +506,48 @@ export interface WordLookup extends Record<PlainDictionaryId, PlainEntry[]> {
   dpd: DpdEntry[];
   /** 낱말 나누기(Splitter) — 연음으로 붙은 낱말을 나누는 방법들 (좋은 차례, 없으면 빈 목록) */
   split: SplitWays;
+  /** 주석서 풀이 — 주석서·복주석서에서 이 말을 표제어로 풀이한 줄들 */
+  att: AttHit[];
+}
+
+/** 주석서·복주석서에서 낱말을 굵은 표제어로 풀이한 곳 하나 */
+export interface AttHit {
+  term: string;
+  suttaId: string;
+  layer: "attha" | "tika";
+  para: number;
+  /** 그 줄 원문 그대로 (<b> 표시 포함) */
+  line: string;
+}
+
+const attShardSchema = z.object({
+  l: z.array(z.string()),
+  k: z.record(z.string(), z.array(z.tuple([z.string(), z.string(), z.number(), z.number(), z.number()]))),
+});
+const attShardCache = new Map<number, Promise<z.infer<typeof attShardSchema>>>();
+
+/** 주석서 풀이 찾기 — 찾을 말들(형태·기본형)의 열쇠로 조각을 받아 모은다. 같은 곳은 한 번만 */
+export async function fetchAttHits(words: string[]): Promise<AttHit[]> {
+  const keys = [...new Set(words.map(attKey).filter((k) => k.length > 1))];
+  const out: AttHit[] = [];
+  const seen = new Set<string>();
+  for (const key of keys) {
+    const n = attShard(key);
+    let shard = attShardCache.get(n);
+    if (!shard) {
+      shard = getJson(`/data/att/h${n}.json`).then((j) => attShardSchema.parse(j));
+      shard.catch(() => attShardCache.delete(n));
+      attShardCache.set(n, shard);
+    }
+    const { l, k } = await shard;
+    for (const [term, suttaId, layer, para, li] of k[key] ?? []) {
+      const id = `${suttaId}/${layer}/${para}/${li}/${term}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      out.push({ term, suttaId, layer: layer === 0 ? "attha" : "tika", para, line: l[li] ?? "" });
+    }
+  }
+  return out;
 }
 
 /** 나누는 방법들. byDpd: DPD Splitter 결과면 true, 이 사이트 프로그램이 나눈 것이면 false */
@@ -652,6 +695,7 @@ export async function lookupWord(
     cone: [],
     sibd: [],
     sisu: [],
+    att: [],
   };
   if (!typed) return empty;
 
@@ -668,17 +712,21 @@ export async function lookupWord(
     ]),
   ].filter(Boolean);
 
-  const plain = await Promise.all(
-    PLAIN_DICTIONARIES.map((id) =>
-      dicts.includes(id) ? fetchPlain(index, id, candidates) : [],
+  const [plain, att] = await Promise.all([
+    Promise.all(
+      PLAIN_DICTIONARIES.map((id) =>
+        dicts.includes(id) ? fetchPlain(index, id, candidates) : [],
+      ),
     ),
-  );
+    dicts.includes("att") ? fetchAttHits([typed, ...candidates]) : [],
+  ]);
   return {
     ...empty,
     normalized,
     alternatives,
     split,
     dpd: dicts.includes("dpd") ? dpd : [],
+    att,
     ...Object.fromEntries(PLAIN_DICTIONARIES.map((id, i) => [id, plain[i]])),
   };
 }

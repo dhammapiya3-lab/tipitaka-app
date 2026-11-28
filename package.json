@@ -11,7 +11,7 @@
     "build:content": "tsx scripts/build-content.ts",
     "build:dictionary": "tsx scripts/build-dictionary.ts",
     "serve": "node scripts/serve.mjs",
-    "build:site": "node scripts/fetch-private.mjs && tsx scripts/build-content.ts && tsx scripts/build-topics.ts && next build",
+    "build:site": "node scripts/fetch-private.mjs && tsx scripts/build-content.ts && tsx scripts/build-att-terms.ts && tsx scripts/build-topics.ts && next build",
     "verify:content": "tsx scripts/verify-content.ts",
     "import:vri": "tsx scripts/import-vri.ts",
     "build:dpd-tables": "tsx scripts/build-dpd-tables.ts",
@@ -21,6 +21,7 @@
     "build:topics": "tsx scripts/build-topics.ts",
     "build:peu": "tsx scripts/build-peu.ts",
     "build:mywikt": "tsx scripts/build-mywikt.ts",
+    "build:att": "tsx scripts/build-att-terms.ts",
     "rehash:dict": "tsx scripts/rehash-dict.ts"
   },
   "dependencies": {
