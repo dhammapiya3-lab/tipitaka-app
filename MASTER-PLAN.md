@@ -192,7 +192,7 @@ Firebase·recharts 는 쓰지 않는다.
 - 찾는 순서: DPD "변화형 → 표제어" 표 → DPD 표제어 → 그 기본형으로 PTS·미얀마. 받는 자료는 단어 하나에 수십 KB.
 - DPD 합성어 분해(deconstructor, 76MB)는 찾는 비율이 0.4%p 만 늘어 넣지 않았다.
 - **추가 (2026-11-03 오후, 원래 사이트가 다시 응답):**
-  - K-PTS 빠알리–한국어 사전: 원래 앱의 `dictionary/korean-pali/dictionary.sqlite`(7.5MB, 16,848항목)를 받아 조각 사전 `kpts` 로 넣었다. 처음 켜진 사전은 DPD + K-PTS.
+  - K-PTS 빠알리–한국어 사전: 원래 앱의 `dictionary/korean-pali/dictionary.sqlite`(7.5MB, 16,848항목)를 받아 조각 사전 `kpts` 로 넣었다. 처음 켜진 사전은 DPD 하나 (2026-11-28 사용자 요청, 그 전에는 DPD + K-PTS). 그 뒤로는 사용자가 고른 사전이 기기에 저장된다.
   - 대역(nissaya): `sutta_pitaka_nissaya/` 를 받아 `build:content` 가 `public/data/suttas/<경>/<판본>.nissaya.json` 으로 바꾼다.
     원래 앱에도 법구경 일부(상가락키따 스님 1~20번 게송 품, 한국마하시 사야도 4개 품의 일부 게송)뿐이다. 단어 창의 "대역" 탭으로 보여 준다(게송 단위로 모음).
   - 문법분석(paligrammar): 원래 사이트에 DN 1·DN 22·법구경 자료가 없다(404). 본문이 있는 경이 늘어나면 같은 방식(대역 탭 옆 "문법분석" 탭)으로 붙인다.

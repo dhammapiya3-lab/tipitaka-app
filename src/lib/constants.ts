@@ -10,8 +10,8 @@ export const PALI_EDITION = "pli-ms";
 /** 처음 열 때 보여 줄 판본: 빠알리 원문 + 한국어 번역 하나 */
 export const DEFAULT_EDITIONS = [PALI_EDITION, "kor-kimjaeseong-calmvoice"];
 
-/** 처음 쓸 사전: DPD + K-PTS 한국어 (PTS·미얀마 사전은 사전 선택에서 켠다) */
-export const DEFAULT_DICTIONARIES: DictionaryId[] = ["dpd", "kpts"];
+/** 처음 쓰는 사람에게 켜진 사전 — 그 뒤로는 사용자가 고른 것이 기기에 저장된다 (reader-settings) */
+export const DEFAULT_DICTIONARIES: DictionaryId[] = ["dpd"];
 export const DICTIONARY_ORDER: DictionaryId[] = ["dpd", "kpts", "pts", "cone", "peu", "mm", "sibd", "sisu", "att"];
 export const DICTIONARY_LABELS: Record<DictionaryId, string> = {
   dpd: "Digital Pāḷi Dictionary",
