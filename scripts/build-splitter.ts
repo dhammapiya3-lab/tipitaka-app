@@ -9,7 +9,8 @@
  * - 연음(sandhi) 규칙: 모음 생략(…ṃ + iva → …ṃva), ṃ → m(모음 앞)·n/ñ/ṇ/m(자음 앞), 끝 모음 생략,
  *   모음 합침(a + i → e, a + u → o, a + a → ā 등), iti 줄임(…ṃ + iti → …nti, …a + iti → …āti).
  * - 조각이 적을수록, 조각이 길수록 좋은 나눔으로 본다. 자동으로 나눈 것이라 틀릴 수 있다(화면에 알린다).
- * - 결과: public/data/dict/splitter/<n>.json  { 낱말: "앞 + 뒤|다른 + 나눔" } (좋은 차례로 많아야 3가지)  (호스팅 파일 수 한도 때문에 조각 128개)
+ * - DPD Splitter 결과(content/deconstructor_output.json)가 있으면 그 86만여 낱말을 원문에 없어도 모두 넣는다 (2026-11-28).
+ * - 결과: public/data/dict/splitter/<n>.json  { 낱말: "앞 + 뒤|다른 + 나눔" } (좋은 차례로 많아야 3가지)  (호스팅 파일 수 한도 때문에 조각 256개)
  */
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -17,7 +18,7 @@ import { normalizeWord } from "../src/lib/pali";
 
 const DICT = path.join(process.cwd(), "public/data/dict");
 const VRI = path.join(process.cwd(), "content/vri");
-export const SPLITTER_SHARDS = 128;
+export const SPLITTER_SHARDS = 256;
 
 /** 화면의 splitterShard 와 같은 계산 */
 function shardNo(word: string): number {
@@ -172,11 +173,15 @@ try {
   console.log("DPD Splitter 결과 파일이 없어 이 프로그램이 나눈 것만 씁니다");
 }
 
+// 2026-11-28 사용자 요청: DPD Splitter 결과 86만여 낱말을 사이트 원문에 없어도 모두 넣는다
+// (사전 화면에 직접 친 낱말·다른 판본 낱말도 나뉘게). 사전 표제어 하나의 변화형인 낱말은 전처럼 뺀다.
+const targets = [...new Set([...unknown, ...[...dpdSplits.keys()].filter((w) => !known.has(w))])];
+const inText = new Set(unknown);
 const out: Record<string, string>[] = Array.from({ length: SPLITTER_SHARDS }, () => ({}));
 let done = 0;
 let fromDpd = 0;
 const started = Date.now();
-for (const w of unknown) {
+for (const w of targets) {
   if (w.length > 40) continue;
   const dpdWays = dpdSplits.get(w)?.filter((x) => x.includes(" + "));
   if (dpdWays?.length) {
@@ -186,6 +191,7 @@ for (const w of unknown) {
     fromDpd++;
     continue;
   }
+  if (!inText.has(w)) continue; // 이 사이트 프로그램은 원문 낱말만 나눈다
   const ways = split(w).filter((p) => p.length >= 2);
   if (ways.length) {
     // 이 프로그램이 나눈 것은 맨 앞에 * 를 붙여 구분한다 (화면에 "자동으로 나눔" 안내)
@@ -199,7 +205,7 @@ rmSync(dir, { recursive: true, force: true });
 mkdirSync(dir, { recursive: true });
 out.forEach((s, i) => writeFileSync(path.join(dir, `${i}.json`), JSON.stringify(s)));
 console.log(
-  `나눈 낱말 ${done.toLocaleString()}개 / ${unknown.length.toLocaleString()}개 (${Math.round((Date.now() - started) / 1000)}초) → 조각 ${SPLITTER_SHARDS}개`,
+  `나눈 낱말 ${done.toLocaleString()}개 / ${targets.length.toLocaleString()}개 (${Math.round((Date.now() - started) / 1000)}초) → 조각 ${SPLITTER_SHARDS}개`,
 );
 for (const w of ["cakkaṃva", "evamāha", "tañca", "seyyathidaṃ", "bhagavantaṃyeva", "tenupasaṅkami", "dhammanti"]) {
   console.log(`  ${w}: ${known.has(w) ? "(사전에 있음)" : (split(w).map((p) => p.join(" + ")).join("  |  ") || "(못 나눔)")}`);

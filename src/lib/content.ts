@@ -557,7 +557,7 @@ export interface SplitWays {
 }
 
 /** 낱말 나누기 조각 — scripts/build-splitter.ts 의 shardNo 와 같은 계산 */
-const SPLITTER_SHARDS = 128;
+const SPLITTER_SHARDS = 256;
 async function fetchSplit(word: string): Promise<SplitWays> {
   let h = 0;
   for (const ch of word) h = (h * 31 + ch.codePointAt(0)!) >>> 0;
