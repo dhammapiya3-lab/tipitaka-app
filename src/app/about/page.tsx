@@ -412,6 +412,19 @@ export default function AboutPage() {
             &ldquo;연구와 교육 목적으로만 공유&rdquo;하며 &ldquo;상업적 이용은
             권리자의 추가 허락이 필요할 수 있다&rdquo;고 밝히고 있습니다.
           </p>
+          <p>
+            <span lang="pi" className="font-semibold text-foreground">
+              주석서 풀이 (Aṭṭhakathā·Ṭīkā)
+            </span>{" "}
+            — 주석서·복주석서가 풀이하는 말(원문에 굵게 찍힌 표제어, 보통
+            &ldquo;~ti&rdquo; 앞)을 모아 낱말로 찾게 한 것입니다. 찾으면 그 말을
+            풀이한 줄이 원문 그대로 나오고, 누르면 그 주석 문단으로 갑니다. 자료:
+            이 사이트에 있는 VRI 제6차 결집본의 경전 주석서·복주석서 원문에서 직접
+            뽑았습니다(약 20만 7천 곳, 서로 다른 말 약 13만 개). 이용 조건은 VRI
+            원문과 같습니다. 방식은 Digital Pāli Reader(DPR)의
+            &ldquo;Aṭṭhakathā Terms&rdquo;·&ldquo;Ṭīkā Terms&rdquo;를 본떴으며,
+            DPR의 자료는 쓰지 않았습니다.
+          </p>
         </CardContent>
       </Card>
 
